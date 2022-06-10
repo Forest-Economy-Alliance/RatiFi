@@ -49,37 +49,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
-
-// <View
-//     style={{
-//       flex: 1,
-//       backgroundColor: 'white',
-//       alignItems: 'center',
-//       justifyContent: 'space-evenly',
-//     }}>
-//     <Text style={{fontWeight: 'bold', fontSize: 25, color: '#33A850'}}>
-//       {t('hello')}{' '}
-//     </Text>
-//     <Text style={{fontWeight: 'bold', fontSize: 25, color: '#33A850'}}>
-//       {t('this line is translated')}
-//     </Text>
-//     <TouchableOpacity
-//       onPress={() => changeLanguage('en')}
-//       style={{
-//         backgroundColor:
-//           currentLanguage === 'en' ? '#33A850' : '#d3d3d3',
-//         padding: 20,
-//       }}>
-//       <Text>Select English</Text>
-//     </TouchableOpacity>
-//     <TouchableOpacity
-//       onPress={() => changeLanguage('hi')}
-//       style={{
-//         backgroundColor:
-//           currentLanguage === 'hi' ? '#33A850' : '#d3d3d3',
-//         padding: 20,
-//       }}>
-//       <Text>हिंदी का चयन करें</Text>
-//     </TouchableOpacity>
-//   </View>

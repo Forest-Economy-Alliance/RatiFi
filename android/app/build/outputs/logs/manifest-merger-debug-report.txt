@@ -174,7 +174,7 @@ ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/main/AndroidManife
 	android:launchMode
 		ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/main/AndroidManifest.xml:17:9-40
 	android:windowSoftInputMode
-		ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/main/AndroidManifest.xml:18:9-51
+		ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/main/AndroidManifest.xml:18:9-66
 	android:exported
 		ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/main/AndroidManifest.xml:19:9-32
 	android:configChanges
