@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LangSelectionScreen from './screens/LanguageSelection/LangSelectionScreen';
-import NamePhoneScreen from './screens/NamePhone/NamePhoneScreen';
+import LangSelectionScreen from './Screens/LanguageSelection/LangSelectionScreen';
+import NamePhoneScreen from './Screens/NamePhone/NamePhoneScreen';
 
 const Stack = createNativeStackNavigator();
 
