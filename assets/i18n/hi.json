@@ -3,6 +3,22 @@
       "hello":"नमस्ते",
       "this line is translated":"यह पंक्ति अनुवादित है",
       "name":"नाम",
-      "phone/mobile":"फोन / मोबाइल"
+      "phone/mobile":"फोन / मोबाइल",
+      "password":"पासवर्ड लिखें",
+      "confirm password":"पासवर्ड की पुष्टि करें",
+      "state":"राज्य",
+      "district":"जिला",
+      "tehsil/block":"तहसील / ब्लॉक",
+      "panchayat":"पंचायत",
+      "village":"गाँव",
+      "finish registration":"पंजीकरण समाप्त करें",
+      "identity card type": "पहचान पत्र का प्रकार",
+      "identity card number": "पहचान पत्र का नंबर",
+      "specify your role": "आपका भूमिका निर्दिष्ट करें",
+      "specify your membership": "आपका सदस्यता निर्दिष्ट करें",
+      "gram sabha": "ग्राम सभा",
+      "your forest map is available": "आपके जंगल का नक्शा उपलब्ध है",
+      "download application document": "आवेदन का दस्तावेज डाउनलोड करे",
+      "download": "डाउनलोड"
     }
   }

@@ -3,6 +3,22 @@
         "hello": "નમસ્તે",
         "this line is translated": "આ પંક્તિનું ભાષાંતર કરવામાં આવ્યું છે",
         "name": "નામ",
-        "phone/mobile": "ફોન/મોબાઇલ"
+        "phone/mobile": "ફોન/મોબાઇલ",
+        "password": "પાસવર્ડ",
+        "confirm password": "પાસવર્ડ ખાતરો",
+        "state": "રાજ્ય",
+        "district": "જિલ્લો",
+        "tehsil/block": "તાલુકી/બ્લોક",
+        "panchayat": "પંચાયત",
+        "village": "ગામ",
+        "finish registration": "નોંધણી સમાપ્ત કરો",
+        "identity card type": "પારંભિક કાર્ડ પ્રકાર",
+        "identity card number": "પારંભિક કાર્ડ નંબર",
+        "specify your role": "તમારા ભાગ નું વિવરણ કરો",
+        "specify your membership": "તમારા સદસથિતિ નું વિવરણ કરો",
+        "gram sabha": "ગ્રામ સભા",
+        "your forest map is available":"તમારો જંગલનો નકશો ઉપલબ્ધ છે",
+        "download application document": "એપ્લિકેશન દસ્તાવેજ ડાઉનલોડ કરો",
+        "download": "ડાઉનલોડ"
     }
 }
