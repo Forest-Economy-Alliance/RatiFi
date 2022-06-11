@@ -18,19 +18,31 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+
+        screenOptions={{
+          headerStyle: {
+            // backgroundColor: 'green',
+          },
+          headerTitleStyle: {
+            // color: 'white'
+          }
+        }}
+      >
         <Stack.Screen
           name="LangSelection"
           component={LangSelectionScreen}
           options={{
-            headerShown: false,
+            // headerShown: false,
+            headerTitle: "Please select a language"
           }}
         />
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
           options={{
-            headerShown: false,
+            // headerShown: false,
+            headerTitle: "Please enter Phone Number"
           }}
         />
       </Stack.Navigator>

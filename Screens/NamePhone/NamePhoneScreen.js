@@ -4,6 +4,8 @@ import '../../assets/i18n/i18n';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLanguage } from '../../slices/userSlice';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 const NamePhoneScreen = () => {
     const language = useSelector(selectLanguage);
@@ -31,26 +33,23 @@ const NamePhoneScreen = () => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
             <KeyboardAvoidingView style={styles.container}>
-                <TextInput
-                    style={styles.inputName}
+                <Input
                     placeholder={t('name')}
-                    placeholderTextColor="#480E09"
                     placeholderStyle={styles.placeholder}
                     onChangeText={text => {
                         setName(text);
                     }}
                     value={name}
                 />
-                <TextInput
-                    style={styles.inputName}
+                <Input
                     placeholder={t('phone/mobile')}
-                    placeholderTextColor="#480E09"
                     placeholderStyle={styles.placeholder}
                     onChangeText={text => {
                         setPhone(text);
                     }}
                     value={phone}
                 />
+                <Button>PROCEED</Button>
             </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );
