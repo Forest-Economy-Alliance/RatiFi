@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  useState,
-  TouchableOpacity,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LangSelectionScreen from './Screens/LanguageSelection/LangSelectionScreen';
 import NamePhoneScreen from './Screens/NamePhone/NamePhoneScreen';
 import PasswordScreen from './Screens/Password/PasswordScreen';
@@ -19,7 +12,6 @@ import downloadPDFScreen from './Screens/DownloadPDF/downloadPDFScreen';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -77,7 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
 });
 
 export default App;
