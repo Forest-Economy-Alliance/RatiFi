@@ -1,5 +1,0 @@
-/*
-@ Color schemes
-*/
-
-// To do 
