@@ -3,6 +3,22 @@
         "hello": "Hello",
         "this line is translated": "This line is translated",
         "name": "Name",
-        "phone/mobile": "Phone/Mobile"
+        "phone/mobile": "Phone/Mobile",
+        "password": "Password",
+        "confirm password": "Confirm Password",
+        "state": "State",
+        "district": "District",
+        "tehsil/block": "Tehsil/Block",
+        "panchayat": "Panchayat",
+        "village": "Village",
+        "finish registration": "Finish Registration",
+        "identity card type": "Identity Card Type",
+        "identity card number": "Identity Card Number",
+        "specify your role": "Specify your role",
+        "specify your membership": "Specify your membership",
+        "gram sabha": "Gram Sabha",
+        "your forest map is available": "Your forest map is available",
+        "download application document": "Download application document",
+        "download": "Download"
     }
 }

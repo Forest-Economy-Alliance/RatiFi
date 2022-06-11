@@ -3,6 +3,22 @@
       "hello": "ନମସ୍କାର",
       "this line is translated": "ଏହି ରେଖା ଅନୁବାଦିତ",
       "name": "ନାମ",
-      "phone/mobile": "ଫୋନ / ମୋବାଇଲ"
+      "phone/mobile": "ଫୋନ / ମୋବାଇଲ",
+      "password": "ପାସ୍ରୋଟ",
+      "confirm password": "ପାସ୍ରୋଟ କିମ୍ବା ନିଶ୍ଚିତ କରନ୍ତୁ",
+      "state": "ରେସ୍ଟେ",
+      "district": "ଦେଉଟରେସ୍ଟ",
+      "tehsil/block": "ଟେଷିଲ / ବାକ୍କି",
+      "panchayat": "ପଞ୍ଚାଯ୍ତର",
+      "village": "ଗଡ଼ିତ",
+      "finish registration": "ନିବେଶ ପତ୍ର",
+      "identity card type": "ଇନ୍ଡେକ୍ଟେରେର କାର୍ଡ ପ୍ରକାର",
+      "identity card number": "ଇନ୍ଡେକ୍ଟେରେର କାର୍ଡ ନମ୍ବର",
+      "specify your role": "ଆପଣଙ୍କ ଭାବରେ ବିବର୍ତିତ କରନ୍ତୁ",
+      "specify your membership": "ଆପଣଙ୍କ ସଦସ୍ଯତା ବିବର୍ତିତ କରନ୍ତୁ",
+      "gram sabha": "ଗରାମ ସବ୍ହା",
+      "your forest map is available": "ତୁମର ଜଙ୍ଗଲ ମାନଚିତ୍ର ଉପଲବ୍ଧ |",
+      "download application document": "ଆପଣଙ୍କ ପତ୍ର ଡାଉନଲୋଡ଼ କରନ୍ତୁ",
+      "download": "ଡାଉନଲୋଡ଼"
     }
   }
