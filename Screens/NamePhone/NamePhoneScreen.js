@@ -11,13 +11,12 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
 
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
-  const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -74,8 +73,7 @@ const NamePhoneScreen = ({navigation}) => {
             onPress={() => {
               setPressed(true);
             }}
-            style={styles.getOtpButton}
-          >
+            style={styles.getOtpButton}>
             <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
           </TouchableOpacity>
         )}
@@ -101,8 +99,7 @@ const NamePhoneScreen = ({navigation}) => {
               style={styles.verifyOtpButton}
               onPress={() => {
                 navigation.navigate('Password');
-              }}
-            >
+              }}>
               <Text style={styles.verifyOtpButtonText}>{t('verify otp')}</Text>
             </TouchableOpacity>
           </View>
