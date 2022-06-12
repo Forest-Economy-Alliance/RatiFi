@@ -13,6 +13,9 @@ import Loader from './components/Loader';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  React.useEffect(() => {
+    // fetchPermissions();
+  }, []);
   return (
     <>
       {false && <Loader />}
