@@ -8,69 +8,72 @@ import PasswordScreen from './Screens/Password/PasswordScreen';
 import LocationInformationScreen from './Screens/LocationInformation/LocationInformationScreen';
 import RoleInformationScreen from './Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from './Screens/DownloadPDF/downloadPDFScreen';
+import Loader from './components/Loader';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-
-        screenOptions={{
-          headerStyle: {
-            // backgroundColor: 'green',
-          },
-          headerTitleStyle: {
-            // color: 'white'
-          }
-        }}
-      >
-        <Stack.Screen
-          name="LangSelection"
-          component={LangSelectionScreen}
-          options={{
-            // headerShown: false,
-            headerTitle: "Please select a language"
+    <>
+      {false && <Loader />}
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              // backgroundColor: 'green',
+            },
+            headerTitleStyle: {
+              // color: 'white'
+            },
           }}
-        />
-        <Stack.Screen
-          name="NamePhone"
-          component={NamePhoneScreen}
-          options={{
-            // headerShown: false,
-            headerTitle: "Please enter Phone Number"
-          }}
-        />
-        <Stack.Screen
-          name="Password"
-          component={PasswordScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="LocationInformation"
-          component={LocationInformationScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="RoleInformation"
-          component={RoleInformationScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="DownloadPDF"
-          component={downloadPDFScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        >
+          <Stack.Screen
+            name="LangSelection"
+            component={LangSelectionScreen}
+            options={{
+              // headerShown: false,
+              headerTitle: 'Please select a language',
+            }}
+          />
+          <Stack.Screen
+            name="NamePhone"
+            component={NamePhoneScreen}
+            options={{
+              // headerShown: false,
+              headerTitle: 'Please enter Phone Number',
+            }}
+          />
+          <Stack.Screen
+            name="Password"
+            component={PasswordScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="LocationInformation"
+            component={LocationInformationScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="RoleInformation"
+            component={RoleInformationScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DownloadPDF"
+            component={downloadPDFScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 
