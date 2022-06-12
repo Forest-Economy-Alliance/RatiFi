@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -8,29 +8,47 @@ import PasswordScreen from './Screens/Password/PasswordScreen';
 import LocationInformationScreen from './Screens/LocationInformation/LocationInformationScreen';
 import RoleInformationScreen from './Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from './Screens/DownloadPDF/downloadPDFScreen';
+import ForestFiSplashScreen from './Screens/ForestFiSplash/ForestFiSplashScreen';
+import RatiFiSplashScreen from './Screens/RatiFiSplash/RatiFiSplashScreen';
+// import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  useEffect(() => {
+    // SplashScreen.hide();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator
-
         screenOptions={{
           headerStyle: {
             // backgroundColor: 'green',
           },
           headerTitleStyle: {
             // color: 'white'
-          }
-        }}
-      >
+          },
+        }}>
+        <Stack.Screen
+          name="ForestFiSplash"
+          component={ForestFiSplashScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="RatiFiSplash"
+          component={RatiFiSplashScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="LangSelection"
           component={LangSelectionScreen}
           options={{
             // headerShown: false,
-            headerTitle: "Please select a language"
+            headerTitle: 'Please select a language',
           }}
         />
         <Stack.Screen
@@ -38,7 +56,7 @@ const App = () => {
           component={NamePhoneScreen}
           options={{
             // headerShown: false,
-            headerTitle: "Please enter Phone Number"
+            headerTitle: 'Please enter Phone Number',
           }}
         />
         <Stack.Screen
