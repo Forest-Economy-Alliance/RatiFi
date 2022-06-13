@@ -4,7 +4,7 @@ import React, {useEffect} from 'react';
 const ForestFiSplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('LangSelection');
+      navigation.replace('LangSelection');
     }, 2000);
   }, []);
   return (

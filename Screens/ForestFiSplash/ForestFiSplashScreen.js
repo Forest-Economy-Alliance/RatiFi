@@ -5,7 +5,7 @@ const ForestFiSplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       // navigate to next screen
-      navigation.navigate('RatiFiSplash');
+      navigation.replace('RatiFiSplash');
     }, 2000);
   }, []);
   return (

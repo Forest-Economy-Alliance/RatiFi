@@ -13,6 +13,8 @@ import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
+import Background from '../../components/Background';
+import Input from '../../components/Input';
 
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
@@ -36,39 +38,38 @@ const NamePhoneScreen = ({navigation}) => {
   }, []);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.container}>
-        <TextInput
-          style={styles.inputPass}
-          placeholder={t('password')}
-          placeholderTextColor="#480E09"
-          onChangeText={text => {
-            setPassword(text);
-          }}
-          value={password}
-        />
-        <TextInput
-          style={styles.inputConfPass}
-          placeholder={t('confirm password')}
-          placeholderTextColor="#480E09"
-          onChangeText={text => {
-            setConfirmPassword(text);
-          }}
-          value={confirmPassword}
-        />
-        <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => {
-            if (password === confirmPassword) {
-              navigation.navigate('LocationInformation');
-            } else {
-              alert('Password does not match');
-            }
-          }}>
-          <Text style={styles.nextButtonText}>{t('next')}</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    <Background>
+      <Input
+        // style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#480E09"
+        onChangeText={text => {
+          setPassword(text);
+        }}
+        value={password}
+      />
+      <Input
+        // style={styles.inputConfPass}
+        placeholder={t('confirm password')}
+        placeholderTextColor="#480E09"
+        onChangeText={text => {
+          setConfirmPassword(text);
+        }}
+        value={confirmPassword}
+      />
+      <TouchableOpacity
+        style={styles.nextButton}
+        onPress={() => {
+          if (password === confirmPassword) {
+            navigation.navigate('LocationInformation');
+          } else {
+            alert('Password does not match');
+          }
+        }}
+      >
+        <Text style={styles.nextButtonText}>{t('next')}</Text>
+      </TouchableOpacity>
+    </Background>
   );
 };
 
