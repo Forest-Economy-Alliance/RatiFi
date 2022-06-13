@@ -13,14 +13,17 @@ MERGED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/no
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-firebase_crashlytics] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/crashlytics/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-23:12
 MERGED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-27:12
+MERGED from [:react-native-async-storage_async-storage] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-async-storage/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-device-info] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-device-info/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-safe-area-context] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-screens] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-splash-screen] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-splash-screen/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-45:12
 MERGED from [com.facebook.react:react-native:0.68.2] /home/sanyam/.gradle/caches/transforms-3/82d69ba5f93bea0b7276a362653bd309/transformed/jetified-react-native-0.68.2/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/sanyam/.gradle/caches/transforms-3/a11837e49ef475574ae2c7a405e31300/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-crashlytics-ndk:18.2.11] /home/sanyam/.gradle/caches/transforms-3/bf1e2f5fa22d8ffac1a8b75c5c274e37/transformed/jetified-firebase-crashlytics-ndk-18.2.11/AndroidManifest.xml:23:1-41:12
 MERGED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:2:1-24:12
+MERGED from [:react-native-location] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-location/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:15:1-38:12
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] /home/sanyam/.gradle/caches/transforms-3/1b6eb1cd16343f1e94165f6ad2590913/transformed/jetified-transport-runtime-3.1.5/AndroidManifest.xml:15:1-41:12
 MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] /home/sanyam/.gradle/caches/transforms-3/3d513af6136f0c39f32b5f90f3074683/transformed/jetified-firebase-encoders-json-18.0.0/AndroidManifest.xml:15:1-23:12
@@ -126,6 +129,8 @@ MERGED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/no
 MERGED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-67
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-67
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-67
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-67
 MERGED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:10:5-67
 MERGED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:10:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:26:5-67
@@ -146,6 +151,8 @@ MERGED from [:react-native-firebase_crashlytics] /home/sanyam/EVERYTHING/isb/Rat
 MERGED from [:react-native-firebase_crashlytics] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/crashlytics/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-21:19
 MERGED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-25:19
 MERGED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-25:19
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:33:5-43:19
 MERGED from [com.facebook.react:react-native:0.68.2] /home/sanyam/.gradle/caches/transforms-3/82d69ba5f93bea0b7276a362653bd309/transformed/jetified-react-native-0.68.2/AndroidManifest.xml:9:5-20
 MERGED from [com.facebook.react:react-native:0.68.2] /home/sanyam/.gradle/caches/transforms-3/82d69ba5f93bea0b7276a362653bd309/transformed/jetified-react-native-0.68.2/AndroidManifest.xml:9:5-20
 MERGED from [com.google.firebase:firebase-crashlytics-ndk:18.2.11] /home/sanyam/.gradle/caches/transforms-3/bf1e2f5fa22d8ffac1a8b75c5c274e37/transformed/jetified-firebase-crashlytics-ndk-18.2.11/AndroidManifest.xml:31:5-39:19
@@ -260,6 +267,8 @@ MERGED from [:react-native-firebase_crashlytics] /home/sanyam/EVERYTHING/isb/Rat
 MERGED from [:react-native-firebase_crashlytics] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/crashlytics/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-async-storage_async-storage] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-async-storage/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-async-storage_async-storage] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-async-storage/async-storage/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-device-info] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-device-info/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-device-info] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-device-info/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-safe-area-context] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-safe-area-context/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
@@ -268,6 +277,8 @@ MERGED from [:react-native-screens] /home/sanyam/EVERYTHING/isb/RatiFi/node_modu
 MERGED from [:react-native-screens] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-screens/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-splash-screen] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-splash-screen/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-splash-screen] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-splash-screen/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.68.2] /home/sanyam/.gradle/caches/transforms-3/82d69ba5f93bea0b7276a362653bd309/transformed/jetified-react-native-0.68.2/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.68.2] /home/sanyam/.gradle/caches/transforms-3/82d69ba5f93bea0b7276a362653bd309/transformed/jetified-react-native-0.68.2/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/sanyam/.gradle/caches/transforms-3/a11837e49ef475574ae2c7a405e31300/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
@@ -276,6 +287,8 @@ MERGED from [com.google.firebase:firebase-crashlytics-ndk:18.2.11] /home/sanyam/
 MERGED from [com.google.firebase:firebase-crashlytics-ndk:18.2.11] /home/sanyam/.gradle/caches/transforms-3/bf1e2f5fa22d8ffac1a8b75c5c274e37/transformed/jetified-firebase-crashlytics-ndk-18.2.11/AndroidManifest.xml:27:5-29:41
 MERGED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:6:5-8:41
 MERGED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:6:5-8:41
+MERGED from [:react-native-location] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-location/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-location] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-location/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:19:5-21:41
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:19:5-21:41
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] /home/sanyam/.gradle/caches/transforms-3/1b6eb1cd16343f1e94165f6ad2590913/transformed/jetified-transport-runtime-3.1.5/AndroidManifest.xml:18:5-20:41
@@ -450,18 +463,24 @@ ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/debug/AndroidManif
 		ADDED from /home/sanyam/EVERYTHING/isb/RatiFi/android/app/src/debug/AndroidManifest.xml:11:19-83
 uses-permission#android.permission.ACCESS_WIFI_STATE
 ADDED from [com.facebook.flipper:flipper:0.125.0] /home/sanyam/.gradle/caches/transforms-3/5433f95c32e4cfd4778a263d86b57183/transformed/jetified-flipper-0.125.0/AndroidManifest.xml:16:5-76
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:5-76
 	android:name
 		ADDED from [com.facebook.flipper:flipper:0.125.0] /home/sanyam/.gradle/caches/transforms-3/5433f95c32e4cfd4778a263d86b57183/transformed/jetified-flipper-0.125.0/AndroidManifest.xml:16:22-73
 uses-permission#android.permission.WAKE_LOCK
 ADDED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-68
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-68
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-68
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:5-68
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:5-68
 	android:name
 		ADDED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-65
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [:@react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:5-79
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:5-79
 MERGED from [:react-native-firebase_auth] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/auth/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:5-79
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
+MERGED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:5-79
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:25:5-79
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:25:5-79
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] /home/sanyam/.gradle/caches/transforms-3/1b6eb1cd16343f1e94165f6ad2590913/transformed/jetified-transport-runtime-3.1.5/AndroidManifest.xml:22:5-79
@@ -530,6 +549,30 @@ ADDED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_
 		ADDED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:24:13-35
 	android:name
 		ADDED from [:react-native-firebase_app] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:13-88
+uses-permission#com.android.vending.CHECK_LICENSE
+ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-73
+	android:name
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-70
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:5-81
+	android:name
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:31:22-78
+provider#com.RNFetchBlob.Utils.FileProvider
+ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-42:20
+	android:grantUriPermissions
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-47
+	android:authorities
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-60
+	android:exported
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:13-37
+	android:name
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-62
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:39:13-41:58
+	android:resource
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:41:17-55
+	android:name
+		ADDED from [:rn-fetch-blob] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/rn-fetch-blob/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:40:17-67
 meta-data#com.google.firebase.components:com.google.firebase.crashlytics.ndk.CrashlyticsNdkRegistrar
 ADDED from [com.google.firebase:firebase-crashlytics-ndk:18.2.11] /home/sanyam/.gradle/caches/transforms-3/bf1e2f5fa22d8ffac1a8b75c5c274e37/transformed/jetified-firebase-crashlytics-ndk-18.2.11/AndroidManifest.xml:35:13-37:85
 	android:value
@@ -542,6 +585,10 @@ ADDED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.grad
 		ADDED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:20:17-82
 	android:name
 		ADDED from [com.google.firebase:firebase-crashlytics:18.2.11] /home/sanyam/.gradle/caches/transforms-3/85662e9081efa77f7cfc25e3c415f198/transformed/jetified-firebase-crashlytics-18.2.11/AndroidManifest.xml:19:17-115
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from [:react-native-location] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-location/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from [:react-native-location] /home/sanyam/EVERYTHING/isb/RatiFi/node_modules/react-native-location/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-78
 service#com.google.android.datatransport.runtime.backends.TransportBackendDiscovery
 ADDED from [com.google.android.datatransport:transport-backend-cct:3.1.5] /home/sanyam/.gradle/caches/transforms-3/425cd2e2e8a9fcbc2d70749869380efb/transformed/jetified-transport-backend-cct-3.1.5/AndroidManifest.xml:29:9-35:19
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.5] /home/sanyam/.gradle/caches/transforms-3/1b6eb1cd16343f1e94165f6ad2590913/transformed/jetified-transport-runtime-3.1.5/AndroidManifest.xml:36:9-38:40

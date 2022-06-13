@@ -2,12 +2,16 @@ import React from 'react';
 import App from './App';
 
 import {Provider} from 'react-redux';
-import {store} from './store/store';
+import {persistor, store} from './store/store';
+// the component we'll use to wrap our component tree
+import {PersistGate} from 'redux-persist/lib/integration/react';
 
 const Setup = () => {
   return (
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   );
 };

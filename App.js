@@ -28,8 +28,7 @@ const App = () => {
           headerTitleStyle: {
             // color: 'white'
           },
-        }}
-      >
+        }}>
         <Stack.Screen
           name="ForestFiSplash"
           component={ForestFiSplashScreen}
