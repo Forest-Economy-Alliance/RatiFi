@@ -13,15 +13,15 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
 import {GenericFormPDF} from '../../utility/basePDFGen';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
-
+import Input from '../../components/Input';
+import Background from '../../components/Background';
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
-  const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -62,8 +62,8 @@ const NamePhoneScreen = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
-        <TextInput
-          style={styles.inputName}
+        <Input
+          // style={styles.inputName}
           placeholder={t('name')}
           placeholderTextColor="#480E09"
           onChangeText={text => {
