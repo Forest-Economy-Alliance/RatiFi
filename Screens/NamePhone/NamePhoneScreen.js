@@ -14,7 +14,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
-
+import Input from '../../components/Input';
+import Background from '../../components/Background';
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
 
@@ -43,8 +44,8 @@ const NamePhoneScreen = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
-        <TextInput
-          style={styles.inputName}
+        <Input
+          // style={styles.inputName}
           placeholder={t('name')}
           placeholderTextColor="#480E09"
           onChangeText={text => {
@@ -73,7 +74,8 @@ const NamePhoneScreen = ({navigation}) => {
             onPress={() => {
               setPressed(true);
             }}
-            style={styles.getOtpButton}>
+            style={styles.getOtpButton}
+          >
             <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
           </TouchableOpacity>
         )}
@@ -99,7 +101,8 @@ const NamePhoneScreen = ({navigation}) => {
               style={styles.verifyOtpButton}
               onPress={() => {
                 navigation.navigate('Password');
-              }}>
+              }}
+            >
               <Text style={styles.verifyOtpButtonText}>{t('verify otp')}</Text>
             </TouchableOpacity>
           </View>

@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {setLanguage} from '../../slices/userSlice';
+import Background from '../../components/Background';
 
 const languages = [
   {
@@ -48,7 +49,7 @@ const LangSelectionScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   return (
-    <View style={styles.container}>
+    <Background>
       <ScrollView contentContainerStyle={styles.innerContainer}>
         {languages.map(lang => (
           <TouchableOpacity
@@ -58,12 +59,13 @@ const LangSelectionScreen = ({navigation}) => {
               dispatch(setLanguage(lang.value));
               navigation.navigate('NamePhone');
             }}
-            style={styles.button}>
+            style={styles.button}
+          >
             <Text style={styles.text}>{lang.name}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </View>
+    </Background>
   );
 };
 
@@ -72,7 +74,7 @@ export default LangSelectionScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '# ',
     alignItems: 'center',
     justifyContent: 'center',
   },

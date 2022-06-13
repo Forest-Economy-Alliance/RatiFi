@@ -62,7 +62,9 @@ buck-out
 .gradle
 local.properties
 *.iml
-/android/
+/android/build
+/android/app/build/
+/android/.gradle/
 
 # Node
 node_modules
@@ -124,4 +126,4 @@ package-lock.json
 .vs
 
 # Android memory profiler files
-*.hprof
+*.hprof 
