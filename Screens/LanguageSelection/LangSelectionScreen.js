@@ -50,23 +50,21 @@ const LangSelectionScreen = ({navigation}) => {
 
   return (
     <Background>
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.innerContainer}>
-          {languages.map(lang => (
-            <TouchableOpacity
-              key={lang.value}
-              onPress={() => {
-                // console.log(selectLanguage);
-                dispatch(setLanguage(lang.value));
-                navigation.navigate('NamePhone');
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.text}>{lang.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+      <ScrollView contentContainerStyle={styles.innerContainer}>
+        {languages.map(lang => (
+          <TouchableOpacity
+            key={lang.value}
+            onPress={() => {
+              // console.log(selectLanguage);
+              dispatch(setLanguage(lang.value));
+              navigation.navigate('NamePhone');
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.text}>{lang.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </Background>
   );
 };
@@ -76,7 +74,7 @@ export default LangSelectionScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '# ',
     alignItems: 'center',
     justifyContent: 'center',
   },
