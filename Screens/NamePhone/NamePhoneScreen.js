@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
+  PermissionsAndroid,
+  Button,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -14,6 +16,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
+import {GenericFormPDF} from '../../utility/basePDFGen';
+import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
@@ -41,6 +45,20 @@ const NamePhoneScreen = ({navigation}) => {
     changeLanguage(language);
   }, []);
 
+  const requestFilePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Write External Storage Permission Granted');
+      } else {
+        console.log('Write External Storage Permission Denied');
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
@@ -69,13 +87,25 @@ const NamePhoneScreen = ({navigation}) => {
           }}
         />
         {/* get otp button */}
+        <Button
+          title="Generate PDF"
+          color="black"
+          onPress={() => {
+            requestFilePermission();
+            let obj = new Form1Jharkhand(
+              ['पदाधिकारी', '!आउ', 'संपन्न', 'अभिलेखों', '!आ'],
+              null,
+            );
+            let filelocation = obj.createPDF('', 'test');
+            alert(filelocation.filePath);
+          }}
+        />
         {!pressed && (
           <TouchableOpacity
             onPress={() => {
               setPressed(true);
             }}
-            style={styles.getOtpButton}
-          >
+            style={styles.getOtpButton}>
             <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
           </TouchableOpacity>
         )}
@@ -101,8 +131,7 @@ const NamePhoneScreen = ({navigation}) => {
               style={styles.verifyOtpButton}
               onPress={() => {
                 navigation.navigate('Password');
-              }}
-            >
+              }}>
               <Text style={styles.verifyOtpButtonText}>{t('verify otp')}</Text>
             </TouchableOpacity>
           </View>
