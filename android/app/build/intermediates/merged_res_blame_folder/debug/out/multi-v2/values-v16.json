@@ -4,17 +4,7 @@
             "outputFile": "/home/sanyam/EVERYTHING/isb/RatiFi/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/home/sanyam/.gradle/caches/transforms-3/2748d895f1c40a3fcfbe00db95e4df1f/transformed/core-1.5.0/res/values-v16/values-v16.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "65",
-                        "endOffsets": "116"
-                    }
-                },
-                {
-                    "source": "/home/sanyam/.gradle/caches/transforms-3/6c75da3f79c7ee6092a809179ae24314/transformed/appcompat-1.3.0/res/values-v16/values-v16.xml",
+                    "source": "/home/sanyam/.gradle/caches/transforms-3/885172800b56f86ba17957cac7d82a58/transformed/appcompat-1.3.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -30,6 +20,16 @@
                         "endLines": "6",
                         "endColumns": "12",
                         "endOffsets": "289"
+                    }
+                },
+                {
+                    "source": "/home/sanyam/.gradle/caches/transforms-3/553a582bbd634e7ac51ce2dbd59e68a7/transformed/core-1.5.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
                     }
                 }
             ]
