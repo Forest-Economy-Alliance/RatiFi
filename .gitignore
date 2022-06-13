@@ -22,42 +22,13 @@ DerivedData
 project.xcworkspace
 **/.xcode.env.local
 
-# Gradle
-/build/
-/packages/react-native-gradle-plugin/build/
-/packages/rn-tester/build
-/packages/rn-tester/android/app/.cxx/
-/packages/rn-tester/android/app/build/
-/packages/rn-tester/android/app/gradle/
-/packages/rn-tester/android/app/gradlew
-/packages/rn-tester/android/app/gradlew.bat
-/ReactAndroid/build/
-/ReactAndroid/.cxx/
-/ReactAndroid/gradle/
-/ReactAndroid/gradlew
-/ReactAndroid/gradlew.bat
-/ReactAndroid/hermes-engine/build/
-/ReactAndroid/hermes-engine/.cxx/
-/template/android/app/build/
-/template/android/build/
+# Android/IntelliJ
 
-# Buck
-.buckd
-buck-out
-/.lsp.buckd
-/.lsp-buck-out
-/ReactAndroid/src/main/jni/prebuilt/lib/
-/ReactAndroid/src/main/gen
+/android/.gradle/
+/android/app/build/
 
-# Android Studio
-.project
-.settings
-.classpath
-
-# Watchman
-.watchmanconfig
-
-# Android
+#
+build/
 .idea
 .gradle
 local.properties

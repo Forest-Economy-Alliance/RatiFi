@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
+  PermissionsAndroid,
+  Button,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -74,8 +76,7 @@ const NamePhoneScreen = ({navigation}) => {
             onPress={() => {
               setPressed(true);
             }}
-            style={styles.getOtpButton}
-          >
+            style={styles.getOtpButton}>
             <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
           </TouchableOpacity>
         )}
@@ -101,8 +102,7 @@ const NamePhoneScreen = ({navigation}) => {
               style={styles.verifyOtpButton}
               onPress={() => {
                 navigation.navigate('Password');
-              }}
-            >
+              }}>
               <Text style={styles.verifyOtpButtonText}>{t('verify otp')}</Text>
             </TouchableOpacity>
           </View>
