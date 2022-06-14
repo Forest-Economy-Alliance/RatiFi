@@ -13,15 +13,107 @@ import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import {Dropdown} from 'react-native-element-dropdown';
 
-const data = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-  {label: 'Item 4', value: '4'},
-  {label: 'Item 5', value: '5'},
-  {label: 'Item 6', value: '6'},
-  {label: 'Item 7', value: '7'},
-  {label: 'Item 8', value: '8'},
+const DATA = [
+  {
+    State: 'Jharkhand',
+    Districts: [
+      {
+        District: 'Simdega',
+        Tehsils: [
+          {
+            Tehsil: 'Bano',
+            Panchayats: [
+              {
+                Panchayat: 'Banki',
+              },
+              {
+                Panchayat: 'Simhatu',
+              },
+              {
+                Panchayat: 'Konsode',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Banki',
+              },
+              {
+                Village: 'Boroseta',
+              },
+              {
+                Village: 'Chotketunga',
+              },
+            ],
+          },
+          {
+            Tehsil: 'Jaldega',
+            Panchayats: [
+              {
+                Panchayat: 'Kutungia',
+              },
+              {
+                Panchayat: 'Patiamba',
+              },
+              {
+                Panchayat: 'Konmerla',
+              },
+              {
+                Panchayat: 'Jaldega',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Ramjari',
+              },
+              {
+                Village: 'Karimati',
+              },
+              {
+                Village: 'Baldega',
+              },
+              {
+                Village: 'Mahomdega',
+              },
+              {
+                Village: 'Kharwagada',
+              },
+            ],
+          },
+          {
+            Tehsil: 'Kolebira',
+            Panchayats: [
+              {
+                Panchayat: 'Lachragarh',
+              },
+              {
+                Panchayat: 'Tutikel',
+              },
+              {
+                Panchayat: 'Eidega',
+              },
+              {
+                Panchayat: 'Nawatoli',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Kombakra',
+              },
+              {
+                Village: 'Sardhatoli',
+              },
+              {
+                Village: 'Eidega',
+              },
+              {
+                Village: 'Bhanwarpahari',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const LocationInformationScreen = ({navigation}) => {
@@ -32,6 +124,107 @@ const LocationInformationScreen = ({navigation}) => {
   const [tehsil, setTehsil] = useState('');
   const [panchayat, setPanchayat] = useState('');
   const [village, setVillage] = useState('');
+
+  const [err, setErr] = useState(0);
+
+  const [states, setStates] = useState([
+    {
+      State: 'Jharkhand',
+    },
+  ]);
+  const [districts, setDistricts] = useState([
+    {
+      District: 'Simdega',
+    },
+  ]);
+  const [tehsils, setTehsils] = useState([
+    {
+      Tehsil: 'Bano',
+    },
+    {
+      Tehsil: 'Jaldega',
+    },
+    {
+      Tehsil: 'Kolebira',
+    },
+  ]);
+  const [panchayats, setPanchayats] = useState([
+    {
+      Panchayat: 'Banki',
+    },
+    {
+      Panchayat: 'Simhatu',
+    },
+    {
+      Panchayat: 'Konsode',
+    },
+    {
+      Panchayat: 'Kutungia',
+    },
+    {
+      Panchayat: 'Patiamba',
+    },
+    {
+      Panchayat: 'Konmerla',
+    },
+    {
+      Panchayat: 'Jaldega',
+    },
+    {
+      Panchayat: 'Lachragarh',
+    },
+    {
+      Panchayat: 'Tutikel',
+    },
+    {
+      Panchayat: 'Eidega',
+    },
+    {
+      Panchayat: 'Nawatoli',
+    },
+  ]);
+  const [villages, setVillages] = useState([
+    {
+      Village: 'Kombakra',
+    },
+    {
+      Village: 'Sardhatoli',
+    },
+    {
+      Village: 'Eidega',
+    },
+    {
+      Village: 'Bhanwarpahari',
+    },
+
+    {
+      Village: 'Ramjari',
+    },
+    {
+      Village: 'Karimati',
+    },
+    {
+      Village: 'Baldega',
+    },
+    {
+      Village: 'Mahomdega',
+    },
+    {
+      Village: 'Kharwagada',
+    },
+    {
+      Village: 'Kombakra',
+    },
+    {
+      Village: 'Sardhatoli',
+    },
+    {
+      Village: 'Eidega',
+    },
+    {
+      Village: 'Bhanwarpahari',
+    },
+  ]);
 
   const {t, i18n} = useTranslation();
 
@@ -57,17 +250,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={states}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="State"
           placeholder={t('state')}
           searchPlaceholder="Search..."
           value={state}
           onChange={item => {
             setState(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -75,17 +268,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={districts}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="District"
           placeholder={t('district')}
           searchPlaceholder="Search..."
           value={district}
           onChange={item => {
             setDistrict(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -93,17 +286,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={tehsils}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="Tehsil"
           placeholder={t('tehsil/block')}
           searchPlaceholder="Search..."
           value={tehsil}
           onChange={item => {
             setTehsil(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -111,17 +304,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={panchayats}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="Panchayat"
           placeholder={t('panchayat')}
           searchPlaceholder="Search..."
           value={panchayat}
           onChange={item => {
             setPanchayat(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -129,21 +322,36 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={villages}
           search
-          maxHeight={'30%'}
-          labelField="label"
-          valueField="value"
+          maxHeight={300}
+          labelField="Village"
           placeholder={t('village')}
           searchPlaceholder="Search..."
           value={village}
           onChange={item => {
             setVillage(item.value);
           }}
+          dropdownPosition="bottom"
         />
+        {err === 1 ? (
+          <Text style={styles.error}>{'Fill all the fields'}</Text>
+        ) : null}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={() => navigation.navigate('RoleInformation')}>
+          onPress={() => {
+            if (
+              state === '' ||
+              district === '' ||
+              tehsil === '' ||
+              panchayat === '' ||
+              village === ''
+            ) {
+              setErr(1);
+            } else {
+              navigation.navigate('RoleInformation');
+            }
+          }}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -199,5 +407,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'uppercase',
     fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });

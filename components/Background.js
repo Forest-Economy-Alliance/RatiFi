@@ -3,7 +3,7 @@ import {View, ImageBackground} from 'react-native';
 
 export default function Background(props) {
   const BG_IMG_PATH = require('../assets/images/background.png');
-  console.log(props);
+  // console.log(props);
   return (
     <View
       style={[
@@ -11,14 +11,12 @@ export default function Background(props) {
           flex: 1,
         },
         props.style,
-      ]}
-    >
+      ]}>
       <ImageBackground
         source={BG_IMG_PATH}
         resizeMode="cover"
         blurRadius={5}
-        style={{flex: 1}}
-      >
+        style={{flex: 1}}>
         {props.children}
       </ImageBackground>
     </View>

@@ -14,13 +14,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
-import Input from '../../components/Input';
-import Background from '../../components/Background';
+
+import {useFormik} from 'formik';
+import {object, string} from 'yup';
+import 'yup-phone';
+
 const NamePhoneScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
-
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
 
   const {t, i18n} = useTranslation();
 
@@ -37,6 +37,48 @@ const NamePhoneScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
+  const state = {
+    name: '',
+    phoneNumber: '',
+  };
+
+  const state2 = {
+    otp: '',
+  };
+
+  const onGetOtp = (values, formikActions) => {
+    formikActions.setSubmitting(false);
+    setPressed(true);
+  };
+
+  const onVerifyOtp = (values, formikActions) => {
+    formikActions.setSubmitting(false);
+    navigation.navigate('Password');
+  };
+
+  const NPSchema = object().shape({
+    name: string().required('Name is Required'),
+    phoneNumber: string()
+      .phone(null, false, 'Invalid Phone Nummber')
+      .required('Phone Number is Required'),
+  });
+
+  const NPSchema2 = object().shape({
+    otp: string().required('OTP is Required'),
+  });
+
+  const formik = useFormik({
+    initialValues: state,
+    validationSchema: NPSchema,
+    onSubmit: onGetOtp,
+  });
+
+  const formik2 = useFormik({
+    initialValues: state2,
+    validationSchema: NPSchema2,
+    onSubmit: onVerifyOtp,
+  });
+
   useEffect(() => {
     changeLanguage(language);
   }, []);
@@ -44,15 +86,17 @@ const NamePhoneScreen = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
-        <Input
-          // style={styles.inputName}
+        <TextInput
+          style={styles.inputName}
           placeholder={t('name')}
           placeholderTextColor="#480E09"
-          onChangeText={text => {
-            setName(text);
-          }}
-          value={name}
+          onChangeText={formik.handleChange('name')}
+          value={formik.values.name}
+          onBlur={formik.handleBlur('name')}
         />
+        {formik.touched.name && formik.errors.name && (
+          <Text style={styles.error}>{formik.errors.name}</Text>
+        )}
         <PhoneInput
           ref={phoneInput}
           placeholder={t('phone/mobile')}
@@ -64,18 +108,18 @@ const NamePhoneScreen = ({navigation}) => {
           textContainerStyle={styles.inputPhoneTextContainer}
           codeTextStyle={styles.inputPhoneCodeText}
           countryPickerButtonStyle={styles.inputPhoneCountryPickerButton}
-          onChangeFormattedText={text => {
-            setPhoneNumber(text);
-          }}
+          onChangeFormattedText={formik.handleChange('phoneNumber')}
+          value={formik.values.phoneNumber}
+          onBlur={formik.handleBlur('phoneNumber')}
         />
+        {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+          <Text style={styles.error}>{formik.errors.phoneNumber}</Text>
+        )}
         {/* get otp button */}
         {!pressed && (
           <TouchableOpacity
-            onPress={() => {
-              setPressed(true);
-            }}
-            style={styles.getOtpButton}
-          >
+            onPress={formik.handleSubmit}
+            style={styles.getOtpButton}>
             <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
           </TouchableOpacity>
         )}
@@ -88,21 +132,19 @@ const NamePhoneScreen = ({navigation}) => {
               style={styles.inputOTP}
               placeholder={t('ENTER OTP')}
               placeholderTextColor="#480E09"
-              onChangeText={text => {
-                setPhoneNumber(text);
-              }}
-              value={phoneNumber}
+              onChangeText={formik2.handleChange('otp')}
+              value={formik2.values.otp}
+              onBlur={formik2.handleBlur('otp')}
             />
-            {/* two buttons */}
+            {formik2.touched.otp && formik2.errors.otp && (
+              <Text style={styles.error}>{formik2.errors.otp}</Text>
+            )}
             <TouchableOpacity style={styles.resendOtpButton} onPress={() => {}}>
               <Text style={styles.resendOtpButtonText}>{t('resend otp')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.verifyOtpButton}
-              onPress={() => {
-                navigation.navigate('Password');
-              }}
-            >
+              onPress={formik2.handleSubmit}>
               <Text style={styles.verifyOtpButtonText}>{t('verify otp')}</Text>
             </TouchableOpacity>
           </View>
@@ -211,5 +253,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'uppercase',
     fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });
