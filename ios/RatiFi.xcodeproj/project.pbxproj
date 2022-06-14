@@ -18,6 +18,8 @@
 		799D75878C444F73BBE064C0 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E007D8E88554025AEDB26AE /* Roboto-Light.ttf */; };
 		D2B55CEB218649E7A971913F /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B949477CE9B479D85E36951 /* Roboto-Medium.ttf */; };
 		2B4AD2611BDD4C6E9A9A4FEC /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69FC6413011D4E2E9E0D3400 /* Roboto-Regular.ttf */; };
+		2A3AEDBD53244750ACFCC64C /* mangal.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79CC30EA9BE3494F9CA5EEB5 /* mangal.ttf */; };
+		1261E364BB6648C6BEB34201 /* mangalb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA84E46B47174805B639F9A9 /* mangalb.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		4E007D8E88554025AEDB26AE /* Roboto-Light.ttf */ = {isa = PBXFileReference; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4B949477CE9B479D85E36951 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		69FC6413011D4E2E9E0D3400 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		79CC30EA9BE3494F9CA5EEB5 /* mangal.ttf */ = {isa = PBXFileReference; name = "mangal.ttf"; path = "../assets/fonts/mangal.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DA84E46B47174805B639F9A9 /* mangalb.ttf */ = {isa = PBXFileReference; name = "mangalb.ttf"; path = "../assets/fonts/mangalb.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,8 @@
 				4E007D8E88554025AEDB26AE /* Roboto-Light.ttf */,
 				4B949477CE9B479D85E36951 /* Roboto-Medium.ttf */,
 				69FC6413011D4E2E9E0D3400 /* Roboto-Regular.ttf */,
+				79CC30EA9BE3494F9CA5EEB5 /* mangal.ttf */,
+				DA84E46B47174805B639F9A9 /* mangalb.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -269,6 +275,8 @@
 				799D75878C444F73BBE064C0 /* Roboto-Light.ttf in Resources */,
 				D2B55CEB218649E7A971913F /* Roboto-Medium.ttf in Resources */,
 				2B4AD2611BDD4C6E9A9A4FEC /* Roboto-Regular.ttf in Resources */,
+				2A3AEDBD53244750ACFCC64C /* mangal.ttf in Resources */,
+				1261E364BB6648C6BEB34201 /* mangalb.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
+  PermissionsAndroid,
+  Button,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
