@@ -30,11 +30,44 @@ const RoleInformationScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
 
   const [id, setId] = useState('');
-  const [value, setValue] = useState(null);
+  const [idType, setIdType] = useState('');
+  const [role, setRole] = useState('');
+  const [pos, setPos] = useState('');
+
+  const [err, setErr] = useState(0);
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const ROLES = [
+    {label: 'FRC', value: '1'},
+    {label: 'SDLC', value: '2'},
+    {label: 'DLC', value: '3'},
+  ];
+
+  const POS1 = [
+    {label: t('President'), value: '1'},
+    {label: t('Secretary'), value: '2'},
+    {label: t('Member'), value: '3'},
+  ];
+  const POS2 = [
+    {label: t('Subdivisonal Officer'), value: '1'},
+    {label: t('Tehsildar'), value: '2'},
+    {label: t('Forest Range Officer'), value: '3'},
+    {label: t('Member'), value: '3'},
+  ];
+  const POS3 = [
+    {label: t('District Collector'), value: '1'},
+    {label: t('District Forest Officer'), value: '2'},
+    {label: t('Officer-in-Charge (Tribal Affairs)'), value: '3'},
+    {label: t('Member'), value: '4'},
+  ];
+
+  const IDENTIFICATION = [
+    {label: 'Aadhar Card', value: '1'},
+    {label: 'Government ID', value: '2'},
+  ];
 
   const changeLanguage = value => {
     i18n
@@ -65,16 +98,16 @@ const RoleInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={ROLES}
           search
           maxHeight={300}
           labelField="label"
           valueField="value"
           placeholder={t('specify your membership')}
           searchPlaceholder="Search..."
-          value={value}
+          value={role}
           onChange={item => {
-            setValue(item.value);
+            setRole(item.value);
           }}
           renderItem={renderItem}
         />
@@ -85,16 +118,16 @@ const RoleInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={role === '1' ? POS1 : role === '2' ? POS2 : POS3}
           search
           maxHeight={300}
           labelField="label"
           valueField="value"
           placeholder={t('specify your role')}
           searchPlaceholder="Search..."
-          value={value}
+          value={pos}
           onChange={item => {
-            setValue(item.value);
+            setPos(item.value);
           }}
           renderItem={renderItem}
         />
@@ -108,16 +141,16 @@ const RoleInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={IDENTIFICATION}
           search
           maxHeight={300}
           labelField="label"
           valueField="value"
           placeholder={t('identity card type')}
           searchPlaceholder="Search..."
-          value={value}
+          value={idType}
           onChange={item => {
-            setValue(item.value);
+            setIdType(item.value);
           }}
           renderItem={renderItem}
         />
@@ -131,10 +164,18 @@ const RoleInformationScreen = ({navigation}) => {
           }}
           value={id}
         />
+        {err === 1 ? (
+          <Text style={styles.error}>{'Fill all the fields'}</Text>
+        ) : null}
         <TouchableOpacity
           style={styles.nextButton}
           onPress={() => {
-            navigation.navigate('DownloadPDF');
+            if (id === '' || idType === '' || role === '' || pos === '') {
+              setErr(1);
+            } else {
+              setErr(0);
+              navigation.navigate('DownloadPDF');
+            }
           }}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
@@ -174,6 +215,7 @@ const styles = StyleSheet.create({
   textItem: {
     flex: 1,
     fontSize: 16,
+    color: '#480E09',
   },
   placeholderStyle: {
     fontSize: 20,
@@ -229,5 +271,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'uppercase',
     fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });
