@@ -11,8 +11,14 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  selectLanguage,
+  setLevel,
+  setPosition,
+  setUidNum,
+  setUidType,
+} from '../../slices/userSlice';
 import {Dropdown} from 'react-native-element-dropdown';
 
 const data = [
@@ -27,6 +33,7 @@ const data = [
 ];
 
 const RoleInformationScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
   const [id, setId] = useState('');
@@ -174,6 +181,10 @@ const RoleInformationScreen = ({navigation}) => {
               setErr(1);
             } else {
               setErr(0);
+              dispatch(setLevel(role));
+              dispatch(setPosition(pos));
+              dispatch(setUidType(idType));
+              dispatch(setUidNum(id));
               navigation.navigate('DownloadPDF');
             }
           }}>

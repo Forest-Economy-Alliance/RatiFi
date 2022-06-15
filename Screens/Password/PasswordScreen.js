@@ -11,12 +11,13 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 
 const NamePhoneScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
   const [password, setPassword] = useState('');
@@ -35,6 +36,7 @@ const NamePhoneScreen = ({navigation}) => {
   });
 
   const onNext = (values, formikActions) => {
+    dispatch(setPassword(values.password));
     formikActions.setSubmitting(false);
     navigation.navigate('LocationInformation');
   };
