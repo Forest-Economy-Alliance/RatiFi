@@ -13,8 +13,8 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectLanguage, setMobile, setName} from '../../slices/userSlice';
 import PhoneInput from 'react-native-phone-number-input';
 
 import {useFormik} from 'formik';
@@ -22,6 +22,7 @@ import {object, string} from 'yup';
 import 'yup-phone';
 
 const NamePhoneScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
   const {t, i18n} = useTranslation();
@@ -49,6 +50,8 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const onGetOtp = (values, formikActions) => {
+    dispatch(setName(values.name));
+    dispatch(setMobile(values.phoneNumber));
     formikActions.setSubmitting(false);
     setPressed(true);
   };
