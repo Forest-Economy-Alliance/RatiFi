@@ -6,6 +6,6 @@ const MangalFont = `<style>
     font-style: normal;
     font-display: swap;
 }
-</style>`
+</style>`;
 
 export default MangalFont;
