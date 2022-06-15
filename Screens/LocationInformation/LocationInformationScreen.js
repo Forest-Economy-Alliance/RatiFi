@@ -240,7 +240,7 @@ const LocationInformationScreen = ({navigation}) => {
           dropdownPosition="bottom"
         />
         {err === 1 ? (
-          <Text style={styles.error}>{'Fill all the fields'}</Text>
+          <Text style={styles.error}>{t('Fill all the fields')}</Text>
         ) : null}
         <TouchableOpacity
           style={styles.nextButton}
