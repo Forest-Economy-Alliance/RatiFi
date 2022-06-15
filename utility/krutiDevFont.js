@@ -8,4 +8,4 @@ export default KrutiDevFont = `
     font-display: swap;
     </style>
 }
-`
+`;

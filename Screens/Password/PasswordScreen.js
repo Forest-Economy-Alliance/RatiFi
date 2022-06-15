@@ -12,7 +12,7 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {selectLanguage, setPassword} from '../../slices/userSlice';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 
@@ -20,19 +20,29 @@ const NamePhoneScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const state = {
     password: '',
     confirmPassword: '',
   };
 
+  const {t, i18n} = useTranslation();
+
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const changeLanguage = value => {
+    i18n
+      .changeLanguage(value)
+      .then(() => setCurrentLanguage(value))
+      .catch(err => console.log(err));
+  };
   const PassSchema = object().shape({
-    password: string().required('Password is Required'),
+    password: string().required(t('Password is Required')),
     confirmPassword: string()
-      .required('Confirm Password is Required')
-      .oneOf([ref('password'), null], 'Passwords must match'),
+      .required(t('Confirm Password is Required'))
+      .oneOf(
+        [ref('password'), null],
+        t('Password and Confirm Password does not match'),
+      ),
   });
 
   const onNext = (values, formikActions) => {
@@ -46,17 +56,6 @@ const NamePhoneScreen = ({navigation}) => {
     validationSchema: PassSchema,
     onSubmit: onNext,
   });
-
-  const {t, i18n} = useTranslation();
-
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   useEffect(() => {
     changeLanguage(language);

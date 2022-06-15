@@ -19,6 +19,25 @@
         "gram sabha": "Gram Sabha",
         "your forest map is available": "Your forest map is available",
         "download application document": "Download application document",
-        "download": "Download"
+        "download": "Download",
+        "President": "President",
+        "Secretary": "Secretary",
+        "Member": "Member",
+        "Subdivisonal Officer": "Subdivisonal Officer",
+        "Tehsildar": "Tehsildar",
+        "Forest Range Officer": "Forest Range Officer",
+        "District Collector": "District Collector",
+        "District Forest Officer": "District Forest Officer",
+        "Officer-in-Charge (Tribal Affairs)": "Officer-in-Charge (Tribal Affairs)",
+        "Name is Required": "Name is required",
+        "Phone Number is Required": "Phone number is required",
+        "Invalid Phone Number": "Invalid Phone Number",
+        "Password is Required": "Password is required",
+        "Confirm Password is Required": "Confirm Password is required",
+        "Password and Confirm Password do not match": "Password and Confirm Password do not match",
+        "OTP is Required": "OTP is required",
+        "Fill all the fields": "Fill all the fields",
+        "Invalid OTP": "Invalid OTP",
+        "Gram Sabha is Required": "Gram Sabha is required"
     }
 }

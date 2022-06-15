@@ -14,27 +14,37 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
 
-const data = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-  {label: 'Item 4', value: '4'},
-  {label: 'Item 5', value: '5'},
-  {label: 'Item 6', value: '6'},
-  {label: 'Item 7', value: '7'},
-  {label: 'Item 8', value: '8'},
-];
+import {useFormik} from 'formik';
+import {object, string, ref} from 'yup';
 
 const DownloadPDFScreen = ({navigation}) => {
   const language = useSelector(selectLanguage);
-  const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
-  const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true);
+
+  const state = {
+    gramSabha: '',
+  };
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const ValSchema = object().shape({
+    gramSabha: string().required(t('Gram Sabha is Required')),
+  });
+
+  const onGet = (values, formikActions) => {
+    setPressed(true);
+    formikActions.setSubmitting(false);
+  };
+
+  const formik = useFormik({
+    initialValues: state,
+    validationSchema: ValSchema,
+    onSubmit: onGet,
+  });
 
   const changeLanguage = value => {
     i18n
@@ -58,19 +68,19 @@ const DownloadPDFScreen = ({navigation}) => {
           style={styles.inputGramSabha}
           placeholder={t('gram sabha')}
           placeholderTextColor="#480E09"
-          onChangeText={text => {
-            setGramSabha(text);
-          }}
-          value={gramSabha}
+          onChangeText={formik.handleChange('gramSabha')}
+          value={formik.values.gramSabha}
+          onBlur={formik.handleBlur('gramSabha')}
         />
+        {formik.errors.gramSabha && formik.touched.gramSabha && (
+          <Text style={styles.error}>{formik.errors.gramSabha}</Text>
+        )}
         <TouchableOpacity
           style={styles.getDocsButton}
-          onPress={() => {
-            setPressed(true);
-          }}>
+          onPress={formik.handleSubmit}>
           <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
         </TouchableOpacity>
-        {pressed && (
+        {pressed && isAvailable && (
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
@@ -169,5 +179,14 @@ const styles = StyleSheet.create({
     color: '#480E09',
     textAlign: 'center',
     marginTop: '5%',
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });

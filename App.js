@@ -47,16 +47,14 @@ const App = () => {
           name="LangSelection"
           component={LangSelectionScreen}
           options={{
-            // headerShown: false,
-            headerTitle: 'Please select a language',
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
           options={{
-            // headerShown: false,
-            headerTitle: 'Please enter Phone Number',
+            headerShown: false,
           }}
         />
         <Stack.Screen
