@@ -24,6 +24,8 @@ target 'RatiFi' do
   pod 'react-native-html-to-pdf', :path => '../node_modules/react-native-html-to-pdf'
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
+
   target 'RatiFiTests' do
     inherit! :complete
     # Pods for testing
