@@ -1,3 +1,4 @@
+import React from 'react';
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
@@ -13,7 +14,9 @@ const persistConfig = {
 
 const pReducer = persistReducer(persistConfig, rootReducer);
 
+console.log('pReducer', pReducer);
 const store = createStore(pReducer, applyMiddleware(thunk));
+
 const persistor = persistStore(store);
 
 export default {

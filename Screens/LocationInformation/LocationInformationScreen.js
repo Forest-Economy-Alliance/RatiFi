@@ -9,13 +9,17 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+
 import {Dropdown} from 'react-native-element-dropdown';
+import i18n from '../../assets/i18n/i18n';
+import {updateUserInfoAction} from '../../redux-store/actions/auth';
+
+console.log(i18n.t('Jharkhand'));
 
 const DATA = [
   {
-    State: 'Jharkhand',
+    State: i18n.t('Jharkhand'),
     Districts: [
       {
         District: 'Simdega',
@@ -117,8 +121,11 @@ const DATA = [
 ];
 
 const LocationInformationScreen = ({navigation}) => {
-  const language = useSelector(selectLanguage);
-
+  const language = 'hi';
+  const dispatch = useDispatch();
+  const statue = useSelector(state => state.entities.auth);
+  console.log('HI');
+  console.log(statue);
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
   const [tehsil, setTehsil] = useState('');
@@ -126,10 +133,11 @@ const LocationInformationScreen = ({navigation}) => {
   const [village, setVillage] = useState('');
 
   const [err, setErr] = useState(0);
+  const {t, i18n} = useTranslation();
 
   const [states, setStates] = useState([
     {
-      State: 'Jharkhand',
+      State: t('Jharkhand'),
     },
   ]);
   const [districts, setDistricts] = useState([
@@ -226,8 +234,6 @@ const LocationInformationScreen = ({navigation}) => {
     },
   ]);
 
-  const {t, i18n} = useTranslation();
-
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   const changeLanguage = value => {
@@ -258,7 +264,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={state}
           onChange={item => {
-            setState(item.value);
+            console.log(item);
+            setState(item.value?.State);
           }}
           dropdownPosition="bottom"
         />
@@ -276,7 +283,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={district}
           onChange={item => {
-            setDistrict(item.value);
+            console.log(item);
+            setDistrict(item.value?.District);
           }}
           dropdownPosition="bottom"
         />
@@ -294,7 +302,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={tehsil}
           onChange={item => {
-            setTehsil(item.value);
+            console.log(item);
+            setDistrict(item.value?.Tehsil);
           }}
           dropdownPosition="bottom"
         />
@@ -312,7 +321,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={panchayat}
           onChange={item => {
-            setPanchayat(item.value);
+            console.log(item);
+            setDistrict(item.value?.Panchayat);
           }}
           dropdownPosition="bottom"
         />
@@ -330,7 +340,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={village}
           onChange={item => {
-            setVillage(item.value);
+            console.log(item);
+            setDistrict(item.value?.Panchayat);
           }}
           dropdownPosition="bottom"
         />
@@ -340,18 +351,24 @@ const LocationInformationScreen = ({navigation}) => {
         <TouchableOpacity
           style={styles.nextButton}
           onPress={() => {
-            if (
-              state === '' ||
-              district === '' ||
-              tehsil === '' ||
-              panchayat === '' ||
-              village === ''
-            ) {
-              setErr(1);
-            } else {
-              navigation.navigate('RoleInformation');
-            }
-          }}>
+            dispatch(
+              updateUserInfoAction(
+                {
+                  state: 'Jharkhand',
+                  district: 'Simdega',
+                  tehsil: 'Bano',
+                  panchayat: 'Banki',
+                  village: 'Kombakra',
+                },
+                args => {
+                  if (args) {
+                    navigation.navigate('RoleInformation');
+                  }
+                },
+              ),
+            );
+          }}
+        >
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

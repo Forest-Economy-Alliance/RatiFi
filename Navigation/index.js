@@ -10,13 +10,21 @@ import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScr
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
 import RatiFiSplashScreen from '../Screens/RatiFiSplash/RatiFiSplashScreen';
+import {useSelector} from 'react-redux';
+import Loader from '../components/Loader';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
+  const {registrationScreenCode, loading} = useSelector(
+    state => state.entities.appUtil.appUtil,
+  );
+
   return (
     <NavigationContainer>
+      {loading && <Loader />}
       <Stack.Navigator
+        initialRouteName="ForestFiSplash"
         screenOptions={{
           headerStyle: {
             // backgroundColor: 'green',
@@ -40,14 +48,16 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="LangSelection"
-          component={LangSelectionScreen}
-          options={{
-            // headerShown: false,
-            headerTitle: 'Please select a language',
-          }}
-        />
+        {
+          <Stack.Screen
+            name="LangSelection"
+            component={LangSelectionScreen}
+            options={{
+              // headerShown: false,
+              headerTitle: 'Please select a language',
+            }}
+          />
+        }
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}

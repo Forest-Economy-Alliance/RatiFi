@@ -1,8 +1,8 @@
 import React from 'react';
-import Redux from './redux';
-import {Provider} from 'react-redux';
+import Redux from './redux-store';
+import {Provider, useDispatch} from 'react-redux';
+import {Text} from 'react-native';
 import {PersistGate} from 'redux-persist/es/integration/react';
-
 import {Navigation} from './Navigation';
 const {store, persistor} = Redux;
 

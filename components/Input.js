@@ -3,7 +3,11 @@ import {View, Text, StyleSheet, TextInput} from 'react-native';
 
 export default function Input(props) {
   return (
-    <TextInput placeholderTextColor={'#fff'} style={styles.input} {...props} />
+    <TextInput
+      placeholderTextColor={'#fff'}
+      {...props}
+      style={[styles.input, props.style]}
+    />
   );
 }
 
@@ -15,9 +19,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: '100%',
     fontSize: 20,
-    color: '#fff',
+    color: '#480E09',
     backgroundColor: 'transparent',
     marginVertical: 5,
-    // marginHorizontal: 5,
   },
 });

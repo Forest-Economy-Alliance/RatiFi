@@ -7,41 +7,41 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useDispatch} from 'react-redux';
-import {setLanguage} from '../../slices/userSlice';
+// import {useDispatch} from 'react-redux';
 
 const languages = [
-  {
-    name: 'English',
-    value: 'en',
-  },
+  // {
+  //   name: 'English',
+  //   value: 'en',
+  // },
   {
     name: 'हिन्दी',
     value: 'hi',
   },
-  {
-    name: 'ગુજરાતી',
-    value: 'gu',
-  },
+  // {
+  //   name: 'ગુજરાતી',
+  //   value: 'gu',
+  // },
   {
     name: 'ଓଡ଼ିଆ',
     value: 'or',
   },
-  {
-    name: 'ಕನ್ನಡ',
-    value: 'kn',
-  },
-  {
-    name: 'മലയാളം',
-    value: 'ml',
-  },
-  {
-    name: 'தமிழ்',
-    value: 'ta',
-  },
-  {
-    name: 'తెలుగు',
-    value: 'te',
-  },
+  // {
+  //   name: 'ಕನ್ನಡ',
+  //   value: 'kn',
+  // },
+  // {
+  //   name: 'മലയാളം',
+  //   value: 'ml',
+  // },
+  // {
+  //   name: 'தமிழ்',
+  //   value: 'ta',
+  // },
+  // {
+  //   name: 'తెలుగు',
+  //   value: 'te',
+  // },
 ];
 
 const LangSelectionScreen = ({navigation}) => {
@@ -54,11 +54,11 @@ const LangSelectionScreen = ({navigation}) => {
           <TouchableOpacity
             key={lang.value}
             onPress={() => {
-              // console.log(selectLanguage);
-              dispatch(setLanguage(lang.value));
+              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
               navigation.navigate('NamePhone');
             }}
-            style={styles.button}>
+            style={styles.button}
+          >
             <Text style={styles.text}>{lang.name}</Text>
           </TouchableOpacity>
         ))}

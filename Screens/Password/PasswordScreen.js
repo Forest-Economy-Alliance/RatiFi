@@ -11,14 +11,14 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
+import {updatePasswordAction} from '../../redux-store/actions/auth';
 
-const NamePhoneScreen = ({navigation}) => {
-  const language = useSelector(selectLanguage);
-
+const PasswordScreen = ({navigation}) => {
+  const language = 'hi';
+  const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -26,6 +26,9 @@ const NamePhoneScreen = ({navigation}) => {
     password: '',
     confirmPassword: '',
   };
+  const mobile = useSelector(
+    state => state.entities.auth.userInfo.profile.mobile,
+  );
 
   const PassSchema = object().shape({
     password: string().required('Password is Required'),
@@ -36,6 +39,20 @@ const NamePhoneScreen = ({navigation}) => {
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
+    dispatch(
+      updatePasswordAction(
+        {
+          mobile: mobile,
+          password: formik.values.password,
+          confirmPassword: formik.values.confirmPassword,
+        },
+        args => {
+          if (args) {
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+          }
+        },
+      ),
+    );
     navigation.navigate('LocationInformation');
   };
 
@@ -89,7 +106,8 @@ const NamePhoneScreen = ({navigation}) => {
         )}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={formik.handleSubmit}>
+          onPress={formik.handleSubmit}
+        >
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -97,7 +115,7 @@ const NamePhoneScreen = ({navigation}) => {
   );
 };
 
-export default NamePhoneScreen;
+export default PasswordScreen;
 
 const styles = StyleSheet.create({
   container: {

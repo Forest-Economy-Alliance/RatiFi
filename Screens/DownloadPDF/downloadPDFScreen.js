@@ -6,13 +6,13 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
+  Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -26,7 +26,7 @@ const data = [
 ];
 
 const DownloadPDFScreen = ({navigation}) => {
-  const language = useSelector(selectLanguage);
+  const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
   const [gramSabha, setGramSabha] = useState('');
@@ -46,6 +46,17 @@ const DownloadPDFScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
+
+  const imgUrls = {
+    ambepadar:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324247/Map1_oqd9eg.png',
+    dayaltung:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324264/Map2_iq3jyc.png',
+    telarai:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324257/Map3_h8wi6y.png',
+    pedawara:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324266/Map4_f5zkou.png',
+  };
 
   return (
     // flexWrap: 'wrap',
@@ -67,22 +78,36 @@ const DownloadPDFScreen = ({navigation}) => {
           style={styles.getDocsButton}
           onPress={() => {
             setPressed(true);
-          }}>
+          }}
+        >
           <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
         </TouchableOpacity>
         {pressed && (
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
-                {t('your forest map is available')}
+                {imgUrls[gramSabha]
+                  ? t('your forest map is available')
+                  : t('your_forest_map_is_not_available')}
               </Text>
+              {imgUrls[gramSabha] && (
+                <Image
+                  source={{uri: imgUrls[gramSabha]}}
+                  style={{
+                    height: 100,
+                    width: 100,
+                  }}
+                />
+              )}
             </View>
             <Text style={styles.subMsg}>
               {t('download application document')}
             </Text>
-            <TouchableOpacity style={styles.nextButton} onPress={() => {}}>
-              <Text style={styles.nextButtonText}>{t('download')}</Text>
-            </TouchableOpacity>
+            {pressed && (
+              <TouchableOpacity style={styles.nextButton} onPress={() => {}}>
+                <Text style={styles.nextButtonText}>{t('download')}</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
       </KeyboardAvoidingView>
@@ -160,7 +185,7 @@ const styles = StyleSheet.create({
     padding: '5%',
   },
   msg: {
-    fontSize: 30,
+    fontSize: 20,
     color: '#480E09',
     textAlign: 'center',
   },
