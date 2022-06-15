@@ -2,7 +2,11 @@ import {configureStore} from '@reduxjs/toolkit';
 import userReducer from '../slices/userSlice';
 import authReducer from '../slices/authSlice';
 // redux-persist wrappers
-import {persistStore, persistReducer, persistCombineReducers} from 'redux-persist';
+import {
+  persistStore,
+  persistReducer,
+  persistCombineReducers,
+} from 'redux-persist';
 // the local storage we'll be using to persist data
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // redux-persist merge level
@@ -16,7 +20,10 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2,
 };
 // wrap persist API around root reducer and store
-const persistedReducers = persistCombineReducers(persistConfig, {user: userReducer, auth: authReducer});
+const persistedReducers = persistCombineReducers(persistConfig, {
+  user: userReducer,
+  auth: authReducer,
+});
 
 export const store = configureStore({
   reducer: persistedReducers,

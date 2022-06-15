@@ -11,16 +11,41 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {selectLanguage} from '../../slices/userSlice';
-import Background from '../../components/Background';
-import Input from '../../components/Input';
+import {useFormik} from 'formik';
+import {object, string, ref} from 'yup';
 
 const NamePhoneScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const state = {
+    password: '',
+    confirmPassword: '',
+  };
+
+  const PassSchema = object().shape({
+    password: string().required('Password is Required'),
+    confirmPassword: string()
+      .required('Confirm Password is Required')
+      .oneOf([ref('password'), null], 'Passwords must match'),
+  });
+
+  const onNext = (values, formikActions) => {
+    dispatch(setPassword(values.password));
+    formikActions.setSubmitting(false);
+    navigation.navigate('LocationInformation');
+  };
+
+  const formik = useFormik({
+    initialValues: state,
+    validationSchema: PassSchema,
+    onSubmit: onNext,
+  });
 
   const {t, i18n} = useTranslation();
 
@@ -38,38 +63,39 @@ const NamePhoneScreen = ({navigation}) => {
   }, []);
 
   return (
-    <Background>
-      <Input
-        // style={styles.inputPass}
-        placeholder={t('password')}
-        placeholderTextColor="#480E09"
-        onChangeText={text => {
-          setPassword(text);
-        }}
-        value={password}
-      />
-      <Input
-        // style={styles.inputConfPass}
-        placeholder={t('confirm password')}
-        placeholderTextColor="#480E09"
-        onChangeText={text => {
-          setConfirmPassword(text);
-        }}
-        value={confirmPassword}
-      />
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={() => {
-          if (password === confirmPassword) {
-            navigation.navigate('LocationInformation');
-          } else {
-            alert('Password does not match');
-          }
-        }}
-      >
-        <Text style={styles.nextButtonText}>{t('next')}</Text>
-      </TouchableOpacity>
-    </Background>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.container}>
+        <TextInput
+          style={styles.inputPass}
+          placeholder={t('password')}
+          placeholderTextColor="#480E09"
+          onChangeText={formik.handleChange('password')}
+          secureTextEntry={true}
+          onBlur={formik.handleBlur('password')}
+          value={formik.values.password}
+        />
+        {formik.touched.password && formik.errors.password && (
+          <Text style={styles.error}>{formik.errors.password}</Text>
+        )}
+        <TextInput
+          style={styles.inputConfPass}
+          placeholder={t('confirm password')}
+          placeholderTextColor="#480E09"
+          onChangeText={formik.handleChange('confirmPassword')}
+          secureTextEntry={true}
+          onBlur={formik.handleBlur('confirmPassword')}
+          value={formik.values.confirmPassword}
+        />
+        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+          <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
+        )}
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={formik.handleSubmit}>
+          <Text style={styles.nextButtonText}>{t('next')}</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -109,5 +135,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'uppercase',
     fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });

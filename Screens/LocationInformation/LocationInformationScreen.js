@@ -9,29 +9,127 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  selectLanguage,
+  setDistrict,
+  setPanchayat,
+  setStateName,
+  setTehsil,
+  setVillage,
+} from '../../slices/userSlice';
 import {Dropdown} from 'react-native-element-dropdown';
 
-const data = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-  {label: 'Item 4', value: '4'},
-  {label: 'Item 5', value: '5'},
-  {label: 'Item 6', value: '6'},
-  {label: 'Item 7', value: '7'},
-  {label: 'Item 8', value: '8'},
-];
-
 const LocationInformationScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
 
-  const [state, setState] = useState('');
-  const [district, setDistrict] = useState('');
-  const [tehsil, setTehsil] = useState('');
-  const [panchayat, setPanchayat] = useState('');
-  const [village, setVillage] = useState('');
+  const [state, sttState] = useState('');
+  const [district, sttDistrict] = useState('');
+  const [tehsil, sttTehsil] = useState('');
+  const [panchayat, sttPanchayat] = useState('');
+  const [village, sttVillage] = useState('');
+
+  const [err, setErr] = useState(0);
+
+  const [states, setStates] = useState([
+    {
+      State: 'Jharkhand',
+    },
+  ]);
+  const [districts, setDistricts] = useState([
+    {
+      District: 'Simdega',
+    },
+  ]);
+  const [tehsils, sttTehsils] = useState([
+    {
+      Tehsil: 'Bano',
+    },
+    {
+      Tehsil: 'Jaldega',
+    },
+    {
+      Tehsil: 'Kolebira',
+    },
+  ]);
+  const [panchayats, setPanchayats] = useState([
+    {
+      Panchayat: 'Banki',
+    },
+    {
+      Panchayat: 'Simhatu',
+    },
+    {
+      Panchayat: 'Konsode',
+    },
+    {
+      Panchayat: 'Kutungia',
+    },
+    {
+      Panchayat: 'Patiamba',
+    },
+    {
+      Panchayat: 'Konmerla',
+    },
+    {
+      Panchayat: 'Jaldega',
+    },
+    {
+      Panchayat: 'Lachragarh',
+    },
+    {
+      Panchayat: 'Tutikel',
+    },
+    {
+      Panchayat: 'Eidega',
+    },
+    {
+      Panchayat: 'Nawatoli',
+    },
+  ]);
+  const [villages, setVillages] = useState([
+    {
+      Village: 'Kombakra',
+    },
+    {
+      Village: 'Sardhatoli',
+    },
+    {
+      Village: 'Eidega',
+    },
+    {
+      Village: 'Bhanwarpahari',
+    },
+
+    {
+      Village: 'Ramjari',
+    },
+    {
+      Village: 'Karimati',
+    },
+    {
+      Village: 'Baldega',
+    },
+    {
+      Village: 'Mahomdega',
+    },
+    {
+      Village: 'Kharwagada',
+    },
+    {
+      Village: 'Kombakra',
+    },
+    {
+      Village: 'Sardhatoli',
+    },
+    {
+      Village: 'Eidega',
+    },
+    {
+      Village: 'Bhanwarpahari',
+    },
+  ]);
 
   const {t, i18n} = useTranslation();
 
@@ -57,17 +155,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={states}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="State"
           placeholder={t('state')}
           searchPlaceholder="Search..."
           value={state}
           onChange={item => {
-            setState(item.value);
+            sttState(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -75,17 +173,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={districts}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="District"
           placeholder={t('district')}
           searchPlaceholder="Search..."
           value={district}
           onChange={item => {
-            setDistrict(item.value);
+            sttDistrict(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -93,17 +191,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={tehsils}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="Tehsil"
           placeholder={t('tehsil/block')}
           searchPlaceholder="Search..."
           value={tehsil}
           onChange={item => {
-            setTehsil(item.value);
+            sttTehsil(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -111,17 +209,17 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={panchayats}
           search
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          labelField="Panchayat"
           placeholder={t('panchayat')}
           searchPlaceholder="Search..."
           value={panchayat}
           onChange={item => {
-            setPanchayat(item.value);
+            sttPanchayat(item.value);
           }}
+          dropdownPosition="bottom"
         />
         <Dropdown
           style={styles.dropdown}
@@ -129,21 +227,41 @@ const LocationInformationScreen = ({navigation}) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={villages}
           search
-          maxHeight={'30%'}
-          labelField="label"
-          valueField="value"
+          maxHeight={300}
+          labelField="Village"
           placeholder={t('village')}
           searchPlaceholder="Search..."
           value={village}
           onChange={item => {
-            setVillage(item.value);
+            sttVillage(item.value);
           }}
+          dropdownPosition="bottom"
         />
+        {err === 1 ? (
+          <Text style={styles.error}>{'Fill all the fields'}</Text>
+        ) : null}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={() => navigation.navigate('RoleInformation')}>
+          onPress={() => {
+            if (
+              state === '' ||
+              district === '' ||
+              tehsil === '' ||
+              panchayat === '' ||
+              village === ''
+            ) {
+              setErr(1);
+            } else {
+              dispatch(setStateName(state));
+              dispatch(setDistrict(district));
+              dispatch(setTehsil(tehsil));
+              dispatch(setPanchayat(panchayat));
+              dispatch(setVillage(village));
+              navigation.navigate('RoleInformation');
+            }
+          }}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -199,5 +317,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textTransform: 'uppercase',
     fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
   },
 });
