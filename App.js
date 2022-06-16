@@ -10,6 +10,7 @@ import RoleInformationScreen from './Screens/RoleInformation/RoleInformationScre
 import downloadPDFScreen from './Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from './Screens/ForestFiSplash/ForestFiSplashScreen';
 import RatiFiSplashScreen from './Screens/RatiFiSplash/RatiFiSplashScreen';
+import FormsPage from './Screens/FormsPage/FormsPage';
 // import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
@@ -81,6 +82,13 @@ const App = () => {
         <Stack.Screen
           name="DownloadPDF"
           component={downloadPDFScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FormsPage"
+          component={FormsPage}
           options={{
             headerShown: false,
           }}
