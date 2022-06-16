@@ -61,8 +61,8 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const onGetOtp = (values, formikActions) => {
-    dispatch(setName(values.name));
-    dispatch(setMobile(values.phoneNumber));
+    // dispatch(setName(values.name));
+    // dispatch(setMobile(values.phoneNumber));
     formikActions.setSubmitting(false);
     setPressed(true);
     dispatch(
