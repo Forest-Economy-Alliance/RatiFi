@@ -170,7 +170,6 @@ const NamePhoneScreen = ({navigation}) => {
         )}
         <Text>{t('you will recived otp on this number')}</Text>
         {/* get otp button */}
-        <Button title='FormsPage' onPress={() => navigation.navigate('FormsPage')} />
         {!pressed && (
           <TouchableOpacity
             onPress={formik.handleSubmit}
