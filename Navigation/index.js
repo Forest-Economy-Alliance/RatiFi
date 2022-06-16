@@ -12,6 +12,7 @@ import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen
 import RatiFiSplashScreen from '../Screens/RatiFiSplash/RatiFiSplashScreen';
 import {useSelector} from 'react-redux';
 import Loader from '../components/Loader';
+import FormsPage from '../Screens/FormsPage/FormsPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,13 @@ export const Navigation = () => {
         <Stack.Screen
           name="DownloadPDF"
           component={downloadPDFScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FormsPage"
+          component={FormsPage}
           options={{
             headerShown: false,
           }}

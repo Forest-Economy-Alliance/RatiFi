@@ -1,6 +1,8 @@
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import MangalFont from './mangalFont';
+import KrutiDevFont from './krutiDevFont';
+
 /**
  * This is an abstract class which defines the interface for a form type.
  * @class FormTypeAbstract
@@ -44,17 +46,20 @@ class FormPDFAbstract {
    */
   createPDF = async (_directory, _fileName) => {
     let headEnd = this.template.search('</head>');
-    var replacedTemplate = this.template.slice(0,headEnd) + MangalFont + this.template.slice(headEnd);
+    var replacedTemplate =
+      this.template.slice(0, headEnd) +
+      KrutiDevFont +
+      this.template.slice(headEnd);
     if (this.totalStrings > 0) {
-        replacedTemplate = replacedTemplate.replace(this.stringRegex, match => {
+      replacedTemplate = replacedTemplate.replace(this.stringRegex, match => {
         let startIndex = match.search(/\d+/g);
-        return this.fieldStrings[match.substring(startIndex, match.length)]
+        return this.fieldStrings[match.substring(startIndex, match.length)];
       });
     }
     if (this.totalPictures > 0) {
       replacedTemplate = replacedTemplate.replace(this.pictureRegex, match => {
         let startIndex = match.search(/\d+/g);
-        return this.fieldPictures[match.substring(startIndex, match.length)]
+        return this.fieldPictures[match.substring(startIndex, match.length)];
       });
     }
 
@@ -63,7 +68,7 @@ class FormPDFAbstract {
         html: replacedTemplate,
         fileName: _fileName,
         directory: _directory,
-        fonts : [MangalFont],
+        fonts: [MangalFont],
       });
 
       alert(file.filePath);
