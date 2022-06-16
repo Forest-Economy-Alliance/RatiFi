@@ -7,7 +7,8 @@ import {
   Button,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import React, {Component} from 'react';
+import React, { useState} from 'react';
+import { useSelector } from 'react-redux';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
 import Form3Jharkhand from '../../utility/Form3_Jharkhand';
@@ -40,17 +41,15 @@ const getPanchayat = () => 'B';
 const getTehsil = () => 'C';
 const getVillage = () => 'D';
 
-class FormsPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: 0,
-      carouselItems: [
+const FormsPage = ({navigation}) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+      const carouselItems = [
         {
           title: 'Form 1',
           callback: async () => {
-            let obj = Form1Jharkhand(
-              [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
+            let obj = new Form1Jharkhand(
+              [getVillage(), "getPanchayat()", "getTehsil()", "getDistrict()"],
               null,
             );
             this.generatePDF(obj, 'Form1_Jharkhand');
@@ -58,9 +57,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
         },
         {
-          title: 'Item 2',
+          title: 'Form 2',
           callback: async () => {
-            let obj = Form2Jharkhand(
+            let obj = new Form2Jharkhand(
               [getPanchayat(), getTehsil(), getDistrict()],
               null,
             );
@@ -69,9 +68,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page2_Jharkhand.png'),
         },
         {
-          title: 'Item 3',
+          title: 'Form 3',
           callback: async () => {
-            let obj = Form3Jharkhand(
+            let obj = new Form3Jharkhand(
               [getPanchayat(), getTehsil(), getDistrict()],
               null,
             );
@@ -80,9 +79,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page3_Jharkhand.png'),
         },
         {
-          title: 'Item 4',
+          title: 'Form 4',
           callback: async () => {
-            let obj = Form4Jharkhand(
+            let obj = new Form4Jharkhand(
               [getPanchayat(), getTehsil(), getDistrict(), '      ', '      '],
               null,
             );
@@ -91,9 +90,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page4_Jharkhand.png'),
         },
         {
-          title: 'Item 5',
+          title: 'Form 5',
           callback: async () => {
-            let obj = Form5Jharkhand(
+            let obj = new Form5Jharkhand(
               [getTehsil(), getVillage(), getDistrict()],
               null,
             );
@@ -103,9 +102,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page5_Jharkhand.png'),
         },
         {
-          title: 'Item 6',
+          title: 'Form 6',
           callback: async () => {
-            let obj = Form6Jharkhand(
+            let obj = new Form6Jharkhand(
               [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
               null,
             );
@@ -114,10 +113,10 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page6_Mangal.png'),
         },
         {
-          title: 'Item 7',
+          title: 'Form 7',
           callback: async () => {
-            let obj = Form7Jharkhand(
-              [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
+            let obj = new Form7Jharkhand(
+              [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
               null,
             );
             await this.generatePDF(obj, 'Form7_Jharkhand');
@@ -125,9 +124,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page7_Mangal.png'),
         },
         {
-          title: 'Item 8',
+          title: 'Form 8',
           callback: async () => {
-            let obj = Form8Jharkhand(
+            let obj = new Form8Jharkhand(
               [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
               null,
             );
@@ -136,57 +135,57 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page8_Jharkhand.png'),
         },
         {
-          title: 'Item 9',
+          title: 'Form 9',
           callback: async () => {
-            let obj = Form9Jharkhand(null, ['none']);
+            let obj = new Form9Jharkhand(null, ['none']);
             await this.generatePDF(obj, 'Form9_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
         },
         {
-          title: 'Item 10',
+          title: 'Form 10',
           callback: async () => {
-            let obj = Form10Jharkhand(null, null);
+            let obj = new Form10Jharkhand(null, null);
             await this.generatePDF(obj, 'Form10_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page10_Jharkhand.png'),
         },
         {
-          title: 'Item 11',
+          title: 'Form 11',
           callback: async () => {
-            let obj = Form11Jharkhand(null, null);
+            let obj = new Form11Jharkhand(null, null);
             await this.generatePDF(obj, 'Form11_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page11_Jharkhand.png'),
         },
         {
-          title: 'Item 12',
+          title: 'Form 12',
           callback: async () => {
-            let obj = Form12Jharkhand(null, null);
+            let obj = new Form12Jharkhand(null, null);
             await this.generatePDF(obj, 'Form12_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page12_Jharkhand.png'),
         },
         {
-          title: 'Item 13',
+          title: 'Form 13',
           callback: async () => {
-            let obj = Form13Jharkhand([getTehsil()], null);
+            let obj = new Form13Jharkhand([getTehsil()], null);
             await this.generatePDF(obj, 'Form13_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page13_Jharkhand.png'),
         },
         {
-          title: 'Item 14',
+          title: 'Form 14',
           callback: async () => {
-            let obj = Form14Jharkhand([getTehsil()], null);
+            let obj = new Form14Jharkhand([getTehsil()], null);
             await this.generatePDF(obj, 'Form14_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page14_Jharkhand.png'),
         },
         {
-          title: 'Item 15',
+          title: 'Form 15',
           callback: async () => {
-            let obj = Form15Jharkhand(
+            let obj = new Form15Jharkhand(
               [getTehsil(), getTehsil(), getDistrict()],
               null,
             );
@@ -195,9 +194,9 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page15_Jharkhand.png'),
         },
         {
-          title: 'Item 16',
+          title: 'Form 16',
           callback: async () => {
-            let obj = Form16Jharkhand(
+            let obj = new Form16Jharkhand(
               [getTehsil(), getTehsil(), getDistrict()],
               null,
             );
@@ -206,32 +205,31 @@ class FormsPage extends Component {
           imageName: require('../../assets/images/FormPreviews/Page16_Jharkhand.png'),
         },
         {
-          title: 'Item 17',
+          title: 'Form 17',
           callback: () => {
-            let obj = Form17Jharkhand([getTehsil()], null);
+            let obj = new Form17Jharkhand([getTehsil()], null);
             this.generatePDF(obj, 'Form17_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/page17_Mangal.png'),
         },
         {
-          title: 'Item 18',
+          title: 'Form 18',
           callback: () => {
-            let obj = Form18Jharkhand([getVillage(), getTehsil()], null);
+            let obj = new Form18Jharkhand([getVillage(), getTehsil()], null);
             this.generatePDF(obj, 'Form18_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/page18_Mangal.png'),
         },
         {
-          title: 'Item 19',
+          title: 'Form 19',
           callback: () => {
-            let obj = Form19Jharkhand([getTehsil(), getTehsil()], null);
+            let obj = new Form19Jharkhand([getTehsil(), getTehsil()], null);
             this.generatePDF(obj, 'Form19_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page19_Jharkhand.png'),
         },
-      ],
-    };
-  }
+      ];
+
   requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -258,7 +256,6 @@ class FormsPage extends Component {
           borderRadius: 5,
           marginLeft: 25,
           marginRight: 25,
-          padding: 10,
           elevation: 5,
           justifyContent: 'center',
           alignItems: 'center',
@@ -269,20 +266,21 @@ class FormsPage extends Component {
           style={{width: '80%', height: '80%'}}
           resizeMode="contain"
         />
-        <Button title={'Download' + item.title} onPress={item.callback} />
+        <Button title={'Download ' + item.title} onPress={()=>{item.callback()}} />
       </View>
     );
   };
 
-  async generatePDF(obj, name) {
+  const generatePDF = async (obj, name) => {
     if (this.requestPermission()) {
       // file location returned by the createPDF
       // replace the '' empty string with directory info if you want to any directory
-      let location = await obj.createPDF('../../pdfs', name);
+      let location = await obj.createPDF('', name);
+      alert(location.filePath);
     }
   }
 
-  render() {
+
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: 'white', paddingTop: 50}}>
         <View
@@ -293,21 +291,20 @@ class FormsPage extends Component {
             alignItems: 'center',
           }}
         >
-          <Text style={{color: 'black'}}> Page {this.state.activeIndex}</Text>
+          <Text style={{color: 'black'}}> {'(experimental)\n'} Form {activeSlide}</Text>
         </View>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
           <Carousel
-            ref={ref => (this.carousel = ref)}
-            data={this.state.carouselItems}
+            data={carouselItems}
             sliderWidth={350}
             itemWidth={350}
             renderItem={this._renderItem}
-            onSnapToItem={index => this.setState({activeIndex: index})}
+            onSnapToItem={index => setActiveSlide(index)}
           />
         </View>
       </SafeAreaView>
     );
-  }
+
 }
 
 export default FormsPage;
