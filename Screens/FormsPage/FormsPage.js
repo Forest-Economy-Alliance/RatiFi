@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   Image,
   PermissionsAndroid,
+  Button,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import React, {Component} from 'react';
@@ -244,12 +245,15 @@ class FormsPage extends Component {
           marginRight: 25,
           padding: 10,
           elevation: 5,
+          justifyContent: 'center',
+            alignItems: 'center',
         }}>
         <Image
           source={item.imageName}
-          style={{width: '100%', height: '100%'}}
+          style={{width: '80%', height: '80%'}}
           resizeMode="contain"
         />
+        <Button title={'Download'+item.title} onPress={item.callback}/>
       </View>
     );
   };
