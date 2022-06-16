@@ -1,5 +1,4 @@
 import {FormPDFAbstract} from './basePDFGen';
-import MangalFont from './mangalFont';
 import Page1 from '../assets/Forms/Jharkhand/Page1_Jharkhand';
 
   /**

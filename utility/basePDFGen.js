@@ -45,6 +45,7 @@ class FormPDFAbstract {
    * @returns Absolute location of the file.
    */
   createPDF = async (_directory, _fileName) => {
+    console.log('Creating PDF');
     let headEnd = this.template.search('</head>');
     var replacedTemplate =
       this.template.slice(0, headEnd) +

@@ -127,7 +127,7 @@ const FormsPage = ({navigation}) => {
           title: 'Form 8',
           callback: async () => {
             let obj = new Form8Jharkhand(
-              [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
+              [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
               null,
             );
             await this.generatePDF(obj, 'Form8_Jharkhand');
