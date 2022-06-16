@@ -26,6 +26,20 @@ import Form15Jharkhand from '../../utility/Form15_Jharkhand';
 import Form16Jharkhand from '../../utility/Form16_Jharkhand';
 import Form17Jharkhand from '../../utility/Form17_Jharkhand';
 import Form18Jharkhand from '../../utility/Form18_Jharkhand';
+import Form19Jharkhand from '../../utility/Form19_Jharkhand';
+
+// import {
+//   getDistrict,
+//   getPanchayat,
+//   getTehsil,
+//   getVillage,
+// } from '../../slices/userSlice';
+
+const getDistrict = () => 'A';
+const getPanchayat = () => 'B';
+const getTehsil = () => 'C';
+const getVillage = () => 'D';
+
 class FormsPage extends Component {
   constructor(props) {
     super(props);
