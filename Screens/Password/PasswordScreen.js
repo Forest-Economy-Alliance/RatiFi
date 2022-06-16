@@ -51,7 +51,7 @@ const PasswordScreen = ({navigation}) => {
   });
 
   const onNext = (values, formikActions) => {
-    dispatch(setPassword(values.password));
+    // dispatch((values.password));
     formikActions.setSubmitting(false);
     dispatch(
       updatePasswordAction(
