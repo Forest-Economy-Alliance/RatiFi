@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
-import userReducer from '../slices/userSlice';
-import authReducer from '../slices/authSlice';
+import user from '../slices/userSlice';
+import auth from '../slices/authSlice';
 // redux-persist wrappers
 import {
   persistStore,
@@ -21,8 +21,8 @@ const persistConfig = {
 };
 // wrap persist API around root reducer and store
 const persistedReducers = persistCombineReducers(persistConfig, {
-  user: userReducer,
-  auth: authReducer,
+  user: user,
+  auth: auth,
 });
 
 export const store = configureStore({
