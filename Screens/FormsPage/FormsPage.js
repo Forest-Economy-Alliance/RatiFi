@@ -48,7 +48,7 @@ const FormsPage = ({navigation}) => {
         {
           title: 'Form 1',
           form: new Form1Jharkhand(
-              [getVillage(), "getPanchayat()", "getTehsil()", "getDistrict()"],
+              [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
               null,
             ),
           imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
