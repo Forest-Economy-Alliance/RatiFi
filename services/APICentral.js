@@ -6,15 +6,16 @@ import axios from 'axios';
 const BASE_URL = 'https://ratifi-backend.herokuapp.com';
 
 export const request = async (
-  options,
   url,
+  options,
   isHeader = true,
   isMultiPartFormData = false,
 ) => {
   let authHeader = null;
 
+  console.log(url);
   let token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWUxOTYyMDg1NDg1N2Y1ODBlNzJkMTkiLCJlbWFpbCI6InNpZGRoYXJ0aHNrMTAxQGdtYWlsLmNvbSIsImlhdCI6MTY0MjE3ODg2OCwiZXhwIjoxNjQ0NzcwODY4fQ.I1JLFk4gOz8mEGnZCDWcesQYaDbTsQsYFPzxso_EmLc';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYxMThhMjcyZGY3ODE5ZTczZjc2YSIsImlhdCI6MTY1NTM4MDI0MiwiZXhwIjoxNjU1NDIzNDQyfQ.gJcX4WT_x60S7fajfMD8QbC2elSGCC9kl38kjKICTPg';
   authHeader = token != ' ' ? `Bearer ${token}` : '';
 
   const client = axios.create({
@@ -27,6 +28,8 @@ export const request = async (
         : 'application/json',
     },
   });
+
+  console.log('CLEINT', client);
 
   return client(options);
 };

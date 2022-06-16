@@ -12,13 +12,12 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectLanguage} from '../../slices/userSlice';
 
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 
 const DownloadPDFScreen = ({navigation}) => {
-  const language = useSelector(selectLanguage);
+  const language = 'hi';
   const [role, setRole] = useState('FRC');
   const [pressed, setPressed] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
@@ -77,7 +76,8 @@ const DownloadPDFScreen = ({navigation}) => {
         )}
         <TouchableOpacity
           style={styles.getDocsButton}
-          onPress={formik.handleSubmit}>
+          onPress={formik.handleSubmit}
+        >
           <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
         </TouchableOpacity>
         {pressed && isAvailable && (
@@ -90,7 +90,12 @@ const DownloadPDFScreen = ({navigation}) => {
             <Text style={styles.subMsg}>
               {t('download application document')}
             </Text>
-            <TouchableOpacity style={styles.nextButton} onPress={() => {}}>
+            <TouchableOpacity
+              style={styles.nextButton}
+              onPress={() => {
+                navigation.navigate('FormsPage');
+              }}
+            >
               <Text style={styles.nextButtonText}>{t('download')}</Text>
             </TouchableOpacity>
           </>

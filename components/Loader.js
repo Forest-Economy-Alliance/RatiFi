@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('window');
+import i18n from '../assets/i18n/i18n';
 
 export default function Loader() {
   return (
@@ -33,7 +34,7 @@ export default function Loader() {
               color: 'black',
             }}
           >
-            Please wait...
+            {i18n.t('Please wait')}...
           </Text>
         </View>
       </View>

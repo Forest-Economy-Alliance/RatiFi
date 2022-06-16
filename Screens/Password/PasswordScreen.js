@@ -12,18 +12,23 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectLanguage, setPassword} from '../../slices/userSlice';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
+import {updatePasswordAction} from '../../redux-store/actions/auth';
 
-const NamePhoneScreen = ({navigation}) => {
+const PasswordScreen = ({navigation}) => {
+  const language = 'hi';
   const dispatch = useDispatch();
-  const language = useSelector(selectLanguage);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const state = {
     password: '',
     confirmPassword: '',
   };
+  const mobile = useSelector(
+    state => state.entities.auth.userInfo.profile.mobile,
+  );
 
   const {t, i18n} = useTranslation();
 
@@ -48,6 +53,20 @@ const NamePhoneScreen = ({navigation}) => {
   const onNext = (values, formikActions) => {
     dispatch(setPassword(values.password));
     formikActions.setSubmitting(false);
+    dispatch(
+      updatePasswordAction(
+        {
+          mobile: mobile,
+          password: formik.values.password,
+          confirmPassword: formik.values.confirmPassword,
+        },
+        args => {
+          if (args) {
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+          }
+        },
+      ),
+    );
     navigation.navigate('LocationInformation');
   };
 
@@ -90,7 +109,8 @@ const NamePhoneScreen = ({navigation}) => {
         )}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={formik.handleSubmit}>
+          onPress={formik.handleSubmit}
+        >
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -98,7 +118,7 @@ const NamePhoneScreen = ({navigation}) => {
   );
 };
 
-export default NamePhoneScreen;
+export default PasswordScreen;
 
 const styles = StyleSheet.create({
   container: {

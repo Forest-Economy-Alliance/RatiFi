@@ -26,15 +26,6 @@ import Form15Jharkhand from '../../utility/Form15_Jharkhand';
 import Form16Jharkhand from '../../utility/Form16_Jharkhand';
 import Form17Jharkhand from '../../utility/Form17_Jharkhand';
 import Form18Jharkhand from '../../utility/Form18_Jharkhand';
-import Form19Jharkhand from '../../utility/Form19_Jharkhand';
-
-import {
-  getDistrict,
-  getPanchayat,
-  getTehsil,
-  getVillage,
-} from '../../slices/userSlice';
-
 class FormsPage extends Component {
   constructor(props) {
     super(props);
@@ -111,9 +102,10 @@ class FormsPage extends Component {
         {
           title: 'Item 7',
           callback: async () => {
-            let obj = Form7Jharkhand([
-              [getVillage(), getPanchayat(), getTehsil(), getDistrict()]
-            ], null);
+            let obj = Form7Jharkhand(
+              [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
+              null,
+            );
             await this.generatePDF(obj, 'Form7_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page7_Mangal.png'),
@@ -121,7 +113,10 @@ class FormsPage extends Component {
         {
           title: 'Item 8',
           callback: async () => {
-            let obj = Form8Jharkhand([[getVillage(), getPanchayat(), getTehsil(), getDistrict()]], null);
+            let obj = Form8Jharkhand(
+              [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
+              null,
+            );
             await this.generatePDF(obj, 'Form8_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page8_Jharkhand.png'),
@@ -129,7 +124,7 @@ class FormsPage extends Component {
         {
           title: 'Item 9',
           callback: async () => {
-            let obj = Form9Jharkhand(null, ["none"]);
+            let obj = Form9Jharkhand(null, ['none']);
             await this.generatePDF(obj, 'Form9_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
@@ -177,7 +172,10 @@ class FormsPage extends Component {
         {
           title: 'Item 15',
           callback: async () => {
-            let obj = Form15Jharkhand([getTehsil(),getTehsil(),getDistrict()], null);
+            let obj = Form15Jharkhand(
+              [getTehsil(), getTehsil(), getDistrict()],
+              null,
+            );
             await this.generatePDF(obj, 'Form15_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page15_Jharkhand.png'),
@@ -185,7 +183,10 @@ class FormsPage extends Component {
         {
           title: 'Item 16',
           callback: async () => {
-            let obj = Form16Jharkhand([getTehsil(),getTehsil(),getDistrict()], null);
+            let obj = Form16Jharkhand(
+              [getTehsil(), getTehsil(), getDistrict()],
+              null,
+            );
             await this.generatePDF(obj, 'Form16_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page16_Jharkhand.png'),
@@ -209,7 +210,7 @@ class FormsPage extends Component {
         {
           title: 'Item 19',
           callback: () => {
-            let obj = Form19Jharkhand([getTehsil(),getTehsil()], null);
+            let obj = Form19Jharkhand([getTehsil(), getTehsil()], null);
             this.generatePDF(obj, 'Form19_Jharkhand');
           },
           imageName: require('../../assets/images/FormPreviews/Page19_Jharkhand.png'),
@@ -246,23 +247,24 @@ class FormsPage extends Component {
           padding: 10,
           elevation: 5,
           justifyContent: 'center',
-            alignItems: 'center',
-        }}>
+          alignItems: 'center',
+        }}
+      >
         <Image
           source={item.imageName}
           style={{width: '80%', height: '80%'}}
           resizeMode="contain"
         />
-        <Button title={'Download'+item.title} onPress={item.callback}/>
+        <Button title={'Download' + item.title} onPress={item.callback} />
       </View>
     );
   };
 
   async generatePDF(obj, name) {
     if (this.requestPermission()) {
-      // file location returned by the createPDF 
+      // file location returned by the createPDF
       // replace the '' empty string with directory info if you want to any directory
-      let location = await obj.createPDF('', name);
+      let location = await obj.createPDF('../../pdfs', name);
     }
   }
 
@@ -275,7 +277,8 @@ class FormsPage extends Component {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <Text style={{color: 'black'}}> Page {this.state.activeIndex}</Text>
         </View>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>

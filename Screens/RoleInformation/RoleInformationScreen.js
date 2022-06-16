@@ -12,14 +12,8 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  selectLanguage,
-  setLevel,
-  setPosition,
-  setUidNum,
-  setUidType,
-} from '../../slices/userSlice';
 import {Dropdown} from 'react-native-element-dropdown';
+import {updateUserInfoAction} from '../../redux-store/actions/auth';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -33,9 +27,8 @@ const data = [
 ];
 
 const RoleInformationScreen = ({navigation}) => {
+  const language = 'hi';
   const dispatch = useDispatch();
-  const language = useSelector(selectLanguage);
-
   const [id, setId] = useState('');
   const [idType, setIdType] = useState('');
   const [role, setRole] = useState('');
@@ -181,13 +174,22 @@ const RoleInformationScreen = ({navigation}) => {
               setErr(1);
             } else {
               setErr(0);
-              dispatch(setLevel(role));
-              dispatch(setPosition(pos));
-              dispatch(setUidType(idType));
-              dispatch(setUidNum(id));
-              navigation.navigate('DownloadPDF');
+              dispatch(
+                updateUserInfoAction(
+                  {
+                    authLevel: 1, //Integer, enums will be there
+                    postLevel: 2, //Integer
+                    identificationProofType: 2, // Integers
+                    identificationProofNumber: 'EFSFDFSDFS', // String
+                  },
+                  args => {
+                    if (args) navigation.navigate('DownloadPDF');
+                  },
+                ),
+              );
             }
-          }}>
+          }}
+        >
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

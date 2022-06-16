@@ -10,31 +10,133 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  selectLanguage,
-  setDistrict,
-  setPanchayat,
-  setStateName,
-  setTehsil,
-  setVillage,
-} from '../../slices/userSlice';
 import {Dropdown} from 'react-native-element-dropdown';
+import i18n from '../../assets/i18n/i18n';
+import {updateUserInfoAction} from '../../redux-store/actions/auth';
+
+console.log(i18n.t('Jharkhand'));
+
+const DATA = [
+  {
+    State: i18n.t('Jharkhand'),
+    Districts: [
+      {
+        District: 'Simdega',
+        Tehsils: [
+          {
+            Tehsil: 'Bano',
+            Panchayats: [
+              {
+                Panchayat: 'Banki',
+              },
+              {
+                Panchayat: 'Simhatu',
+              },
+              {
+                Panchayat: 'Konsode',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Banki',
+              },
+              {
+                Village: 'Boroseta',
+              },
+              {
+                Village: 'Chotketunga',
+              },
+            ],
+          },
+          {
+            Tehsil: 'Jaldega',
+            Panchayats: [
+              {
+                Panchayat: 'Kutungia',
+              },
+              {
+                Panchayat: 'Patiamba',
+              },
+              {
+                Panchayat: 'Konmerla',
+              },
+              {
+                Panchayat: 'Jaldega',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Ramjari',
+              },
+              {
+                Village: 'Karimati',
+              },
+              {
+                Village: 'Baldega',
+              },
+              {
+                Village: 'Mahomdega',
+              },
+              {
+                Village: 'Kharwagada',
+              },
+            ],
+          },
+          {
+            Tehsil: 'Kolebira',
+            Panchayats: [
+              {
+                Panchayat: 'Lachragarh',
+              },
+              {
+                Panchayat: 'Tutikel',
+              },
+              {
+                Panchayat: 'Eidega',
+              },
+              {
+                Panchayat: 'Nawatoli',
+              },
+            ],
+            Village: [
+              {
+                Village: 'Kombakra',
+              },
+              {
+                Village: 'Sardhatoli',
+              },
+              {
+                Village: 'Eidega',
+              },
+              {
+                Village: 'Bhanwarpahari',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const LocationInformationScreen = ({navigation}) => {
+  const language = 'hi';
   const dispatch = useDispatch();
-  const language = useSelector(selectLanguage);
-
-  const [state, sttState] = useState('');
-  const [district, sttDistrict] = useState('');
-  const [tehsil, sttTehsil] = useState('');
-  const [panchayat, sttPanchayat] = useState('');
-  const [village, sttVillage] = useState('');
+  const statue = useSelector(state => state.entities.auth);
+  console.log('HI');
+  console.log(statue);
+  const [state, setState] = useState('');
+  const [district, setDistrict] = useState('');
+  const [tehsil, setTehsil] = useState('');
+  const [panchayat, setPanchayat] = useState('');
+  const [village, setVillage] = useState('');
 
   const [err, setErr] = useState(0);
+  const {t, i18n} = useTranslation();
 
   const [states, setStates] = useState([
     {
-      State: 'Jharkhand',
+      State: t('Jharkhand'),
     },
   ]);
   const [districts, setDistricts] = useState([
@@ -131,8 +233,6 @@ const LocationInformationScreen = ({navigation}) => {
     },
   ]);
 
-  const {t, i18n} = useTranslation();
-
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   const changeLanguage = value => {
@@ -163,7 +263,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={state}
           onChange={item => {
-            sttState(item.value);
+            console.log(item);
+            setState(item.value?.State);
           }}
           dropdownPosition="bottom"
         />
@@ -181,7 +282,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={district}
           onChange={item => {
-            sttDistrict(item.value);
+            console.log(item);
+            setDistrict(item.value?.District);
           }}
           dropdownPosition="bottom"
         />
@@ -199,7 +301,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={tehsil}
           onChange={item => {
-            sttTehsil(item.value);
+            console.log(item);
+            setDistrict(item.value?.Tehsil);
           }}
           dropdownPosition="bottom"
         />
@@ -217,7 +320,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={panchayat}
           onChange={item => {
-            sttPanchayat(item.value);
+            console.log(item);
+            setDistrict(item.value?.Panchayat);
           }}
           dropdownPosition="bottom"
         />
@@ -235,7 +339,8 @@ const LocationInformationScreen = ({navigation}) => {
           searchPlaceholder="Search..."
           value={village}
           onChange={item => {
-            sttVillage(item.value);
+            console.log(item);
+            setDistrict(item.value?.Panchayat);
           }}
           dropdownPosition="bottom"
         />
@@ -245,23 +350,24 @@ const LocationInformationScreen = ({navigation}) => {
         <TouchableOpacity
           style={styles.nextButton}
           onPress={() => {
-            if (
-              state === '' ||
-              district === '' ||
-              tehsil === '' ||
-              panchayat === '' ||
-              village === ''
-            ) {
-              setErr(1);
-            } else {
-              dispatch(setStateName(state));
-              dispatch(setDistrict(district));
-              dispatch(setTehsil(tehsil));
-              dispatch(setPanchayat(panchayat));
-              dispatch(setVillage(village));
-              navigation.navigate('RoleInformation');
-            }
-          }}>
+            dispatch(
+              updateUserInfoAction(
+                {
+                  state: 'Jharkhand',
+                  district: 'Simdega',
+                  tehsil: 'Bano',
+                  panchayat: 'Banki',
+                  village: 'Kombakra',
+                },
+                args => {
+                  if (args) {
+                    navigation.navigate('RoleInformation');
+                  }
+                },
+              ),
+            );
+          }}
+        >
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
