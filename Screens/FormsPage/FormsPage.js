@@ -216,7 +216,7 @@ class FormsPage extends Component {
       ],
     };
   }
-  requestCameraPermission = async () => {
+  requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -255,7 +255,9 @@ class FormsPage extends Component {
   };
 
   async generatePDF(obj, name) {
-    if (this.requestCameraPermission()) {
+    if (this.requestPermission()) {
+      // file location returned by the createPDF 
+      // replace the '' empty string with directory info if you want to any directory
       let location = await obj.createPDF('', name);
     }
   }
