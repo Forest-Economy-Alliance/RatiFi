@@ -26,7 +26,7 @@
     "Member": "सदस्य",
     "Subdivisonal Officer": "उपमण्डल अधिकारी (अध्यक्ष)",
     "Tehsildar": "तहसीलदार",
-    "Forest Range Officer": "वन परिक्षेत्र अधिकारी ",
+    "Forest Range Officer": "वन परिक्षेत्र अधिकारी",
     "District Collector": "ज़िलाधीश (अध्यक्ष)",
     "District Forest Officer": "जिला वन अधिकारी",
     "Officer-in-Charge (Tribal Affairs)": "जनजातीय  विभाग के अधिकारी",
@@ -36,6 +36,16 @@
     "enter mobile number": "अपना मोबाइल नंबर लिखें",
     "Enter your name": "अपना नाम लिखें",
     "Enter OTP": "ओटीपी डालें",
-    "OTP_SENT": "ओटीपी आपके मोबाइल नंबर पर भेजा गया है।"
+    "OTP_SENT": "ओटीपी आपके मोबाइल नंबर पर भेजा गया है।",
+    "Name is Required": "नाम आवश्यक है",
+    "Phone Number is Required": "फोन नंबर आवश्यक है",
+    "Invalid Phone Number": "अमान्य फोन नंबर",
+    "Password is Required": "पासवर्ड आवश्यक है",
+    "Confirm Password is Required": "पासवर्ड की पुष्टि आवश्यक है",
+    "Password and Confirm Password does not match": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते",
+    "OTP is Required": "OTP आवश्यक है",
+    "Fill all the fields": "सभी क्षेत्र भरें",
+    "Invalid OTP": "अमान्य OTP",
+    "Gram Sabha is Required": "ग्राम सभा आवश्यक है"
   }
 }

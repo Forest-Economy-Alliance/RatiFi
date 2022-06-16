@@ -30,14 +30,28 @@ const PasswordScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.mobile,
   );
 
+  const {t, i18n} = useTranslation();
+
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const changeLanguage = value => {
+    i18n
+      .changeLanguage(value)
+      .then(() => setCurrentLanguage(value))
+      .catch(err => console.log(err));
+  };
   const PassSchema = object().shape({
-    password: string().required('Password is Required'),
+    password: string().required(t('Password is Required')),
     confirmPassword: string()
-      .required('Confirm Password is Required')
-      .oneOf([ref('password'), null], 'Passwords must match'),
+      .required(t('Confirm Password is Required'))
+      .oneOf(
+        [ref('password'), null],
+        t('Password and Confirm Password does not match'),
+      ),
   });
 
   const onNext = (values, formikActions) => {
+    dispatch(setPassword(values.password));
     formikActions.setSubmitting(false);
     dispatch(
       updatePasswordAction(
@@ -61,17 +75,6 @@ const PasswordScreen = ({navigation}) => {
     validationSchema: PassSchema,
     onSubmit: onNext,
   });
-
-  const {t, i18n} = useTranslation();
-
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   useEffect(() => {
     changeLanguage(language);

@@ -61,6 +61,8 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const onGetOtp = (values, formikActions) => {
+    dispatch(setName(values.name));
+    dispatch(setMobile(values.phoneNumber));
     formikActions.setSubmitting(false);
     setPressed(true);
     dispatch(
@@ -100,14 +102,14 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const NPSchema = object().shape({
-    name: string().required('Name is Required'),
+    name: string().required(t('Name is Required')),
     phoneNumber: string()
-      .phone(null, false, 'Invalid Phone Nummber')
-      .required('Phone Number is Required'),
+      .phone(null, false, t('Invalid Phone Number'))
+      .required(t('Phone Number is Required')),
   });
 
   const NPSchema2 = object().shape({
-    otp: string().required('OTP is Required'),
+    otp: string().required(t('OTP is Required')),
   });
 
   const formik = useFormik({

@@ -10,7 +10,6 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {Dropdown} from 'react-native-element-dropdown';
 import i18n from '../../assets/i18n/i18n';
 import {updateUserInfoAction} from '../../redux-store/actions/auth';
@@ -145,7 +144,7 @@ const LocationInformationScreen = ({navigation}) => {
       District: 'Simdega',
     },
   ]);
-  const [tehsils, setTehsils] = useState([
+  const [tehsils, sttTehsils] = useState([
     {
       Tehsil: 'Bano',
     },
@@ -346,7 +345,7 @@ const LocationInformationScreen = ({navigation}) => {
           dropdownPosition="bottom"
         />
         {err === 1 ? (
-          <Text style={styles.error}>{'Fill all the fields'}</Text>
+          <Text style={styles.error}>{t('Fill all the fields')}</Text>
         ) : null}
         <TouchableOpacity
           style={styles.nextButton}
