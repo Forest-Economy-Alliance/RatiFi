@@ -183,13 +183,14 @@ const RoleInformationScreen = ({navigation}) => {
                     identificationProofNumber: 'EFSFDFSDFS', // String
                   },
                   args => {
-                    if (args) navigation.navigate('DownloadPDF');
+                    if (args) {
+                      navigation.navigate('DownloadPDF');
+                    }
                   },
                 ),
               );
             }
-          }}
-        >
+          }}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

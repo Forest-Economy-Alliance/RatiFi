@@ -1,4 +1,3 @@
-import React from 'react';
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
@@ -9,12 +8,11 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   blacklist: ['requests'],
-  stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+  stateReconciler: autoMergeLevel2,
 };
 
 const pReducer = persistReducer(persistConfig, rootReducer);
 
-console.log('pReducer', pReducer);
 const store = createStore(pReducer, applyMiddleware(thunk));
 
 const persistor = persistStore(store);

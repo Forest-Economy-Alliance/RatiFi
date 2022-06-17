@@ -17,24 +17,12 @@ import FormsPage from '../Screens/FormsPage/FormsPage';
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
-  const {registrationScreenCode, loading} = useSelector(
-    state => state.entities.appUtil.appUtil,
-  );
+  const {loading} = useSelector(state => state.entities.appUtil.appUtil);
 
   return (
     <NavigationContainer>
       {loading && <Loader />}
-      <Stack.Navigator
-        initialRouteName="ForestFiSplash"
-        screenOptions={{
-          headerStyle: {
-            // backgroundColor: 'green',
-          },
-          headerTitleStyle: {
-            // color: 'white'
-          },
-        }}
-      >
+      <Stack.Navigator initialRouteName="ForestFiSplash">
         <Stack.Screen
           name="ForestFiSplash"
           component={ForestFiSplashScreen}
@@ -54,8 +42,7 @@ export const Navigation = () => {
             name="LangSelection"
             component={LangSelectionScreen}
             options={{
-              // headerShown: false,
-              headerTitle: 'Please select a language',
+              headerShown: false,
             }}
           />
         }
@@ -63,8 +50,7 @@ export const Navigation = () => {
           name="NamePhone"
           component={NamePhoneScreen}
           options={{
-            // headerShown: false,
-            headerTitle: 'Please enter Phone Number',
+            headerShown: false,
           }}
         />
         <Stack.Screen

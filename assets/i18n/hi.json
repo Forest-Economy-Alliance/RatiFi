@@ -46,6 +46,8 @@
     "OTP is Required": "OTP आवश्यक है",
     "Fill all the fields": "सभी क्षेत्र भरें",
     "Invalid OTP": "अमान्य OTP",
-    "Gram Sabha is Required": "ग्राम सभा आवश्यक है"
+    "Gram Sabha is Required": "ग्राम सभा आवश्यक है",
+    "resend otp": "ओटीपी पुनः भेजें",
+    "you will receive otp on this number": "इस नंबर पे OTP आएगा"
   }
 }

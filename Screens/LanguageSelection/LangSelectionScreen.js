@@ -7,13 +7,12 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useDispatch} from 'react-redux';
-// import {useDispatch} from 'react-redux';
 
 const languages = [
-  // {
-  //   name: 'English',
-  //   value: 'en',
-  // },
+  {
+    name: 'English',
+    value: 'en',
+  },
   {
     name: 'हिन्दी',
     value: 'hi',
@@ -57,8 +56,7 @@ const LangSelectionScreen = ({navigation}) => {
               dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
               navigation.navigate('NamePhone');
             }}
-            style={styles.button}
-          >
+            style={styles.button}>
             <Text style={styles.text}>{lang.name}</Text>
           </TouchableOpacity>
         ))}

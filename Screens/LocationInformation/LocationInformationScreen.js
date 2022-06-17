@@ -14,7 +14,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import i18n from '../../assets/i18n/i18n';
 import {updateUserInfoAction} from '../../redux-store/actions/auth';
 
-console.log(i18n.t('Jharkhand'));
+i18n.t('Jharkhand');
 
 const DATA = [
   {
@@ -122,14 +122,17 @@ const DATA = [
 const LocationInformationScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
-  const statue = useSelector(state => state.entities.auth);
-  console.log('HI');
-  console.log(statue);
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
   const [tehsil, setTehsil] = useState('');
   const [panchayat, setPanchayat] = useState('');
   const [village, setVillage] = useState('');
+
+  const [val1, setVal1] = useState('');
+  const [val2, setVal2] = useState('');
+  const [val3, setVal3] = useState('');
+  const [val4, setVal4] = useState('');
+  const [val5, setVal5] = useState('');
 
   const [err, setErr] = useState(0);
   const {t, i18n} = useTranslation();
@@ -137,99 +140,127 @@ const LocationInformationScreen = ({navigation}) => {
   const [states, setStates] = useState([
     {
       State: t('Jharkhand'),
+      value: '1',
     },
   ]);
   const [districts, setDistricts] = useState([
     {
       District: 'Simdega',
+      value: '1',
     },
   ]);
   const [tehsils, sttTehsils] = useState([
     {
       Tehsil: 'Bano',
+      value: '1',
     },
     {
       Tehsil: 'Jaldega',
+      value: '2',
     },
     {
       Tehsil: 'Kolebira',
+      value: '3',
     },
   ]);
   const [panchayats, setPanchayats] = useState([
     {
       Panchayat: 'Banki',
+      value: '1',
     },
     {
       Panchayat: 'Simhatu',
+      value: '2',
     },
     {
       Panchayat: 'Konsode',
+      value: '3',
     },
     {
       Panchayat: 'Kutungia',
+      value: '4',
     },
     {
       Panchayat: 'Patiamba',
+      value: '5',
     },
     {
       Panchayat: 'Konmerla',
+      value: '6',
     },
     {
       Panchayat: 'Jaldega',
+      value: '7',
     },
     {
       Panchayat: 'Lachragarh',
+      value: '8',
     },
     {
       Panchayat: 'Tutikel',
+      value: '9',
     },
     {
       Panchayat: 'Eidega',
+      value: '10',
     },
     {
       Panchayat: 'Nawatoli',
+      value: '11',
     },
   ]);
   const [villages, setVillages] = useState([
     {
       Village: 'Kombakra',
+      value: '1',
     },
     {
       Village: 'Sardhatoli',
+      value: '2',
     },
     {
       Village: 'Eidega',
+      value: '3',
     },
     {
       Village: 'Bhanwarpahari',
+      value: '4',
     },
-
     {
       Village: 'Ramjari',
+      value: '5',
     },
     {
       Village: 'Karimati',
+      value: '6',
     },
     {
       Village: 'Baldega',
+      value: '7',
     },
     {
       Village: 'Mahomdega',
+      value: '8',
     },
     {
       Village: 'Kharwagada',
+      value: '9',
     },
     {
       Village: 'Kombakra',
+      value: '10',
     },
     {
       Village: 'Sardhatoli',
+      value: '11',
     },
     {
       Village: 'Eidega',
+      value: '12',
     },
     {
       Village: 'Bhanwarpahari',
+      value: '13',
     },
   ]);
 
@@ -259,12 +290,14 @@ const LocationInformationScreen = ({navigation}) => {
           search
           maxHeight={300}
           labelField="State"
+          valueField="value"
           placeholder={t('state')}
           searchPlaceholder="Search..."
-          value={state}
+          value={val1}
           onChange={item => {
             console.log(item);
-            setState(item.value?.State);
+            setVal1(item.value);
+            setState(item.State);
           }}
           dropdownPosition="bottom"
         />
@@ -278,12 +311,14 @@ const LocationInformationScreen = ({navigation}) => {
           search
           maxHeight={300}
           labelField="District"
+          valueField="value"
           placeholder={t('district')}
           searchPlaceholder="Search..."
-          value={district}
+          value={val2}
           onChange={item => {
             console.log(item);
-            setDistrict(item.value?.District);
+            setVal2(item.value);
+            setDistrict(item.District);
           }}
           dropdownPosition="bottom"
         />
@@ -297,12 +332,14 @@ const LocationInformationScreen = ({navigation}) => {
           search
           maxHeight={300}
           labelField="Tehsil"
+          valueField="value"
           placeholder={t('tehsil/block')}
           searchPlaceholder="Search..."
-          value={tehsil}
+          value={val3}
           onChange={item => {
             console.log(item);
-            setDistrict(item.value?.Tehsil);
+            setVal3(item.value);
+            setTehsil(item.Tehsil);
           }}
           dropdownPosition="bottom"
         />
@@ -316,12 +353,14 @@ const LocationInformationScreen = ({navigation}) => {
           search
           maxHeight={300}
           labelField="Panchayat"
+          valueField="value"
           placeholder={t('panchayat')}
           searchPlaceholder="Search..."
-          value={panchayat}
+          value={val4}
           onChange={item => {
             console.log(item);
-            setDistrict(item.value?.Panchayat);
+            setVal4(item.value);
+            setPanchayat(item.Panchayat);
           }}
           dropdownPosition="bottom"
         />
@@ -335,12 +374,14 @@ const LocationInformationScreen = ({navigation}) => {
           search
           maxHeight={300}
           labelField="Village"
+          valueField="value"
           placeholder={t('village')}
           searchPlaceholder="Search..."
-          value={village}
+          value={val5}
           onChange={item => {
             console.log(item);
-            setDistrict(item.value?.Panchayat);
+            setVal5(item.value);
+            setVillage(item.Village);
           }}
           dropdownPosition="bottom"
         />
@@ -350,24 +391,35 @@ const LocationInformationScreen = ({navigation}) => {
         <TouchableOpacity
           style={styles.nextButton}
           onPress={() => {
-            dispatch(
-              updateUserInfoAction(
-                {
-                  state: 'Jharkhand',
-                  district: 'Simdega',
-                  tehsil: 'Bano',
-                  panchayat: 'Banki',
-                  village: 'Kombakra',
-                },
-                args => {
-                  if (args) {
-                    navigation.navigate('RoleInformation');
-                  }
-                },
-              ),
-            );
-          }}
-        >
+            if (
+              state === '' ||
+              district === '' ||
+              tehsil === '' ||
+              panchayat === '' ||
+              village === ''
+            ) {
+              console.log(state, district, tehsil, panchayat, village);
+              setErr(1);
+            } else {
+              console.log(state, district, tehsil, panchayat, village);
+              dispatch(
+                updateUserInfoAction(
+                  {
+                    state: state,
+                    district: district,
+                    tehsil: tehsil,
+                    panchayat: panchayat,
+                    village: village,
+                  },
+                  args => {
+                    if (args) {
+                      navigation.navigate('RoleInformation');
+                    }
+                  },
+                ),
+              );
+            }
+          }}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

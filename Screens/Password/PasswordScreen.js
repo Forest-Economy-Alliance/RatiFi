@@ -19,16 +19,14 @@ import {updatePasswordAction} from '../../redux-store/actions/auth';
 const PasswordScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
+  const mobile = useSelector(
+    state => state.entities.auth.userInfo.profile.mobile,
+  );
   const state = {
     password: '',
     confirmPassword: '',
   };
-  const mobile = useSelector(
-    state => state.entities.auth.userInfo.profile.mobile,
-  );
 
   const {t, i18n} = useTranslation();
 
@@ -51,14 +49,13 @@ const PasswordScreen = ({navigation}) => {
   });
 
   const onNext = (values, formikActions) => {
-    // dispatch((values.password));
     formikActions.setSubmitting(false);
     dispatch(
       updatePasswordAction(
         {
           mobile: mobile,
-          password: formik.values.password,
-          confirmPassword: formik.values.confirmPassword,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
         },
         args => {
           if (args) {
@@ -109,8 +106,7 @@ const PasswordScreen = ({navigation}) => {
         )}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={formik.handleSubmit}
-        >
+          onPress={formik.handleSubmit}>
           <Text style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

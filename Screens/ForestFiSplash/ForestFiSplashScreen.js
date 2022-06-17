@@ -1,26 +1,9 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {getDeviceHash} from '../../utils/DeviceUtil';
 
 const ForestFiSplashScreen = ({navigation}) => {
-  // const loading = useSelector(state => state);
-  // console.log(loading);
-  // console.log('LOADING', loading);
-  const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch({type: 'DISABLE_LOADING'});
-    const fetchDD = async () => {
-      const DD = await getDeviceHash();
-      console.log('HERE', typeof DD);
-      // dispatch({type: 'SAVE_DD', payload: DD});
-    };
-
-    fetchDD();
-  }, []);
   useEffect(() => {
     setTimeout(() => {
-      // navigate to next screen
       navigation.replace('RatiFiSplash');
     }, 1000);
   }, []);
