@@ -13,6 +13,7 @@ import RatiFiSplashScreen from '../Screens/RatiFiSplash/RatiFiSplashScreen';
 import {useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
+import {useTranslation} from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,16 @@ export const Navigation = () => {
   const {registrationScreenCode, loading} = useSelector(
     state => state.entities.appUtil.appUtil,
   );
+
+  const {t, i18n} = useTranslation();
+  let language = 'hi';
+  const changeLanguage = value => {
+    i18n.changeLanguage(value).catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    changeLanguage(language);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -33,6 +44,7 @@ export const Navigation = () => {
           headerTitleStyle: {
             // color: 'white'
           },
+          animation: 'fade_from_bottom',
         }}
       >
         <Stack.Screen
@@ -55,7 +67,7 @@ export const Navigation = () => {
             component={LangSelectionScreen}
             options={{
               // headerShown: false,
-              headerTitle: 'Please select a language',
+              headerTitle: t('ENTER_LANGUAGE'),
             }}
           />
         }
@@ -64,7 +76,7 @@ export const Navigation = () => {
           component={NamePhoneScreen}
           options={{
             // headerShown: false,
-            headerTitle: 'Please enter Phone Number',
+            headerTitle: t('NAME_AND_PHONE'),
           }}
         />
         <Stack.Screen

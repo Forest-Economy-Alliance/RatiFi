@@ -12,7 +12,7 @@ const ForestFiSplashScreen = ({navigation}) => {
     dispatch({type: 'DISABLE_LOADING'});
     const fetchDD = async () => {
       const DD = await getDeviceHash();
-      console.log('HERE', typeof DD);
+      // console.log('HERE', typeof DD);
       // dispatch({type: 'SAVE_DD', payload: DD});
     };
 

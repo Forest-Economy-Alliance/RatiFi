@@ -21,6 +21,7 @@
     "download application document": "Download application document",
     "download": "Download",
     "resend otp": "ओटीपी पुनः भेजें",
-    "you will recived otp on this number": "इस नंबर पे OTP आएगा"
+    "you will recived otp on this number": "इस नंबर पे OTP आएगा",
+    "GET_OTP": "ओटीपी प्राप्त करें"
   }
 }

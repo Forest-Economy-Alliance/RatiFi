@@ -2,6 +2,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import MangalFont from './mangalFont';
 import KrutiDevFont from './krutiDevFont';
+import {ToastAndroid} from 'react-native';
 
 /**
  * This is an abstract class which defines the interface for a form type.
@@ -72,7 +73,15 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
-      alert(file.filePath);
+      ToastAndroid.showWithGravityAndOffset(
+        'Form saved' + file.filePath,
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+
+      // alert(file.filePath);
       return file;
     } catch (error) {
       console.log('Error creating PDF: ' + error);
