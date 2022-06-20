@@ -91,6 +91,7 @@ const PasswordScreen = ({navigation}) => {
           secureTextEntry={true}
           onBlur={formik.handleBlur('password')}
           value={formik.values.password}
+          keyboardType="number-pad"
         />
         {formik.touched.password && formik.errors.password && (
           <Text style={styles.error}>{formik.errors.password}</Text>
@@ -101,6 +102,7 @@ const PasswordScreen = ({navigation}) => {
           placeholderTextColor="#480E09"
           onChangeText={formik.handleChange('confirmPassword')}
           secureTextEntry={true}
+          keyboardType="number-pad"
           onBlur={formik.handleBlur('confirmPassword')}
           value={formik.values.confirmPassword}
         />

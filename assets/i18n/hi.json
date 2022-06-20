@@ -39,13 +39,15 @@
     "OTP_SENT": "ओटीपी आपके मोबाइल नंबर पर भेजा गया है।",
     "Name is Required": "नाम आवश्यक है",
     "Phone Number is Required": "फोन नंबर आवश्यक है",
-    "Invalid Phone Number": "अमान्य फोन नंबर",
+    "Invalid Phone Number": " कृपया 10 अंकों का फ़ोन नंबर दर्ज करें",
     "Password is Required": "पासवर्ड आवश्यक है",
     "Confirm Password is Required": "पासवर्ड की पुष्टि आवश्यक है",
     "Password and Confirm Password does not match": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते",
     "OTP is Required": "OTP आवश्यक है",
     "Fill all the fields": "सभी क्षेत्र भरें",
     "Invalid OTP": "अमान्य OTP",
-    "Gram Sabha is Required": "ग्राम सभा आवश्यक है"
+    "Gram Sabha is Required": "ग्राम सभा आवश्यक है",
+    "ENTER_LANGUAGE": "कृपया कोई भाषा चुनें",
+    "NAME_AND_PHONE": "नाम और फोन नंबर"
   }
 }

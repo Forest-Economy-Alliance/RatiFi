@@ -3,8 +3,8 @@
  */
 
 import axios from 'axios';
-const BASE_URL = 'https://ratifi-backend.herokuapp.com';
-
+const BASE_URL = 'https://ratifi-backend.el.r.appspot.com';
+import store from '../redux-store/index';
 export const request = async (
   url,
   options,
@@ -13,9 +13,9 @@ export const request = async (
 ) => {
   let authHeader = null;
 
-  console.log(url);
-  let token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYTYxMThhMjcyZGY3ODE5ZTczZjc2YSIsImlhdCI6MTY1NTM4MDI0MiwiZXhwIjoxNjU1NDIzNDQyfQ.gJcX4WT_x60S7fajfMD8QbC2elSGCC9kl38kjKICTPg';
+  // var state = store.getState();
+  let token = store.store.getState().entities.auth.userInfo.token;
+  console.log(token);
   authHeader = token != ' ' ? `Bearer ${token}` : '';
 
   const client = axios.create({

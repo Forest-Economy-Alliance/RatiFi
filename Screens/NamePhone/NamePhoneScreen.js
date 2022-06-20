@@ -89,7 +89,6 @@ const NamePhoneScreen = ({navigation}) => {
         },
         args => {
           if (args === true) {
-            console.log('HI');
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
             navigation.navigate('Password');
           } else {
@@ -148,7 +147,7 @@ const NamePhoneScreen = ({navigation}) => {
         {formik.touched.name && formik.errors.name && (
           <Text style={styles.error}>{formik.errors.name}</Text>
         )}
-        <Text>{t('you will recived otp on this number')}</Text>
+        {/* <Text>{t('you will recived otp on this number')}</Text> */}
         <PhoneInput
           // disabled={pressed ? true : false} to be confirmed
           ref={phoneInput}
@@ -176,7 +175,7 @@ const NamePhoneScreen = ({navigation}) => {
             onPress={formik.handleSubmit}
             style={styles.getOtpButton}
           >
-            <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
+            <Text style={styles.getOtpButtonText}>{t('GET_OTP')}</Text>
           </TouchableOpacity>
         )}
         {pressed && (
@@ -186,7 +185,6 @@ const NamePhoneScreen = ({navigation}) => {
             </Text>
             <Input
               // style={styles.inputOTP}
-              edi
               placeholder={t('Enter OTP')}
               placeholderTextColor="#480E09"
               onChangeText={formik2.handleChange('otp')}
