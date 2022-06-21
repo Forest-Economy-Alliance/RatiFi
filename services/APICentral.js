@@ -3,8 +3,8 @@
  */
 
 import axios from 'axios';
-const BASE_URL = 'https://ratifi-backend.el.r.appspot.com';
 import store from '../redux-store/index';
+export const BASE_URL = 'https://ratifi-backend.el.r.appspot.com';
 export const request = async (
   url,
   options,
