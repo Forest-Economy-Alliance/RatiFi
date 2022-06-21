@@ -141,95 +141,95 @@ const LocationInformationScreen = ({navigation}) => {
   ]);
   const [districts, setDistricts] = useState([
     {
-      District: 'Simdega',
+      District: t('Simdega'),
     },
   ]);
   const [tehsils, sttTehsils] = useState([
     {
-      Tehsil: 'Bano',
+      Tehsil: t('Bano'),
     },
     {
-      Tehsil: 'Jaldega',
+      Tehsil: t('Jaldega'),
     },
     {
-      Tehsil: 'Kolebira',
+      Tehsil: t('Kolebira'),
     },
   ]);
   const [panchayats, setPanchayats] = useState([
     {
-      Panchayat: 'Banki',
+      Panchayat: t('Banki'),
     },
     {
-      Panchayat: 'Simhatu',
+      Panchayat: t('Simhatu'),
     },
     {
-      Panchayat: 'Konsode',
+      Panchayat: t('Konsode'),
     },
     {
-      Panchayat: 'Kutungia',
+      Panchayat: t('Kutungia'),
     },
     {
-      Panchayat: 'Patiamba',
+      Panchayat: t('Patiamba'),
     },
     {
-      Panchayat: 'Konmerla',
+      Panchayat: t('Konmerla'),
     },
     {
-      Panchayat: 'Jaldega',
+      Panchayat: t('Jaldega'),
     },
     {
-      Panchayat: 'Lachragarh',
+      Panchayat: t('Lachragarh'),
     },
     {
-      Panchayat: 'Tutikel',
+      Panchayat: t('Tutikel'),
     },
     {
-      Panchayat: 'Eidega',
+      Panchayat: t('Eidega'),
     },
     {
-      Panchayat: 'Nawatoli',
+      Panchayat: t('Nawatoli'),
     },
   ]);
   const [villages, setVillages] = useState([
     {
-      Village: 'Kombakra',
+      Village: t('Kombakra'),
     },
     {
-      Village: 'Sardhatoli',
+      Village: t('Sardhatoli'),
     },
     {
-      Village: 'Eidega',
+      Village: t('Eidega'),
     },
     {
-      Village: 'Bhanwarpahari',
+      Village: t('Bhanwarpahari'),
     },
 
     {
-      Village: 'Ramjari',
+      Village: t('Ramjari'),
     },
     {
-      Village: 'Karimati',
+      Village: t('Karimati'),
     },
     {
-      Village: 'Baldega',
+      Village: t('Baldega'),
     },
     {
-      Village: 'Mahomdega',
+      Village: t('Mahomdega'),
     },
     {
-      Village: 'Kharwagada',
+      Village: t('Kharwagada'),
     },
     {
-      Village: 'Kombakra',
+      Village: t('Kombakra'),
     },
     {
-      Village: 'Sardhatoli',
+      Village: t('Sardhatoli'),
     },
     {
-      Village: 'Eidega',
+      Village: t('Eidega'),
     },
     {
-      Village: 'Bhanwarpahari',
+      Village: t('Bhanwarpahari'),
     },
   ]);
 
@@ -256,7 +256,7 @@ const LocationInformationScreen = ({navigation}) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={states}
-          search
+          search={false}
           maxHeight={300}
           labelField="State"
           placeholder={t('state')}
@@ -275,7 +275,7 @@ const LocationInformationScreen = ({navigation}) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={districts}
-          search
+          search={false}
           maxHeight={300}
           labelField="District"
           placeholder={t('district')}
@@ -294,7 +294,7 @@ const LocationInformationScreen = ({navigation}) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={tehsils}
-          search
+          search={false}
           maxHeight={300}
           labelField="Tehsil"
           placeholder={t('tehsil/block')}
@@ -313,7 +313,7 @@ const LocationInformationScreen = ({navigation}) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={panchayats}
-          search
+          search={false}
           maxHeight={300}
           labelField="Panchayat"
           placeholder={t('panchayat')}
@@ -332,7 +332,7 @@ const LocationInformationScreen = ({navigation}) => {
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
           data={villages}
-          search
+          search={false}
           maxHeight={300}
           labelField="Village"
           placeholder={t('village')}

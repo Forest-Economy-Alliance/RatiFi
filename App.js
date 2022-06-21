@@ -6,7 +6,7 @@ import {Text} from 'react-native';
 import {PersistGate} from 'redux-persist/es/integration/react';
 import {Navigation} from './Navigation';
 const {store, persistor} = Redux;
-console.log = () => {};
+// console.log = () => {};
 function App() {
   return (
     <ToastProvider>
