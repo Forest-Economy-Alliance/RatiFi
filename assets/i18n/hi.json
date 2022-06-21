@@ -41,6 +41,8 @@
     "Name is Required": "नाम आवश्यक है",
     "Phone Number is Required": "फोन नंबर आवश्यक है",
     "Invalid Phone Number": " कृपया 10 अंकों का फ़ोन नंबर दर्ज करें",
+    "OTP sent to your mobile !!": "आपके मोबाइल पर भेजा गया ओटीपी !!",
+    "Please select Storage Location": "कृपया फ़ोन के अंदर संग्रहण स्थान चुनें,\nआपके दस्तावेज़ वही सुरक्षित रूप से सहेजे जाएंगे",
     "Password is Required": "पासवर्ड आवश्यक है",
     "Confirm Password is Required": "पासवर्ड की पुष्टि आवश्यक है",
     "Password and Confirm Password does not match": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते",
@@ -76,6 +78,7 @@
     "Bhanwarpahari": "भंवरपहारी",
     "GET_DOCUMENTS": "दस्तावेज़ प्राप्त करें",
     "ALL_FORM_DOWNLOADED": "आप के सारे फॉर्म डौन्लोडस फोल्डर में सेव कर दिए गए है",
-    "FORM_DOWNLOAD_SCREEN_HEADER": "फॉर्म डाउनलोड करे"
+    "FORM_DOWNLOAD_SCREEN_HEADER": "फॉर्म डाउनलोड करे",
+    "INCORRECT_PASSWORD": "गलत पासवर्ड"
   }
 }
