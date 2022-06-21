@@ -15,12 +15,22 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 import {updatePasswordAction} from '../../redux-store/actions/auth';
-
+import {useRoute} from '@react-navigation/native';
+import {useToast} from 'react-native-toast-notifications';
 const PasswordScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
+  const toast = useToast();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loginflow, setLoginFlow] = useState(false);
+  React.useEffect(() => {
+    if (route?.params?.login === true) {
+      setLoginFlow(true);
+    }
+  }, [route?.params]);
+  const route = useRoute();
+  console.log('P', route.params);
 
   const state = {
     password: '',
@@ -29,7 +39,9 @@ const PasswordScreen = ({navigation}) => {
   const mobile = useSelector(
     state => state.entities.auth.userInfo.profile.mobile,
   );
-
+  const pwdToVerify = useSelector(
+    state => state.entities.auth.userInfo.profile.password,
+  );
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -51,28 +63,44 @@ const PasswordScreen = ({navigation}) => {
   });
 
   const onNext = (values, formikActions) => {
-    // dispatch((values.password));
     formikActions.setSubmitting(false);
-    dispatch(
-      updatePasswordAction(
-        {
-          mobile: mobile,
-          password: formik.values.password,
-          confirmPassword: formik.values.confirmPassword,
-        },
-        args => {
-          if (args) {
-            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-          }
-        },
-      ),
-    );
-    navigation.navigate('LocationInformation');
+    // dispatch({type: 'ENABLE_LOADING'});
+    if (loginflow) {
+      console.log('PWD\n pw', pwdToVerify, formik.values.password);
+      if (pwdToVerify === formik.values.password) {
+        navigation.replace('DownloadPDF');
+      } else {
+        toast.show(t('INCORRECT_PASSWORD'), {
+          type: 'success',
+          animationType: 'zoom-in',
+          successColor: '#480E09',
+          placement: 'top',
+          duration: 5000,
+        });
+      }
+    } else {
+      dispatch(
+        updatePasswordAction(
+          {
+            mobile: mobile,
+            password: formik.values.password,
+            confirmPassword: formik.values.confirmPassword,
+          },
+          args => {
+            if (args) {
+              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+            }
+          },
+        ),
+      );
+      navigation.navigate('LocationInformation');
+    }
+    // dispatch({type: 'DISABLE_LOADING'});
   };
 
   const formik = useFormik({
     initialValues: state,
-    validationSchema: PassSchema,
+    validationSchema: !loginflow ? PassSchema : null,
     onSubmit: onNext,
   });
 
@@ -96,16 +124,18 @@ const PasswordScreen = ({navigation}) => {
         {formik.touched.password && formik.errors.password && (
           <Text style={styles.error}>{formik.errors.password}</Text>
         )}
-        <TextInput
-          style={styles.inputConfPass}
-          placeholder={t('confirm password')}
-          placeholderTextColor="#480E09"
-          onChangeText={formik.handleChange('confirmPassword')}
-          secureTextEntry={true}
-          keyboardType="number-pad"
-          onBlur={formik.handleBlur('confirmPassword')}
-          value={formik.values.confirmPassword}
-        />
+        {!loginflow && (
+          <TextInput
+            style={styles.inputConfPass}
+            placeholder={t('confirm password')}
+            placeholderTextColor="#480E09"
+            onChangeText={formik.handleChange('confirmPassword')}
+            secureTextEntry={true}
+            keyboardType="number-pad"
+            onBlur={formik.handleBlur('confirmPassword')}
+            value={formik.values.confirmPassword}
+          />
+        )}
         {formik.touched.confirmPassword && formik.errors.confirmPassword && (
           <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
         )}
@@ -113,7 +143,9 @@ const PasswordScreen = ({navigation}) => {
           style={styles.nextButton}
           onPress={formik.handleSubmit}
         >
-          <Text style={styles.nextButtonText}>{t('next')}</Text>
+          <Text style={styles.nextButtonText}>
+            {loginflow ? 'LOGIN' : t('next')}
+          </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

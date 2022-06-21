@@ -38,13 +38,12 @@ const FormsPage = ({navigation}) => {
   const [progress, setProgress] = useState(0);
   const toast = useToast();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
-  console.log(profile);
-  console.log(t(profile?.district));
+
   const getDistrict = () => t(profile?.district);
   const getPanchayat = () => t(profile?.panchayat);
   const getTehsil = () => t(profile?.tehsil);
   const getVillage = () => t(profile?.village);
-  console.log(getVillage());
+  console.log(profile);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const dispatch = useDispatch();
@@ -177,11 +176,12 @@ const FormsPage = ({navigation}) => {
     },
   ];
 
-  requestPermission = async () => {
+  const requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       );
+      console.log('GRANTED', granted);
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can write the pdf');
       } else {
@@ -225,11 +225,14 @@ const FormsPage = ({navigation}) => {
   };
 
   const generatePDF = async (obj, name) => {
-    if (this.requestPermission()) {
+    console.log('PP', requestPermission());
+    if (requestPermission()) {
       // file location returned by the createPDF
       // replace the '' empty string with directory info if you want to any directory
       let location = await obj.createPDF('DDDD', name);
       // alert(location.filePath);
+    } else {
+      alert('NO PERMISSION');
     }
   };
 

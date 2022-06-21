@@ -76,11 +76,15 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
+      console.log(file.filePath);
+
       RNFetchBlob.fs
         .exists(file.filePath)
         .then(exist => {
           console.log(`file ${exist ? '' : 'not'} exists`);
           RNFetchBlob.fs.readFile(file.filePath, 'base64').then(data => {
+            // console.log('D', data);
+            console.log(RNFS.DownloadDirectoryPath);
             RNFS.moveFile(
               file.filePath,
               RNFS.DownloadDirectoryPath + '/' + '' + _fileName + '.pdf',
@@ -89,13 +93,13 @@ class FormPDFAbstract {
                 console.log('MOVED');
               })
               .catch(uc => console.log('uc', uc));
-            axios
-              .post(`${BASE_URL}/upload-document`, {
-                pdf: data,
-                name: _fileName,
-              })
-              .then(res => {})
-              .catch(e => console.log(_fileName, e));
+            // axios
+            //   .post(`${BASE_URL}/upload-document`, {
+            //     pdf: data,
+            //     name: _fileName,
+            //   })
+            //   .then(res => {})
+            //   .catch(e => console.log(_fileName, e));
           });
         })
         .catch(() => {});
