@@ -9,10 +9,11 @@ import LocationInformationScreen from '../Screens/LocationInformation/LocationIn
 import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
-import RatiFiSplashScreen from '../Screens/RatiFiSplash/RatiFiSplashScreen';
 import {useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
+import OTPScreen from '../Screens/OTPScreen/OTPScreen';
+import IdCardScreen from '../Screens/IdCard/IdCardScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,21 +32,12 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
-          name="RatiFiSplash"
-          component={RatiFiSplashScreen}
+          name="LangSelection"
+          component={LangSelectionScreen}
           options={{
             headerShown: false,
           }}
         />
-        {
-          <Stack.Screen
-            name="LangSelection"
-            component={LangSelectionScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        }
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
@@ -54,8 +46,22 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
+          name="OTP"
+          component={OTPScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="Password"
           component={PasswordScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="IdCard"
+          component={IdCardScreen}
           options={{
             headerShown: false,
           }}

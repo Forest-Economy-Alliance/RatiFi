@@ -32,11 +32,11 @@
     "Officer-in-Charge (Tribal Affairs)": "जनजातीय  विभाग के अधिकारी",
     "Jharkhand": "झारखंड",
     "Please wait": "कृपया प्रतीक्षा करे",
-    "verify otp": "ओटीपी सत्यापित करें",
-    "enter mobile number": "अपना मोबाइल नंबर लिखें",
+    "verify otp": "OTP सत्यापित करें",
+    "Enter mobile number": "अपना मोबाइल नंबर लिखें",
     "Enter your name": "अपना नाम लिखें",
-    "Enter OTP": "ओटीपी डालें",
-    "OTP_SENT": "ओटीपी आपके मोबाइल नंबर पर भेजा गया है।",
+    "Enter OTP": "OTP डालें",
+    "OTP_SENT": "OTP आपके मोबाइल नंबर पर भेजा गया है।",
     "Name is Required": "नाम आवश्यक है",
     "Phone Number is Required": "फोन नंबर आवश्यक है",
     "Invalid Phone Number": "अमान्य फोन नंबर",
@@ -47,7 +47,14 @@
     "Fill all the fields": "सभी क्षेत्र भरें",
     "Invalid OTP": "अमान्य OTP",
     "Gram Sabha is Required": "ग्राम सभा आवश्यक है",
-    "resend otp": "ओटीपी पुनः भेजें",
-    "you will receive otp on this number": "इस नंबर पे OTP आएगा"
+    "resend otp": "OTP पुनः भेजें",
+    "You will receive otp on this number": "इस नंबर पे OTP आएगा",
+    "Select your language": "अपनी भाषा चुनें",
+    "Registration": "पंजीकरण",
+    "Get OTP": "OTP भेजें",
+    "Next": "अगला",
+    "Password Set": "पासवर्ड सेट",
+    "Password": "पासवर्ड",
+    "Identity Card": "पहचान पत्र"
   }
 }
