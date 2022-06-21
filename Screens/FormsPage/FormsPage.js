@@ -177,7 +177,7 @@ const FormsPage = ({navigation}) => {
     },
   ];
 
-  requestPermission = async () => {
+  const requestPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -225,11 +225,11 @@ const FormsPage = ({navigation}) => {
   };
 
   const generatePDF = async (obj, name) => {
-    if (this.requestPermission()) {
+    if (requestPermission()) {
       // file location returned by the createPDF
       // replace the '' empty string with directory info if you want to any directory
       let location = await obj.createPDF('DDDD', name);
-      // alert(location.filePath);
+      // alert(location);
     }
   };
 

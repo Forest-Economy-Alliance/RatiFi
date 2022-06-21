@@ -53,6 +53,7 @@ class FormPDFAbstract {
     let headEnd = this.template.search('</head>');
     var replacedTemplate =
       this.template.slice(0, headEnd) +
+      MangalFont +
       KrutiDevFont +
       this.template.slice(headEnd);
     if (this.totalStrings > 0) {
@@ -69,6 +70,7 @@ class FormPDFAbstract {
     }
 
     try {
+      
       let file = await RNHTMLtoPDF.convert({
         html: replacedTemplate,
         fileName: _fileName,
@@ -109,7 +111,7 @@ class FormPDFAbstract {
       // );
 
       // alert(file.filePath);
-      return file;
+      return file.filePath;
     } catch (error) {
       console.log('Error creating PDF: ' + error);
     }
