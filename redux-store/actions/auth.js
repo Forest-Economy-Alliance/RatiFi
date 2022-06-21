@@ -12,6 +12,7 @@ export const postOTPAction = (data, callback) => dispatch => {
   return loginHandler(data)
     .then(async ({data: response}) => {
       console.log('RES', response);
+
       dispatch({type: 'SAVE_PROFILE', payload: response.data});
       const DD = await getDeviceHash();
 
@@ -22,7 +23,13 @@ export const postOTPAction = (data, callback) => dispatch => {
         25,
         50,
       );
-      if (callback) {
+      if (response.message === 'AVAILABLE') {
+        dispatch({
+          type: 'UPDATE_REGISTRATION_SCREEN_CODE',
+          payload: 5,
+        });
+        dispatch({type: 'DISABLE_LOADING'});
+      } else if (callback) {
         dispatch({type: 'SAVE_DD', payload: DD});
         dispatch({type: 'DISABLE_LOADING'});
         callback(response.data.success);
