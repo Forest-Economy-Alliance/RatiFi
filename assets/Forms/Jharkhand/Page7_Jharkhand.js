@@ -141,6 +141,7 @@ font-size:10.0000pt;" ><font face="Mangal" >ग्राम</font></span><span s
 font-size:10.0000pt;" >&nbsp;</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><font face="Mangal" >सभा</font></span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >:</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
+font-size:10.0000pt;" >&nbsp;$string0</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p></o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
 font-size:12.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >2. </span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
@@ -148,16 +149,19 @@ font-size:10.0000pt;" ><font face="Mangal" >ग्राम</font></span><span s
 font-size:10.0000pt;" >&nbsp;</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><font face="Mangal" >पंचायत</font></span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >:</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
+font-size:10.0000pt;" >&nbsp;$string1</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p></o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >3. </span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><font face="Mangal" >प्रखंड</font></span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >:</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
+font-size:10.0000pt;" >&nbsp;$string2</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p></o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >4. </span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><font face="Mangal" >जिला</font></span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >:</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
+font-size:10.0000pt;" >&nbsp;$string3</span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p></o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" >5. </span><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
@@ -798,5 +802,4 @@ font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal  align=jus
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Calibri;
 font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></p><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
-font-size:12.0000pt;" ><o:p>&nbsp;</o:p></span></p></div><!--EndFragment--></body></html>
-`
+font-size:12.0000pt;" ><o:p>&nbsp;</o:p></span></p></div><!--EndFragment--></body></html>`
