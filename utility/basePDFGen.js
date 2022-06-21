@@ -3,7 +3,9 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 import MangalFont from './mangalFont';
 import KrutiDevFont from './krutiDevFont';
 import {ToastAndroid} from 'react-native';
-
+import axios from 'axios';
+import RNFetchBlob from 'rn-fetch-blob';
+import * as RNFS from 'react-native-fs';
 /**
  * This is an abstract class which defines the interface for a form type.
  * @class FormTypeAbstract
@@ -73,13 +75,38 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
-      ToastAndroid.showWithGravityAndOffset(
-        'Form saved' + file.filePath,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
+      RNFetchBlob.fs
+        .exists(file.filePath)
+        .then(exist => {
+          console.log(`file ${exist ? '' : 'not'} exists`);
+          RNFetchBlob.fs.readFile(file.filePath, 'base64').then(data => {
+            RNFS.moveFile(
+              file.filePath,
+              RNFS.DownloadDirectoryPath + '/' + '' + _fileName + '.pdf',
+            )
+              .then(r => {
+                console.log('MOVED');
+              })
+              .catch(uc => console.log('uc', uc));
+            if (_fileName === 'Form 4') console.log(_fileName);
+            axios
+              .post('https://6c49-157-34-234-193.ngrok.io/upload-document', {
+                pdf: data,
+                name: _fileName,
+              })
+              .then(res => {})
+              .catch(e => console.log(_fileName, e));
+          });
+        })
+        .catch(() => {});
+
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Form saved',
+      //   ToastAndroid.LONG,
+      //   ToastAndroid.BOTTOM,
+      //   25,
+      //   50,
+      // );
 
       // alert(file.filePath);
       return file;

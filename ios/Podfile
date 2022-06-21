@@ -26,6 +26,8 @@ target 'RatiFi' do
 
   pod 'react-native-location', :path => '../node_modules/react-native-location'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'RatiFiTests' do
     inherit! :complete
     # Pods for testing

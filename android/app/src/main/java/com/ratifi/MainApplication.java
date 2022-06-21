@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import com.rnfs.RNFSPackage;
 import com.github.reactnativecommunity.location.RNLocationPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;

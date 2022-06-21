@@ -51,6 +51,9 @@
     "NAME_AND_PHONE": "नाम और फोन नंबर",
     "Simdega": "सिमडेगा",
     "Bano": "बानो",
-    "Banki": "बाँकी"
+    "Banki": "बाँकी",
+    "GET_DOCUMENTS": "दस्तावेज़ प्राप्त करें",
+    "ALL_FORM_DOWNLOADED": "आप के सारे फॉर्म डौन्लोडस फोल्डर में सेव कर दिए गए है",
+    "FORM_DOWNLOAD_SCREEN_HEADER": "फॉर्म डाउनलोड करे"
   }
 }
