@@ -11,6 +11,15 @@ const ForestFiSplashScreen = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
+      //assuiming if created user, then he will finish regiration completely
+      //  without application break, more cases can be handled
+
+      if (registrationScreenCode === 2) {
+        return navigation.replace('Password', {
+          login: false,
+        });
+      }
+
       if (token) {
         return navigation.replace('Password', {
           login: true,

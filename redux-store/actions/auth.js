@@ -28,8 +28,9 @@ export const postOTPAction = (data, callback) => dispatch => {
           type: 'UPDATE_REGISTRATION_SCREEN_CODE',
           payload: 5,
         });
-        dispatch({type: 'DISABLE_LOADING'});
-      } else if (callback) {
+      }
+
+      if (callback) {
         dispatch({type: 'SAVE_DD', payload: DD});
         dispatch({type: 'DISABLE_LOADING'});
         callback(response.data.success);
