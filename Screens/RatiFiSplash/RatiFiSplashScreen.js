@@ -6,10 +6,17 @@ const ForestFiSplashScreen = ({navigation}) => {
   const {registrationScreenCode, loading} = useSelector(
     state => state.entities.appUtil.appUtil,
   );
-  // const {token} = useSelector(state => state.entities.auth.userInfo);
+  const {token} = useSelector(state => state.entities.auth.userInfo);
+  console.log('T', token);
 
   useEffect(() => {
     setTimeout(() => {
+      if (token) {
+        return navigation.replace('Password', {
+          login: true,
+        });
+      }
+
       if (registrationScreenCode == 0) navigation.replace('LangSelection');
       else if (registrationScreenCode === 1) navigation.replace('NamePhone');
       else if (registrationScreenCode === 2) navigation.replace('Password');
