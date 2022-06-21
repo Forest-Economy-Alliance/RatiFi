@@ -4,11 +4,12 @@ import {
   SafeAreaView,
   Image,
   PermissionsAndroid,
-  Button,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import Button from '../../components/Button';
+import {useToast} from 'react-native-toast-notifications';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
 import Form3Jharkhand from '../../utility/Form3_Jharkhand';
@@ -29,16 +30,13 @@ import Form17Jharkhand from '../../utility/Form17_Jharkhand';
 import Form18Jharkhand from '../../utility/Form18_Jharkhand';
 import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import {useTranslation} from 'react-i18next';
-
-// import {
-//   getDistrict,
-//   getPanchayat,
-//   getTehsil,
-//   getVillage,
-// } from '../../slices/userSlice';
+import * as Progress from 'react-native-progress';
+import DownloadLoader from '../../components/DownloadLoader';
 
 const FormsPage = ({navigation}) => {
   const {t} = useTranslation();
+  const [progress, setProgress] = useState(0);
+  const toast = useToast();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
   console.log(profile);
   console.log(t(profile?.district));
@@ -46,7 +44,10 @@ const FormsPage = ({navigation}) => {
   const getPanchayat = () => t(profile?.panchayat);
   const getTehsil = () => t(profile?.tehsil);
   const getVillage = () => t(profile?.village);
+  console.log(getVillage());
   const [activeSlide, setActiveSlide] = useState(0);
+
+  const dispatch = useDispatch();
 
   const carouselItems = [
     {
@@ -67,8 +68,10 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 3',
-      form: async () =>
-        new Form3Jharkhand([getPanchayat(), getTehsil(), getDistrict()], null),
+      form: new Form3Jharkhand(
+        [getPanchayat(), getTehsil(), getDistrict()],
+        null,
+      ),
       imageName: require('../../assets/images/FormPreviews/Page3_Jharkhand.png'),
     },
     {
@@ -210,12 +213,13 @@ const FormsPage = ({navigation}) => {
           style={{width: '80%', height: '80%'}}
           resizeMode="contain"
         />
-        <Button
-          title={'Download ' + item.title}
+        {/* <Button
           onPress={() => {
             generatePDF(item.form, item.title);
           }}
-        />
+        >
+          {'Download ' + item.title}
+        </Button> */}
       </View>
     );
   };
@@ -224,7 +228,7 @@ const FormsPage = ({navigation}) => {
     if (this.requestPermission()) {
       // file location returned by the createPDF
       // replace the '' empty string with directory info if you want to any directory
-      let location = await obj.createPDF('', name);
+      let location = await obj.createPDF('DDDD', name);
       // alert(location.filePath);
     }
   };
@@ -239,20 +243,62 @@ const FormsPage = ({navigation}) => {
           alignItems: 'center',
         }}
       >
-        <Text style={{color: 'black'}}>
-          {' '}
-          {'(experimental)\n'} Form {activeSlide}
-        </Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            padding: 10,
+          }}
+        >
+          <Carousel
+            data={carouselItems}
+            sliderWidth={350}
+            itemWidth={350}
+            renderItem={_renderItem}
+            onSnapToItem={index => setActiveSlide(index)}
+          />
+        </View>
       </View>
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-        <Carousel
-          data={carouselItems}
-          sliderWidth={350}
-          itemWidth={350}
-          renderItem={_renderItem}
-          onSnapToItem={index => setActiveSlide(index)}
-        />
+      <View style={{paddingHorizontal: 50, paddingVertical: 30}}>
+        <Button
+          onPress={async () => {
+            setProgress(0.009);
+            // console.log('HI');
+            // dispatch({type: 'ENABLE_LOADING'});
+            for (const key of carouselItems) {
+              const response = await generatePDF(key.form, key.title);
+              console.log(response);
+              setProgress(e => e + 1 / 19);
+            }
+            setProgress(0);
+
+            toast.show(t('ALL_FORM_DOWNLOADED'), {
+              type: 'success',
+              animationType: 'zoom-in',
+              successColor: '#480E09',
+              placement: 'top',
+              duration: 8000,
+            });
+          }}
+        >
+          &nbsp;&nbsp; Download All Forms
+        </Button>
       </View>
+      {progress != 0 ? (
+        <DownloadLoader>
+          <View>
+            <Progress.Pie
+              progress={progress}
+              size={40}
+              color="#480E09"
+              style={{alignSelf: 'center', marginBottom: 10}}
+            />
+            <Text>{t('Please wait')}...</Text>
+          </View>
+        </DownloadLoader>
+      ) : null}
     </SafeAreaView>
   );
 };

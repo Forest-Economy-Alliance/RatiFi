@@ -52,6 +52,7 @@ export const Navigation = () => {
           component={ForestFiSplashScreen}
           options={{
             headerShown: false,
+            animation: 'default',
           }}
         />
         <Stack.Screen
@@ -59,6 +60,7 @@ export const Navigation = () => {
           component={RatiFiSplashScreen}
           options={{
             headerShown: false,
+            animation: 'default',
           }}
         />
         {
@@ -103,15 +105,18 @@ export const Navigation = () => {
         <Stack.Screen
           name="DownloadPDF"
           component={downloadPDFScreen}
-          options={{
-            headerShown: false,
-          }}
+          options={
+            {
+              // headerShown: false,
+            }
+          }
         />
         <Stack.Screen
           name="FormsPage"
           component={FormsPage}
           options={{
-            headerShown: false,
+            headerTitle: t('FORM_DOWNLOAD_SCREEN_HEADER'),
+            // headerShown: false,
           }}
         />
       </Stack.Navigator>

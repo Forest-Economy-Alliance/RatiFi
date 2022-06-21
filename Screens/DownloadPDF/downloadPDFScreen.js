@@ -12,7 +12,6 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 
@@ -63,6 +62,7 @@ const DownloadPDFScreen = ({navigation}) => {
         <View style={styles.roleContainer}>
           <Text style={styles.roleText}>{role}</Text>
         </View>
+
         <TextInput
           style={styles.inputGramSabha}
           placeholder={t('gram sabha')}
@@ -78,7 +78,7 @@ const DownloadPDFScreen = ({navigation}) => {
           style={styles.getDocsButton}
           onPress={formik.handleSubmit}
         >
-          <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
+          <Text style={styles.getDocsButtonText}>{t('GET_DOCUMENTS')}</Text>
         </TouchableOpacity>
         {pressed && isAvailable && (
           <>
