@@ -78,6 +78,7 @@
     "Bhanwarpahari": "भंवरपहारी",
     "GET_DOCUMENTS": "दस्तावेज़ प्राप्त करें",
     "ALL_FORM_DOWNLOADED": "आप के सारे फॉर्म डौन्लोडस फोल्डर में सेव कर दिए गए है",
-    "FORM_DOWNLOAD_SCREEN_HEADER": "फॉर्म डाउनलोड करे"
+    "FORM_DOWNLOAD_SCREEN_HEADER": "फॉर्म डाउनलोड करे",
+    "INCORRECT_PASSWORD": "गलत पासवर्ड"
   }
 }
