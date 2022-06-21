@@ -184,9 +184,10 @@ const NamePhoneScreen = ({navigation}) => {
               {t('OTP sent to your mobile !!')}
             </Text>
             <Input
-              // style={styles.inputOTP}
+              style={styles.inputOTP}
               placeholder={t('Enter OTP')}
               placeholderTextColor="#480E09"
+              keyboardType="number-pad"
               onChangeText={formik2.handleChange('otp')}
               value={formik2.values.otp}
               onBlur={formik2.handleBlur('otp')}

@@ -8,8 +8,9 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Button from '../../components/Button';
 import {useToast} from 'react-native-toast-notifications';
+import Button from '../../components/Button';
+import FormSaveLocationPicker from '../../components/FormSaveLocationPicker';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
 import Form3Jharkhand from '../../utility/Form3_Jharkhand';
@@ -31,23 +32,47 @@ import Form18Jharkhand from '../../utility/Form18_Jharkhand';
 import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import {useTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
+import * as ScopedStorage from 'react-native-scoped-storage';
+
 import DownloadLoader from '../../components/DownloadLoader';
 
 const FormsPage = ({navigation}) => {
   const {t} = useTranslation();
   const [progress, setProgress] = useState(0);
   const toast = useToast();
+  const dispatch = useDispatch();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
+  const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
 
   const getDistrict = () => t(profile?.district);
   const getPanchayat = () => t(profile?.panchayat);
   const getTehsil = () => t(profile?.tehsil);
   const getVillage = () => t(profile?.village);
-  console.log(profile);
+
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const dispatch = useDispatch();
-
+  const requestPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
+      // console.log('GRANTED', granted);
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can write the pdf');
+      } else {
+        console.log('External Storage permission denied');
+      }
+      return true;
+    } catch (err) {
+      console.warn(err);
+      requestPermission();
+      return false;
+    }
+  };
+  if (!formSaveDir) {
+    requestPermission();
+    return <FormSaveLocationPicker />;
+  }
   const carouselItems = [
     {
       title: 'Form 1',
@@ -176,24 +201,6 @@ const FormsPage = ({navigation}) => {
     },
   ];
 
-  const requestPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      );
-      console.log('GRANTED', granted);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can write the pdf');
-      } else {
-        console.log('External Storage permission denied');
-      }
-      return true;
-    } catch (err) {
-      console.warn(err);
-      return false;
-    }
-  };
-
   const _renderItem = ({item, index}) => {
     return (
       <View
@@ -225,12 +232,14 @@ const FormsPage = ({navigation}) => {
   };
 
   const generatePDF = async (obj, name) => {
-    if (requestPermission()) {
-      // file location returned by the createPDF
-      // replace the '' empty string with directory info if you want to any directory
-      let location = await obj.createPDF('DDDD', name);
-      // alert(location);
-    }
+    // if (requestPermission()) {
+    // file location returned by the createPDF
+    // replace the '' empty string with directory info if you want to any directory
+    await obj.createPDF('DD', name);
+    // alert(location);
+    // } else {
+    // console.log('NO PERMISSION');
+    // }
   };
 
   return (
@@ -265,16 +274,12 @@ const FormsPage = ({navigation}) => {
         <Button
           onPress={async () => {
             setProgress(0.009);
-            // console.log('HI');
-            // dispatch({type: 'ENABLE_LOADING'});
             for (const key of carouselItems) {
               const response = await generatePDF(key.form, key.title);
-              console.log(response);
               setProgress(e => e + 1 / 19);
             }
             setProgress(0);
-
-            toast.show(t('ALL_FORM_DOWNLOADED'), {
+            toast.show(`सभी पीडीएफ ${formSaveDir} फ़ोल्डर में सहेजे गए`, {
               type: 'success',
               animationType: 'zoom-in',
               successColor: '#480E09',

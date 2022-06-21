@@ -7,6 +7,7 @@ import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from 'react-native-fs';
 import {BASE_URL} from '../services/APICentral';
+import store from '../redux-store';
 /**
  * This is an abstract class which defines the interface for a form type.
  * @class FormTypeAbstract
@@ -70,7 +71,6 @@ class FormPDFAbstract {
     }
 
     try {
-      
       let file = await RNHTMLtoPDF.convert({
         html: replacedTemplate,
         fileName: _fileName,
@@ -78,18 +78,21 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
-      console.log(file.filePath);
+      // console.log('FF', file);
 
       RNFetchBlob.fs
         .exists(file.filePath)
         .then(exist => {
           console.log(`file ${exist ? '' : 'not'} exists`);
           RNFetchBlob.fs.readFile(file.filePath, 'base64').then(data => {
-            // console.log('D', data);
-            console.log(RNFS.DownloadDirectoryPath);
+            // eslint-disable-next-line prettier/prettier
+            let finalPath = store.store.getState().entities.appUtil.appUtil
+              .formSaveDir;
+            console.log('GTP', finalPath);
+
             RNFS.moveFile(
               file.filePath,
-              RNFS.DownloadDirectoryPath + '/' + '' + _fileName + '.pdf',
+              finalPath + '/' + '' + _fileName + '.pdf',
             )
               .then(r => {
                 console.log('MOVED');
