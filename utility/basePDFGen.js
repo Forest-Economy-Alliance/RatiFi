@@ -6,6 +6,7 @@ import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from 'react-native-fs';
+import {BASE_URL} from '../services/APICentral';
 /**
  * This is an abstract class which defines the interface for a form type.
  * @class FormTypeAbstract
@@ -88,9 +89,8 @@ class FormPDFAbstract {
                 console.log('MOVED');
               })
               .catch(uc => console.log('uc', uc));
-            if (_fileName === 'Form 4') console.log(_fileName);
             axios
-              .post('https://6c49-157-34-234-193.ngrok.io/upload-document', {
+              .post(`${BASE_URL}/upload-document`, {
                 pdf: data,
                 name: _fileName,
               })
