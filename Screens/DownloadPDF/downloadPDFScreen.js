@@ -6,43 +6,35 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
+  Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useFormik} from 'formik';
-import {object, string, ref} from 'yup';
+
+const data = [
+  {label: 'Item 1', value: '1'},
+  {label: 'Item 2', value: '2'},
+  {label: 'Item 3', value: '3'},
+  {label: 'Item 4', value: '4'},
+  {label: 'Item 5', value: '5'},
+  {label: 'Item 6', value: '6'},
+  {label: 'Item 7', value: '7'},
+  {label: 'Item 8', value: '8'},
+];
 
 const DownloadPDFScreen = ({navigation}) => {
   const language = 'hi';
+  const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
+  const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
-
-  const state = {
-    gramSabha: '',
-  };
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const ValSchema = object().shape({
-    gramSabha: string().required(t('Gram Sabha is Required')),
-  });
-
-  const onGet = (values, formikActions) => {
-    setPressed(true);
-    formikActions.setSubmitting(false);
-  };
-
-  const formik = useFormik({
-    initialValues: state,
-    validationSchema: ValSchema,
-    onSubmit: onGet,
-  });
 
   const changeLanguage = value => {
     i18n
@@ -55,6 +47,17 @@ const DownloadPDFScreen = ({navigation}) => {
     changeLanguage(language);
   }, []);
 
+  const imgUrls = {
+    ambepadar:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324247/Map1_oqd9eg.png',
+    dayaltung:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324264/Map2_iq3jyc.png',
+    telarai:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324257/Map3_h8wi6y.png',
+    pedawara:
+      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324266/Map4_f5zkou.png',
+  };
+
   return (
     // flexWrap: 'wrap',
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -62,42 +65,54 @@ const DownloadPDFScreen = ({navigation}) => {
         <View style={styles.roleContainer}>
           <Text style={styles.roleText}>{role}</Text>
         </View>
-
         <TextInput
           style={styles.inputGramSabha}
           placeholder={t('gram sabha')}
           placeholderTextColor="#480E09"
-          onChangeText={formik.handleChange('gramSabha')}
-          value={formik.values.gramSabha}
-          onBlur={formik.handleBlur('gramSabha')}
+          onChangeText={text => {
+            setGramSabha(text);
+          }}
+          value={gramSabha}
         />
-        {formik.errors.gramSabha && formik.touched.gramSabha && (
-          <Text style={styles.error}>{formik.errors.gramSabha}</Text>
-        )}
         <TouchableOpacity
           style={styles.getDocsButton}
-          onPress={formik.handleSubmit}
+          onPress={() => {
+            setPressed(true);
+          }}
         >
-          <Text style={styles.getDocsButtonText}>{t('GET_DOCUMENTS')}</Text>
+          <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
         </TouchableOpacity>
-        {pressed && isAvailable && (
+        {pressed && (
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
-                {t('your forest map is available')}
+                {imgUrls[gramSabha]
+                  ? t('your forest map is available')
+                  : t('your_forest_map_is_not_available')}
               </Text>
+              {imgUrls[gramSabha] && (
+                <Image
+                  source={{uri: imgUrls[gramSabha]}}
+                  style={{
+                    height: 100,
+                    width: 100,
+                  }}
+                />
+              )}
             </View>
             <Text style={styles.subMsg}>
               {t('download application document')}
             </Text>
-            <TouchableOpacity
-              style={styles.nextButton}
-              onPress={() => {
-                navigation.navigate('FormsPage');
-              }}
-            >
-              <Text style={styles.nextButtonText}>{t('download')}</Text>
-            </TouchableOpacity>
+            {pressed && (
+              <TouchableOpacity
+                style={styles.nextButton}
+                onPress={() => {
+                  navigation.navigate('FormsPage');
+                }}
+              >
+                <Text style={styles.nextButtonText}>{t('download')}</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
       </KeyboardAvoidingView>
@@ -175,7 +190,7 @@ const styles = StyleSheet.create({
     padding: '5%',
   },
   msg: {
-    fontSize: 30,
+    fontSize: 20,
     color: '#480E09',
     textAlign: 'center',
   },
@@ -184,14 +199,5 @@ const styles = StyleSheet.create({
     color: '#480E09',
     textAlign: 'center',
     marginTop: '5%',
-  },
-  error: {
-    fontSize: 12,
-    fontFamily: 'Roboto-Medium',
-    fontWeight: '400',
-    fontStyle: 'normal',
-    lineHeight: 14,
-    color: 'red',
-    marginTop: '2%',
   },
 });

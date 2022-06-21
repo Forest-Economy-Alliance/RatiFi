@@ -31,7 +31,9 @@ const NamePhoneScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const {DD, profile} = useSelector(state => state.entities.auth.userInfo);
-
+  const {registrationScreenCode} = useSelector(
+    state => state.entities.appUtil.appUtil,
+  );
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   // const dstate = useSelector(state => state.entities.auth);
@@ -88,7 +90,9 @@ const NamePhoneScreen = ({navigation}) => {
           otp: formik2.values.otp,
         },
         args => {
-          if (args === true) {
+          if (registrationScreenCode === 5) {
+            navigation.navigate('DownloadPDF');
+          } else if (args === true) {
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
             navigation.navigate('Password');
           } else {
