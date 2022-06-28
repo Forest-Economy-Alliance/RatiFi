@@ -1,7 +1,5 @@
-import React, {FC, ReactElement, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
-  FlatList,
   Modal,
   ScrollView,
   StyleSheet,
@@ -12,27 +10,13 @@ import {
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-const DropdownCreatePost = props => {
+const Dropdown = props => {
   const [visible, setVisible] = useState(false);
   const DropdownButton = useRef(null);
   const [dropdownTop, setDropdownTop] = useState(0);
-  const [selected, setSelected] = useState(undefined);
-  const [selectedValue, setSelectedValue] = useState('AADHAR');
-  const data = [
-    {
-      label: 'AADHAR',
-      isNew: false,
-      value: '1',
-    },
-    {
-      label: 'GOVERNMENT ID',
-      isNew: false,
-      value: '2',
-    },
-  ];
+  const [selectedValue, setSelectedValue] = useState('');
 
   // const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
 
   const openDropdown = () => {
     DropdownButton.current.measure((fx, fy, width, height, px, py) => {
@@ -50,8 +34,13 @@ const DropdownCreatePost = props => {
 
   const onSelect = item => {
     setSelectedValue(item.label);
+    props.formik.setFieldValue(props.variable, item.label);
     // console.log('Selected', item);
   };
+
+  useEffect(() => {
+    console.log('HII', props.visible);
+  }, []);
 
   const renderItem = ({item, index}) => {
     return (
@@ -61,24 +50,17 @@ const DropdownCreatePost = props => {
             style={styles.item3}
             onPress={() => onItemPress(item)}>
             <Text style={styles.buttonText1}>{item.label}</Text>
-            {item.isNew && (
-              <View style={styles.newView}>
-                <Text style={styles.newText}>New</Text>
-              </View>
-            )}
           </TouchableOpacity>
         )}
         {item.value !== '1' ? (
-          <TouchableOpacity
-            style={styles.item}
-            onPress={() => onItemPress(item)}>
-            <Text style={styles.buttonText1}>{item.label}</Text>
-            {item.isNew && (
-              <View style={styles.newView}>
-                <Text style={styles.newText}>New</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+          <>
+            <View style={styles.horLine} />
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => onItemPress(item)}>
+              <Text style={styles.buttonText1}>{item.label}</Text>
+            </TouchableOpacity>
+          </>
         ) : (
           <></>
         )}
@@ -91,7 +73,7 @@ const DropdownCreatePost = props => {
     setVisible(false);
   };
 
-  return (
+  return props.visible ? (
     <>
       <TouchableOpacity
         onPress={() => {
@@ -102,7 +84,23 @@ const DropdownCreatePost = props => {
         <View style={styles.label}>
           <Text style={styles.labelText}>{selectedValue}</Text>
         </View>
-        <Ionicon name="caret-down" size={20} color="#FFFFFF" />
+        <View style={styles.vIcon}>
+          {visible ? (
+            <Ionicon
+              name="caret-up"
+              size={20}
+              color="#000"
+              style={styles.icon}
+            />
+          ) : (
+            <Ionicon
+              name="caret-down"
+              size={20}
+              color="#000"
+              style={styles.icon}
+            />
+          )}
+        </View>
       </TouchableOpacity>
       <Modal visible={visible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setVisible(false)}>
@@ -115,17 +113,27 @@ const DropdownCreatePost = props => {
               top: dropdownTop,
             },
           ]}>
-          {data.map((item, index) => renderItem({item, index}))}
+          {props.data.map((item, index) => renderItem({item, index}))}
         </ScrollView>
       </Modal>
     </>
+  ) : (
+    <></>
   );
 };
 
 const styles = StyleSheet.create({
   label: {
-    width: '90%',
     alignItems: 'center',
+    // backgroundColor: 'black',
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    paddingVertical: '3%',
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    marginLeft: '10%',
+    marginTop: '4%',
+    width: '70%',
   },
   labelText: {
     color: '#FFFFFF',
@@ -133,33 +141,33 @@ const styles = StyleSheet.create({
     marginRight: '2%',
   },
   buttonText1: {
-    color: '#000',
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '500',
+    // textAlign: 'center',
     marginRight: '2%',
   },
   dropdown: {
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0,0,0,1)',
     width: '80%',
     borderRadius: 12,
     zIndex: 999,
-    height: 120,
+    // height: 120,
     marginHorizontal: '10%',
-    paddingLeft: '8%',
+    paddingHorizontal: '8%',
+    borderColor: '#FFFFFF',
+    borderWidth: 0.5,
   },
   item: {
     flexDirection: 'row',
+    justifyContent: 'center',
     paddingBottom: '10%',
-  },
-  item2: {
-    flexDirection: 'row',
-    paddingBottom: '25%',
   },
   item3: {
     flexDirection: 'row',
     paddingTop: '10%',
     paddingBottom: '10%',
+    justifyContent: 'center',
   },
   avatar: {
     backgroundColor: 'white',
@@ -182,17 +190,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   button: {
-    paddingVertical: '3%',
-    paddingHorizontal: '2%',
     backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     flexDirection: 'row',
-    borderColor: '#FFFFFF',
-    borderWidth: 1,
-    marginHorizontal: '10%',
-    marginTop: '4%',
-    borderRadius: 20,
   },
   pad: {
     height: '5%',
@@ -208,6 +209,28 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 11,
   },
+  vIcon: {
+    backgroundColor: '#FFFFFF',
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    width: '10%',
+    paddingVertical: '3%',
+
+    marginTop: '4%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {},
+  horLine: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FFFFFF',
+    borderWidth: 0.5,
+    width: '100%',
+    // marginTop: '2%',
+    marginBottom: '10%',
+  },
 });
 
-export default DropdownCreatePost;
+export default Dropdown;

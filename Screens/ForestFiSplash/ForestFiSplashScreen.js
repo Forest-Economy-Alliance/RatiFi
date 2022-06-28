@@ -76,7 +76,7 @@ const ForestFiSplashScreen = ({navigation}) => {
         moveFor();
         moveRat();
         setTimeout(() => {
-          navigation.replace('LangSelection');
+          navigation.replace('Role');
         }, 1000);
       }}>
       {/* Import image */}

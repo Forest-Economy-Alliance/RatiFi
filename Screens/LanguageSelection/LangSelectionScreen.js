@@ -65,7 +65,7 @@ const LangSelectionScreen = ({navigation}) => {
               key={lang.value}
               onPress={() => {
                 dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-                navigation.navigate('NamePhone');
+                navigation.navigate('Login');
               }}
               style={styles.button}>
               <Text style={styles.text}>{lang.name}</Text>

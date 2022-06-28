@@ -15,15 +15,23 @@ import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {useSelector} from 'react-redux';
-import {selectName} from '../../redux-store/reducers/entities/appUtil';
+import Dropdown from '../../components/CustomDropdown';
+import {object, string} from 'yup';
+import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const NamePhoneScreen = ({navigation}) => {
+const RoleScreen = ({navigation}) => {
   const language = 'hi';
+  const name = useSelector(state => state.entities.appUtil.appUtil.name);
+  const state = {
+    member: '',
+    role: '',
+  };
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [errorVisible, setErrorVisible] = useState(false);
 
   const changeLanguage = value => {
     i18n
@@ -32,39 +40,92 @@ const NamePhoneScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
-
-  const state = {
-    otp: '',
-  };
-  const onVerifyOtp = (values, formikActions) => {
+  const onNext = (values, formikActions) => {
+    // console.log(values);
     formikActions.setSubmitting(false);
-    navigation.navigate('Password');
-    // dispatch(
-    //   verifyOTPAction(
-    //     {
-    //       mobile: formik.values.phoneNumber,
-    //       otp: formik2.values.otp,
-    //     },
-    //     args => {
-    //       if (args === true) {
-    //         console.log('HI');
-    //         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-    //         navigation.navigate('Password');
-    //       } else {
-    //         setWrongOTP('Wrong OTP');
-    //       }
-    //     },
-    //   ),
-    // );
-    // navigation.navigate('Password');
+    navigation.navigate('IdCard');
   };
+
+  const uidSchema = object().shape({
+    member: string().required(t('Membership is Required')),
+    role: string().required(t('Role is Required')),
+  });
 
   const formik = useFormik({
     initialValues: state,
-    // validationSchema: OTPSchema,
-    onSubmit: onVerifyOtp,
+    validationSchema: uidSchema,
+    onSubmit: onNext,
   });
+
+  const data1 = [
+    {
+      label: 'FRC',
+      value: '1',
+      roleData: [
+        {
+          label: 'President',
+          value: '1',
+        },
+        {
+          label: 'Secretary',
+          value: '2',
+        },
+        {
+          label: 'Member',
+          value: '3',
+        },
+      ],
+    },
+    {
+      label: 'SDLC',
+      value: '2',
+      roleData: [
+        {
+          label: 'Subdivisonal Officer',
+          value: '1',
+        },
+        {
+          label: 'Tehsildar',
+          value: '2',
+        },
+        {
+          label: 'Forest Range Officer',
+          value: '3',
+        },
+        {
+          label: 'Member',
+          value: '4',
+        },
+      ],
+    },
+    {
+      label: 'DLC',
+      value: '3',
+      roleData: [
+        {
+          label: 'District Collector',
+          value: '1',
+        },
+        {
+          label: 'District Forest Officer',
+          value: '2',
+        },
+        {
+          label: 'Officer-in-Charge (Tribal Affairs)',
+          value: '3',
+        },
+        {
+          label: 'Member',
+          value: '4',
+        },
+      ],
+    },
+  ];
+
+  const buttonText = {
+    member: t('Fill Membership'),
+    role: t('Fill Role'),
+  };
 
   useEffect(() => {
     changeLanguage(language);
@@ -80,26 +141,54 @@ const NamePhoneScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('OTP')}</Text>
+              <View style={styles.name}>
+                <Text style={styles.nameTxt}>{name}</Text>
+              </View>
               <View style={styles.horizontalLine} />
             </View>
-            <View style={styles.name}>
-              <Text style={styles.nameTxt}>{name}</Text>
-            </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter OTP')}</Text>
+              <Text style={styles.titleText}>
+                {t('specify your membership')}
+              </Text>
             </View>
-            <CustomInput
-              onChangeText={formik.handleChange('otp')}
-              onBlur={formik.handleBlur('otp')}
-              value={formik.values.otp}
-              error={formik.errors.otp && formik.touched.otp}
-              keyboardType="numeric"
+            <Dropdown
+              visible={true}
+              data={data1}
+              formik={formik}
+              variable={'member'}
+            />
+            <View style={styles.title}>
+              <Text style={styles.titleText}>{t('specify your role')}</Text>
+            </View>
+            <Dropdown
+              visible={true}
+              data={
+                data1
+                  .filter(item => item.label === formik.values.member)
+                  .map(item => {
+                    return item.roleData;
+                  })[0]
+              }
+              formik={formik}
+              variable={'role'}
             />
             <CustomButton
               text={t('Next')}
-              onPress={formik.handleSubmit}
+              onPress={() => {
+                if (formik.errors.member || formik.errors.role) {
+                  console.log(formik.errors);
+                  setErrorVisible(true);
+                }
+                formik.handleSubmit();
+              }}
               style={styles.otpBtn}
+            />
+            <CustomError
+              visible={errorVisible}
+              setVisible={setErrorVisible}
+              errorText={t('Please fill all the fields')}
+              errors={formik.errors}
+              buttonText={buttonText}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -108,7 +197,7 @@ const NamePhoneScreen = ({navigation}) => {
   );
 };
 
-export default NamePhoneScreen;
+export default RoleScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -126,6 +215,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   headerText: {
+    marginTop: '5%',
     fontSize: 25,
     color: '#FFFFFF',
   },
@@ -134,12 +224,10 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: '#FFFFFF',
     marginTop: '10%',
-    marginBottom: '10%',
   },
   name: {
     alignItems: 'center',
     marginHorizontal: '10%',
-    margin: '10%',
   },
   nameTxt: {
     fontSize: 25,
@@ -147,8 +235,8 @@ const styles = StyleSheet.create({
   },
   title: {
     alignItems: 'center',
-    paddingTop: '10%',
     marginHorizontal: '10%',
+    marginTop: '10%',
   },
   titleText: {
     fontSize: 20,

@@ -16,14 +16,19 @@ import {object, string} from 'yup';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
+import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const NamePhoneScreen = ({navigation}) => {
   const language = 'hi';
+  const dispatch = useDispatch();
+
+  const [curLen, setCurLen] = useState(0);
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [errorVisible, setErrorVisible] = useState(false);
 
   const changeLanguage = value => {
     i18n
@@ -40,6 +45,7 @@ const NamePhoneScreen = ({navigation}) => {
   const onGetOtp = (values, formikActions) => {
     formikActions.setSubmitting(false);
     console.log('values', values);
+    dispatch({type: 'UPDATE_NAME', payload: values.name});
     navigation.navigate('OTP');
     // navigation.navigate('LanguageSelection');
     // dispatch(
@@ -56,9 +62,21 @@ const NamePhoneScreen = ({navigation}) => {
     // );
   };
 
+  const NPSchema = object().shape({
+    name: string().required(t('Name is Required')),
+    phoneNumber: string()
+      .required(t('Phone Number is Required'))
+      .phone('IN', 'false', t('Invalid Phone Number')),
+  });
+
+  const buttonText = {
+    name: t('Fill Name'),
+    phoneNumber: t('Fill Phone Number'),
+  };
+
   const formik = useFormik({
     initialValues: state,
-    // validationSchema: NPSchema,
+    validationSchema: NPSchema,
     onSubmit: onGetOtp,
   });
 
@@ -105,8 +123,20 @@ const NamePhoneScreen = ({navigation}) => {
             </View>
             <CustomButton
               text={t('Get OTP')}
-              onPress={formik.handleSubmit}
+              onPress={() => {
+                if (formik.errors.phoneNumber || formik.errors.name) {
+                  setErrorVisible(true);
+                }
+                formik.handleSubmit();
+              }}
               style={styles.otpBtn}
+            />
+            <CustomError
+              visible={errorVisible}
+              setVisible={setErrorVisible}
+              errorText={t('Please fill all the fields')}
+              errors={formik.errors}
+              buttonText={buttonText}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>

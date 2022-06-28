@@ -14,6 +14,10 @@ import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
 import OTPScreen from '../Screens/OTPScreen/OTPScreen';
 import IdCardScreen from '../Screens/IdCard/IdCardScreen';
+import LoginScreen from '../Screens/Login/LoginScreen';
+import LoginPasswordScreen from '../Screens/LoginPassword/LoginPassword';
+import ForgotPasswordScreen from '../Screens/ForgotPassword/ForgotPasswordScreen';
+import RoleScreen from '../Screens/Role/RoleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +38,27 @@ export const Navigation = () => {
         <Stack.Screen
           name="LangSelection"
           component={LangSelectionScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="LoginPassword"
+          component={LoginPasswordScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
           options={{
             headerShown: false,
           }}
@@ -69,6 +94,13 @@ export const Navigation = () => {
         <Stack.Screen
           name="LocationInformation"
           component={LocationInformationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Role"
+          component={RoleScreen}
           options={{
             headerShown: false,
           }}

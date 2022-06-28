@@ -10,6 +10,7 @@ export default function CustomInput(props) {
         {...props}
         style={[styles.input, props.style]}
         textAlign={'center'}
+        secureTextEntry={props.secureTextEntry}
       />
     </View>
   );

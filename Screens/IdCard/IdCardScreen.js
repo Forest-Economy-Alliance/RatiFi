@@ -17,24 +17,21 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
+import {object, string} from 'yup';
+import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const IdCardScreen = ({navigation}) => {
   const language = 'hi';
-  const dispatch = useDispatch();
-
-  const mobile = useSelector(
-    state => state.entities.auth.userInfo.profile.mobile,
-  );
+  const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const state = {
-    password: '',
-    confirmPassword: '',
+    type: '',
+    uid: '',
   };
-
-  const [name, setName] = useState('Ram Krishna');
 
   const {t, i18n} = useTranslation();
 
+  const [errorVisible, setErrorVisible] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   const changeLanguage = value => {
@@ -49,24 +46,36 @@ const IdCardScreen = ({navigation}) => {
     navigation.navigate('IdCard');
   };
 
+  const uidSchema = object().shape({
+    type: string().required(t('Identity Card Type is Required')),
+    uid: string().required(t('UID is required')),
+  });
+
   const formik = useFormik({
     initialValues: state,
-    // validationSchema: ,
+    validationSchema: uidSchema,
     onSubmit: onNext,
   });
+
+  const data1 = [
+    {
+      label: 'AADHAR',
+      value: '1',
+    },
+    {
+      label: 'GOVERNMENT ID',
+      value: '2',
+    },
+  ];
+
+  const buttonText = {
+    type: t('Fill Identity Card Type'),
+    uid: t('Fill UID'),
+  };
 
   useEffect(() => {
     changeLanguage(language);
   }, []);
-
-  const [selected, setSelected] = useState(undefined);
-  const data = [
-    {label: 'One', value: '1'},
-    {label: 'Two', value: '2'},
-    {label: 'Three', value: '3'},
-    {label: 'Four', value: '4'},
-    {label: 'Five', value: '5'},
-  ];
 
   return (
     <ImageBackground
@@ -78,26 +87,47 @@ const IdCardScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
+              <View style={styles.name}>
+                <Text style={styles.nameTxt}>{name}</Text>
+              </View>
               <Text style={styles.headerText}>{t('Identity Card')}</Text>
               <View style={styles.horizontalLine} />
-            </View>
-            <View style={styles.name}>
-              <Text style={styles.nameTxt}>{name}</Text>
             </View>
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('identity card type')}</Text>
             </View>
-            {/* <CustomInput
-              onChangeText={formik.handleChange('password')}
-              onBlur={formik.handleBlur('password')}
-              value={formik.values.password}
-              error={formik.errors.password && formik.touched.password}
-            /> */}
-            <Dropdown label={'AADHAR'} />
+            <Dropdown
+              visible={true}
+              data={data1}
+              formik={formik}
+              variable={'type'}
+            />
+            <View style={styles.title}>
+              <Text style={styles.titleText}>{t('Identity Card UID')}</Text>
+            </View>
+            <CustomInput
+              onChangeText={formik.handleChange('uid')}
+              onBlur={formik.handleBlur('uid')}
+              value={formik.values.uid}
+              error={formik.errors.uid && formik.touched.uid}
+            />
             <CustomButton
               text={t('Next')}
-              onPress={formik.handleSubmit}
+              onPress={() => {
+                if (formik.errors.type || formik.errors.uid) {
+                  console.log(formik.errors);
+                  setErrorVisible(true);
+                }
+                formik.handleSubmit();
+              }}
               style={styles.otpBtn}
+            />
+            <CustomError
+              visible={errorVisible}
+              setVisible={setErrorVisible}
+              errorText={t('Please fill all the fields')}
+              errors={formik.errors}
+              buttonText={buttonText}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -124,6 +154,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   headerText: {
+    marginTop: '5%',
     fontSize: 25,
     color: '#FFFFFF',
   },
@@ -132,7 +163,6 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: '#FFFFFF',
     marginTop: '10%',
-    marginBottom: '10%',
   },
   name: {
     alignItems: 'center',
@@ -144,8 +174,8 @@ const styles = StyleSheet.create({
   },
   title: {
     alignItems: 'center',
-    paddingTop: '10%',
     marginHorizontal: '10%',
+    marginTop: '10%',
   },
   titleText: {
     fontSize: 20,

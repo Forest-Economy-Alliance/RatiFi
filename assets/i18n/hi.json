@@ -55,6 +55,23 @@
     "Next": "अगला",
     "Password Set": "पासवर्ड सेट",
     "Password": "पासवर्ड",
-    "Identity Card": "पहचान पत्र"
+    "Identity Card": "पहचान पत्र",
+    "Please fill all the fields": "सभी क्षेत्र भरें",
+    "Fill Name": "नाम भरें",
+    "Fill Phone Number": "फोन नंबर भरें",
+    "Fill Password": "पासवर्ड भरें",
+    "Fill Confirm Password": "पुष्टि पासवर्ड भरें",
+    "Fill Membership": "सदस्यता भरें",
+    "Fill Role": "भूमिका भरें",
+    "Fill Identity Card Type": "पहचान पत्र का प्रकार भरें",
+    "Fill UID": "पहचान पत्र संख्या भरें",
+    "Login": "लॉगिन",
+    "Forgot Password": "पासवर्ड भूल गए है तो क्लिक करें",
+    "Identity Card UID": "पहचान पत्र संख्या",
+    "Identity Card UID is required": "पहचान पत्र संख्या आवश्यक है",
+    "Membership is Required": "सदस्यता आवश्यक है",
+    "Role is Required": "भूमिका आवश्यक है",
+    "Identity Card Type": "पहचान पत्र का प्रकार",
+    "Identity Card Type is Required": "पहचान पत्र का प्रकार आवश्यक है"
   }
 }

@@ -1,3 +1,3 @@
 export default function Routes() {
-    const user = useSelector(selectAuth);
+  const user = useSelector(selectAuth);
 }

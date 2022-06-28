@@ -10,20 +10,25 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {useFormik} from 'formik';
+import {object, string} from 'yup';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
-import {selectName} from '../../redux-store/reducers/entities/appUtil';
+import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const NamePhoneScreen = ({navigation}) => {
+const LoginScreen = ({navigation}) => {
   const language = 'hi';
+  const dispatch = useDispatch();
+
+  const [curLen, setCurLen] = useState(0);
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [errorVisible, setErrorVisible] = useState(false);
 
   const changeLanguage = value => {
     i18n
@@ -32,38 +37,34 @@ const NamePhoneScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
-
   const state = {
-    otp: '',
+    phoneNumber: '',
   };
-  const onVerifyOtp = (values, formikActions) => {
+
+  const onSubmit = (values, formikActions) => {
     formikActions.setSubmitting(false);
-    navigation.navigate('Password');
-    // dispatch(
-    //   verifyOTPAction(
-    //     {
-    //       mobile: formik.values.phoneNumber,
-    //       otp: formik2.values.otp,
-    //     },
-    //     args => {
-    //       if (args === true) {
-    //         console.log('HI');
-    //         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-    //         navigation.navigate('Password');
-    //       } else {
-    //         setWrongOTP('Wrong OTP');
-    //       }
-    //     },
-    //   ),
-    // );
-    // navigation.navigate('Password');
+    console.log('values', values);
+    dispatch({type: 'UPDATE_NAME', payload: values.name});
+    // If registered
+    // navigation.navigate('LoginPassword');
+    // else navigate to registration
+    navigation.navigate('NamePhone');
+  };
+
+  const NPSchema = object().shape({
+    phoneNumber: string()
+      .required(t('Phone Number is Required'))
+      .phone('IN', 'false', t('Invalid Phone Number')),
+  });
+
+  const buttonText = {
+    phoneNumber: t('Fill Phone Number'),
   };
 
   const formik = useFormik({
     initialValues: state,
-    // validationSchema: OTPSchema,
-    onSubmit: onVerifyOtp,
+    validationSchema: NPSchema,
+    onSubmit: onSubmit,
   });
 
   useEffect(() => {
@@ -80,26 +81,35 @@ const NamePhoneScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('OTP')}</Text>
+              <Text style={styles.headerText}>{t('Login')}</Text>
               <View style={styles.horizontalLine} />
             </View>
-            <View style={styles.name}>
-              <Text style={styles.nameTxt}>{name}</Text>
-            </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter OTP')}</Text>
+              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
             </View>
             <CustomInput
-              onChangeText={formik.handleChange('otp')}
-              onBlur={formik.handleBlur('otp')}
-              value={formik.values.otp}
-              error={formik.errors.otp && formik.touched.otp}
+              onChangeText={formik.handleChange('phoneNumber')}
+              onBlur={formik.handleBlur('phoneNumber')}
+              value={formik.values.phoneNumber}
+              error={formik.errors.phoneNumber && formik.touched.phoneNumber}
               keyboardType="numeric"
             />
             <CustomButton
-              text={t('Next')}
-              onPress={formik.handleSubmit}
+              text={t('Submit')}
+              onPress={() => {
+                if (formik.errors.phoneNumber) {
+                  setErrorVisible(true);
+                }
+                formik.handleSubmit();
+              }}
               style={styles.otpBtn}
+            />
+            <CustomError
+              visible={errorVisible}
+              setVisible={setErrorVisible}
+              errorText={t('Please fill all the fields')}
+              errors={formik.errors}
+              buttonText={buttonText}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -108,7 +118,7 @@ const NamePhoneScreen = ({navigation}) => {
   );
 };
 
-export default NamePhoneScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -134,16 +144,6 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: '#FFFFFF',
     marginTop: '10%',
-    marginBottom: '10%',
-  },
-  name: {
-    alignItems: 'center',
-    marginHorizontal: '10%',
-    margin: '10%',
-  },
-  nameTxt: {
-    fontSize: 25,
-    color: '#FFFFFF',
   },
   title: {
     alignItems: 'center',
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   subText: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#FFFFFF',
   },
   otpBtn: {

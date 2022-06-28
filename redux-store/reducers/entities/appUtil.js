@@ -4,6 +4,7 @@ const INIT_STATE = {
   loading: false,
   registrationScreenCode: 0,
   language: 'hi', // not used yet
+  name: '',
 };
 
 const appUtil = (state = INIT_STATE, action) => {
@@ -23,10 +24,17 @@ const appUtil = (state = INIT_STATE, action) => {
         ...state,
         registrationScreenCode: action.payload,
       };
+    case 'UPDATE_NAME':
+      return {
+        ...state,
+        name: action.payload,
+      };
     default:
       return state;
   }
 };
+
+export const selectName = state => state.entities.appUtil.appUtil.name;
 
 export default combineReducers({
   appUtil,
