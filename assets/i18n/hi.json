@@ -72,6 +72,22 @@
     "Membership is Required": "सदस्यता आवश्यक है",
     "Role is Required": "भूमिका आवश्यक है",
     "Identity Card Type": "पहचान पत्र का प्रकार",
-    "Identity Card Type is Required": "पहचान पत्र का प्रकार आवश्यक है"
+    "Identity Card Type is Required": "पहचान पत्र का प्रकार आवश्यक है",
+    "UID is Required": "पहचान पत्र संख्या आवश्यक है",
+    "Select your location": "अपना स्थान चुनें",
+    "State": "राज्य",
+    "District": "जिला",
+    "Tehsil": "तहसील",
+    "Panchayat": "पंचायत",
+    "Village": "गाँव",
+    "Gujrehra": "गुजरेहरा",
+    "Gopalpur": "गोपालपुर",
+    "Palampur": "पालमपुर",
+    "Kagda": "काँगड़ा",
+    "Himachal Pradesh": "हिमाचल प्रदेश",
+    "Edit Profile": "जानकारी बदले",
+    "Track old claim": "पुराने दिए गए आवेदन की स्थिति जाने",
+    "File claim": "आवेदन की स्थिति दर्ज करे"
+
   }
 }

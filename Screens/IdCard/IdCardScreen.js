@@ -6,7 +6,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ImageBackground,
-  StatusBar,
+  ScrollView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -15,7 +15,7 @@ import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
@@ -43,12 +43,12 @@ const IdCardScreen = ({navigation}) => {
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
-    navigation.navigate('IdCard');
+    navigation.navigate('Location');
   };
 
   const uidSchema = object().shape({
     type: string().required(t('Identity Card Type is Required')),
-    uid: string().required(t('UID is required')),
+    uid: string().required(t('UID is Required')),
   });
 
   const formik = useFormik({
@@ -83,7 +83,7 @@ const IdCardScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={styles.darkness}>
+      <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
@@ -131,7 +131,7 @@ const IdCardScreen = ({navigation}) => {
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };

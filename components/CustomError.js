@@ -108,6 +108,34 @@ export default function CustomError({
               </TouchableOpacity>
             </>
           )}
+          {errors.type && (
+            <>
+              <View style={styles.titleErr}>
+                <Text style={styles.titleTextErr}>{errors.type}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setVisible(!visible);
+                }}>
+                <Text style={styles.buttonText}>{buttonText.type}</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {errors.uid && (
+            <>
+              <View style={styles.titleErr}>
+                <Text style={styles.titleTextErr}>{errors.uid}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setVisible(!visible);
+                }}>
+                <Text style={styles.buttonText}>{buttonText.uid}</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
     </Modal>

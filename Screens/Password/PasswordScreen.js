@@ -170,6 +170,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -257,7 +258,7 @@ const PasswordScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={styles.darkness}>
+      <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
@@ -308,7 +309,7 @@ const PasswordScreen = ({navigation}) => {
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };

@@ -76,7 +76,7 @@ const ForestFiSplashScreen = ({navigation}) => {
         moveFor();
         moveRat();
         setTimeout(() => {
-          navigation.replace('Role');
+          navigation.replace('FRCInitial');
         }, 1000);
       }}>
       {/* Import image */}

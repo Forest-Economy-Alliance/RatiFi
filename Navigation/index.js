@@ -18,6 +18,9 @@ import LoginScreen from '../Screens/Login/LoginScreen';
 import LoginPasswordScreen from '../Screens/LoginPassword/LoginPassword';
 import ForgotPasswordScreen from '../Screens/ForgotPassword/ForgotPasswordScreen';
 import RoleScreen from '../Screens/Role/RoleScreen';
+import LocationScreen from '../Screens/Location/Location';
+import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
+import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -101,6 +104,27 @@ export const Navigation = () => {
         <Stack.Screen
           name="Role"
           component={RoleScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Location"
+          component={LocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FRCHome"
+          component={FRCHomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FRCInitial"
+          component={FRCInitialScreen}
           options={{
             headerShown: false,
           }}

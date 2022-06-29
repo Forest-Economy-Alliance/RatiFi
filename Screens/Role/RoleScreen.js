@@ -6,13 +6,13 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import 'yup-phone';
-import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {useSelector} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
@@ -137,7 +137,7 @@ const RoleScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={styles.darkness}>
+      <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
@@ -192,7 +192,7 @@ const RoleScreen = ({navigation}) => {
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };

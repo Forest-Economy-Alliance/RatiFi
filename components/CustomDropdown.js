@@ -108,12 +108,12 @@ const Dropdown = props => {
         </TouchableWithoutFeedback>
         <ScrollView
           style={[
-            styles.dropdown,
+            props.data ? styles.dropdown : null,
             {
               top: dropdownTop,
             },
           ]}>
-          {props.data.map((item, index) => renderItem({item, index}))}
+          {props.data?.map((item, index) => renderItem({item, index}))}
         </ScrollView>
       </Modal>
     </>
@@ -152,11 +152,12 @@ const styles = StyleSheet.create({
     width: '80%',
     borderRadius: 12,
     zIndex: 999,
-    // height: 120,
+    height: '25%',
     marginHorizontal: '10%',
     paddingHorizontal: '8%',
     borderColor: '#FFFFFF',
     borderWidth: 0.5,
+    marginBottom: '5%',
   },
   item: {
     flexDirection: 'row',

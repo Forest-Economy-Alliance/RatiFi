@@ -20,7 +20,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const LoginScreen = ({navigation}) => {
+const FRCInitialScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
 
@@ -38,35 +38,14 @@ const LoginScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const state = {
-    phoneNumber: '',
-  };
-
-  const onSubmit = (values, formikActions) => {
-    formikActions.setSubmitting(false);
-    console.log('values', values);
-    dispatch({type: 'UPDATE_NAME', payload: values.name});
-    // If registered
-    // navigation.navigate('LoginPassword');
-    // else navigate to registration
-    navigation.navigate('NamePhone');
-  };
-
-  const NPSchema = object().shape({
-    phoneNumber: string()
-      .required(t('Phone Number is Required'))
-      .phone('IN', 'false', t('Invalid Phone Number')),
-  });
-
-  const buttonText = {
-    phoneNumber: t('Fill Phone Number'),
-  };
-
-  const formik = useFormik({
-    initialValues: state,
-    validationSchema: NPSchema,
-    onSubmit: onSubmit,
-  });
+  const [name, setName] = useState('Ram Krishna');
+  const [member, setMember] = useState('FRC');
+  const [role, setRole] = useState('Secretary');
+  const [state, setState] = useState('Himachal Pradesh');
+  const [district, setDistrict] = useState('Kagda');
+  const [tehsil, setTehsil] = useState('Palampur');
+  const [panchayat, setPanchayat] = useState('Gopalpur');
+  const [village, setVillage] = useState('Gujrehra');
 
   useEffect(() => {
     changeLanguage(language);
@@ -82,36 +61,28 @@ const LoginScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Login')}</Text>
-              <View style={styles.horizontalLine} />
+              <Text style={styles.headerText}>
+                {name}
+                {', '}
+                {role}
+                {', '}
+                {member}
+              </Text>
             </View>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
-            </View>
-            <CustomInput
-              onChangeText={formik.handleChange('phoneNumber')}
-              onBlur={formik.handleBlur('phoneNumber')}
-              value={formik.values.phoneNumber}
-              error={formik.errors.phoneNumber && formik.touched.phoneNumber}
-              keyboardType="numeric"
-            />
-            <CustomButton
-              text={t('Submit')}
-              onPress={() => {
-                if (formik.errors.phoneNumber) {
-                  setErrorVisible(true);
-                }
-                formik.handleSubmit();
-              }}
-              style={styles.otpBtn}
-            />
-            <CustomError
-              visible={errorVisible}
-              setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
-              errors={formik.errors}
-              buttonText={buttonText}
-            />
+            <View style={styles.horizontalLine} />
+            <Text style={styles.locTitleTxt}>
+              {t(village)}
+              {', '}
+            </Text>
+            <Text style={styles.locSubTitleTxt}>
+              {t(panchayat)}
+              {', '}
+              {t(tehsil)}
+              {', '}
+              {t(district)}
+              {', '}
+              {t(state)}
+            </Text>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
       </ScrollView>
@@ -119,7 +90,7 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-export default LoginScreen;
+export default FRCInitialScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -137,11 +108,32 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 20,
     color: '#FFFFFF',
   },
+  locInfo: {
+    // alignItems: 'center',
+    marginHorizontal: '10%',
+    marginTop: '10%',
+    // backgroundColor: '#FFFFFF',
+  },
+  locTitleInfo: {
+    fontSize: 24,
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
+  subheaderText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  locSubInfo: {
+    backgroundColor: '#FFFFFF',
+    // marginTop: '5%',
+    // marginBottom: '5%',
+  },
   horizontalLine: {
-    width: '100%',
+    width: '80%',
+    marginLeft: '10%',
     height: 2,
     backgroundColor: '#FFFFFF',
     marginTop: '10%',
@@ -164,8 +156,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFFFFF',
   },
-  otpBtn: {
-    marginTop: '30%',
+  locTitleTxt: {
+    fontSize: 24,
+    textAlign: 'center',
+    color: '#FFFFFF',
+    marginTop: '10%',
+    marginHorizontal: '10%',
+  },
+  locSubTitleTxt: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#FFFFFF',
+    marginTop: '2%',
+    marginHorizontal: '10%',
   },
   inputName: {
     borderColor: '#CCCCCC',

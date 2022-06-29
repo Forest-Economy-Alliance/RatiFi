@@ -20,7 +20,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const LoginScreen = ({navigation}) => {
+const FRCHomeScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
 
@@ -38,35 +38,14 @@ const LoginScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const state = {
-    phoneNumber: '',
-  };
-
-  const onSubmit = (values, formikActions) => {
-    formikActions.setSubmitting(false);
-    console.log('values', values);
-    dispatch({type: 'UPDATE_NAME', payload: values.name});
-    // If registered
-    // navigation.navigate('LoginPassword');
-    // else navigate to registration
-    navigation.navigate('NamePhone');
-  };
-
-  const NPSchema = object().shape({
-    phoneNumber: string()
-      .required(t('Phone Number is Required'))
-      .phone('IN', 'false', t('Invalid Phone Number')),
-  });
-
-  const buttonText = {
-    phoneNumber: t('Fill Phone Number'),
-  };
-
-  const formik = useFormik({
-    initialValues: state,
-    validationSchema: NPSchema,
-    onSubmit: onSubmit,
-  });
+  const [name, setName] = useState('Ram Krishna');
+  const [member, setMember] = useState('FRC');
+  const [role, setRole] = useState('Secretary');
+  const [state, setState] = useState('Himachal Pradesh');
+  const [district, setDistrict] = useState('Kagda');
+  const [tehsil, setTehsil] = useState('Palampur');
+  const [panchayat, setPanchayat] = useState('Gopalpur');
+  const [village, setVillage] = useState('Gujrehra');
 
   useEffect(() => {
     changeLanguage(language);
@@ -82,35 +61,43 @@ const LoginScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Login')}</Text>
-              <View style={styles.horizontalLine} />
+              <Text style={styles.headerText}>
+                {name}
+                {', '}
+                {role}
+                {', '}
+                {member}
+              </Text>
+              <Text style={styles.subheaderText}>
+                {t(village)}
+                {', '}
+                {t(panchayat)}
+                {', '}
+                {t(tehsil)}
+                {', '}
+                {t(district)}
+                {', '}
+                {t(state)}
+              </Text>
             </View>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
-            </View>
-            <CustomInput
-              onChangeText={formik.handleChange('phoneNumber')}
-              onBlur={formik.handleBlur('phoneNumber')}
-              value={formik.values.phoneNumber}
-              error={formik.errors.phoneNumber && formik.touched.phoneNumber}
-              keyboardType="numeric"
+            <CustomButton
+              text={t('Edit Profile')}
+              onPress={() => {}}
+              style={styles.epBtnView}
+              button={styles.epBtn}
+            />
+            <View style={styles.horizontalLine} />
+            <CustomButton
+              text={t('Track old claim')}
+              onPress={() => {}}
+              style={styles.otBtnView}
+              button={styles.otBtn}
             />
             <CustomButton
-              text={t('Submit')}
-              onPress={() => {
-                if (formik.errors.phoneNumber) {
-                  setErrorVisible(true);
-                }
-                formik.handleSubmit();
-              }}
-              style={styles.otpBtn}
-            />
-            <CustomError
-              visible={errorVisible}
-              setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
-              errors={formik.errors}
-              buttonText={buttonText}
+              text={t('File claim')}
+              onPress={() => {}}
+              style={styles.ntBtnView}
+              button={styles.ntBtn}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -119,7 +106,7 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-export default LoginScreen;
+export default FRCHomeScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -132,16 +119,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
   },
   header: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingTop: '15%',
     marginHorizontal: '10%',
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 22,
+    color: '#FFFFFF',
+  },
+  subheaderText: {
+    fontSize: 16,
     color: '#FFFFFF',
   },
   horizontalLine: {
-    width: '100%',
+    width: '80%',
+    marginLeft: '10%',
     height: 2,
     backgroundColor: '#FFFFFF',
     marginTop: '10%',
@@ -164,8 +156,39 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFFFFF',
   },
-  otpBtn: {
-    marginTop: '30%',
+  epBtnView: {
+    flexDirection: 'row',
+    marginTop: '2%',
+    marginRight: '10%',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    // backgroundColor: '#FFFFFF',
+  },
+  epBtn: {
+    width: '40%',
+    paddingVertical: '2%',
+  },
+  otBtnView: {
+    flexDirection: 'row',
+    marginTop: '20%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: '#FFFFFF',
+  },
+  otBtn: {
+    width: '75%',
+    paddingVertical: '2%',
+  },
+  ntBtnView: {
+    flexDirection: 'row',
+    marginTop: '20%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: '#FFFFFF',
+  },
+  ntBtn: {
+    width: '55%',
+    paddingVertical: '2%',
   },
   inputName: {
     borderColor: '#CCCCCC',
