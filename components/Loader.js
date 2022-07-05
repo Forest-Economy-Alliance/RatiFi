@@ -22,8 +22,7 @@ export default function Loader() {
             flexDirection: 'row',
             padding: 10,
             borderRadius: 10,
-          }}
-        >
+          }}>
           <ActivityIndicator color={'black'} />
           <Text
             style={{
@@ -32,8 +31,7 @@ export default function Loader() {
               paddingLeft: 10,
               borderRadius: 12,
               color: 'black',
-            }}
-          >
+            }}>
             {i18n.t('Please wait')}...
           </Text>
         </View>

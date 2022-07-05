@@ -1,167 +1,3 @@
-// /* eslint-disable no-alert */
-// import {
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TouchableWithoutFeedback,
-//   TouchableOpacity,
-//   Keyboard,
-//   KeyboardAvoidingView,
-// } from 'react-native';
-// import {useTranslation} from 'react-i18next';
-// import '../../assets/i18n/i18n';
-// import React, {useEffect, useState} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
-// import {useFormik} from 'formik';
-// import {object, string, ref} from 'yup';
-// import {updatePasswordAction} from '../../redux-store/actions/auth';
-
-// const PasswordScreen = ({navigation}) => {
-//   const language = 'hi';
-//   const dispatch = useDispatch();
-
-//   const mobile = useSelector(
-//     state => state.entities.auth.userInfo.profile.mobile,
-//   );
-//   const state = {
-//     password: '',
-//     confirmPassword: '',
-//   };
-
-//   const {t, i18n} = useTranslation();
-
-//   const [currentLanguage, setCurrentLanguage] = useState('en');
-
-//   const changeLanguage = value => {
-//     i18n
-//       .changeLanguage(value)
-//       .then(() => setCurrentLanguage(value))
-//       .catch(err => console.log(err));
-//   };
-//   const PassSchema = object().shape({
-//     password: string().required(t('Password is Required')),
-//     confirmPassword: string()
-//       .required(t('Confirm Password is Required'))
-//       .oneOf(
-//         [ref('password'), null],
-//         t('Password and Confirm Password does not match'),
-//       ),
-//   });
-
-//   const onNext = (values, formikActions) => {
-//     formikActions.setSubmitting(false);
-//     dispatch(
-//       updatePasswordAction(
-//         {
-//           mobile: mobile,
-//           password: values.password,
-//           confirmPassword: values.confirmPassword,
-//         },
-//         args => {
-//           if (args) {
-//             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-//           }
-//         },
-//       ),
-//     );
-//     navigation.navigate('LocationInformation');
-//   };
-
-//   const formik = useFormik({
-//     initialValues: state,
-//     validationSchema: PassSchema,
-//     onSubmit: onNext,
-//   });
-
-//   useEffect(() => {
-//     changeLanguage(language);
-//   }, []);
-
-//   return (
-//     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-//       <KeyboardAvoidingView style={styles.container}>
-//         <TextInput
-//           style={styles.inputPass}
-//           placeholder={t('password')}
-//           placeholderTextColor="#480E09"
-//           onChangeText={formik.handleChange('password')}
-//           secureTextEntry={true}
-//           onBlur={formik.handleBlur('password')}
-//           value={formik.values.password}
-//         />
-//         {formik.touched.password && formik.errors.password && (
-//           <Text style={styles.error}>{formik.errors.password}</Text>
-//         )}
-//         <TextInput
-//           style={styles.inputConfPass}
-//           placeholder={t('confirm password')}
-//           placeholderTextColor="#480E09"
-//           onChangeText={formik.handleChange('confirmPassword')}
-//           secureTextEntry={true}
-//           onBlur={formik.handleBlur('confirmPassword')}
-//           value={formik.values.confirmPassword}
-//         />
-//         {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-//           <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
-//         )}
-//         <TouchableOpacity
-//           style={styles.nextButton}
-//           onPress={formik.handleSubmit}>
-//           <Text style={styles.nextButtonText}>{t('next')}</Text>
-//         </TouchableOpacity>
-//       </KeyboardAvoidingView>
-//     </TouchableWithoutFeedback>
-//   );
-// };
-
-// export default PasswordScreen;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     // justifyContent: 'center',
-//     padding: '15%',
-//   },
-//   inputPass: {
-//     borderColor: '#CCCCCC',
-//     borderBottomWidth: 1,
-//     width: '100%',
-//     fontSize: 25,
-//     color: '#480E09',
-//   },
-//   inputConfPass: {
-//     borderColor: '#CCCCCC',
-//     borderBottomWidth: 1,
-//     width: '100%',
-//     fontSize: 25,
-//     color: '#480E09',
-//   },
-//   nextButton: {
-//     backgroundColor: '#480E09',
-//     width: '100%',
-//     height: '8%',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginTop: '10%',
-//   },
-//   nextButtonText: {
-//     color: 'white',
-//     textTransform: 'uppercase',
-//     fontSize: 20,
-//   },
-//   error: {
-//     fontSize: 12,
-//     fontFamily: 'Roboto-Medium',
-//     fontWeight: '400',
-//     fontStyle: 'normal',
-//     lineHeight: 14,
-//     color: 'red',
-//     marginTop: '2%',
-//   },
-// });
-
 import {
   StyleSheet,
   Text,
@@ -186,15 +22,15 @@ import {ref} from 'yup';
 import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const PasswordScreen = ({navigation}) => {
+const LoginPasswordScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
 
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
+  const name = useState('Ram Krishna');
   const state = {
     password: '',
-    confirmPassword: '',
   };
+
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -207,15 +43,9 @@ const PasswordScreen = ({navigation}) => {
   };
   const PassSchema = object().shape({
     password: string().required(t('Password is Required')),
-    confirmPassword: string()
-      .required(t('Confirm Password is Required'))
-      .oneOf(
-        [ref('password'), null],
-        t('Password and Confirm Password does not match'),
-      ),
   });
 
-  const onNext = (values, formikActions) => {
+  const onLogin = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // dispatch(
     //   updatePasswordAction(
@@ -236,13 +66,12 @@ const PasswordScreen = ({navigation}) => {
 
   const buttonText = {
     password: t('Fill Password'),
-    confirmPassword: t('Fill Confirm Password'),
   };
 
   const formik = useFormik({
     initialValues: state,
-    validationSchema: !loginflow ? PassSchema : null,
-    onSubmit: onNext,
+    validationSchema: PassSchema,
+    onSubmit: onLogin,
   });
 
   const [errorVisible, setErrorVisible] = useState(false);
@@ -261,7 +90,7 @@ const PasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Password')}</Text>
+              <Text style={styles.headerText}>{t('Login')}</Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>
@@ -274,30 +103,26 @@ const PasswordScreen = ({navigation}) => {
               onChangeText={formik.handleChange('password')}
               onBlur={formik.handleBlur('password')}
               value={formik.values.password}
-              error={formik.errors.password && formik.touched.password}
               secureTextEntry={true}
-            />
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('confirm password')}</Text>
-            </View>
-            <CustomInput
-              onChangeText={formik.handleChange('confirmPassword')}
-              onBlur={formik.handleBlur('confirmPassword')}
-              value={formik.values.confirmPassword}
-              error={
-                formik.errors.confirmPassword && formik.touched.confirmPassword
-              }
+              error={formik.errors.password && formik.touched.password}
             />
             <CustomButton
-              text={t('Password Set')}
+              text={t('Login')}
               onPress={() => {
-                if (formik.errors.password || formik.errors.confirmPassword) {
+                if (formik.errors.password) {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
               }}
-              secureTextEntry={true}
               style={styles.otpBtn}
+            />
+            <CustomButton
+              text={t('Forgot Password')}
+              onPress={() => {
+                navigation.navigate('ForgotPassword');
+              }}
+              style={styles.forgPassBtn}
+              button={styles.forgPassWidth}
             />
             <CustomError
               visible={errorVisible}
@@ -313,7 +138,7 @@ const PasswordScreen = ({navigation}) => {
   );
 };
 
-export default PasswordScreen;
+export default LoginPasswordScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -368,7 +193,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   otpBtn: {
-    marginTop: '30%',
+    marginTop: '20%',
+  },
+  forgPassBtn: {
+    marginTop: '50%',
+  },
+  forgPassWidth: {
+    width: '70%',
   },
   inputName: {
     borderColor: '#CCCCCC',

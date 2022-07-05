@@ -20,9 +20,11 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const NamePhoneScreen = ({navigation}) => {
+const ForgotPasswordScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
+
+  const [name, setName] = useState('Ram Krishna');
 
   const [curLen, setCurLen] = useState(0);
 
@@ -39,7 +41,6 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const state = {
-    name: '',
     phoneNumber: '',
   };
 
@@ -48,30 +49,15 @@ const NamePhoneScreen = ({navigation}) => {
     console.log('values', values);
     dispatch({type: 'UPDATE_NAME', payload: values.name});
     navigation.navigate('OTP');
-    // navigation.navigate('LanguageSelection');
-    // dispatch(
-    //   postOTPAction(
-    //     {
-    //       mobile: formik.values.phoneNumber,
-    //       name: formik.values.name,
-    //       lat: '123.23',
-    //       lng: '123.2',
-    //       dd: DD,
-    //     },
-    //     args => {},
-    //   ),
-    // );
   };
 
   const NPSchema = object().shape({
-    name: string().required(t('Name is Required')),
     phoneNumber: string()
       .required(t('Phone Number is Required'))
       .phone('IN', 'false', t('Invalid Phone Number')),
   });
 
   const buttonText = {
-    name: t('Fill Name'),
     phoneNumber: t('Fill Phone Number'),
   };
 
@@ -98,15 +84,9 @@ const NamePhoneScreen = ({navigation}) => {
               <Text style={styles.headerText}>{t('Registration')}</Text>
               <View style={styles.horizontalLine} />
             </View>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter your name')}</Text>
+            <View style={styles.name}>
+              <Text style={styles.nameTxt}>{name}</Text>
             </View>
-            <CustomInput
-              onChangeText={formik.handleChange('name')}
-              onBlur={formik.handleBlur('name')}
-              value={formik.values.name}
-              error={formik.errors.name && formik.touched.name}
-            />
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
             </View>
@@ -125,7 +105,7 @@ const NamePhoneScreen = ({navigation}) => {
             <CustomButton
               text={t('Get OTP')}
               onPress={() => {
-                if (formik.errors.phoneNumber || formik.errors.name) {
+                if (formik.errors.phoneNumber) {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
@@ -146,7 +126,7 @@ const NamePhoneScreen = ({navigation}) => {
   );
 };
 
-export default NamePhoneScreen;
+export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -200,6 +180,16 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 25,
     color: '#480E09',
+  },
+  name: {
+    alignItems: 'center',
+    margin: '10%',
+    marginTop: '25%',
+    marginHorizontal: '10%',
+  },
+  nameTxt: {
+    fontSize: 25,
+    color: '#FFFFFF',
   },
   inputPhone: {
     borderColor: '#CCCCCC',
@@ -294,80 +284,3 @@ const styles = StyleSheet.create({
     marginTop: '2%',
   },
 });
-
-// {/* <Text>{t('Enter your name')}</Text>
-//           <TextInput
-//             style={styles.inputName}
-//             placeholder={t('name')}
-//             placeholderTextColor="#480E09"
-//             onChangeText={formik.handleChange('name')}
-//             value={formik.values.name}
-//             onBlur={formik.handleBlur('name')}
-//           />
-
-//           {formik.touched.name && formik.errors.name && (
-//             <Text style={styles.error}>{formik.errors.name}</Text>
-//           )}
-//           <Text>{t('you will recived otp on this number')}</Text>
-//           <PhoneInput
-//             ref={phoneInput}
-//             placeholder={t('phone/mobile')}
-//             placeholderTextColor="#480E09"
-//             defaultCode="IN"
-//             layout="second"
-//             containerStyle={styles.inputPhone}
-//             textInputStyle={styles.inputPhoneText}
-//             textContainerStyle={styles.inputPhoneTextContainer}
-//             codeTextStyle={styles.inputPhoneCodeText}
-//             countryPickerButtonStyle={styles.inputPhoneCountryPickerButton}
-//             onChangeFormattedText={formik.handleChange('phoneNumber')}
-//             value={formik.values.phoneNumber}
-//             onBlur={formik.handleBlur('phoneNumber')}
-//           />
-//           {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-//             <Text style={styles.error}>{formik.errors.phoneNumber}</Text>
-//           )}
-//           <Text>{t('you will receive otp on this number')}</Text>
-//           {/* get otp button */}
-//           {!pressed && (
-//             <TouchableOpacity
-//               onPress={formik.handleSubmit}
-//               style={styles.getOtpButton}>
-//               <Text style={styles.getOtpButtonText}>{t('get otp')}</Text>
-//             </TouchableOpacity>
-//           )}
-//           {pressed && (
-//             <View style={styles.afterOTP}>
-//               <Text style={styles.afterOTPText}>
-//                 {t('OTP sent to your mobile !!')}
-//               </Text>
-//               <TextInput
-//                 style={styles.inputOTP}
-//                 placeholder={t('ENTER OTP')}
-//                 placeholderTextColor="#480E09"
-//                 onChangeText={formik2.handleChange('otp')}
-//                 value={formik2.values.otp}
-//                 onBlur={formik2.handleBlur('otp')}
-//               />
-//               {formik2.touched.otp && formik2.errors.otp && (
-//                 <Text style={styles.error}>{formik2.errors.otp}</Text>
-//               )}
-
-//               <Text>{wrongOtp}</Text>
-//               <TouchableOpacity
-//                 style={styles.verifyOtpButton}
-//                 onPress={formik2.handleSubmit}>
-//                 <Text style={styles.verifyOtpButtonText}>
-//                   {t('verify otp')}
-//                 </Text>
-//               </TouchableOpacity>
-
-//               <TouchableOpacity
-//                 style={styles.resendOtpButton}
-//                 onPress={formik.handleSubmit}>
-//                 <Text style={styles.resendOtpButtonText}>
-//                   {t('resend otp')}
-//                 </Text>
-//               </TouchableOpacity>
-//             </View>
-//           )}} */

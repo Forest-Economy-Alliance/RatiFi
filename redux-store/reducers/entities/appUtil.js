@@ -5,6 +5,7 @@ const INIT_STATE = {
   registrationScreenCode: 0,
   formSaveDir: '',
   language: 'hi', // not used yet
+  name: '',
 };
 
 const appUtil = (state = INIT_STATE, action) => {
@@ -28,11 +29,18 @@ const appUtil = (state = INIT_STATE, action) => {
       return {
         ...state,
         formSaveDir: action.payload,
+      }
+    case 'UPDATE_NAME':
+      return {
+        ...state,
+        name: action.payload,
       };
     default:
       return state;
   }
 };
+
+export const selectName = state => state.entities.appUtil.appUtil.name;
 
 export default combineReducers({
   appUtil,

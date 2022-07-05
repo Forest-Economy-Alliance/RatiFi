@@ -9,18 +9,23 @@ import LocationInformationScreen from '../Screens/LocationInformation/LocationIn
 import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
-import RatiFiSplashScreen from '../Screens/RatiFiSplash/RatiFiSplashScreen';
 import {useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
-import {useTranslation} from 'react-i18next';
+import OTPScreen from '../Screens/OTPScreen/OTPScreen';
+import IdCardScreen from '../Screens/IdCard/IdCardScreen';
+import LoginScreen from '../Screens/Login/LoginScreen';
+import LoginPasswordScreen from '../Screens/LoginPassword/LoginPassword';
+import ForgotPasswordScreen from '../Screens/ForgotPassword/ForgotPasswordScreen';
+import RoleScreen from '../Screens/Role/RoleScreen';
+import LocationScreen from '../Screens/Location/Location';
+import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
+import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
-  const {registrationScreenCode, loading} = useSelector(
-    state => state.entities.appUtil.appUtil,
-  );
+  const {loading} = useSelector(state => state.entities.appUtil.appUtil);
 
   const {t, i18n} = useTranslation();
   let language = 'hi';
@@ -35,18 +40,7 @@ export const Navigation = () => {
   return (
     <NavigationContainer>
       {loading && <Loader />}
-      <Stack.Navigator
-        initialRouteName="ForestFiSplash"
-        screenOptions={{
-          headerStyle: {
-            // backgroundColor: 'green',
-          },
-          headerTitleStyle: {
-            // color: 'white'
-          },
-          animation: 'fade_from_bottom',
-        }}
-      >
+      <Stack.Navigator initialRouteName="ForestFiSplash">
         <Stack.Screen
           name="ForestFiSplash"
           component={ForestFiSplashScreen}
@@ -56,29 +50,46 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
-          name="RatiFiSplash"
-          component={RatiFiSplashScreen}
+          name="LangSelection"
+          component={LangSelectionScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="LoginPassword"
+          component={LoginPasswordScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
           options={{
             headerShown: false,
             animation: 'default',
           }}
         />
-        {
-          <Stack.Screen
-            name="LangSelection"
-            component={LangSelectionScreen}
-            options={{
-              // headerShown: false,
-              headerTitle: t('ENTER_LANGUAGE'),
-            }}
-          />
-        }
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
           options={{
-            // headerShown: false,
-            headerTitle: t('NAME_AND_PHONE'),
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="OTP"
+          component={OTPScreen}
+          options={{
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -89,8 +100,43 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
+          name="IdCard"
+          component={IdCardScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="LocationInformation"
           component={LocationInformationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Role"
+          component={RoleScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Location"
+          component={LocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FRCHome"
+          component={FRCHomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FRCInitial"
+          component={FRCInitialScreen}
           options={{
             headerShown: false,
           }}

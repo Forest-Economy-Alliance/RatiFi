@@ -20,8 +20,10 @@
     "your forest map is available": "Your forest map is available",
     "download application document": "Download application document",
     "download": "Download",
-    "resend otp": "ओटीपी पुनः भेजें",
-    "you will recived otp on this number": "इस नंबर पे OTP आएगा",
-    "GET_OTP": "ओटीपी प्राप्त करें"
+    "resend otp": "Resend OTP",
+    "You will receive otp on this number": "You will receive otp on this number",
+    "Select your language": "Select your language",
+    "Registration": "Registration",
+    "Enter mobile number": "Enter mobile number"
   }
 }
