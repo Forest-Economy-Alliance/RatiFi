@@ -8,8 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 const {height, width} = Dimensions.get('window');
-import i18n from '../assets/i18n/i18n';
-import Button from './Button';
+import Button from './CustomButton';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import {useDispatch} from 'react-redux';
 import {t} from 'i18next';

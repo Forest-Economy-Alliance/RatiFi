@@ -9,7 +9,7 @@ import Carousel from 'react-native-snap-carousel';
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'react-native-toast-notifications';
-import Button from '../../components/Button';
+import Button from '../../components/CustomButton';
 import FormSaveLocationPicker from '../../components/FormSaveLocationPicker';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
