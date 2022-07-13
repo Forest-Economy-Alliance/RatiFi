@@ -195,6 +195,7 @@ const PasswordScreen = ({navigation}) => {
     password: '',
     confirmPassword: '',
   };
+  const loginflow=false;
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
