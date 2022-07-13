@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 import store from '../redux-store/index';
-export const BASE_URL = 'https://ratifi-backend.el.r.appspot.com';
+export const BASE_URL = 'https://ratifi-backend.herokuapp.com';
 export const request = async (
   url,
   options,

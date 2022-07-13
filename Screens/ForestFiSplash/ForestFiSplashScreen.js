@@ -8,11 +8,14 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
+import { useDispatch } from 'react-redux';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const ForestFiSplashScreen = ({navigation}) => {
+  const dispatch=useDispatch();
+  dispatch({type: 'DISABLE_LOADING'});
   const value = useState(
     new Animated.ValueXY({
       x: windowWidth / 2 - (windowHeight * 0.19) / 2,
