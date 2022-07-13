@@ -47,7 +47,8 @@ const LocationScreen = ({navigation}) => {
   const onNext = (values, formikActions) => {
     // console.log(values);
     formikActions.setSubmitting(false);
-    navigation.navigate('FRCHome');
+    // navigation.navigate('FRCHome');
+    navigation.navigate("RoleInformation")
   };
 
   const locSchema = object().shape({

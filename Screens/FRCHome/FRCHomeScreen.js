@@ -86,7 +86,8 @@ const FRCHomeScreen = ({navigation}) => {
               style={styles.epBtnView}
               button={styles.epBtn}
             />
-            <View style={styles.horizontalLine} />
+            {/* <View style={styles.horizontalLine} /> */}
+            <CustomInput/>
             <CustomButton
               text={t('Track old claim')}
               onPress={() => {}}
