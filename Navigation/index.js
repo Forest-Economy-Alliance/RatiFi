@@ -21,7 +21,7 @@ import RoleScreen from '../Screens/Role/RoleScreen';
 import LocationScreen from '../Screens/Location/Location';
 import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
 import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
-
+import { useTranslation } from 'react-i18next';
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {

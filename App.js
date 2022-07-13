@@ -6,7 +6,7 @@ import {Navigation} from './Navigation';
 const {store, persistor} = Redux;
 import {LogBox} from 'react-native';
 import ignoreWarnings from 'ignore-warnings';
-
+import { ToastProvider } from 'react-native-toast-notifications';
 ignoreWarnings('warn', ['ViewPropTypes']);
 
 LogBox.ignoreLogs([
