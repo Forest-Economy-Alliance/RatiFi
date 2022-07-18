@@ -3,6 +3,8 @@ import {
   View,
   SafeAreaView,
   Image,
+  ImageBackground,
+  StyleSheet,
   PermissionsAndroid,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
@@ -33,8 +35,10 @@ import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import {useTranslation} from 'react-i18next';
 import * as Progress from 'react-native-progress';
 import * as ScopedStorage from 'react-native-scoped-storage';
+const BG_IMG_PATH = require('../../assets/images/background.png');
 
 import DownloadLoader from '../../components/DownloadLoader';
+import CustomButton from '../../components/CustomButton';
 
 const FormsPage = ({navigation}) => {
   const {t} = useTranslation();
@@ -56,7 +60,6 @@ const FormsPage = ({navigation}) => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       );
-      // console.log('GRANTED', granted);
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can write the pdf');
       } else {
@@ -220,13 +223,7 @@ const FormsPage = ({navigation}) => {
           style={{width: '80%', height: '80%'}}
           resizeMode="contain"
         />
-        {/* <Button
-          onPress={() => {
-            generatePDF(item.form, item.title);
-          }}
-        >
-          {'Download ' + item.title}
-        </Button> */}
+      
       </View>
     );
   };
@@ -243,7 +240,14 @@ const FormsPage = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white', paddingTop: 50}}>
+  
+       <ImageBackground
+      source={BG_IMG_PATH}
+      resizeMode="cover"
+      blurRadius={10}
+      style={styles.bg}>
+
+   
       <View
         style={{
           flex: 1,
@@ -270,7 +274,7 @@ const FormsPage = ({navigation}) => {
           />
         </View>
       </View>
-      <View style={{paddingHorizontal: 50, paddingVertical: 30}}>
+      <View style={{paddingVertical: 20}}>
         <Button
           onPress={async () => {
             setProgress(0.009);
@@ -288,8 +292,13 @@ const FormsPage = ({navigation}) => {
             });
           }}
         >
-          &nbsp;&nbsp; Download All Forms
+           Download Forms
         </Button>
+        <CustomButton style={{marginTop:10}} onPress={()=>{
+          navigation.navigate("FRCHome")
+        }}>
+          Apply Claim 
+        </CustomButton>
       </View>
       {progress != 0 ? (
         <DownloadLoader>
@@ -304,8 +313,18 @@ const FormsPage = ({navigation}) => {
           </View>
         </DownloadLoader>
       ) : null}
-    </SafeAreaView>
+
+</ImageBackground>
+ 
   );
 };
 
 export default FormsPage;
+
+const styles=StyleSheet.create({
+  bg: {
+    // flex: 1,
+    height: '100%',
+    width: '100%',
+  }
+})

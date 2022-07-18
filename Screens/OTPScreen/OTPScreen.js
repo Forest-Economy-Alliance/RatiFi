@@ -15,17 +15,22 @@ import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {selectName} from '../../redux-store/reducers/entities/appUtil';
+import { useRoute } from '@react-navigation/native';
+import { verifyOTPAction } from '../../redux-store/actions/auth';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const NamePhoneScreen = ({navigation}) => {
-  const language = 'hi';
 
+  const dispatch=useDispatch();
+  const language = 'hi';
+  const route=useRoute();
+  console.log(route?.params?.phoneNumber);
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
-
+  const [wrongOTP,setWrongOTP]=useState('');
   const changeLanguage = value => {
     i18n
       .changeLanguage(value)
@@ -40,25 +45,42 @@ const NamePhoneScreen = ({navigation}) => {
   };
   const onVerifyOtp = (values, formikActions) => {
     formikActions.setSubmitting(false);
-    navigation.navigate('Password');
-    // dispatch(
-    //   verifyOTPAction(
-    //     {
-    //       mobile: formik.values.phoneNumber,
-    //       otp: formik2.values.otp,
-    //     },
-    //     args => {
-    //       if (args === true) {
-    //         console.log('HI');
-    //         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-    //         navigation.navigate('Password');
-    //       } else {
-    //         setWrongOTP('Wrong OTP');
-    //       }
-    //     },
-    //   ),
-    // );
     // navigation.navigate('Password');
+    dispatch(
+      verifyOTPAction(
+        {
+          mobile: route?.params?.phoneNumber,
+          otp: formik.values.otp,
+        },
+        args => {
+          console.log("ARGS->",args);
+          if (args === "AVAILABLE") {
+
+            navigation.navigate("FRCHome")
+
+            // updating to screen code to 2 as otp verification is done ,
+            // now two cases ,
+            // in reponse if we get AVAILABLE
+            // else we get created  
+            // if available -> Home Screen
+            // if created -> Password
+            
+            // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+
+
+          //  navigation.navigate("Login")
+          
+          } else if(args==="CREATED"){
+             
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+            navigation.navigate("Password")
+          } {
+            setWrongOTP('Wrong OTP');
+          }
+        },
+      ),
+    );
+   
   };
 
   const formik = useFormik({
@@ -90,6 +112,7 @@ const NamePhoneScreen = ({navigation}) => {
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter OTP')}</Text>
             </View>
+           
             <CustomInput
               onChangeText={formik.handleChange('otp')}
               onBlur={formik.handleBlur('otp')}
@@ -97,6 +120,9 @@ const NamePhoneScreen = ({navigation}) => {
               error={formik.errors.otp && formik.touched.otp}
               keyboardType="numeric"
             />
+             <Text style={{alignSelf:'center',color:'red',marginTop:10}}>
+              {wrongOTP}
+              </Text>
             <CustomButton
               text={t('Next')}
               onPress={formik.handleSubmit}

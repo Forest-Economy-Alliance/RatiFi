@@ -8,14 +8,14 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const ForestFiSplashScreen = ({navigation}) => {
   const dispatch=useDispatch();
-  dispatch({type: 'DISABLE_LOADING'});
+  // dispatch({type: 'DISABLE_LOADING'});
   const value = useState(
     new Animated.ValueXY({
       x: windowWidth / 2 - (windowHeight * 0.19) / 2,
@@ -71,25 +71,70 @@ const ForestFiSplashScreen = ({navigation}) => {
     }).start();
   }
 
+
+
+  const {registrationScreenCode, loading} = useSelector(
+    state => state.entities.appUtil.appUtil,
+  );
+  const {token} = useSelector(state => state.entities.auth.userInfo);
+  
+  useEffect(() => {
+    setTimeout(() => {
+      //assuiming if created user, then he will finish regiration completely
+      //  without application break, more cases can be handled
+
+      if (registrationScreenCode === 2 && !token) {
+        return navigation.replace('Password', {
+          login: false,
+        });
+      }
+
+      if (token) {
+        return navigation.replace('LoginPassword', {
+          login: true,
+        });
+      }
+
+      if (registrationScreenCode == 0) navigation.replace('LangSelection');
+      else if (registrationScreenCode === 1) navigation.replace('NamePhone');
+      else if (registrationScreenCode === 2) navigation.replace('Password');
+      else if (registrationScreenCode === 3)
+        navigation.replace('Location');
+      else if (registrationScreenCode === 4)
+        navigation.replace('Role');
+      else if (registrationScreenCode === 5) {
+        navigation.replace('DownloadPDF');
+      }
+    }, 1500);
+  }, []);
+
+
+  // React.useEffect(()=>{
+
+  //       setTimeout(() => {
+  //       setAnimate(true);
+  //       moveCircle();
+  //       moveFor();
+  //       moveRat();
+
+
+  //           // some logic here 
+
+  //         navigation.replace('LangSelection');
+
+
+  //       }, 1000);
+  // },[])
+
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setAnimate(true);
-        moveCircle();
-        moveFor();
-        moveRat();
-        setTimeout(() => {
-          navigation.replace('LangSelection');
-        }, 1000);
-      }}>
-      {/* Import image */}
+    <TouchableWithoutFeedback>
       <View style={styles.container}>
         <Image
           source={require('../../assets/logo/forestfi.png')}
           style={styles.image}
           resizeMode="contain"
         />
-        {/* <Text style={styles.text}>ForestFi</Text> */}
         <Animated.View
           style={[
             {

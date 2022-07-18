@@ -6,7 +6,7 @@ import LangSelectionScreen from '../Screens/LanguageSelection/LangSelectionScree
 import NamePhoneScreen from '../Screens/NamePhone/NamePhoneScreen';
 import PasswordScreen from '../Screens/Password/PasswordScreen';
 import LocationInformationScreen from '../Screens/LocationInformation/LocationInformationScreen';
-import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
+// import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
 import {useSelector} from 'react-redux';
@@ -70,14 +70,14 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
           options={{
             headerShown: false,
             animation: 'default',
           }}
-        />
+        /> */}
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
@@ -141,13 +141,13 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="RoleInformation"
           component={RoleInformationScreen}
           options={{
             headerShown: false,
           }}
-        />
+        /> */}
         <Stack.Screen
           name="DownloadPDF"
           component={downloadPDFScreen}
@@ -162,7 +162,7 @@ export const Navigation = () => {
           component={FormsPage}
           options={{
             headerTitle: t('FORM_DOWNLOAD_SCREEN_HEADER'),
-            // headerShown: false,
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

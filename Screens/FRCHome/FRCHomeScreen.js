@@ -11,7 +11,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import 'yup-phone';
@@ -38,14 +38,18 @@ const FRCHomeScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const [name, setName] = useState('Ram Krishna');
+  const {name,panchayat,tehsil,state,district,village,postLevel,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
+
+  // console.log("UIF",UIF);
+
+  // const [name, setName] = useState('Ram Krishna');
   const [member, setMember] = useState('FRC');
   const [role, setRole] = useState('Secretary');
-  const [state, setState] = useState('Himachal Pradesh');
-  const [district, setDistrict] = useState('Kagda');
-  const [tehsil, setTehsil] = useState('Palampur');
-  const [panchayat, setPanchayat] = useState('Gopalpur');
-  const [village, setVillage] = useState('Gujrehra');
+  // const [state, setState] = useState('Himachal Pradesh');
+  // const [district, setDistrict] = useState('Kagda');
+  // const [tehsil, setTehsil] = useState('Palampur');
+  // const [panchayat, setPanchayat] = useState('Gopalpur');
+  // const [village, setVillage] = useState('Gujrehra');
 
   useEffect(() => {
     changeLanguage(language);
@@ -64,9 +68,9 @@ const FRCHomeScreen = ({navigation}) => {
               <Text style={styles.headerText}>
                 {name}
                 {', '}
-                {role}
+                {postLevel}
                 {', '}
-                {member}
+                {authLevel}
               </Text>
               <Text style={styles.subheaderText}>
                 {t(village)}
@@ -82,7 +86,11 @@ const FRCHomeScreen = ({navigation}) => {
             </View>
             <CustomButton
               text={t('Edit Profile')}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("Location",{
+                  editProfile:true
+                })
+              }}
               style={styles.epBtnView}
               button={styles.epBtn}
             />

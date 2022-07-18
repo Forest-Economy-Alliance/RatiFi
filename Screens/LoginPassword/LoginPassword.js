@@ -20,13 +20,17 @@ import {object} from 'yup';
 import {string} from 'yup';
 import {ref} from 'yup';
 import CustomError from '../../components/CustomError';
+import {useToast} from 'react-native-toast-notifications';
+
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LoginPasswordScreen = ({navigation}) => {
   const language = 'hi';
+  const toast=useToast();
   const dispatch = useDispatch();
+  const {name} = useSelector(state => state.entities.auth.userInfo?.profile);
 
-  const name = useState('Ram Krishna');
+ 
   const state = {
     password: '',
   };
@@ -45,23 +49,48 @@ const LoginPasswordScreen = ({navigation}) => {
     password: string().required(t('Password is Required')),
   });
 
+  const pwdToVerify = useSelector(
+    state => state.entities.auth.userInfo.profile.password
+  );
+
   const onLogin = (values, formikActions) => {
     formikActions.setSubmitting(false);
-    // dispatch(
-    //   updatePasswordAction(
-    //     {
-    //       mobile: mobile,
-    //       password: values.password,
-    //       confirmPassword: values.confirmPassword,
-    //     },
-    //     args => {
-    //       if (args) {
-    //         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-    //       }
-    //     },
-    //   ),
-    // );
-    navigation.navigate('IdCard');
+    // dispatch({type: 'ENABLE_LOADING'});
+    let loginflow=true;
+    if (loginflow) {
+      console.log("PTV",pwdToVerify)
+      if (pwdToVerify === formik.values.password) {
+        navigation.replace('DownloadPDF');
+      } else {
+        toast.show(t('INCORRECT_PASSWORD'), {
+          type: 'success',
+          animationType: 'zoom-in',
+          successColor: '#480E09',
+          placement: 'top',
+          duration: 5000,
+        });
+      }
+    } else {
+
+      dispatch(
+        updatePasswordAction(
+          {
+            mobile: mobile,
+            password: formik.values.password,
+            confirmPassword: formik.values.confirmPassword,
+          },
+          args => {
+            if (args) {
+              // screen code 3 means , password set 
+              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+              navigation.navigate('Location');
+            }
+          },
+        ),
+      );
+      
+    }
+    // dispatch({type: 'DISABLE_LOADING'});
   };
 
   const buttonText = {

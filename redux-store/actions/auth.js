@@ -15,7 +15,7 @@ export const postOTPAction = (data, callback) => dispatch => {
 
       dispatch({type: 'SAVE_PROFILE', payload: response.data});
       const DD = await getDeviceHash();
-
+    
       ToastAndroid.showWithGravityAndOffset(
         'OTP_SENT' + '  ' + response.data.otp,
         ToastAndroid.LONG,
@@ -48,11 +48,14 @@ export const verifyOTPAction = (data, callback) => dispatch => {
     .then(async ({data: response}) => {
       console.log('OTPR', response);
       if (response.success) {
+        
+
         dispatch({type: 'SAVE_TOKEN', payload: response.data.token});
       }
 
       if (callback) {
-        callback(response.success);
+        // if(response.message==="AVAILABLE")
+        callback(response.message);
         dispatch({type: 'DISABLE_LOADING'});
       }
     })
@@ -68,6 +71,8 @@ export const updatePasswordAction = (data, callback) => dispatch => {
     .then(async ({data: response}) => {
       console.log('RES', response);
       if (response.success) {
+        dispatch({type: 'SAVE_PROFILE', payload: response.data});
+
         dispatch({type: 'DISABLE_LOADING'});
       }
 
@@ -81,11 +86,14 @@ export const updatePasswordAction = (data, callback) => dispatch => {
 };
 
 export const updateUserInfoAction = (data, callback) => dispatch => {
-  console.log(data);
+  console.log("DATA--",data);
   dispatch({type: 'ENABLE_LOADING'});
   return updateUserHandler(data)
     .then(async ({data: response}) => {
-      console.log('RES', response);
+      console.log('RES--', response);
+
+      dispatch({type: 'SAVE_PROFILE', payload: response.data});
+
       if (response.success) {
         dispatch({type: 'DISABLE_LOADING'});
       }

@@ -14,11 +14,11 @@ import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
-
+import { updateUserInfoAction } from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
   const language = 'hi';
@@ -29,7 +29,7 @@ const RoleScreen = ({navigation}) => {
   };
 
   const {t, i18n} = useTranslation();
-
+  const dispatch=useDispatch();
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -41,9 +41,33 @@ const RoleScreen = ({navigation}) => {
   };
 
   const onNext = (values, formikActions) => {
-    // console.log(values);
+    console.log(values);
     formikActions.setSubmitting(false);
-    navigation.navigate('IdCard');
+
+
+    dispatch(
+      updateUserInfoAction(
+        {
+
+          authLevel:values.member,
+          postLevel:values.role
+          
+        },
+        args => {
+          if (args) {
+
+            // screencode 5 means role set
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
+
+            navigation.navigate("DownloadPDF")
+            // navigation.navigate('IdCard');
+
+          }
+        },
+      ),
+    );
+
+    
   };
 
   const uidSchema = object().shape({

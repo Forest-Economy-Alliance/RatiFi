@@ -15,14 +15,32 @@ import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
-
+import { updateUserInfoAction } from '../../redux-store/actions/auth';
+import { useRoute } from '@react-navigation/native';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LocationScreen = ({navigation}) => {
+
+
+  const [editProfileMode,setEditProfileMode]=useState(false);
+  const route=useRoute();
+
+
+  React.useEffect(()=>{
+    console.log(route.params)
+    if(route?.params?.editProfile===true){
+      setEditProfileMode(true);
+    }
+
+
+
+  },[route?.params?.editProfile])
+
   const language = 'hi';
+  const dispatch=useDispatch();
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const state = {
     state: '',
@@ -48,7 +66,38 @@ const LocationScreen = ({navigation}) => {
     // console.log(values);
     formikActions.setSubmitting(false);
     // navigation.navigate('FRCHome');
-    navigation.navigate("RoleInformation")
+
+  
+      dispatch(
+        updateUserInfoAction(
+          {
+            state: formik.values.state,
+            district: formik.values.district,
+            tehsil: formik.values.tehsil,
+            panchayat: formik.values.panchayat,
+            village: formik.values.village,
+          },
+          args => {
+            if (args) {
+
+              if(editProfileMode){
+                navigation.navigate("FRCHome")
+              }
+             else {// navigation.navigate('RoleInformation');
+
+              //screen code 4 , means location information set
+              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
+
+              navigation.navigate("Role")}
+            }
+          },
+        ),
+      );
+    
+
+
+
+
   };
 
   const locSchema = object().shape({
@@ -339,6 +388,7 @@ const LocationScreen = ({navigation}) => {
                   console.log(formik.errors);
                   setErrorVisible(true);
                 }
+                
                 formik.handleSubmit();
               }}
               style={styles.otpBtn}
