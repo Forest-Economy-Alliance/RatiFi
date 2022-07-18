@@ -38,6 +38,7 @@ export const updatePasswordHandler = data => {
 
 export const updateUserHandler = data => {
   console.log(data);
+  
   return request(
     '/update-user',
     {

@@ -5,7 +5,7 @@
 import axios from 'axios';
 import store from '../redux-store/index';
 export const BASE_URL = 'https://ratifi-backend.herokuapp.com';
-export const request = async (
+export const  request = async (
   url,
   options,
   isHeader = true,
@@ -15,7 +15,6 @@ export const request = async (
 
   // var state = store.getState();
   let token = store.store.getState().entities.auth.userInfo.token;
-  console.log(token);
   authHeader = token != ' ' ? `Bearer ${token}` : '';
 
   const client = axios.create({

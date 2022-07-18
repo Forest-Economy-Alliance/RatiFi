@@ -15,14 +15,18 @@ import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
-
+import { updateUserInfoAction } from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const IdCardScreen = ({navigation}) => {
   const language = 'hi';
+
+  const dispatch=useDispatch();
+
+
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const state = {
     type: '',
@@ -43,7 +47,24 @@ const IdCardScreen = ({navigation}) => {
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
-    navigation.navigate('Location');
+
+    // update the Governemnt ID in api
+
+    dispatch(updateUserInfoAction({
+      identificationProofType:1,
+      identificationProofNumber:parseInt(formik.values.uid)
+    },(args)=>{
+          
+      if(args===true)
+      navigation.navigate('Location');
+
+
+    }));
+    
+
+
+
+   
   };
 
   const uidSchema = object().shape({

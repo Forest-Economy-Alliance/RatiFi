@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 const {height, width} = Dimensions.get('window');
 import Button from './CustomButton';
@@ -30,15 +31,26 @@ export default function FormSaveLocationPicker(props) {
           }}
         >
           <Text>{t('Please select Storage Location')}</Text>
-          <Button
+          <TouchableOpacity
+          style={{
+           backgroundColor:'#480E09',
+           alignSelf:'center',
+           paddingVertical:10,
+           paddingHorizontal:20,
+           marginTop:5,
+           borderRadius:10
+          }}
             onPress={async () => {
               let dir = await ScopedStorage.openDocumentTree(true);
               console.log('DIREcTORY', dir);
               dispatch({type: 'SAVE_FORM_DIR_URL', payload: dir.path});
             }}
           >
-            CHOOSE
-          </Button>
+           <Text style={{color:'white'}}>
+            
+             CHOOSE
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>

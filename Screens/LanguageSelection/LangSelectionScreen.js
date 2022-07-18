@@ -7,7 +7,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import {t} from 'i18next';
 
 const languages = [
@@ -47,7 +47,7 @@ const languages = [
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LangSelectionScreen = ({navigation}) => {
   const dispatch = useDispatch();
-
+  const {token} = useSelector(state => state.entities.auth.userInfo);
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -64,7 +64,12 @@ const LangSelectionScreen = ({navigation}) => {
             <TouchableOpacity
               key={lang.value}
               onPress={() => {
+                // updating screen registration code  to 1 , means we have choosed the lanuage
                 dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+                if(!token)
+                {
+                  navigation.navigate("NamePhone")
+                }else
                 navigation.navigate('Login');
               }}
               style={styles.button}>
