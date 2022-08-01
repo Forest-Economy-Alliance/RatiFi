@@ -83,7 +83,7 @@ const LoginPasswordScreen = ({navigation}) => {
             if (args) {
               // screen code 3 means , password set 
               dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-              navigation.navigate('Location');
+              navigation.replace('Location');
             }
           },
         ),

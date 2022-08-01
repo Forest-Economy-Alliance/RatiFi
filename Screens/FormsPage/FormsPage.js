@@ -292,13 +292,9 @@ const FormsPage = ({navigation}) => {
             });
           }}
         >
-           Download Forms
+           फॉर्म डाउनलोड करें
         </Button>
-        <CustomButton style={{marginTop:10}} onPress={()=>{
-          navigation.navigate("FRCHome")
-        }}>
-          Apply Claim 
-        </CustomButton>
+       
       </View>
       {progress != 0 ? (
         <DownloadLoader>

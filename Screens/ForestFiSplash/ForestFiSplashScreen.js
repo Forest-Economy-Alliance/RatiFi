@@ -15,7 +15,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const ForestFiSplashScreen = ({navigation}) => {
   const dispatch=useDispatch();
-  // dispatch({type: 'DISABLE_LOADING'});
+  dispatch({type: 'DISABLE_LOADING'});
   const value = useState(
     new Animated.ValueXY({
       x: windowWidth / 2 - (windowHeight * 0.19) / 2,

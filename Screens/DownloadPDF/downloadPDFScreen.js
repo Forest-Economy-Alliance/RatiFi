@@ -6,14 +6,18 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
+  ImageBackground,
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
+import {Dropdown} from 'react-native-element-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
+import { AllVillages } from '../../constants/Villages';
 
+const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
   {label: 'Item 1', value: '1'},
   {label: 'Item 2', value: '2'},
@@ -29,9 +33,11 @@ const DownloadPDFScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
+  const [val5, setVal5] = useState('');
+  const [village, setVillage] = useState('');
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
-
+  const [villages,setVillages]=useState(AllVillages);
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -60,20 +66,40 @@ const DownloadPDFScreen = ({navigation}) => {
 
   return (
     // flexWrap: 'wrap',
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.container}>
+    <ImageBackground
+      source={BG_IMG_PATH}
+      resizeMode="cover"
+      blurRadius={10}
+      style={styles.bg}>
+  <View style={{paddingHorizontal:20}}>
+    
+  
         <View style={styles.roleContainer}>
           <Text style={styles.roleText}>{role}</Text>
         </View>
-        <TextInput
-          style={styles.inputGramSabha}
-          placeholder={t('gram sabha')}
-          placeholderTextColor="#480E09"
-          onChangeText={text => {
-            setGramSabha(text);
+
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={villages}
+          search={false}
+          maxHeight={300}
+          labelField="Village"
+          valueField="value"
+          placeholder={t('village')}
+          searchPlaceholder="Search..."
+          value={val5}
+          onChange={item => {
+            console.log(item);
+            setVal5(item.value);
+            setVillage(item.Village);
           }}
-          value={gramSabha}
+          dropdownPosition="bottom"
         />
+       
         <TouchableOpacity
           style={styles.getDocsButton}
           onPress={() => {
@@ -115,8 +141,10 @@ const DownloadPDFScreen = ({navigation}) => {
             )}
           </>
         )}
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+
+</View>
+    
+    </ImageBackground>
   );
 };
 
@@ -128,7 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // alignItems: 'center',
     // justifyContent: 'center',
-    padding: '10%',
+    padding: '20%',
   },
   roleContainer: {
     flexDirection: 'row',
@@ -139,6 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 1,
     borderColor: '#C8CCC8',
+    // paddingHorizontal:20
   },
   roleText: {
     fontSize: 20,
@@ -152,6 +181,32 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 25,
     color: '#480E09',
+  },
+  dropdown: {
+    margin: '5%',
+    height: '8%',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 25,
+    color: '#480E09',
+  },
+  selectedTextStyle: {
+    fontSize: 25,
+    color: '#480E09',
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    color: 'black',
   },
   nextButton: {
     backgroundColor: '#480E09',
@@ -199,5 +254,10 @@ const styles = StyleSheet.create({
     color: '#480E09',
     textAlign: 'center',
     marginTop: '5%',
+  },
+  bg: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
   },
 });

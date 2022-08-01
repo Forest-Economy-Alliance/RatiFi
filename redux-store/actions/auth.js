@@ -16,13 +16,13 @@ export const postOTPAction = (data, callback) => dispatch => {
       dispatch({type: 'SAVE_PROFILE', payload: response.data});
       const DD = await getDeviceHash();
     
-      ToastAndroid.showWithGravityAndOffset(
-        'OTP_SENT' + '  ' + response.data.otp,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'OTP_SENT' + '  ' + response.data.otp,
+      //   ToastAndroid.LONG,
+      //   ToastAndroid.BOTTOM,
+      //   25,
+      //   50,
+      // );
       if (response.message === 'AVAILABLE') {
         dispatch({
           type: 'UPDATE_REGISTRATION_SCREEN_CODE',
