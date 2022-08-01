@@ -209,7 +209,8 @@ const LocationInformationScreen = ({navigation}) => {
       value: '11',
     },
   ]);
-  const [villages, setVillages] = useState([
+  const [villages, setVillages] = useState(
+    [
     {
       Village: 'Kombakra',
       value: '1',

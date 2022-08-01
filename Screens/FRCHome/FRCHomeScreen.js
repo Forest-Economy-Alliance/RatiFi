@@ -98,13 +98,18 @@ const FRCHomeScreen = ({navigation}) => {
             <CustomInput/>
             <CustomButton
               text={t('Track old claim')}
-              onPress={() => {}}
+              onPress={() => {
+
+              }}
               style={styles.otBtnView}
               button={styles.otBtn}
             />
             <CustomButton
               text={t('File claim')}
-              onPress={() => {}}
+              onPress={() => {
+                console.log("CLICKET")
+                navigation.navigate("DownloadPDF")
+              }}
               style={styles.ntBtnView}
               button={styles.ntBtn}
             />
