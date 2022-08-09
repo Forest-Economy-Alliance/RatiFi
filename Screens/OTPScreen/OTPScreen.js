@@ -19,8 +19,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectName} from '../../redux-store/reducers/entities/appUtil';
 import { useRoute } from '@react-navigation/native';
 import { verifyOTPAction } from '../../redux-store/actions/auth';
-
 const BG_IMG_PATH = require('../../assets/images/background.png');
+
 const NamePhoneScreen = ({navigation}) => {
 
   const dispatch=useDispatch();
@@ -57,7 +57,6 @@ const NamePhoneScreen = ({navigation}) => {
           if (args === "AVAILABLE") {
 
             navigation.navigate("FRCHome")
-
             // updating to screen code to 2 as otp verification is done ,
             // now two cases ,
             // in reponse if we get AVAILABLE
@@ -75,7 +74,7 @@ const NamePhoneScreen = ({navigation}) => {
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
             navigation.navigate("Password")
           } {
-            setWrongOTP('Wrong OTP');
+            setWrongOTP(t('Wrong OTP'));
           }
         },
       ),

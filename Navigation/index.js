@@ -70,14 +70,14 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
           options={{
             headerShown: false,
             animation: 'default',
           }}
-        /> */}
+        />
         <Stack.Screen
           name="NamePhone"
           component={NamePhoneScreen}
@@ -153,7 +153,7 @@ export const Navigation = () => {
           component={downloadPDFScreen}
           options={
             {
-              // headerShown: false,
+              headerShown: false,
             }
           }
         />

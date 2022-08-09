@@ -18,6 +18,8 @@ import {object, string, ref} from 'yup';
 import {updatePasswordAction} from '../../redux-store/actions/auth';
 import {useRoute} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
+import CustomButton from '../../components/CustomButton';
+import CustomInput from '../../components/CustomInput';
 
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
@@ -109,7 +111,7 @@ const PasswordScreen = ({navigation}) => {
     }
     // dispatch({type: 'DISABLE_LOADING'});
   };
-
+// alert("HI")
   const formik = useFormik({
     initialValues: state,
     validationSchema: !loginflow ? PassSchema : null,
@@ -120,15 +122,14 @@ const PasswordScreen = ({navigation}) => {
     changeLanguage(language);
   }, []);
 
-  return (<ImageBackground
+  return (
+   
+      <ImageBackground
     source={BG_IMG_PATH}
     resizeMode="cover"
     blurRadius={10}
     style={styles.bg}>
-
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.container}>
-        <TextInput
+        <CustomInput
           style={styles.inputPass}
           placeholder={t('password')}
           placeholderTextColor="#480E09"
@@ -142,7 +143,7 @@ const PasswordScreen = ({navigation}) => {
           <Text style={styles.error}>{formik.errors.password}</Text>
         )}
         {!loginflow && (
-          <TextInput
+          <CustomInput
             style={styles.inputConfPass}
             placeholder={t('confirm password')}
             placeholderTextColor="#480E09"
@@ -156,17 +157,16 @@ const PasswordScreen = ({navigation}) => {
         {formik.touched.confirmPassword && formik.errors.confirmPassword && (
           <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
         )}
-        <TouchableOpacity
+        <CustomButton
           style={styles.nextButton}
           onPress={formik.handleSubmit}
         >
           <Text style={styles.nextButtonText}>
             {loginflow ? 'LOGIN' : t('next')}
           </Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-    </ImageBackground>
+        </CustomButton>
+        </ImageBackground>
+      
   );
 };
 
@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     // justifyContent: 'center',
-    padding: '15%',
+    paddingHorizontal:'10%'
+    // padding: '15%',
   },
   inputPass: {
     borderColor: '#CCCCCC',
@@ -195,9 +196,9 @@ const styles = StyleSheet.create({
     color: '#480E09',
   },
   nextButton: {
-    backgroundColor: '#480E09',
-    width: '100%',
-    height: '8%',
+    // backgroundColor: '#480E09',
+    // width: '100%',
+    // height: '8%',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '10%',
@@ -217,9 +218,11 @@ const styles = StyleSheet.create({
     marginTop: '2%',
   },
     bg: {
-      // flex: 1,
-      height: '100%',
-      width: '100%',
+      flex: 1,
+      // height: '100%',
+      // width: '100%',
+      paddingHorizontal:'10%',
+      paddingVertical:'10%'
     }
 
 });

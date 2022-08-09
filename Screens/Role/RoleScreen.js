@@ -83,7 +83,7 @@ const RoleScreen = ({navigation}) => {
 
   const data1 = [
     {
-      label: 'FRC',
+      label: t('FRC'),
       value: '1',
       roleData: [
         {
@@ -101,7 +101,7 @@ const RoleScreen = ({navigation}) => {
       ],
     },
     {
-      label: 'SDLC',
+      label: t('SDLC'),
       value: '2',
       roleData: [
         {
@@ -123,7 +123,7 @@ const RoleScreen = ({navigation}) => {
       ],
     },
     {
-      label: 'DLC',
+      label: t('DLC'),
       value: '3',
       roleData: [
         {

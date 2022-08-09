@@ -45,7 +45,7 @@ const RoleInformationScreen = ({navigation}) => {
     {label: 'SDLC', value: '2'},
     {label: 'DLC', value: '3'},
   ];
-
+  // alert("H")
   const POS1 = [
     {label: t('President'), value: '1'},
     {label: t('Secretary'), value: '2'},

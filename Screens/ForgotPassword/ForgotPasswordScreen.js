@@ -18,6 +18,7 @@ import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
+import { postOTPAction } from '../../redux-store/actions/auth';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ForgotPasswordScreen = ({navigation}) => {
@@ -44,11 +45,30 @@ const ForgotPasswordScreen = ({navigation}) => {
     phoneNumber: '',
   };
 
-  const onGetOtp = (values, formikActions) => {
+  const onGetOtp = async (values, formikActions) => {
     formikActions.setSubmitting(false);
     console.log('values', values);
-    dispatch({type: 'UPDATE_NAME', payload: values.name});
-    navigation.navigate('OTP');
+  
+    // dispatch({type: 'UPDATE_NAME', payload: values.name});
+  // const DD=await getDeviceHash();
+
+    dispatch(
+      postOTPAction(
+        {
+          mobile: formik.values.phoneNumber,
+          name: formik.values.name,
+          lat: '123.23',
+          lng: '123.2',
+          // dd: DD,
+        },
+        args => {
+          // sending phone number in OTP Screen, as we need their to send in API Call
+          navigation.navigate('OTP',{
+            phoneNumber:formik.values.phoneNumber
+          });        
+        },
+      ),
+    );
   };
 
   const NPSchema = object().shape({

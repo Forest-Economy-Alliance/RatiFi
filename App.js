@@ -14,6 +14,7 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
+  
   return (
     <ToastProvider>
       <Provider store={store}>

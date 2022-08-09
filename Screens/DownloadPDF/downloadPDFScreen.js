@@ -14,8 +14,10 @@ import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {Dropdown} from 'react-native-element-dropdown';
+import FontAwesome from'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import { AllVillages } from '../../constants/Villages';
+import CustomButton from '../../components/CustomButton';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
@@ -74,8 +76,10 @@ const DownloadPDFScreen = ({navigation}) => {
   <View style={{paddingHorizontal:20}}>
     
   
+          
         <View style={styles.roleContainer}>
-          <Text style={styles.roleText}>{role}</Text>
+       
+          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30}/> &nbsp; {role}</Text>
         </View>
 
         <Dropdown
@@ -89,7 +93,7 @@ const DownloadPDFScreen = ({navigation}) => {
           maxHeight={300}
           labelField="Village"
           valueField="value"
-          placeholder={t('village')}
+          placeholder={t('gram sabha')}
           searchPlaceholder="Search..."
           value={val5}
           onChange={item => {
@@ -99,15 +103,15 @@ const DownloadPDFScreen = ({navigation}) => {
           }}
           dropdownPosition="bottom"
         />
-       
-        <TouchableOpacity
-          style={styles.getDocsButton}
-          onPress={() => {
+       <CustomButton onPress={() => {
             setPressed(true);
           }}
-        >
-          <Text style={styles.getDocsButtonText}>{t('get documents')}</Text>
-        </TouchableOpacity>
+        button={{width:200}}
+        dsbled={val5 ? false :true}
+          >
+       {t('get documents')}
+       </CustomButton>
+    
         {pressed && (
           <>
             <View style={styles.msgContainer}>
@@ -130,14 +134,14 @@ const DownloadPDFScreen = ({navigation}) => {
               {t('download application document')}
             </Text>
             {pressed && (
-              <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => {
-                  navigation.navigate('FormsPage');
-                }}
-              >
-                <Text style={styles.nextButtonText}>{t('download')}</Text>
-              </TouchableOpacity>
+              <CustomButton
+              disabled={true}
+                button={{marginTop:20}}
+              onPress={() => {
+                navigation.navigate('FormsPage');
+              }}>
+                  {t('download')}
+              </CustomButton>
             )}
           </>
         )}
@@ -147,6 +151,15 @@ const DownloadPDFScreen = ({navigation}) => {
     </ImageBackground>
   );
 };
+
+{/* <TouchableOpacity
+                style={styles.nextButton}
+                onPress={() => {
+                  navigation.navigate('FormsPage');
+                }}
+              >
+                <Text style={styles.nextButtonText}>{t('download')}</Text>
+              </TouchableOpacity> */}
 
 export default DownloadPDFScreen;
 
@@ -161,6 +174,7 @@ const styles = StyleSheet.create({
   roleContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    marginTop:'5%',
     marginBottom: '5%',
     backgroundColor: '#D3F2D3',
     alignSelf: 'flex-end',

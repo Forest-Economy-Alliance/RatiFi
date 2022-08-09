@@ -209,12 +209,13 @@ const FormsPage = ({navigation}) => {
       <View
         style={{
           backgroundColor: 'white',
-          flex: 1,
+          // flex: 1,
           borderRadius: 5,
           marginLeft: 25,
           marginRight: 25,
           elevation: 5,
           justifyContent: 'center',
+          // alignSelf:'center',
           alignItems: 'center',
         }}
       >
@@ -258,14 +259,16 @@ const FormsPage = ({navigation}) => {
       >
         <View
           style={{
-            flex: 1,
-            flexDirection: 'row',
+          
+            flex:0.9,
+            paddingTop:'20%',
             justifyContent: 'center',
             alignSelf: 'center',
             padding: 10,
           }}
         >
           <Carousel
+           
             data={carouselItems}
             sliderWidth={350}
             itemWidth={350}
@@ -275,7 +278,8 @@ const FormsPage = ({navigation}) => {
         </View>
       </View>
       <View style={{paddingVertical: 20}}>
-        <Button
+        <CustomButton
+        button={{width:250}}
           onPress={async () => {
             setProgress(0.009);
             for (const key of carouselItems) {
@@ -293,7 +297,7 @@ const FormsPage = ({navigation}) => {
           }}
         >
            फॉर्म डाउनलोड करें
-        </Button>
+        </CustomButton>
        
       </View>
       {progress != 0 ? (

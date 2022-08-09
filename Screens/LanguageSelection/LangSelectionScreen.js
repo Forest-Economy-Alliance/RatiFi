@@ -11,38 +11,38 @@ import {useDispatch,useSelector} from 'react-redux';
 import {t} from 'i18next';
 
 const languages = [
-  {
-    name: 'English',
-    value: 'en',
-  },
+  // {
+  //   name: 'English',
+  //   value: 'en',
+  // },
   {
     name: 'हिन्दी',
     value: 'hi',
   },
-  {
-    name: 'ગુજરાતી',
-    value: 'gu',
-  },
+  // {
+  //   name: 'ગુજરાતી',
+  //   value: 'gu',
+  // },
   {
     name: 'ଓଡ଼ିଆ',
     value: 'or',
   },
-  {
-    name: 'ಕನ್ನಡ',
-    value: 'kn',
-  },
-  {
-    name: 'മലയാളം',
-    value: 'ml',
-  },
-  {
-    name: 'தமிழ்',
-    value: 'ta',
-  },
-  {
-    name: 'తెలుగు',
-    value: 'te',
-  },
+  // {
+  //   name: 'ಕನ್ನಡ',
+  //   value: 'kn',
+  // },
+  // {
+  //   name: 'മലയാളം',
+  //   value: 'ml',
+  // },
+  // {
+  //   name: 'தமிழ்',
+  //   value: 'ta',
+  // },
+  // {
+  //   name: 'తెలుగు',
+  //   value: 'te',
+  // },
 ];
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LangSelectionScreen = ({navigation}) => {
@@ -86,7 +86,7 @@ export default LangSelectionScreen;
 
 const styles = StyleSheet.create({
   innerContainer: {
-    flexGrow: 1,
+    // flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },

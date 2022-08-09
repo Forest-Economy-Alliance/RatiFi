@@ -94,9 +94,9 @@ const FRCHomeScreen = ({navigation}) => {
               style={styles.epBtnView}
               button={styles.epBtn}
             />
-            {/* <View style={styles.horizontalLine} /> */}
+            {/* <View styl123e={styles.horizontalLine} /> */}
             <CustomInput/>
-            <CustomButton
+           <CustomButton
               text={t('Track old claim')}
               onPress={() => {
 
@@ -194,10 +194,10 @@ const styles = StyleSheet.create({
     paddingVertical: '2%',
   },
   ntBtnView: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     marginTop: '20%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     // backgroundColor: '#FFFFFF',
   },
   ntBtn: {

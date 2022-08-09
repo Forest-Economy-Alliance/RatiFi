@@ -102,7 +102,7 @@ const Dropdown = props => {
           )}
         </View>
       </TouchableOpacity>
-      <Modal visible={visible} transparent animationType="fade">
+      <Modal  visible={visible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
@@ -110,7 +110,7 @@ const Dropdown = props => {
           style={[
             props.data ? styles.dropdown : null,
             {
-              top: dropdownTop,
+              top: 20
             },
           ]}>
           {props.data?.map((item, index) => renderItem({item, index}))}
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     width: '80%',
     borderRadius: 12,
     zIndex: 999,
-    height: '25%',
+    height: '95%',
     marginHorizontal: '10%',
     paddingHorizontal: '8%',
     borderColor: '#FFFFFF',

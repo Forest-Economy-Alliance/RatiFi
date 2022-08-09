@@ -79,6 +79,7 @@ const ForestFiSplashScreen = ({navigation}) => {
   const {token} = useSelector(state => state.entities.auth.userInfo);
   
   useEffect(() => {
+    
     setTimeout(() => {
       //assuiming if created user, then he will finish regiration completely
       //  without application break, more cases can be handled
