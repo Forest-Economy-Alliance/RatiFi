@@ -11,7 +11,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import 'yup-phone';
@@ -25,8 +25,9 @@ const ForgotPasswordScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
 
-  const [name, setName] = useState('Ram Krishna');
-
+  // const [name, setName] = useState('Ram Krishna');
+  const {name} = useSelector(state => state.entities.auth.userInfo.profile);
+  
   const [curLen, setCurLen] = useState(0);
 
   const {t, i18n} = useTranslation();
