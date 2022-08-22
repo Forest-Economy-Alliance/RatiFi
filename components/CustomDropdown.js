@@ -20,12 +20,6 @@ const Dropdown = props => {
 
   const openDropdown = () => {
     DropdownButton.current.measure((fx, fy, width, height, px, py) => {
-      // console.log('Component width is: ' + width);
-      // console.log('Component height is: ' + height);
-      // console.log('X offset to frame: ' + fx);
-      // console.log('Y offset to frame: ' + fy);
-      // console.log('X offset to page: ' + px);
-      // console.log('Y offset to page: ' + py);
       setDropdownTop(height + py);
     });
 

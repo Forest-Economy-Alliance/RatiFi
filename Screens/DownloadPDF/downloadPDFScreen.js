@@ -79,9 +79,9 @@ const DownloadPDFScreen = ({navigation}) => {
           
         <View style={styles.roleContainer}>
        
-          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30}/> &nbsp; {role}</Text>
+          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30}/> </Text>
         </View>
-
+      
         <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
@@ -103,6 +103,9 @@ const DownloadPDFScreen = ({navigation}) => {
           }}
           dropdownPosition="bottom"
         />
+
+
+
        <CustomButton onPress={() => {
             setPressed(true);
           }}
