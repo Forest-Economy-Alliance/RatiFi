@@ -167,7 +167,7 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 13',
-      form: new Form13Jharkhand([getTehsil()], null),
+      form: new Form13Jharkhand([getTehsil(),getDistrict()], null),
       imageName: require('../../assets/images/FormPreviews/Page13_Jharkhand.png'),
     },
     {

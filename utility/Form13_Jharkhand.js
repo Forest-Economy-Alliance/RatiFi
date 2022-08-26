@@ -2,7 +2,7 @@ import {FormPDFAbstract} from './basePDFGen';
 import Page13 from '../assets/Forms/Jharkhand/Page13_Jharkhand';
 
 /**
- *  Form 1 for Jharkhand state
+ *  Form 13 for Jharkhand state
  */
 class Form13Jharkhand extends FormPDFAbstract {
   template = Page13;
