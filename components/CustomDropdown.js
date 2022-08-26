@@ -27,14 +27,17 @@ const Dropdown = props => {
   };
 
   const onSelect = item => {
+
+
     setSelectedValue(item.label);
+      if(props.downloadPDFScreenFix){
+   props.downloadPDFScreenFix(item);}else{
     props.formik.setFieldValue(props.variable, item.label);
-    // console.log('Selected', item);
+   }
+
   };
 
-  useEffect(() => {
-    console.log('HII', props.visible);
-  }, []);
+
 
   const renderItem = ({item, index}) => {
     return (

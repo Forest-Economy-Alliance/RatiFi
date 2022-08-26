@@ -6,12 +6,15 @@ import {
   ImageBackground,
   StyleSheet,
   PermissionsAndroid,
+  TouchableOpacity,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import React, {useState} from 'react';
+import React, {useState,useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'react-native-toast-notifications';
 import Button from '../../components/CustomButton';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import FormSaveLocationPicker from '../../components/FormSaveLocationPicker';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
@@ -41,6 +44,7 @@ import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 
 const FormsPage = ({navigation}) => {
+  const  carouselRef=useRef(null);
   const {t} = useTranslation();
   const [progress, setProgress] = useState(0);
   const toast = useToast();
@@ -219,6 +223,7 @@ const FormsPage = ({navigation}) => {
           alignItems: 'center',
         }}
       >
+        
         <Image
           source={item.imageName}
           style={{width: '80%', height: '80%'}}
@@ -257,24 +262,49 @@ const FormsPage = ({navigation}) => {
           alignItems: 'center',
         }}
       >
+
         <View
           style={{
-          
-            flex:0.9,
-            paddingTop:'20%',
+            flex:0.7,
+            // backgroundColor:'red',
+            paddingTop:'10%',
             justifyContent: 'center',
             alignSelf: 'center',
-            padding: 10,
+            // padding: 10,
+            flexDirection:'row'
           }}
         >
+<View style={{alignSelf:'center',paddingLeft:10}}>
+
+<TouchableOpacity onPress={e=>{
+carouselRef?.current?.snapToPrev()
+// carouselRef?.snapToPrev()
+
+}}>
+<Ionicons name="chevron-back-circle-sharp" size={50}/>
+
+</TouchableOpacity>
+</View>
+
+          
           <Carousel
-           
+          ref={carouselRef}
             data={carouselItems}
-            sliderWidth={350}
-            itemWidth={350}
+            sliderWidth={300}
+            itemWidth={300}
             renderItem={_renderItem}
             onSnapToItem={index => setActiveSlide(index)}
           />
+<View style={{alignSelf:'center',marginLeft:20}}>
+<TouchableOpacity onPress={e=>{
+  carouselRef?.current?.snapToNext()
+}}>
+
+
+<Ionicons name="chevron-forward-circle-sharp" size={50}/>
+</TouchableOpacity>
+</View>
+
         </View>
       </View>
       <View style={{paddingVertical: 20}}>
