@@ -193,7 +193,7 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 17',
-      form: new Form17Jharkhand([getTehsil()], null),
+      form: new Form17Jharkhand([getTehsil(),getVillage(),getVillage(),getVillage()], null),
       imageName: require('../../assets/images/FormPreviews/page17_Mangal.png'),
     },
     {

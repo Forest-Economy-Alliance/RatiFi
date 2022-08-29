@@ -87,15 +87,15 @@ const RoleScreen = ({navigation}) => {
       value: '1',
       roleData: [
         {
-          label: 'President',
+          label: t('President'),
           value: '1',
         },
         {
-          label: 'Secretary',
+          label: t('Secretary'),
           value: '2',
         },
         {
-          label: 'Member',
+          label: t('Member'),
           value: '3',
         },
       ],
