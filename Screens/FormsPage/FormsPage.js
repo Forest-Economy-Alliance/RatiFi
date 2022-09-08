@@ -54,10 +54,10 @@ const FormsPage = ({navigation}) => {
   const {profile} = useSelector(state => state.entities.auth.userInfo);
   const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
 
-  const getDistrict = (blank) => blank ? '....................' : t(profile?.district);
-  const getPanchayat = (blank) => blank ? '....................' : t(profile?.panchayat);
-  const getTehsil = (blank) => blank ? '....................' : t(profile?.tehsil);
-  const getVillage = (blank) => blank ? '....................' : t(profile?.village);
+  const getDistrict = (blank=true) => blank ? '....................' : t(profile?.district);
+  const getPanchayat = (blank=true) => blank ? '....................' : t(profile?.panchayat);
+  const getTehsil = (blank=true) => blank ? '....................' : t(profile?.tehsil);
+  const getVillage = (blank=true) => blank ? '....................' : t(profile?.village);
 
   console.log(getVillage());
 
@@ -87,7 +87,7 @@ const FormsPage = ({navigation}) => {
   const carouselItems = [
     {
       title: 'Form 0',
-      form: new Form0Jharkhand([t('Jharkhand'),getDistrict(),getTehsil(),getPanchayat(),getVillage(),getVillage()],null),
+      form: new Form0Jharkhand([t('Jharkhand'),getDistrict(false),getTehsil(false),getPanchayat(false),getVillage(false),getVillage(false)],null),
       imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
     },
     {
