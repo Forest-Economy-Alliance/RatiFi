@@ -1,6 +1,7 @@
 
 export default Page18_Jharkhand = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv=Content-Type  content="text/html; charset=utf-8" ><meta name=ProgId  content=Word.Document ><meta name=Generator  content="Microsoft Word 14" ><meta name=Originator  content="Microsoft Word 14" ><title></title>
+<style>
 @font-face{
 font-family:"Times New Roman";
 }
@@ -89,7 +90,8 @@ layout-grid:18.0000pt;
 mso-header-margin:35.4000pt;
 mso-footer-margin:35.4000pt;
 }
-div.Section0{page:Section0;}</style></head><body style="tab-interval:36pt;" ><!--StartFragment--><div class="Section0"  style="layout-grid:18.0000pt;" ><p class=MsoNormal  align=right  style="text-align:right;" ><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
+div.Section0{page:Section0;}
+</style></head><body style="tab-interval:36pt;" ><!--StartFragment--><div class="Section0"  style="layout-grid:18.0000pt;" ><p class=MsoNormal  align=right  style="text-align:right;" ><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
 font-weight:bold;font-size:10.5000pt;" ><font face="Mangal" >संलग्न</font></span></b><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
 font-weight:bold;font-size:10.5000pt;" >&nbsp;13</span></b><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
 font-weight:bold;font-size:10.5000pt;" ><o:p></o:p></span></b></p><p class=MsoNormal  align=right  style="text-align:right;" ><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;

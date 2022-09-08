@@ -16,6 +16,7 @@ import Button from '../../components/CustomButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import FormSaveLocationPicker from '../../components/FormSaveLocationPicker';
+import Form0Jharkhand from '../../utility/Form0_Jharkhand';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
 import Form2Jharkhand from '../../utility/Form2_Jharkhand';
 import Form3Jharkhand from '../../utility/Form3_Jharkhand';
@@ -43,6 +44,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 
+
 const FormsPage = ({navigation}) => {
   const  carouselRef=useRef(null);
   const {t} = useTranslation();
@@ -52,10 +54,12 @@ const FormsPage = ({navigation}) => {
   const {profile} = useSelector(state => state.entities.auth.userInfo);
   const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
 
-  const getDistrict = () => t(profile?.district);
-  const getPanchayat = () => t(profile?.panchayat);
-  const getTehsil = () => t(profile?.tehsil);
-  const getVillage = () => t(profile?.village);
+  const getDistrict = (blank) => blank ? '....................' : t(profile?.district);
+  const getPanchayat = (blank) => blank ? '....................' : t(profile?.panchayat);
+  const getTehsil = (blank) => blank ? '....................' : t(profile?.tehsil);
+  const getVillage = (blank) => blank ? '....................' : t(profile?.village);
+
+  console.log(getVillage());
 
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -81,6 +85,11 @@ const FormsPage = ({navigation}) => {
     return <FormSaveLocationPicker />;
   }
   const carouselItems = [
+    {
+      title: 'Form 0',
+      form: new Form0Jharkhand([t('Jharkhand'),getDistrict(),getTehsil(),getPanchayat(),getVillage(),getVillage()],null),
+      imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
+    },
     {
       title: 'Form 1',
       form: new Form1Jharkhand(
@@ -167,12 +176,12 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 13',
-      form: new Form13Jharkhand([getTehsil(),getDistrict()], null),
+      form: new Form13Jharkhand([getTehsil(),getDistrict(),'....................'],null),
       imageName: require('../../assets/images/FormPreviews/Page13_Jharkhand.png'),
     },
     {
       title: 'Form 14',
-      form: new Form14Jharkhand([getTehsil()], null),
+      form: new Form14Jharkhand([getTehsil(),'....................'],null),
       imageName: require('../../assets/images/FormPreviews/Page14_Jharkhand.png'),
     },
     {
@@ -193,17 +202,17 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 17',
-      form: new Form17Jharkhand([getTehsil(),getVillage(),getVillage(),getVillage()], null),
+      form: new Form17Jharkhand([getTehsil(),getVillage(),getVillage(),getVillage()], '....................'|| null),
       imageName: require('../../assets/images/FormPreviews/page17_Mangal.png'),
     },
     {
       title: 'Form 18',
-      form: new Form18Jharkhand([getVillage(), getTehsil()], null),
+      form: new Form18Jharkhand([getVillage(), getTehsil()], '....................'|| null),
       imageName: require('../../assets/images/FormPreviews/page18_Mangal.png'),
     },
     {
       title: 'Form 19',
-      form: new Form19Jharkhand([getTehsil(), getTehsil()], null),
+      form: new Form19Jharkhand([getTehsil(), getTehsil()], '....................'|| null),
       imageName: require('../../assets/images/FormPreviews/Page19_Jharkhand.png'),
     },
   ];

@@ -28,7 +28,6 @@ export const  request = async (
     },
   });
 
-  console.log('CLEINT', client);
-
   return client(options);
 };
+

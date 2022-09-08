@@ -976,10 +976,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: '5%',
     marginBottom: '5%',
-    backgroundColor: '#D3F2D3',
+    // backgroundColor: '#D3F2D3',
     alignSelf: 'flex-end',
     borderRadius: 100,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: '#C8CCC8',
     // paddingHorizontal:20
   },
