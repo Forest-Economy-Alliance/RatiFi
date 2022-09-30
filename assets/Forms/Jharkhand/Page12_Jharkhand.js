@@ -93,7 +93,17 @@ layout-grid:18.0000pt;
 mso-header-margin:35.4000pt;
 mso-footer-margin:35.4000pt;
 }
-div.Section0{page:Section0;}</style></head><body style="tab-interval:36pt;" ><!--StartFragment--><div class="Section0"  style="layout-grid:18.0000pt;" ><table class=MsoNormalTable  border=1  cellspacing=0  style="border-collapse:collapse;margin-left:6.7500pt;margin-right:6.7500pt;
+div.Section0{page:Section0;}</style></head><body style="tab-interval:36pt;" ><!--StartFragment--><div class="Section0"  style="layout-grid:18.0000pt;" >
+
+
+<p class=MsoNormal  align=right  style="text-align:right;" >
+<b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
+font-weight:bold;font-size:10.5000pt;" ><font face="Mangal" >संलग्न </font></span></b><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
+font-weight:bold;font-size:10.5000pt;" >6</span></b><b><span style="mso-spacerun:'yes';font-family:Arial;font-weight:bold;
+font-size:11.0000pt;" ><o:p></o:p></span></b>
+</p>
+<br/>
+<table class=MsoNormalTable  border=1  cellspacing=0  style="border-collapse:collapse;margin-left:6.7500pt;margin-right:6.7500pt;
 border:none;mso-border-left-alt:0.5000pt solid rgb(0,0,0);mso-border-top-alt:0.5000pt solid rgb(0,0,0);
 mso-border-right-alt:0.5000pt solid rgb(0,0,0);mso-border-bottom-alt:0.5000pt solid rgb(0,0,0);mso-border-insideh:0.5000pt solid rgb(0,0,0);
 mso-border-insidev:0.5000pt solid rgb(0,0,0);mso-padding-alt:0.0000pt 5.4000pt 0.0000pt 5.4000pt ;" ><tr><td width=601  valign=top  colspan=3  style="width:450.8000pt;padding:0.0000pt 5.4000pt 0.0000pt 5.4000pt ;border-left:1.0000pt solid rgb(0,0,0);
@@ -187,8 +197,7 @@ mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p
 mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><b style="mso-bidi-font-weight:normal" ><span style="font-family:'Kruti Dev 010';mso-fareast-font-family:'Times New Roman';mso-bidi-font-family:Mangal;
 mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><b style="mso-bidi-font-weight:normal" ><span style="font-family:'Kruti Dev 010';mso-fareast-font-family:'Times New Roman';mso-bidi-font-family:Mangal;
 mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal ><b style="mso-bidi-font-weight:normal" ><span style="font-family:'Kruti Dev 010';mso-fareast-font-family:'Times New Roman';mso-bidi-font-family:Mangal;
-mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p></td></tr></table><p class=MsoNormal  align=right  style="text-align:right;" ><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
-font-weight:bold;font-size:10.5000pt;" ><font face="Mangal" >संलग्न </font></span></b><b><span style="mso-spacerun:'yes';font-family:Mangal;mso-fareast-font-family:Arial;
-font-weight:bold;font-size:10.5000pt;" >6</span></b><b><span style="mso-spacerun:'yes';font-family:Arial;font-weight:bold;
-font-size:11.0000pt;" ><o:p></o:p></span></b></p></div><!--EndFragment--></body></html>
+mso-ansi-font-weight:bold;font-size:10.0000pt;" ><o:p>&nbsp;</o:p></span></b></p></td></tr></table></div><!--EndFragment-->
+
+</body></html>
 `;

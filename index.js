@@ -8,6 +8,12 @@ import {name as appName} from './app.json';
 import {LogBox} from 'react-native';
 import ignoreWarnings from 'ignore-warnings';
 
+
+if (!__DEV__) {
+  console.log = () => {};
+}
+
+
 ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]']);
 
 LogBox.ignoreLogs([

@@ -96,6 +96,12 @@ const ForestFiSplashScreen = ({navigation}) => {
         });
       }
 
+      console.log("SEFSEDF",registrationScreenCode)
+      if(!token && registrationScreenCode===5){
+        navigation.replace("NamePhone")
+        return ;
+      }
+     
       if (registrationScreenCode == 0) navigation.replace('LangSelection');
       else if (registrationScreenCode === 1) navigation.replace('NamePhone');
       else if (registrationScreenCode === 2) navigation.replace('Password');
