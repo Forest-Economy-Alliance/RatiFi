@@ -7,14 +7,15 @@ import {
   StyleSheet,
   PermissionsAndroid,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import React, {useState,useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'react-native-toast-notifications';
 import Button from '../../components/CustomButton';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import FormSaveLocationPicker from '../../components/FormSaveLocationPicker';
 import Form0Jharkhand from '../../utility/Form0_Jharkhand';
 import Form1Jharkhand from '../../utility/Form1_Jharkhand';
@@ -43,16 +44,19 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
+import CustomSignOutPopup from '../../components/CustomSignOutPopup';
+import { BASE_URL } from '../../services/APICentral';
 
 
 const FormsPage = ({navigation}) => {
   const  carouselRef=useRef(null);
   const {t} = useTranslation();
+  const [vis,setVis]=useState(false);
   const [progress, setProgress] = useState(0);
   const toast = useToast();
   const dispatch = useDispatch();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
-  const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
+  const {formSaveDir,formData} = useSelector(state => state.entities.appUtil.appUtil);
 
   const getDistrict = (blank=true) => blank ? '....................' : t(profile?.district);
   const getPanchayat = (blank=true) => blank ? '....................' : t(profile?.panchayat);
@@ -89,6 +93,11 @@ const FormsPage = ({navigation}) => {
       title: 'Form 0',
       form: new Form0Jharkhand([t('Jharkhand'),getDistrict(false),getTehsil(false),getPanchayat(false),getVillage(false),getVillage(false)],null),
       imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
+    },
+    {
+      title: 'Form 9',
+      form: new Form9Jharkhand(null, ['none']),
+      imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
     },
     {
       title: 'Form 1',
@@ -154,11 +163,7 @@ const FormsPage = ({navigation}) => {
       ),
       imageName: require('../../assets/images/FormPreviews/Page8_Jharkhand.png'),
     },
-    {
-      title: 'Form 9',
-      form: new Form9Jharkhand(null, ['none']),
-      imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
-    },
+    
     {
       title: 'Form 10',
       form: new Form10Jharkhand(null, null),
@@ -217,6 +222,39 @@ const FormsPage = ({navigation}) => {
     },
   ];
 
+
+
+
+  const handleDownload=async ()=>{
+    console.log("REDUX",formData)
+  
+    if(formData.length!==2)
+    {
+      alert("Please try again")
+    return ;}
+
+
+    try{
+      // console.log("REDUX",formData)
+  
+      // console.log("URI",`https://ratifi-backend-v2.herokuapp.com/get-documents?f0=${formData[0]}&f9=${formData[1]}`)
+    const response=await Linking.openURL(`${BASE_URL}/get-documents?f0=${formData[0]}&f9=${formData[1]}`);
+      await  console.log(response);
+      // dispatch({type:"CLEAR_FORMS"})
+    }catch(er){
+      alert("Something went wrong");
+    }
+  }
+
+
+
+
+
+
+
+
+
+
   const _renderItem = ({item, index}) => {
     return (
       <View
@@ -243,6 +281,15 @@ const FormsPage = ({navigation}) => {
     );
   };
 
+  const handleSignOut=()=>{
+    setVis(true);
+  }
+  const signout=()=>{
+    dispatch({type: 'SAVE_TOKEN', payload: null});
+    setVis(false);
+    navigation.navigate("NamePhone")
+  }
+
   const generatePDF = async (obj, name) => {
     // if (requestPermission()) {
     // file location returned by the createPDF
@@ -261,8 +308,6 @@ const FormsPage = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-
-   
       <View
         style={{
           flex: 1,
@@ -270,7 +315,14 @@ const FormsPage = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-      >
+      > 
+     
+  
+     {vis &&  <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout}/>}
+
+        <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
+          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} color="white" /> </Text>
+        </TouchableOpacity>
 
         <View
           style={{
@@ -319,11 +371,16 @@ carouselRef?.current?.snapToPrev()
       <View style={{paddingVertical: 20}}>
         <CustomButton
         button={{width:250}}
+                       
           onPress={async () => {
+            // dispatch({type:"CLEAR_FORMS"})
             setProgress(0.009);
-            for (const key of carouselItems) {
+            let CIT=carouselItems.slice(0,2);
+            console.log("AA",CIT);
+            console.log("LENGTH",CIT.length);
+            for (const key of CIT) {
               const response = await generatePDF(key.form, key.title);
-              setProgress(e => e + 1 / 19);
+              setProgress(e => e + 1 / 2);
             }
             setProgress(0);
             toast.show(`सभी पीडीएफ ${formSaveDir} फ़ोल्डर में सहेजे गए`, {
@@ -333,6 +390,7 @@ carouselRef?.current?.snapToPrev()
               placement: 'top',
               duration: 8000,
             });
+            handleDownload();
           }}
         >
            फॉर्म डाउनलोड करें
@@ -362,8 +420,19 @@ export default FormsPage;
 
 const styles=StyleSheet.create({
   bg: {
-    // flex: 1,
     height: '100%',
     width: '100%',
-  }
+  },
+  roleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: '5%',
+    marginBottom: '5%',
+    marginRight:'10%',
+    // backgroundColor: '#D3F2D3',
+    alignSelf: 'flex-end',
+    borderRadius: 100,
+    // borderWidth: 1,
+    borderColor: '#C8CCC8',
+  },
 })

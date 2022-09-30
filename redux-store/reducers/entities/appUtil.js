@@ -6,6 +6,7 @@ const INIT_STATE = {
   formSaveDir: '',
   language: 'hi', // not used yet
   name: '',
+  formData:[]
 };
 
 const appUtil = (state = INIT_STATE, action) => {
@@ -35,6 +36,28 @@ const appUtil = (state = INIT_STATE, action) => {
         ...state,
         name: action.payload,
       };
+    case 'UPDATE_FORMDATA':
+
+      console.log("ITS COMING");
+      var oldFormData=state.formData || [];
+      console.log("OO",oldFormData)
+      if(oldFormData?.length===2){
+        oldFormData =[];
+        oldFormData.push(action.payload);
+      }else{
+        oldFormData.push(action.payload)
+      }
+      console.log("COMPLETE")
+      return {
+        ...state,
+        formData:oldFormData
+      }
+
+    case "CLEAR_FORMS":
+      return {
+        ...state,
+        formData:[]
+      }
     default:
       return state;
   }

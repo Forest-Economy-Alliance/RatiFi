@@ -20,6 +20,8 @@ import { AllVillages } from '../../constants/Villages';
 import CustomButton from '../../components/CustomButton';
 import Dropdown from '../../components/CustomDropdown';
 import { useFormik } from 'formik';
+import Loader from '../../components/Loader';
+import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
   { label: 'Item 1', value: '1' },
@@ -36,7 +38,7 @@ const DownloadPDFScreen = ({ navigation }) => {
 
 
   const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
-
+  const [vis,setVis]=useState(false);
   const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
@@ -89,7 +91,7 @@ const DownloadPDFScreen = ({ navigation }) => {
       value: '1',
       Districts: [
         {
-          label: t('Samdega'),
+          label: t('Simdega'),
           value: '1',
           Tehsils: [
             {
@@ -837,6 +839,14 @@ const DownloadPDFScreen = ({ navigation }) => {
 
   const villagesData=(states[0].Districts[0].Tehsils[0].Panchayats);
 
+  const handleSignOut=()=>{
+    setVis(true);
+  }
+  const signout=()=>{
+    dispatch({type: 'SAVE_TOKEN', payload: null});
+    setVis(false);
+    navigation.navigate("NamePhone")
+  }
 // console.log(districts);
 
 
@@ -863,11 +873,11 @@ const DownloadPDFScreen = ({ navigation }) => {
       style={styles.bg}>
       <View style={{ paddingHorizontal: 20 }}>
 
+     {vis &&  <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout}/>}
 
-
-        <View style={styles.roleContainer}>
-          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} /> </Text>
-        </View>
+        <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
+          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} color="white" /> </Text>
+        </TouchableOpacity>
 
 
         {/* <Dropdown
@@ -972,6 +982,7 @@ const styles = StyleSheet.create({
     padding: '20%',
   },
   roleContainer: {
+    
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: '5%',

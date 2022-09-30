@@ -105,19 +105,19 @@ const RoleScreen = ({navigation}) => {
       value: '2',
       roleData: [
         {
-          label: 'Subdivisonal Officer',
+          label: t('Subdivisonal Officer'),
           value: '1',
         },
         {
-          label: 'Tehsildar',
+          label: t('Tehsildar'),
           value: '2',
         },
         {
-          label: 'Forest Range Officer',
+          label: t('Forest Range Officer'),
           value: '3',
         },
         {
-          label: 'Member',
+          label: t('Member'),
           value: '4',
         },
       ],

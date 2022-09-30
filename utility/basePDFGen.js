@@ -2,7 +2,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import MangalFont from './mangalFont';
 import KrutiDevFont from './krutiDevFont';
-import {ToastAndroid} from 'react-native';
+import {Linking, ToastAndroid} from 'react-native';
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from 'react-native-fs';
@@ -70,6 +70,8 @@ class FormPDFAbstract {
       });
     }
 
+
+    
     try {
       let file = await RNHTMLtoPDF.convert({
         html: replacedTemplate,
@@ -78,13 +80,106 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
-      // console.log('FF', file);
+      console.log('FF', file);
+
+
+
+
+      const pdfFile = {
+        uri: file.filePath,
+        type: 'application/pdf',
+        name: `${_fileName}.pdf`,
+    };
+    
+    var body = new FormData();
+ 
+    body.append('pdfFile', pdfFile);
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('POST', 'http://localhost:3000/get-documents');                                 
+    // xhr.send(body);
+    
+
+
+    RNFetchBlob.fs
+    .exists(file.filePath)
+    .then(exist => {
+      console.log(`file ${exist ? '' : 'not'} exists`);
+
+      RNFetchBlob.fs.readFile(file.filePath, 'base64')
+      .then(data => {
+        // console.log("DATA",data);
+
+
+
+
+
+         axios.post(BASE_URL+'/get-gcp-url',{
+          base64Data:data,
+          fileName:_fileName
+        }).then(({data})=>{
+            // console.log(data.name);
+          // store.store.dispatch()
+          setTimeout(()=>{
+            store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.name});
+          },200)
+              //  const response=await Linking.openURL(`https://ratifi-backend-v2.herokuapp.com/get-docuemnts?f0=${}&f9=${}`);
+
+            // unlink as well
+        }).catch(err=>{
+          console.log("something went wrong",err)
+        })
+
+
+
+
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    })
+    .catch(ef=>{
+      console.error(ef);
+    })
+
+    return ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // upload to GCP
+    fetch('https://ratifi-backend-v2.herokuapp.com/get-url',{
+      method:'POST',
+      body:body                        
+    })
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(err=>console.log(err))
+
 
       RNFetchBlob.fs
         .exists(file.filePath)
         .then(exist => {
           console.log(`file ${exist ? '' : 'not'} exists`);
           RNFetchBlob.fs.readFile(file.filePath, 'base64').then(data => {
+
+
+
+
+
             // eslint-disable-next-line prettier/prettier
             let finalPath = store.store.getState().entities.appUtil.appUtil
               .formSaveDir;

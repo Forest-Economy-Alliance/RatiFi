@@ -102,6 +102,10 @@
     "Bintuka":"बिनतुका",
     "Karkatta": "करकट्टा",
     "Jamursoya": "जंबुड़सोया",
+    "Bhanwarpahari":"भंवरपहाड़",
+    "Dhouranhan":"धौरान्हा",
+    "Harrapnai":"हर्रपनाई",
+    "Jundih":"जुंडीह",
     "Kewetang":"केबेटांग" ,
     "Turyu": "टूड्यू",
     "Pangur": "पंगुर",
@@ -124,6 +128,7 @@
     "Kuruchdega": "कुरुचड़ेगा",
     "Chhotketunga":"छोटकेटूँगा",
     "Jaldega": "जलड़ेगा",
+    "Barkaduel":"बरकाडुएल",
     "Virta": "बिरता ",
     "Bandu": "बानदु",
     "Boroseta":"बोरोसेता",
@@ -272,5 +277,6 @@
     "FRC":"एफआरसी",
     "SDLC":"एसडीएलसी",
     "DLC":"डीएलसी",
+    "Are you sure, you want to sign out?":"क्या आप साइन आउट करना चाहते हैं?"
 }
 }
