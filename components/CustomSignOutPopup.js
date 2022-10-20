@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React from 'react';
 import {
   View,
@@ -50,11 +51,11 @@ export default function CustomSignOutPopup(props) {
 
         
           <TouchableOpacity onPress={()=>props.signout()}>
-            <Text style={{color:'#480E09',borderWidth:1,padding:5,paddingHorizontal:10,borderRadius:10}}>YES</Text>
+            <Text style={{color:'#480E09',borderWidth:1,padding:5,paddingHorizontal:10,borderRadius:10}}>{t('SIGN_OUT')}</Text>
           </TouchableOpacity>
         
           <TouchableOpacity onPress={()=>props.setVis(false)}>
-            <Text style={{color:'#480E09',borderWidth:1,padding:5,paddingHorizontal:10,borderRadius:10}}>NO</Text>
+            <Text style={{color:'#480E09',borderWidth:1,padding:5,paddingHorizontal:10,borderRadius:10}}>{t('NO')}</Text>
           </TouchableOpacity>
 
 

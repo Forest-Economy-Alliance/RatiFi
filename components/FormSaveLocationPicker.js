@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 const {height, width} = Dimensions.get('window');
 import Button from './CustomButton';
-import * as ScopedStorage from 'react-native-scoped-storage';
+// import * as ScopedStorage from 'react-native-scoped-storage';
 import {useDispatch} from 'react-redux';
 import {t} from 'i18next';
 
@@ -40,14 +40,13 @@ export default function FormSaveLocationPicker(props) {
            marginTop:5,
            borderRadius:10
           }}
-            onPress={async () => {
-              let dir = await ScopedStorage.openDocumentTree(true);
-              console.log('DIREcTORY', dir);
-              dispatch({type: 'SAVE_FORM_DIR_URL', payload: dir.path});
+            onPress={ () => {
+              // let dir = await ScopedStorage.openDocumentTree(true);
+              // console.log('DIREcTORY', dir);
+              // dispatch({type: 'SAVE_FORM_DIR_URL', payload: dir.path});
             }}
           >
-           <Text style={{color:'white'}}>
-            
+           <Text style={{color:'white'}}> 
              CHOOSE
             </Text>
           </TouchableOpacity>

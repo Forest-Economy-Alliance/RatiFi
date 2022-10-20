@@ -134,7 +134,7 @@ font-weight:bold;font-size:14.0000pt;" >छ</span></b><b><span style="mso-spacer
 font-weight:bold;font-size:14.0000pt;" >&nbsp;)</span></b><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
 font-weight:bold;font-size:14.0000pt;" ><o:p></o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><span style="position:absolute;z-index:1;left:0px;
 margin-left:0.0000px;margin-top:15.3333px;width:623.0000px;
-height:887.0000px;" ><img width="623"  height="887"  src="Page9_Jharkhand.files/Page9_Jharkhand72.png" ></span><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
+height:887.0000px;" ><img width="623"  height="880"  src="$picture0" ></span><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
 font-weight:bold;font-size:14.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
 font-weight:bold;font-size:14.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';
 font-weight:bold;font-size:14.0000pt;" ><o:p>&nbsp;</o:p></span></b></p><p class=MsoNormal  align=center  style="text-align:center;" ><b><span style="mso-spacerun:'yes';font-family:Calibri;mso-bidi-font-family:'Times New Roman';

@@ -6848,11 +6848,6 @@
   "resolved" "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-4.3.1.tgz"
   "version" "4.3.1"
 
-"react-native-scoped-storage@^1.9.2":
-  "integrity" "sha512-Jh/I8sd7T9eqq4OWScL1aM7N5PPEEqw2Bs7i8/gcIIBDekwU/vYWTlyc4ute0pABAu41vSA+4RnfoRsyWOerJQ=="
-  "resolved" "https://registry.npmjs.org/react-native-scoped-storage/-/react-native-scoped-storage-1.9.2.tgz"
-  "version" "1.9.2"
-
 "react-native-screens@^3.13.1", "react-native-screens@>= 3.0.0":
   "integrity" "sha512-xcrnuUs0qUrGpc2gOTDY4VgHHADQwp80mwR1prU/Q0JqbZN5W3koLhuOsT6FkSRKjR5t40l+4LcjhHdpqRB2HA=="
   "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.13.1.tgz"

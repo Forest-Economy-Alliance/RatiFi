@@ -80,7 +80,7 @@ class FormPDFAbstract {
         fonts: [MangalFont],
       });
 
-      console.log('FF', file);
+      // console.log('FF', file);
 
 
 
@@ -100,28 +100,25 @@ class FormPDFAbstract {
     
 
 
-    RNFetchBlob.fs
+    return await RNFetchBlob.fs
     .exists(file.filePath)
-    .then(exist => {
+    .then(async(exist )=> {
       console.log(`file ${exist ? '' : 'not'} exists`);
 
-      RNFetchBlob.fs.readFile(file.filePath, 'base64')
-      .then(data => {
+      await RNFetchBlob.fs.readFile(file.filePath, 'base64')
+      .then(async (data) => {
         // console.log("DATA",data);
 
-
-
-
-
-         axios.post(BASE_URL+'/get-gcp-url',{
+         await axios.post(BASE_URL+'/get-gcp-url',{
           base64Data:data,
           fileName:_fileName
-        }).then(({data})=>{
-            // console.log(data.name);
+        }).then(async ({data})=>{
+            console.log("DTA FOR FROM ->",data.name);
           // store.store.dispatch()
-          setTimeout(()=>{
-            store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.name});
-          },200)
+     
+            await store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.name});
+            // await store.store.subscribe(()=>null);
+            console.log("REDUX AFTER DISPATHC",store.store.getState().entities.appUtil.appUtil.formData)
               //  const response=await Linking.openURL(`https://ratifi-backend-v2.herokuapp.com/get-docuemnts?f0=${}&f9=${}`);
 
             // unlink as well

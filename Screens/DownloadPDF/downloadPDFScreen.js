@@ -22,6 +22,11 @@ import Dropdown from '../../components/CustomDropdown';
 import { useFormik } from 'formik';
 import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
+import axios from 'axios';
+import { BASE_URL } from '../../services/APICentral';
+
+import HI from '../../assets/i18n/hi.json';
+
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
   { label: 'Item 1', value: '1' },
@@ -34,9 +39,15 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
+
+
+
+
+
+
 const DownloadPDFScreen = ({ navigation }) => {
-
-
+  const [imgUrl,setImgUrl]=useState(null);
+  const [vData,setVData]=useState([]);
   const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
   const [vis,setVis]=useState(false);
   const language = 'hi';
@@ -62,16 +73,16 @@ const DownloadPDFScreen = ({ navigation }) => {
     changeLanguage(language);
   }, []);
 
-  const imgUrls = {
-    ambepadar:
-      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324247/Map1_oqd9eg.png',
-    dayaltung:
-      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324264/Map2_iq3jyc.png',
-    telarai:
-      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324257/Map3_h8wi6y.png',
-    pedawara:
-      'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324266/Map4_f5zkou.png',
-  };
+  // const imgUrls = {
+  //   ambepadar:
+  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324247/Map1_oqd9eg.png',
+  //   dayaltung:
+  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324264/Map2_iq3jyc.png',
+  //   telarai:
+  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324257/Map3_h8wi6y.png',
+  //   pedawara:
+  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324266/Map4_f5zkou.png',
+  // };
 
 
   const data1 = [
@@ -836,7 +847,10 @@ const DownloadPDFScreen = ({ navigation }) => {
     },
   ];
 
+  const {profile} = useSelector(state => state.entities.auth.userInfo);
 
+
+ 
   const villagesData=(states[0].Districts[0].Tehsils[0].Panchayats);
 
   const handleSignOut=()=>{
@@ -860,6 +874,44 @@ const DownloadPDFScreen = ({ navigation }) => {
     // validationSchema: uidSchema,
     // onSubmit: onNext,
   });
+
+
+
+  useEffect(()=>{
+    let temp=states[0].Districts;
+    for(let key of temp ){
+  
+      for(let th of key.Tehsils){
+        if(th.label===profile?.tehsil){
+          // alert(th.label)
+          console.log("TH",th.Panchayats);
+          setVData(th.Panchayats)
+        }
+      }
+      // console.log("KEY",key.label)
+      // if(key.label == profile?.district){
+      //   alert("OK")
+      // }
+    }
+  },[])
+
+
+
+const getEnglish=(param)=>{
+  
+
+  console.log("OK", HI.translation)
+
+  const left=Object.keys(HI.translation);
+  const right=Object.values(HI.translation);
+  const len=left.length;
+  for(let i=0;i<len;i++){
+    if(right[i]===val5.label){
+    return left[i].toLowerCase();
+    }
+  }
+
+}
 
 
 
@@ -907,7 +959,7 @@ const DownloadPDFScreen = ({ navigation }) => {
           
           downloadPDFScreenFix={setVal5}
           visible={true}
-          data={villagesData}
+          data={vData}
           formik={formik}
           variable={'type'}
         />
@@ -915,6 +967,23 @@ const DownloadPDFScreen = ({ navigation }) => {
 
         <CustomButton onPress={() => {
           setPressed(true);
+
+          // fetch image
+          
+          const map_name=getEnglish('hi');
+          // alert(BASE_URL+`/get-map?name=${map_name}`)
+          axios.get(BASE_URL+`/get-map?name=${map_name}`)
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.success){
+              setImgUrl(res.data.url)
+            }
+          })
+          .catch(ee=>{
+            console.log(ee)
+          })
+
+         
         }}
           button={{ width: 200,marginTop:20 }}
           dsbled={val5 ? false : true}
@@ -926,13 +995,13 @@ const DownloadPDFScreen = ({ navigation }) => {
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
-                {imgUrls[gramSabha]
+                {imgUrl
                   ? t('your forest map is available')
                   : t('your_forest_map_is_not_available')}
               </Text>
-              {imgUrls[gramSabha] && (
+              {imgUrl && (
                 <Image
-                  source={{ uri: imgUrls[gramSabha] }}
+                  source={{ uri: imgUrl }}
                   style={{
                     height: 100,
                     width: 100,
@@ -948,7 +1017,9 @@ const DownloadPDFScreen = ({ navigation }) => {
                 disabled={true}
                 button={{ marginTop: 20 }}
                 onPress={() => {
-                  navigation.navigate('FormsPage');
+                  navigation.navigate('FormsPage',{
+                    url:imgUrl
+                  });
                 }}>
                 {t('download')}
               </CustomButton>

@@ -38,17 +38,21 @@ import Form17Jharkhand from '../../utility/Form17_Jharkhand';
 import Form18Jharkhand from '../../utility/Form18_Jharkhand';
 import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import {useTranslation} from 'react-i18next';
+import store from '../../redux-store';
 import * as Progress from 'react-native-progress';
-import * as ScopedStorage from 'react-native-scoped-storage';
-const BG_IMG_PATH = require('../../assets/images/background.png');
 
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import { BASE_URL } from '../../services/APICentral';
+import { useRoute } from '@react-navigation/native';
+const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
 const FormsPage = ({navigation}) => {
+
+  const route=useRoute();
+  
   const  carouselRef=useRef(null);
   const {t} = useTranslation();
   const [vis,setVis]=useState(false);
@@ -56,7 +60,18 @@ const FormsPage = ({navigation}) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
-  const {formSaveDir,formData} = useSelector(state => state.entities.appUtil.appUtil);
+  const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
+  const {formData}=useSelector(()=>store.store.getState().entities.appUtil.appUtil)
+
+
+
+
+
+
+
+  console.log("FORMDATA-->>CHANGED",formData)
+
+
 
   const getDistrict = (blank=true) => blank ? '....................' : t(profile?.district);
   const getPanchayat = (blank=true) => blank ? '....................' : t(profile?.panchayat);
@@ -84,10 +99,12 @@ const FormsPage = ({navigation}) => {
       return false;
     }
   };
-  if (!formSaveDir) {
-    requestPermission();
-    return <FormSaveLocationPicker />;
-  }
+
+  // PYS ISSUE
+  // if (!formSaveDir) {
+  //   requestPermission();
+  //   return <FormSaveLocationPicker />;
+  // }
   const carouselItems = [
     {
       title: 'Form 0',
@@ -96,7 +113,7 @@ const FormsPage = ({navigation}) => {
     },
     {
       title: 'Form 9',
-      form: new Form9Jharkhand(null, ['none']),
+      form: new Form9Jharkhand(null, [ route?.params?.url || 'none']),
       imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
     },
     {
@@ -226,21 +243,27 @@ const FormsPage = ({navigation}) => {
 
 
   const handleDownload=async ()=>{
-    console.log("REDUX",formData)
-  
-    if(formData.length!==2)
+    // console.log("HD START",new Date().getTime())
+    // console.log("REDUX",formData) // working incorrectlry
+    // console.log("HANDLE DOWNLOAD CALLED")
+    // 
+
+    // BELOW IS WORKING FINE
+    const FD=store.store.getState().entities.appUtil.appUtil.formData;
+    console.log("FD",FD)
+    if(FD.length!==2)
     {
-      alert("Please try again")
-    return ;}
+    alert("Please try again later")
+    return ;
+  }
 
 
     try{
       // console.log("REDUX",formData)
   
       // console.log("URI",`https://ratifi-backend-v2.herokuapp.com/get-documents?f0=${formData[0]}&f9=${formData[1]}`)
-    const response=await Linking.openURL(`${BASE_URL}/get-documents?f0=${formData[0]}&f9=${formData[1]}`);
-      await  console.log(response);
-      // dispatch({type:"CLEAR_FORMS"})
+    const response=await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[1]}`);
+    
     }catch(er){
       alert("Something went wrong");
     }
@@ -294,7 +317,7 @@ const FormsPage = ({navigation}) => {
     // if (requestPermission()) {
     // file location returned by the createPDF
     // replace the '' empty string with directory info if you want to any directory
-    await obj.createPDF('DD', name);
+   return  await obj.createPDF('DD', name);
     // alert(location);
     // } else {
     // console.log('NO PERMISSION');
@@ -376,21 +399,25 @@ carouselRef?.current?.snapToPrev()
             // dispatch({type:"CLEAR_FORMS"})
             setProgress(0.009);
             let CIT=carouselItems.slice(0,2);
-            console.log("AA",CIT);
+            // console.log("AA",CIT);
             console.log("LENGTH",CIT.length);
             for (const key of CIT) {
+              console.log("ENTRY",new Date().getTime())
               const response = await generatePDF(key.form, key.title);
-              setProgress(e => e + 1 / 2);
+               setProgress(e => e + 1 / 2)
+              console.log("EXIT",new Date().getTime())
+
             }
-            setProgress(0);
-            toast.show(`सभी पीडीएफ ${formSaveDir} फ़ोल्डर में सहेजे गए`, {
-              type: 'success',
-              animationType: 'zoom-in',
-              successColor: '#480E09',
-              placement: 'top',
-              duration: 8000,
-            });
-            handleDownload();
+            
+            // toast.show(`सभी पीडीएफ ${formSaveDir} फ़ोल्डर में सहेजे गए`, {
+            //   type: 'success',
+            //   animationType: 'zoom-in',
+            //   successColor: '#480E09',
+            //   placement: 'top',
+            //   duration: 8000,
+            // });
+            setTimeout(async()=>{ await handleDownload();setProgress(0);},10);
+           
           }}
         >
            फॉर्म डाउनलोड करें

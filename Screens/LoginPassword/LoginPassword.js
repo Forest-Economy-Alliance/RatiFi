@@ -129,6 +129,7 @@ const LoginPasswordScreen = ({navigation}) => {
               <Text style={styles.titleText}>{t('password')}</Text>
             </View>
             <CustomInput
+              keyboardType={"number-pad"}
               onChangeText={formik.handleChange('password')}
               onBlur={formik.handleBlur('password')}
               value={formik.values.password}

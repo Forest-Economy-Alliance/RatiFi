@@ -186,14 +186,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%',
     fontSize: 25,
-    color: '#480E09',
+    // color: '#480E09',
   },
   inputConfPass: {
     borderColor: '#CCCCCC',
     borderBottomWidth: 1,
     width: '100%',
     fontSize: 25,
-    color: '#480E09',
+    // color: '#480E09',
   },
   nextButton: {
     // backgroundColor: '#480E09',
