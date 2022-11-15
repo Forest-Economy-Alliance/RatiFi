@@ -991,6 +991,20 @@ const getEnglish=(param)=>{
           {t('get documents')}
         </CustomButton>
 
+        
+
+        <CustomButton  button={{ width: 200,marginTop:20 }}
+
+text={t('Track old claim')}
+
+
+        onPress={()=>{
+          navigation.navigate('PastRecordsScreen')
+        }}
+        >Past Applications</CustomButton>
+
+
+
         {pressed && (
           <>
             <View style={styles.msgContainer}>
@@ -1024,6 +1038,9 @@ const getEnglish=(param)=>{
                 {t('download')}
               </CustomButton>
             )}
+
+
+
           </>
         )}
 

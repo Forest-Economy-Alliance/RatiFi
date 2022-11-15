@@ -22,6 +22,14 @@ import LocationScreen from '../Screens/Location/Location';
 import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
 import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
 import { useTranslation } from 'react-i18next';
+// import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
+
+
+import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
+
+
+
+
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
@@ -134,6 +142,11 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+
+
+
+
+
         <Stack.Screen
           name="FRCInitial"
           component={FRCInitialScreen}
@@ -141,6 +154,8 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+      
+    
         {/* <Stack.Screen
           name="RoleInformation"
           component={RoleInformationScreen}
@@ -165,6 +180,18 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+
+<Stack.Screen
+      name="PastRecordsScreen"
+      component={PastRecordsScreen}
+      options={{
+        headerShown:false
+      }}
+
+      />
+      
+
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

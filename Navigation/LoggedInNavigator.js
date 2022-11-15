@@ -2,6 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {t} from 'i18next';
 import {useTranslation} from 'react-i18next';
+import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,17 @@ const LoggedInNavigator = () => {
           headerShown: false,
         }}
       />
+
+<Stack.Screen
+      name="PastRecordsScreen"
+      component={PastRecordsScreen}
+      options={{
+        headerShown:false
+      }}
+
+      />
+      
+    
     </Stack.Navigator>
   );
 };
