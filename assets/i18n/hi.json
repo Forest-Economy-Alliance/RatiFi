@@ -279,6 +279,7 @@
     "DLC":"डीएलसी",
     "SIGN_OUT":"साइनआउट करें",
     "NO":"नहीं",
-    "Are you sure, you want to sign out?":"क्या आप साइन आउट करना चाहते हैं?"
+    "Are you sure, you want to sign out?":"क्या आप साइन आउट करना चाहते हैं?",
+    "Application_Number":"इस आवेदन की संख्या"
 }
 }

@@ -85,9 +85,11 @@ const LoginScreen = ({navigation}) => {
               <Text style={styles.headerText}>{t('Login')}</Text>
               <View style={styles.horizontalLine} />
             </View>
+            
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
             </View>
+
             <CustomInput
               onChangeText={formik.handleChange('phoneNumber')}
               onBlur={formik.handleBlur('phoneNumber')}

@@ -993,16 +993,7 @@ const getEnglish=(param)=>{
 
         
 
-        <CustomButton  button={{ width: 200,marginTop:20 }}
-
-text={t('Track old claim')}
-
-
-        onPress={()=>{
-          navigation.navigate('PastRecordsScreen')
-        }}
-        >Past Applications</CustomButton>
-
+  
 
 
         {pressed && (
@@ -1029,7 +1020,7 @@ text={t('Track old claim')}
             {pressed && (
               <CustomButton
                 disabled={true}
-                button={{ marginTop: 20 }}
+                button={{ marginTop: 20}}
                 onPress={() => {
                   navigation.navigate('FormsPage',{
                     url:imgUrl
@@ -1045,7 +1036,6 @@ text={t('Track old claim')}
         )}
 
       </View>
-
     </ImageBackground>
   );
 };

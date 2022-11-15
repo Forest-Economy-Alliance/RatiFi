@@ -46,6 +46,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import { BASE_URL } from '../../services/APICentral';
 import { useRoute } from '@react-navigation/native';
+import { postClaimHandler } from '../../services/claimService';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
@@ -60,6 +61,10 @@ const FormsPage = ({navigation}) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const {profile} = useSelector(state => state.entities.auth.userInfo);
+
+
+  console.warn("PROFILE_DATA",profile)
+
   const {formSaveDir} = useSelector(state => state.entities.appUtil.appUtil);
   const {formData}=useSelector(()=>store.store.getState().entities.appUtil.appUtil)
 
@@ -379,6 +384,7 @@ carouselRef?.current?.snapToPrev()
             renderItem={_renderItem}
             onSnapToItem={index => setActiveSlide(index)}
           />
+          
 <View style={{alignSelf:'center',marginLeft:20}}>
 <TouchableOpacity onPress={e=>{
   carouselRef?.current?.snapToNext()
@@ -391,7 +397,54 @@ carouselRef?.current?.snapToPrev()
 
         </View>
       </View>
-      <View style={{paddingVertical: 20}}>
+      <View style={{paddingVertical: 20,}}>
+
+{ 
+
+!profile?.claims?.length ? 
+  <CustomButton style={{marginBottom:20}}
+button={{width:'80%'}}
+
+  onPress={async()=>{
+
+    try{
+
+      console.log("OK")
+    
+    const rsponse= await postClaimHandler({
+      ownerId:profile._id.toString()
+    })
+    console.log("XXXX",rsponse.data.data);
+
+    dispatch({type: 'SAVE_PROFILE', payload: rsponse?.data?.data});
+    console.log("UUU",profile)
+  }catch(e){
+    console.log("SOMETHING_WENT_WRONG")
+  }
+   
+  }}
+  
+  >
+ <Text > आवेदन अप्लाई करे  </Text>
+  </CustomButton>
+
+  :
+
+
+<CustomButton  
+style={{marginBottom:20}}
+button={{width:300}}
+dsbled={profile?.claims?.length==0}
+text={t('Track old claim')}
+        onPress={()=>{
+          navigation.navigate('PastRecordsScreen')
+        }}
+        />
+
+
+}
+
+
         <CustomButton
         button={{width:250}}
                        

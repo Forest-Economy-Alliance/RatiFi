@@ -107,7 +107,6 @@ const FRCHomeScreen = ({navigation}) => {
             <CustomButton
               text={t('File claim')}
               onPress={() => {
-                console.log("CLICKET")
                 navigation.navigate("DownloadPDF")
               }}
               style={styles.ntBtnView}
