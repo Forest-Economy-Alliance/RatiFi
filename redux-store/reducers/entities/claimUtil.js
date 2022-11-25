@@ -2,13 +2,19 @@
 import {combineReducers} from 'redux';
 
 const INIT_STATE={
-    claim:[]
+    claim:{}
 }
 
 
 const claimInfo = (state = INIT_STATE, action) => {
     switch (action.type) {
+
+
       case 'SAVE_CLAIM':
+
+        console.warn("BUG-A",action);
+
+        
         return {
           ...state,
           claim: action.payload,

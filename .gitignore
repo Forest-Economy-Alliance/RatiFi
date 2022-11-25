@@ -99,5 +99,5 @@ package-lock.json
 # Android memory profiler files
 *.hprof 
 
-RatiFiKeystoreFile
+# RatiFiKeystoreFile
 *.aab

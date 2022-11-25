@@ -56,7 +56,7 @@ const NamePhoneScreen = ({navigation}) => {
           console.log("ARGS->",args);
           if (args === "AVAILABLE") {
 
-            navigation.navigate("FRCHome")
+            navigation.navigate("DownloadPDF")
             // updating to screen code to 2 as otp verification is done ,
             // now two cases ,
             // in reponse if we get AVAILABLE

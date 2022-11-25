@@ -10,7 +10,7 @@ import {
   Linking,
 } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import React, {useState,useRef} from 'react';
+import React, {useState,useRef, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'react-native-toast-notifications';
 import Button from '../../components/CustomButton';
@@ -40,7 +40,7 @@ import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import {useTranslation} from 'react-i18next';
 import store from '../../redux-store';
 import * as Progress from 'react-native-progress';
-
+import HI from '../../assets/i18n/hi.json';
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
@@ -53,7 +53,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 const FormsPage = ({navigation}) => {
 
   const route=useRoute();
-  
+  const [vName,setVName]=useState('');
   const  carouselRef=useRef(null);
   const {t} = useTranslation();
   const [vis,setVis]=useState(false);
@@ -245,9 +245,34 @@ const FormsPage = ({navigation}) => {
   ];
 
 
+  useEffect(()=>{
+    if(route?.params?.vName!=undefined)
+    setVName(route?.params?.vName)
+  },[route?.params?.vName])
 
 
-  const handleDownload=async ()=>{
+
+
+
+ const getEnglish=(param)=>{
+  
+
+  console.log("OK", HI.translation)
+
+  const left=Object.keys(HI.translation);
+  const right=Object.values(HI.translation);
+  const len=left.length;
+  for(let i=0;i<len;i++){
+    if(right[i]===vName.label){
+    return left[i].toLowerCase();
+    }
+  }
+
+}
+
+
+
+  const handleDownload=async (vNameEnglish)=>{
     // console.log("HD START",new Date().getTime())
     // console.log("REDUX",formData) // working incorrectlry
     // console.log("HANDLE DOWNLOAD CALLED")
@@ -255,7 +280,7 @@ const FormsPage = ({navigation}) => {
 
     // BELOW IS WORKING FINE
     const FD=store.store.getState().entities.appUtil.appUtil.formData;
-    console.log("FD",FD)
+    
     if(FD.length!==2)
     {
     alert("Please try again later")
@@ -267,7 +292,7 @@ const FormsPage = ({navigation}) => {
       // console.log("REDUX",formData)
   
       // console.log("URI",`https://ratifi-backend-v2.herokuapp.com/get-documents?f0=${formData[0]}&f9=${formData[1]}`)
-    const response=await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[1]}`);
+    const response=await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[1]}&vName=${vNameEnglish}`);
     
     }catch(er){
       alert("Something went wrong");
@@ -414,10 +439,14 @@ button={{width:'80%'}}
     const rsponse= await postClaimHandler({
       ownerId:profile._id.toString()
     })
+
     console.log("XXXX",rsponse.data.data);
 
     dispatch({type: 'SAVE_PROFILE', payload: rsponse?.data?.data});
-    console.log("UUU",profile)
+
+
+
+
   }catch(e){
     console.log("SOMETHING_WENT_WRONG")
   }
@@ -450,6 +479,11 @@ text={t('Track old claim')}
                        
           onPress={async () => {
             // dispatch({type:"CLEAR_FORMS"})
+            console.log('====================================');
+            console.log('VVVVNAME',vName);
+            console.log('====================================');
+         
+        
             setProgress(0.009);
             let CIT=carouselItems.slice(0,2);
             // console.log("AA",CIT);
@@ -469,7 +503,7 @@ text={t('Track old claim')}
             //   placement: 'top',
             //   duration: 8000,
             // });
-            setTimeout(async()=>{ await handleDownload();setProgress(0);},10);
+            setTimeout(async()=>{ await handleDownload(getEnglish(vName));setProgress(0);},10);
            
           }}
         >

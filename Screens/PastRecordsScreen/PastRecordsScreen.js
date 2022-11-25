@@ -68,15 +68,17 @@ const PastRecordsScreen = ({ navigation }) => {
 
   const {profile} = useSelector(state => state.entities.auth.userInfo);
 
-  const {claim}=useSelector(state=>state?.entities?.claimUtil?.claimInfo)
+  // const {claim}=useSelector(state=>state?.entities?.claimUtil?.claimInfo)
+
+  const [claim,setClaim]=useState({});
 
 
-
-  // console.log("UIF",UIF);
+  // console.log("UIF",claim);
 
   // const [name, setName] = useState('Ram Krishna');
   const [member, setMember] = useState('FRC');
   const [role, setRole] = useState('Secretary');
+
 
   const [cameraModalVis,setCameraModalVis]=useState(false);
   const [previewDocModalVis,setPreviewDocModal]=useState(false);
@@ -97,9 +99,7 @@ const PastRecordsScreen = ({ navigation }) => {
 
 const handleDocPreview=(url)=>{
   setDocUrlToPreview(url)
-  // get-image-for-preview
-
-
+  // get-image-for-previev
 
 }
 
@@ -111,12 +111,20 @@ const handleDocPreview=(url)=>{
 
 
   useEffect(() => {
-    changeLanguage(language);
 
 
-
+    // changeLanguage(language);
     // fetch Details on basis of applicaton
-    dispatch(fetchClaimDetailsByIdAction({claimId:profile?.claims[0]}));
+    // alert(profile?.claims[0])
+
+    // console.warn("BEFORE_GOING",profile?.claims[0]);
+    fetchClaimDetailsHandler({claimId:profile?.claims[0]})
+    .then(response=>{
+      setClaim(response.data.data);
+    })
+    .catch(error=>{
+      console.log("ERROR",error);
+    })
     // dispatch(fetchClaimDetailsHandler({id:'A163'},args=>{
     //   console.log("DONE")
     // }));
@@ -126,6 +134,23 @@ const handleDocPreview=(url)=>{
 
 
   }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <ImageBackground
@@ -384,7 +409,8 @@ onPress={()=>{
                       // handleDocPreview(claim[0])
                       // setPreviewDocModal(true);
 
-                      if(!(claim?.courtDocuments[0]?.title==='SDM_SUMMON'))
+                      // if(!(claim?.courtDocuments[0]?.title==='SDM_SUMMON'))
+                      if(true)
                       setCameraModalVis(true)
                       else
                       {
@@ -397,7 +423,7 @@ onPress={()=>{
                 }}
                  style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
                 >
-                {!(claim?.courtDocuments[0]?.title==='SDM_SUMMON') ?   <Ionicons name="camera" color="white" size={20}/>
+                { true ?   <Ionicons name="camera" color="white" size={20}/>
                      :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
                 </CustomButton>
               </View>
@@ -423,8 +449,8 @@ onPress={()=>{
                onPress={()=>{
                       // fetch Details on basis of applicato
                       // dispatch({type:"ENABLE_LOADING"})
-
-                      if(!(claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
                       {
                         setDocName('SDM_SUMMON_RESULT_1')
                         setCameraModalVis(true)}
@@ -439,7 +465,7 @@ onPress={()=>{
                 }}
                  style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
                 >
-                {!(claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1') ?   <Ionicons name="camera" color="white" size={20}/>
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
                      :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
                 </CustomButton>
               </View>
@@ -670,3 +696,8 @@ const styles = StyleSheet.create({
   }
 
 });
+
+
+
+// ( claim!==undefined && !(claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+//( claim!=undefined && !(claim?.courtDocuments[0]?.title==='SDM_SUMMON') )

@@ -26,6 +26,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../services/APICentral';
 
 import HI from '../../assets/i18n/hi.json';
+import { getDeviceHash } from '../../utils/DeviceUtil';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
@@ -883,9 +884,9 @@ const DownloadPDFScreen = ({ navigation }) => {
   
       for(let th of key.Tehsils){
         if(th.label===profile?.tehsil){
-          // alert(th.label)
-          console.log("TH",th.Panchayats);
-          setVData(th.Panchayats)
+         
+          console.log("TH",th.Villages);
+          setVData(th.Villages)
         }
       }
       // console.log("KEY",key.label)
@@ -897,7 +898,7 @@ const DownloadPDFScreen = ({ navigation }) => {
 
 
 
-const getEnglish=(param)=>{
+ const getEnglish=(param)=>{
   
 
   console.log("OK", HI.translation)
@@ -965,12 +966,14 @@ const getEnglish=(param)=>{
         />
 
 
-        <CustomButton onPress={() => {
+        <CustomButton onPress={async () => {
           setPressed(true);
 
           // fetch image
-          
-          const map_name=getEnglish('hi');
+          await getDeviceHash();
+          const map_name=getEnglish(val5);
+
+
           // alert(BASE_URL+`/get-map?name=${map_name}`)
           axios.get(BASE_URL+`/get-map?name=${map_name}`)
           .then(res=>{
@@ -1023,7 +1026,8 @@ const getEnglish=(param)=>{
                 button={{ marginTop: 20}}
                 onPress={() => {
                   navigation.navigate('FormsPage',{
-                    url:imgUrl
+                    url:imgUrl,
+                    vName:val5
                   });
                 }}>
                 {t('download')}

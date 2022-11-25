@@ -12,7 +12,8 @@ import { fetchClaimDetailsHandler } from "../../services/claimService";
 
 export const fetchClaimDetailsByIdAction=(data,callback)=>dispatch=>{
     dispatch({type: 'ENABLE_LOADING'});
-    return fetchClaimDetailsHandler(data)
+    console.log("GOING_MAIN");
+    return  fetchClaimDetailsHandler(data)
     .then(async({data:response})=>{
         console.log("RRX",response.data);
 
