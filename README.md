@@ -7,5 +7,4 @@ Ratifi is the CFR claim filing and tracking system. Apart from providing lots of
 
 ----------------
 
-
 ![Untitled Diagram drawio (1)](https://user-images.githubusercontent.com/69970001/178913303-290aaba3-2a7f-4445-9b02-aff00750e0a1.png)
