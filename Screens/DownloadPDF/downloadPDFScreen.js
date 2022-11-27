@@ -10,6 +10,7 @@ import {
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, { useEffect, useState } from 'react';
@@ -980,18 +981,15 @@ const DownloadPDFScreen = ({ navigation }) => {
             // console.log(res.data);
 
             if(res.data.success){
-              console.warn("DATA",res.data.data)
+              // console.warn("DATA",res.data.data)
               setImgUrl(res.data.data)
 
           dispatch({type:'DISABLE_LOADING'});
             }
           })
           .catch(ee=>{
-            console.log("ERROsR",ee)
             setImgUrl('x')
-
           dispatch({type:'DISABLE_LOADING'});
-            
           })
 
          
@@ -1016,14 +1014,18 @@ const DownloadPDFScreen = ({ navigation }) => {
                   : t('your_forest_map_is_not_available')}
               </Text>
               {imgUrl!=='x' && (
-                <Image
-                  source={{ uri: `data:image/jpg;base64,${imgUrl}` }}
+                <FastImage
+                
+                  source={{ uri: `data:image/jpg;base64,${imgUrl}` ,priority :FastImage.priority.high}}
                   style={{
                     height: 100,
                     width: 100,
-                    resizeMode:'contain'
+                    
                   }}
+                  resizeMode={FastImage.resizeMode.contain}
                 />
+
+                
               )}
             </View>
             <Text style={styles.subMsg}>

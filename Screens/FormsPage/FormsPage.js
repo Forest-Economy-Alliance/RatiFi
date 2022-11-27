@@ -129,119 +129,119 @@ const FormsPage = ({navigation}) => {
       ),
       imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
     },
-    {
-      title: 'Form 2',
-      form: new Form2Jharkhand(
-        [getPanchayat(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page2_Jharkhand.png'),
-    },
-    {
-      title: 'Form 3',
-      form: new Form3Jharkhand(
-        [getPanchayat(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page3_Jharkhand.png'),
-    },
-    {
-      title: 'Form 4',
-      form: new Form4Jharkhand(
-        [getPanchayat(), getTehsil(), getDistrict(), '      ', '      '],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page4_Jharkhand.png'),
-    },
-    {
-      title: 'Form 5',
-      form: new Form5Jharkhand(
-        [getTehsil(), getVillage(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page5_Jharkhand.png'),
-    },
-    {
-      title: 'Form 6',
-      form: new Form6Jharkhand(
-        [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page6_Mangal.png'),
-    },
-    {
-      title: 'Form 7',
-      form: new Form7Jharkhand(
-        [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page7_Mangal.png'),
-    },
-    {
-      title: 'Form 8',
-      form: new Form8Jharkhand(
-        [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page8_Jharkhand.png'),
-    },
+    // {
+    //   title: 'Form 2',
+    //   form: new Form2Jharkhand(
+    //     [getPanchayat(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page2_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 3',
+    //   form: new Form3Jharkhand(
+    //     [getPanchayat(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page3_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 4',
+    //   form: new Form4Jharkhand(
+    //     [getPanchayat(), getTehsil(), getDistrict(), '      ', '      '],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page4_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 5',
+    //   form: new Form5Jharkhand(
+    //     [getTehsil(), getVillage(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page5_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 6',
+    //   form: new Form6Jharkhand(
+    //     [[getVillage(), getPanchayat(), getTehsil(), getDistrict()]],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page6_Mangal.png'),
+    // },
+    // {
+    //   title: 'Form 7',
+    //   form: new Form7Jharkhand(
+    //     [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page7_Mangal.png'),
+    // },
+    // {
+    //   title: 'Form 8',
+    //   form: new Form8Jharkhand(
+    //     [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page8_Jharkhand.png'),
+    // },
     
-    {
-      title: 'Form 10',
-      form: new Form10Jharkhand(null, null),
-      imageName: require('../../assets/images/FormPreviews/Page10_Jharkhand.png'),
-    },
-    {
-      title: 'Form 11',
-      form: new Form11Jharkhand(null, null),
-      imageName: require('../../assets/images/FormPreviews/Page11_Jharkhand.png'),
-    },
-    {
-      title: 'Form 12',
-      form: new Form12Jharkhand(null, null),
-      imageName: require('../../assets/images/FormPreviews/Page12_Jharkhand.png'),
-    },
-    {
-      title: 'Form 13',
-      form: new Form13Jharkhand([getTehsil(),getDistrict(),'....................'],null),
-      imageName: require('../../assets/images/FormPreviews/Page13_Jharkhand.png'),
-    },
-    {
-      title: 'Form 14',
-      form: new Form14Jharkhand([getTehsil(),'....................'],null),
-      imageName: require('../../assets/images/FormPreviews/Page14_Jharkhand.png'),
-    },
-    {
-      title: 'Form 15',
-      form: new Form15Jharkhand(
-        [getTehsil(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page15_Jharkhand.png'),
-    },
-    {
-      title: 'Form 16',
-      form: new Form16Jharkhand(
-        [getTehsil(), getTehsil(), getDistrict()],
-        null,
-      ),
-      imageName: require('../../assets/images/FormPreviews/Page16_Jharkhand.png'),
-    },
-    {
-      title: 'Form 17',
-      form: new Form17Jharkhand([getTehsil(),getVillage(),getVillage(),getVillage()], '....................'|| null),
-      imageName: require('../../assets/images/FormPreviews/page17_Mangal.png'),
-    },
-    {
-      title: 'Form 18',
-      form: new Form18Jharkhand([getVillage(), getTehsil()], '....................'|| null),
-      imageName: require('../../assets/images/FormPreviews/page18_Mangal.png'),
-    },
-    {
-      title: 'Form 19',
-      form: new Form19Jharkhand([getTehsil(), getTehsil()], '....................'|| null),
-      imageName: require('../../assets/images/FormPreviews/Page19_Jharkhand.png'),
-    },
+    // {
+    //   title: 'Form 10',
+    //   form: new Form10Jharkhand(null, null),
+    //   imageName: require('../../assets/images/FormPreviews/Page10_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 11',
+    //   form: new Form11Jharkhand(null, null),
+    //   imageName: require('../../assets/images/FormPreviews/Page11_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 12',
+    //   form: new Form12Jharkhand(null, null),
+    //   imageName: require('../../assets/images/FormPreviews/Page12_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 13',
+    //   form: new Form13Jharkhand([getTehsil(),getDistrict(),'....................'],null),
+    //   imageName: require('../../assets/images/FormPreviews/Page13_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 14',
+    //   form: new Form14Jharkhand([getTehsil(),'....................'],null),
+    //   imageName: require('../../assets/images/FormPreviews/Page14_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 15',
+    //   form: new Form15Jharkhand(
+    //     [getTehsil(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page15_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 16',
+    //   form: new Form16Jharkhand(
+    //     [getTehsil(), getTehsil(), getDistrict()],
+    //     null,
+    //   ),
+    //   imageName: require('../../assets/images/FormPreviews/Page16_Jharkhand.png'),
+    // },
+    // {
+    //   title: 'Form 17',
+    //   form: new Form17Jharkhand([getTehsil(),getVillage(),getVillage(),getVillage()], '....................'|| null),
+    //   imageName: require('../../assets/images/FormPreviews/page17_Mangal.png'),
+    // },
+    // {
+    //   title: 'Form 18',
+    //   form: new Form18Jharkhand([getVillage(), getTehsil()], '....................'|| null),
+    //   imageName: require('../../assets/images/FormPreviews/page18_Mangal.png'),
+    // },
+    // {
+    //   title: 'Form 19',
+    //   form: new Form19Jharkhand([getTehsil(), getTehsil()], '....................'|| null),
+    //   imageName: require('../../assets/images/FormPreviews/Page19_Jharkhand.png'),
+    // },
   ];
 
 
