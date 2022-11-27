@@ -47,7 +47,7 @@ const data = [
 
 
 const DownloadPDFScreen = ({ navigation }) => {
-  const [imgUrl,setImgUrl]=useState(null);
+  const [imgUrl,setImgUrl]=useState('x');
   const [vData,setVData]=useState([]);
   const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
   const [vis,setVis]=useState(false);
@@ -973,17 +973,25 @@ const DownloadPDFScreen = ({ navigation }) => {
           await getDeviceHash();
           const map_name=getEnglish(val5);
 
-
+          dispatch({type:'ENABLE_LOADING'})
           // alert(BASE_URL+`/get-map?name=${map_name}`)
           axios.get(BASE_URL+`/get-map?name=${map_name}`)
           .then(res=>{
-            console.log(res.data);
+            // console.log(res.data);
+
             if(res.data.success){
-              setImgUrl(res.data.url)
+              console.warn("DATA",res.data.data)
+              setImgUrl(res.data.data)
+
+          dispatch({type:'DISABLE_LOADING'});
             }
           })
           .catch(ee=>{
-            console.log(ee)
+            console.log("ERROsR",ee)
+            setImgUrl('x')
+
+          dispatch({type:'DISABLE_LOADING'});
+            
           })
 
          
@@ -1003,16 +1011,17 @@ const DownloadPDFScreen = ({ navigation }) => {
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
-                {imgUrl
+                {imgUrl!='x'
                   ? t('your forest map is available')
                   : t('your_forest_map_is_not_available')}
               </Text>
-              {imgUrl && (
+              {imgUrl!=='x' && (
                 <Image
-                  source={{ uri: imgUrl }}
+                  source={{ uri: `data:image/jpg;base64,${imgUrl}` }}
                   style={{
                     height: 100,
                     width: 100,
+                    resizeMode:'contain'
                   }}
                 />
               )}
