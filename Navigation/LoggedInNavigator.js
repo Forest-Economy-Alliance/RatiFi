@@ -3,7 +3,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {t} from 'i18next';
 import {useTranslation} from 'react-i18next';
 import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
-
+import HomeScreen from '../Screens/HomeScreen/homeScreen';
+import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
+import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 const Stack = createNativeStackNavigator();
 
 const LoggedInNavigator = () => {
@@ -74,6 +76,30 @@ const LoggedInNavigator = () => {
       <Stack.Screen
         name="DownloadPDF"
         component={downloadPDFScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      
+
+      <Stack.Screen
+        name="PDFPreviewScreen"
+        component={PDFPreviewScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="ShowProfile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+<Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
         options={{
           headerShown: false,
         }}

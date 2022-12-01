@@ -7,6 +7,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import org.wonday.pdf.RCTPdfView;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;

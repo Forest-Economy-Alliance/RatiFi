@@ -60,7 +60,7 @@ const LoginPasswordScreen = ({navigation}) => {
     if (loginflow) {
       console.log("PTV",pwdToVerify)
       if (pwdToVerify === formik.values.password) {
-        navigation.replace('DownloadPDF');
+        navigation.replace('HomeScreen');
       } else {
         toast.show(t('INCORRECT_PASSWORD'), {
           type: 'success',
@@ -108,7 +108,6 @@ const LoginPasswordScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
-
   return (
     <ImageBackground
       source={BG_IMG_PATH}

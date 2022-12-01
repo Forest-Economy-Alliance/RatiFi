@@ -82,7 +82,7 @@ const LocationScreen = ({navigation}) => {
             if (args) {
 
               if(editProfileMode){
-                navigation.navigate("FRCHome")
+                navigation.navigate("DownloadPDF")
               }
              else {// navigation.navigate('RoleInformation');
 

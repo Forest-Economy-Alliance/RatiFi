@@ -202,7 +202,7 @@ onPress={async()=>{
   const data = await cameraRef?.current?.takePictureAsync(options);
 
   // console.log(data?.base64)
-  dispatch({type:"ENABLE_LOADING"})
+ 
 
   getGCPUrlImageHandler({
     fileName:'Hello',
@@ -226,7 +226,7 @@ onPress={async()=>{
     if(rssponse.data.success===true)
     dispatch({type:"DISABLE_LOADING"})
 
-
+    dispatch({type:"DISABLE_LOADING"})
 
 
   })
@@ -324,27 +324,8 @@ onPress={()=>{
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>
-                {name}
-                {', '}
-                {postLevel}
-                {', '}
-                {authLevel}
-              </Text>
-              <Text style={styles.subheaderText}>
-                {t(village)}
-                {', '}
-                {t(panchayat)}
-                {', '}
-                {t(tehsil)}
-                {', '}
-                {t(district)}
-                {', '}
-                {t(state)}
-              </Text>
-            </View>
-            <CustomButton
+           
+            {/* <CustomButton
               text={t('Edit Profile')}
               onPress={() => {
                 navigation.navigate("Location", {
@@ -353,7 +334,7 @@ onPress={()=>{
               }}
               style={styles.epBtnView}
               button={styles.epBtn}
-            />
+            /> */}
             {/* <View styl123e={styles.horizontalLine} /> */}
             {/* <CustomInput /> */}
           
@@ -385,6 +366,8 @@ onPress={()=>{
 
 
 
+<ScrollView>
+
 
 
 
@@ -393,9 +376,9 @@ onPress={()=>{
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>
+                  <Text numberOfLines={10} style={[styles.subheaderText, { fontSize: 12,width:'40%' }]}>
                     {/* <Image /> */}
-                    SDM को प्रस्तुत किया </Text>
+                    ग्राम पंचायत द्वारा गांव में वन अधिकार समिति (FRC) गठित करने की अधिसूचना - Form 1</Text>
                   <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(7,'day').format('DD/MM/YYYY')} </Text>
                 </View>
 
@@ -437,9 +420,53 @@ onPress={()=>{
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>
+                  <Text style={[styles.subheaderText, { fontSize: 12,width:'40%' }]}>
                     {/* <Image /> */}
-                    SDM का जवाब</Text>
+                  
+                    ग्राम सभा की पहली बैठक कर वन अधिकार समिति (FRC) का गठन - Form 3 </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    SDLC को सामुदायिक वन संसाधनों पर दावा की प्रक्रिया आरंभ करने की सूचना - Form 4</Text>
                   <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
                 </View>
 
@@ -477,6 +504,275 @@ onPress={()=>{
 
 
 
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    SDLC को दस्तावेजों को उपलब्ध कराने के लिए सूचना - Form 5 </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    एफआरसी द्वारा तैयार दस्तावेज - Form 6,7,8,9,10,13
+
+ </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+
+
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    वन क्षेत्र एवं अंचल पदाधिकारी को स्थल निरीक्षण के लिए सूचना - Form 11 
+
+
+ </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    स्थल निरीक्षण की रिपोर्ट - Form 14 
+
+
+
+ </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    ग्राम सभा की दूसरी बैठक कर CFR दावा को अनुमोदित करना और एसडीएलसी को नोटिस - Form 16 
+
+
+
+
+ </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+            <View >
+              <View style={styles.header}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={[styles.subheaderText, { fontSize: 12 ,width:'40%'}]}>
+                    {/* <Image /> */}
+                    भरा हुआ दावा प्रपत्र प्रारूप ख और ग एवं SDLC अन्तिम प्रस्तुति  - Form 17, Form 18 and Form 0 
+
+
+
+ </Text>
+                  <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().add(14,'day').format('DD/MM/YYYY')}</Text>
+                </View>
+
+              </View>
+              <View >
+                <CustomButton
+               onPress={()=>{
+                      // fetch Details on basis of applicato
+                      // dispatch({type:"ENABLE_LOADING"})
+// alert(claim?.courtDocuments.length)
+                      if(!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title==='SDM_SUMMON_RESULT_1'))
+                      {
+                        setDocName('SDM_SUMMON_RESULT_1')
+                        setCameraModalVis(true)}
+                      else
+                      {
+                        setPreviewDocModal(true)
+                        handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                      }
+
+
+                  
+                }}
+                 style={{ width: '100%' ,marginTop:10,paddingRight:30,alignItems:'flex-end'}}
+                >
+                {true ?   <Ionicons name="camera" color="white" size={20}/>
+                     :  <Text style={{fontSize:12}}> फोटो देखें</Text>}
+                </CustomButton>
+              </View>
+
+            </View>
+
+
+
+            </ScrollView>
 
 
 

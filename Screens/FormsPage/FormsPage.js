@@ -423,7 +423,7 @@ carouselRef?.current?.snapToPrev()
         </View>
       </View>
       <View style={{paddingVertical: 20,}}>
-
+{/* 
 { 
 
 !profile?.claims?.length ? 
@@ -471,7 +471,7 @@ text={t('Track old claim')}
         />
 
 
-}
+} */}
 
 
         <CustomButton
