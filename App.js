@@ -8,6 +8,7 @@ import {LogBox} from 'react-native';
 import ignoreWarnings from 'ignore-warnings';
 import { ToastProvider } from 'react-native-toast-notifications';
 import HomeScreen from './Screens/HomeScreen/homeScreen';
+import ProfileScreen from './Screens/ProfileScreen/profilescreen';
 ignoreWarnings('warn', ['ViewPropTypes']);
 
 LogBox.ignoreLogs([
@@ -21,6 +22,7 @@ function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Navigation />
+          
           
         </PersistGate>
       </Provider>
