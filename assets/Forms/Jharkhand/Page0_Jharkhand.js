@@ -122,7 +122,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         <td
             style="width:226pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
             <p class="s2" style="padding-top: 10pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">वन अज़िकार
-                सज़मज़त</p>
+            समिति</p>
         </td>
         <td
             style="width:225pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">

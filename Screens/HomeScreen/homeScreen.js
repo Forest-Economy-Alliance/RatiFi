@@ -35,6 +35,8 @@ import {
   const HomeScreen = ({ navigation }) => {
     const [imgUrl,setImgUrl]=useState('x');
     const [vData,setVData]=useState([]);
+    const { name, panchayat, tehsil, state, district, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
+
     const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
     const [vis,setVis]=useState(false);
     const language = 'hi';
@@ -141,6 +143,9 @@ import {
         blurRadius={10}
         style={styles.bg}>
         <View style={{ paddingHorizontal: 20 }}>
+
+      
+
   
        {vis &&  <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout}/>}
   
@@ -182,16 +187,65 @@ import {
           />
   
    */}
-           <CustomButton
-                disabled={true}
-                button={{ width: 200,marginTop: 150 , marginBottom: 30 ,  fontWeight: '800' }}>
-                {t('get documents')}
-              </CustomButton>
-          <CustomButton
-                disabled={true}
-                button={{ marginTop: 20}}>
-                {t('download')}
-              </CustomButton>
+
+
+<View style={styles.header}>
+              <Text style={styles.headerText}>
+                {name}
+                {', '}
+                {postLevel}
+                {', '}
+                {authLevel}
+              </Text>
+              <Text style={styles.subheaderText}>
+                {t(village)}
+                {', '}
+                {t(panchayat)}
+                {', '}
+                {t(tehsil)}
+                {', '}
+                {t(district)}
+                {', '}
+                {t(state)}
+              </Text>
+            </View>
+
+
+
+            <CustomButton
+            style={{marginBottom:20}}
+            button={{width:300}}
+            text={t('Show Profile Details')}
+              onPress={() => {
+                navigation.navigate("ShowProfile", {
+                  editProfile: true
+                })
+              }}
+   
+            />
+
+
+
+            <CustomButton
+            style={{marginBottom:20}}
+            button={{width:300}}
+            text={t('Edit Profile')}
+              onPress={() => {
+                navigation.navigate("Location", {
+                  editProfile: true
+                })
+              }}
+   
+            />
+         <CustomButton  
+style={{marginBottom:20}}
+button={{width:300}}
+// dsbled={profile?.claims?.length==0}
+text={t('Track old claim')}
+        onPress={()=>{
+          navigation.navigate('PastRecordsScreen')
+        }}
+        />
   
         </View>
       </ImageBackground>
@@ -320,5 +374,19 @@ import {
       flex: 1,
       height: '100%',
       width: '100%',
+    },
+    header: {
+
+      paddingTop: '15%',
+      marginHorizontal: '10%',
+      marginBottom:'10%'
+    },
+    headerText: {
+      fontSize: 22,
+      color: '#FFFFFF',
+    },
+    subheaderText: {
+      fontSize: 16,
+      color: '#FFFFFF',
     },
   });

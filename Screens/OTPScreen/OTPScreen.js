@@ -63,11 +63,8 @@ const NamePhoneScreen = ({navigation}) => {
             // else we get created  
             // if available -> Home Screen
             // if created -> Password
-            
             // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-
-
-          //  navigation.navigate("Login")
+           //  navigation.navigate("Login")
           
           } else if(args==="CREATED"){
              

@@ -80,7 +80,7 @@
     "Select your location": "अपना स्थान चुनें",
     "State": "राज्य",
     "District": "जिला",
-    "Tehsil": "तहसील",
+    "Tehsil": "प्रखंड",
     "Panchayat": "पंचायत",
     "Village": "गाँव",
     "Gujrehra": "गुजरेहरा",
@@ -280,6 +280,9 @@
     "SIGN_OUT":"साइनआउट करें",
     "NO":"नहीं",
     "Are you sure, you want to sign out?":"क्या आप साइन आउट करना चाहते हैं?",
-    "Application_Number":"इस आवेदन की संख्या"
+    "Application_Number":"इस आवेदन की संख्या",
+    "Show Profile Details":"प्रोफ़ाइल विवरण दिखाएं",
+    "View Document":"दस्तावेज़ देखें",
+    "Check your upoad documents here":"अपने अपलोड किए गए दस्तावेज़ यहां देखें"
 }
 }

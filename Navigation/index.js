@@ -26,6 +26,9 @@ import { useTranslation } from 'react-i18next';
 
 
 import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
+import HomeScreen from '../Screens/HomeScreen/homeScreen';
+import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
+import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 
 
 
@@ -78,6 +81,13 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+           <Stack.Screen
+        name="ShowProfile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
@@ -142,6 +152,23 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+<Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+    <Stack.Screen
+        name="PDFPreviewScreen"
+        component={PDFPreviewScreen}
+        options={{
+          // headerShown: false,
+          headerTransparent:true,
+          headerTitle:'दस्तावेज़'
+        }}
+      />
 
 
 

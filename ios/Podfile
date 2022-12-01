@@ -30,6 +30,8 @@ target 'RatiFi' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
+
   target 'RatiFiTests' do
     inherit! :complete
     # Pods for testing
