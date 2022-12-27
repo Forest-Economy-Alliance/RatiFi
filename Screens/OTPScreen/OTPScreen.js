@@ -56,7 +56,8 @@ const NamePhoneScreen = ({navigation}) => {
           console.log("ARGS->",args);
           if (args === "AVAILABLE") {
 
-            navigation.navigate("DownloadPDF")
+            navigation.navigate("HomeScreen")
+            // navigation.navigate("DownloadPDF")
             // updating to screen code to 2 as otp verification is done ,
             // now two cases ,
             // in reponse if we get AVAILABLE
@@ -70,7 +71,7 @@ const NamePhoneScreen = ({navigation}) => {
              
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
             navigation.navigate("Password")
-          } {
+          }else {
             setWrongOTP(t('Wrong OTP'));
           }
         },

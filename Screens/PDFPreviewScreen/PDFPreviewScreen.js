@@ -1,16 +1,13 @@
 import { useRoute } from '@react-navigation/native';
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, Dimensions } from "react-native"
+import { ImageBackground, StyleSheet, Image, Text, Dimensions } from "react-native"
 import Pdf from 'react-native-pdf';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 export const PDFPreviewScreen = (props) => {
 
-    const route=useRoute();
-
-
-    
+    const route = useRoute();
 
     return <ImageBackground
         source={BG_IMG_PATH}
@@ -18,26 +15,15 @@ export const PDFPreviewScreen = (props) => {
         blurRadius={10}
         style={styles.bg}>
 
-
-        <Pdf
-            trustAllCerts={false}
-            source={{ uri:route?.params?.url
-              , cache: true }}
-            onLoadComplete={(numberOfPages, filePath) => {
-                console.log(`Number of pages: ${numberOfPages}`);
+        <Image
+            source={{ uri: route?.params?.url }}
+            style={{
+                height: '100%',
+                width: '100%',
+                resizeMode: 'cover'
             }}
-            onPageChanged={(page, numberOfPages) => {
-                console.log(`Current page: ${page}`);
-            }}
-            onError={(error) => {
-                console.log(error);
-            }}
-            onPressLink={(uri) => {
-                console.log(`Link pressed: ${uri}`);
-            }}
-
-            style={styles.pdf}
         />
+
 
 
 
