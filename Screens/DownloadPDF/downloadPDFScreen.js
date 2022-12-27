@@ -859,10 +859,10 @@ const DownloadPDFScreen = ({ navigation }) => {
     setVis(true);
   }
   const signout=()=>{
-    dispatch({type: 'SAVE_TOKEN', payload: null});
-    dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+    // dispatch({type: 'SAVE_TOKEN', payload: null});
+    // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
     setVis(false);
-    navigation.navigate("NamePhone")
+    navigation.navigate("LoginPassword")
   }
 // console.log(districts);
 

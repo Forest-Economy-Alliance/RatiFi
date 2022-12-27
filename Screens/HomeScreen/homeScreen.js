@@ -76,9 +76,10 @@ import {
       setVis(true);
     }
     const signout=()=>{
-      dispatch({type: 'SAVE_TOKEN', payload: null});
-      setVis(false);
-      navigation.navigate("NamePhone")
+    //   dispatch({type: 'SAVE_TOKEN', payload: null});
+    //   setVis(false);
+    setVis(false);
+    navigation.navigate("LoginPassword")
     }
   // console.log(districts);
   

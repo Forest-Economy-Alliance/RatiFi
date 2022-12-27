@@ -145,6 +145,16 @@ const LoginPasswordScreen = ({navigation}) => {
               }}
               style={styles.otpBtn}
             />
+
+            <View style={{marginTop:'30%'}}>
+            <CustomButton
+            style={{marginBottom:10}}
+            button={{width:200}}
+            text={ t('New') +' '+  t('Registration')}
+            onPress={() => {
+                navigation.navigate('NamePhone');
+              }}
+            />
             <CustomButton
               text={t('Forgot Password')}
               onPress={() => {
@@ -153,6 +163,7 @@ const LoginPasswordScreen = ({navigation}) => {
               style={styles.forgPassBtn}
               button={styles.forgPassWidth}
             />
+            </View>
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
@@ -225,10 +236,12 @@ const styles = StyleSheet.create({
     marginTop: '20%',
   },
   forgPassBtn: {
-    marginTop: '50%',
+
+    // marginTop: '50%',
   },
   forgPassWidth: {
     width: '70%',
+  
   },
   inputName: {
     borderColor: '#CCCCCC',
