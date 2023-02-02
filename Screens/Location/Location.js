@@ -158,10 +158,6 @@ const LocationScreen = ({ navigation }) => {
                                     value: '7'
                                 },
                                 {
-                                    label: t('Konsode'),
-                                    value: '8'
-                                },
-                                {
                                     label: t('Beraergi'),
                                     value: '9'
                                 },
@@ -278,21 +274,21 @@ const LocationScreen = ({ navigation }) => {
                                     value: '7'
                                 }, {
                                     label: t('Bujaga'),
-                                    value: '8'
+                                    value: '3'
                                 }, {
                                     label: t('Kuruchdega'),
-                                    value: '8'
+                                    value: '3'
                                 },
                                 {
                                     label: t('Chhotketunga'),
-                                    value: '8'
+                                    value: '3'
                                 }, {
                                     label: t('Jaldega'),
-                                    value: '8'
+                                    value: '3'
                                 },
                                 {
                                     label: t('Virta'),
-                                    value: '8'
+                                    value: '3'
                                 },
                                 {
                                     label: t('Bandu'),
