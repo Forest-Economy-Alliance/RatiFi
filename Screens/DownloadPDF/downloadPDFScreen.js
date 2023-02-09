@@ -973,7 +973,7 @@ const DownloadPDFScreen = ({ navigation }) => {
 
         {/* Show village of only the given panchayat in the dropdown */}
         <Dropdown
-          DownloadPDFScreenFix={setVal5}
+          downloadPDFScreenFix={setVal5}
           visible={true}
           data={vData}
           formik={formik} 
