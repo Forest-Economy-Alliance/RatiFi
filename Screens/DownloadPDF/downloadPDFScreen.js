@@ -883,19 +883,33 @@ const DownloadPDFScreen = ({ navigation }) => {
   useEffect(()=>{
     let temp=states[0].Districts;
     for(let key of temp ){
-  
       for(let th of key.Tehsils){
         if(th.label===profile?.tehsil){
-         
           console.log("TH",th.Villages);
           setVData(th.Villages)
         }
       }
-      // console.log("KEY",key.label)
-      // if(key.label == profile?.district){
-      //   alert("OK")
-      // }
     }
+    // // Instead of taking all villages from state, we will take villages from Panchayats
+    // // select the state selected by user 
+    // let temp_state = states.filter((state) => state.label === profile?.state);
+    // console.log("state of user: ", temp_state);
+    // let temp_district = temp_state[0].Districts.filter((district) => district.label === profile?.district);
+    // console.log("district of user: ", temp_district);
+    // let temp_tehsil = temp_district[0].Tehsils.filter((tehsil) => tehsil.label === profile?.tehsil);
+    // console.log("tehsil of user: ", temp_tehsil);
+    // let temp_panchayat = temp_tehsil[0].Panchayats.filter((panchayat) => panchayat.label === profile?.panchayat);
+    // console.log("panchayat of user: ", temp_panchayat);
+    // // Check all the villages in the panchayat
+    // // go through all the villages and check if the village has same pancayat as the user
+    // let temp_villages = [];
+    // for (let village of villagesData) {
+    //   console.log("village: and panchayat: ", village, temp_panchayat[0].value);
+    //   if (village.panchayat === temp_panchayat[0].value) {
+    //     temp_villages.push(village);
+    //   }
+    // }
+    // console.log("villages of user: ", temp_villages);
   },[])
 
 
@@ -957,16 +971,14 @@ const DownloadPDFScreen = ({ navigation }) => {
           dropdownPosition="bottom"
         /> */}
 
-
+        {/* Show village of only the given panchayat in the dropdown */}
         <Dropdown
-          
-          downloadPDFScreenFix={setVal5}
+          DownloadPDFScreenFix={setVal5}
           visible={true}
           data={vData}
-          formik={formik}
+          formik={formik} 
           variable={'type'}
         />
-
 
         <CustomButton onPress={async () => {
           setPressed(true);

@@ -1775,11 +1775,16 @@ const LocationScreen = ({ navigation }) => {
                                     console.log(formik.errors);
                                     setErrorVisible(true);
                                 }
-
                                 formik.handleSubmit();
+                                // Send Data to next screen
                             }}
-                            style={styles.otpBtn}
-                        />
+                            style = {
+                                {
+                                    ...styles.otpBtn,
+                                    marginTop: 20
+                                }
+                            }
+                        />                        
                         <CustomError
                             visible={errorVisible}
                             setVisible={setErrorVisible}
