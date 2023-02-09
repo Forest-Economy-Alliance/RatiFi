@@ -125,121 +125,160 @@ const ProfileScreen = ({ navigation }) => {
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form0")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[0]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[0]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[0]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>    
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form1")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[1]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[1]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[1]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form2")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[2]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[2]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[2]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form3")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[3]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[3]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[3]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form4")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[4]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[4]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[4]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form5")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[5]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[5]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[5]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form6")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[6]?.storageUrl
-                                        })
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[6]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[6]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form7")}</Text>
-                                <CustomButton
-                                    onPress={() => {
-                                        navigation.navigate("PDFPreviewScreen", {
-                                            url: claim?.courtDocuments[7]?.storageUrl
-                                        });
-                                    }}
-                                    button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
-                                    {t('View Document')}
-                                </CustomButton>
+                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[7]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[7]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form8")}</Text>
-                                <CustomButton
+                                {/* <CustomButton
                                     onPress={() => {
                                         // navigation.navigate("PDFPreviewScreen", {
                                         //     url: 'https://00f74ba44bae72e745ffba76e7a5e029d356a337ac-apidata.googleusercontent.com/download/storage/v1/b/ratifi-document-storage/o/villages-map-pdf%2Fstatic-forms%2F8.pdf?jk=AFshE3Vd5RBn9YHeIawXRVWQbw4xGGtsMQYhwB1yooDjOG_3f2o3LIS5bwaNFIV5vxZT6GAPk4nKudoRU4EvgS1lhIYfa3eejFhmCfX67yoYNDe9eujy0AmIHfGjrYEMjd11rM_AZS1qtmyFqqErN6D3LYgT4xtI-ErAlom9Qmz1zG5u1IUinQdpeXTQiKN0NOXGkBYelDgh5fLWqPi21OBpW6dExQGhm9uimN7G3oTZVLk85ki7HAwaNFCNGflfBI9QO5-DQ23I9fHgyKh2nNrecCQ_lXh7zq9dEUE8R_afdHvngOjYt2tyvvBoLcLzKLW2gZqDLWIleMm-K2nKsrjzlv2CQ11vV2lowMb2jZ2boH8cnKcJZUFOZXfC_X3j3tmcLt0batlUOP-6cfX5WVUagf1kCmGsxnYItwWK-FxlNdheI5t4rHpDtUA7a0Zbwr1DBy0WkgjVKlwYHoN3lmMGwlkPdc5eDXcbHEZ7f4DO2MwGgiKlXIPBnPMysthS6VfitdCrqQsADyBZIjLqy4NlPlZPiVhYtChhvrIDFb3Vw1gSzJ69AB7FWVGLDjdyrVs-Dnm1jO3gqabSE0QvcxALbVlswZXsAmVrO4B6UMB2Eiy3J4n_03Am3KbhTCIUhw-4zCJCOxYq2UsbgTP-7XiUi0v8-bS71akbFt51j7fkhlJJcgXN80qyhTXVrbpfo15YKGzIl-eWhrSBl-mybkOEbeC05jSKJVxleH6by19kOkYUARSPgQmQiruvp86IEMFOO3AC_bkKw1XXjaih9PtKxfrsnajTi7V9xa-ewjWPOYEGdwW-UL-2AH9-RpIZXkgfiLOm2B06aE76BGwCwxdxOHGIl__EmOBkitJ2Cv10h4YCYbDCTbx0e2CeT5jBQgeRsgXvJUBvzMgJyRftVJN9O_WhtKnTmJMX0WMbDjusvz5KLIO0BmyUksyJ4G-spsmtu_CnjitpMbmFBxKd8GUnmVMj3vhUXd9-ddDKyWtXR8vIMnYSr2wT4f_-Fn0TjAwgc05j87hb_DsUAL3I3x-hQ24km7cISy8dO2Gb5tj1B_fTtWLocLdqd8eTgOfl60pGLoRVNZ_I5RnELe3PwfENoECTPEwmRpXO6egxa_xPMHeQl6UL8qGxjuu67MSEIWhgM8Ag6uOVgzbmnvumxtye4zAz0GAEzkV1VAF75PLW8xCyjGRlnpWxcuonkDTqs8gwiiqtkJaCcw&isca=1'
@@ -250,7 +289,21 @@ const ProfileScreen = ({ navigation }) => {
                                     }}
                                     button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                     {t('View Document')}
-                                </CustomButton>
+                                </CustomButton> */}
+                                                                    <CustomButton
+                                        onPress={() => {
+                                            if (claim?.courtDocuments[8]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[8]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
                             </View>
 
                             <View style={styles.fileContent}>
@@ -258,9 +311,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form9")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[9]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[9]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[9]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -272,9 +330,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form10")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[10]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[10]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[10]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -286,9 +349,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form11")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[11]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[11]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[11]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -301,9 +369,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form12")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[12]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[12]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[12]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -314,10 +387,16 @@ const ProfileScreen = ({ navigation }) => {
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
                                     {t("Form13")}</Text>
                                     <CustomButton
+                                        
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[13]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[13]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[13]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -329,9 +408,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form14")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[14]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[14]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[14]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -344,9 +428,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form15")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[15]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[15]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[15]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -358,9 +447,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form16")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[16]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[16]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[16]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -371,9 +465,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form17")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[17]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[17]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[17]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
@@ -384,9 +483,14 @@ const ProfileScreen = ({ navigation }) => {
                                     {t("Form18")}</Text>
                                     <CustomButton
                                         onPress={() => {
-                                            navigation.navigate("PDFPreviewScreen", {
-                                                url: claim?.courtDocuments[18]?.storageUrl
-                                            });
+                                            if (claim?.courtDocuments[18]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[18]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
                                         }}
                                         button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                         {t('View Document')}
