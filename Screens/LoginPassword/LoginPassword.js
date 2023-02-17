@@ -108,12 +108,16 @@ const LoginPasswordScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
+  if(!name){
+    navigation.navigate('NamePhone');
+  }
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
+      {/* if name is null, move to navigation.navigate('NamePhone'); */}
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>

@@ -53,3 +53,14 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+/*
+how to use this file for upload to playstore
+
+1. create a new project in android studio
+2. copy this file to your project
+3. open terminal and go to your project directory
+4. run this command
+    ./gradlew assembleRelease
+5. go to app/build/outputs/bundle/release
+6. upload the aab file to playstore
+*/

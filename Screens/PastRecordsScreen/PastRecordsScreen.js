@@ -12,6 +12,7 @@ import {
     Modal,
     TouchableOpacity,
     ActivityIndicator,
+    BackHandler,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -65,7 +66,16 @@ const PastRecordsScreen = ({ navigation }) => {
 
     const { name, panchayat, tehsil, state, district, village, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
 
-
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                navigation.goBack();
+                return true;
+            },
+        );
+        return () => backHandler.remove();
+    }, []);
 
 
     const { profile } = useSelector(state => state.entities.auth.userInfo);

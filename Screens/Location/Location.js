@@ -8,6 +8,8 @@ import {
     ImageBackground,
     ScrollView,
 } from 'react-native';
+import { BackHandler } from 'react-native';
+
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, { useEffect, useState } from 'react';
@@ -1614,7 +1616,16 @@ const LocationScreen = ({ navigation }) => {
 
 
 
-
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                navigation.goBack();
+                return true;
+            },
+        );
+        return () => backHandler.remove();
+    }, []);
 
 
 

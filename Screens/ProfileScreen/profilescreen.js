@@ -20,6 +20,7 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 import { fetchClaimDetailsHandler } from '../../services/claimService';
+import { BackHandler } from 'react-native';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ProfileScreen = ({ navigation }) => {
@@ -39,7 +40,6 @@ const ProfileScreen = ({ navigation }) => {
             .then(() => setCurrentLanguage(value))
             .catch(err => console.log(err));
     };
-
     const { name, panchayat, tehsil, state, district, village, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
 
     // console.log("UIF",UIF);
@@ -71,18 +71,17 @@ const ProfileScreen = ({ navigation }) => {
             .catch(error => {
                 console.log("ERROR", error);
             })
-
-
-
-
-
-
-
-
-
-
     }, []);
-
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                navigation.goBack();
+                return true;
+            },
+        );
+        return () => backHandler.remove();
+    }, []);
     return (
         <ImageBackground
             source={BG_IMG_PATH}
