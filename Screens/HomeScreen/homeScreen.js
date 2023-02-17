@@ -26,10 +26,9 @@ import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
 import { BASE_URL } from '../../services/APICentral';
-
+import { BackHandler } from 'react-native';
 import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
-
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -51,6 +50,7 @@ const HomeScreen = ({ navigation }) => {
     const { t, i18n } = useTranslation();
 
     const [currentLanguage, setCurrentLanguage] = useState('en');
+    
 
     const changeLanguage = value => {
         i18n
@@ -96,28 +96,29 @@ const HomeScreen = ({ navigation }) => {
         // onSubmit: onNext,
     });
 
-
-
-    // useEffect(()=>{
-    //   let temp=states[0].Districts;
-    //   for(let key of temp ){
-
-    //     for(let th of key.Tehsils){
-    //       if(th.label===profile?.tehsil){
-
-    //         console.log("TH",th.Villages);
-    //         setVData(th.Villages)
-    //       }
-    //     }
-    //     // console.log("KEY",key.label)
-    //     // if(key.label == profile?.district){
-    //     //   alert("OK")
-    //     // }
-    //   }
-    // },[])
-
-
-
+    // leave app on back button press on this screen
+    useEffect(() => {
+        const backAction = () => {
+            // current screen is home screen
+            Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+                {
+                    text: "Cancel",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                { text: "YES", onPress: () => BackHandler.exitApp() }
+            ]);
+            return true;
+        };
+        
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        
+        return () => backHandler.remove();
+    }, []);
+    // Make a useEffect run on particular pages
     const getEnglish = (param) => {
 
 
@@ -133,8 +134,6 @@ const HomeScreen = ({ navigation }) => {
         }
 
     }
-
-
 
 
     return (
@@ -203,8 +202,7 @@ const HomeScreen = ({ navigation }) => {
                                 {authLevel}
                             </Text>
                             <Text style={styles.subheaderText}>
-                                {t(village)}
-                                {', '}
+                                {/* {t(village)} */}
                                 {t(panchayat)}
                                 {', '}
                                 {t(tehsil)}

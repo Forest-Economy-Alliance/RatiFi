@@ -9,6 +9,8 @@ import {
     TouchableOpacity,
     Linking,
 } from 'react-native';
+import { BackHandler } from 'react-native';
+
 import Carousel from 'react-native-snap-carousel';
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,7 +72,16 @@ const FormsPage = ({ navigation }) => {
 
 
 
-
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+                navigation.goBack();
+                return true;
+            },
+        );
+        return () => backHandler.remove();
+    }, []);
 
 
 
@@ -484,6 +495,7 @@ text={t('Track old claim')}
                         &nbsp; होम स्क्रीन
                     </CustomButton>
                 }
+                {!homeScreenButtonShow &&
                 <CustomButton
                     button={{ width: 250 }}
 
@@ -523,6 +535,7 @@ text={t('Track old claim')}
                 >
                     फॉर्म डाउनलोड करें
                 </CustomButton>
+            }
 
             </View>
             {progress != 0 ? (

@@ -853,7 +853,7 @@ const DownloadPDFScreen = ({ navigation }) => {
 
 
  
-  const villagesData=(states[0].Districts[0].Tehsils[0].Panchayats);
+  const villagesData=(states[0].Districts[0].Tehsils[0].Villages);
 
   const handleSignOut=()=>{
     setVis(true);
@@ -878,38 +878,760 @@ const DownloadPDFScreen = ({ navigation }) => {
     // onSubmit: onNext,
   });
 
+  const panchayatToVillageMapping = {
 
+    [t('Bano')]: [
+        {
+            label: t('Bano'),
+            value: '1',
+        },
+        {
+            label: t('Samdega'),
+            value: '1'
+        },],
+    [t('Bintuka')]: [
+        {
+            label: t('Karkatta'),
+            value: '4'
+        },
+        {
+            label: t('Bintuka'),
+            value: '4'
+        },
+        {
+            label: t('Jamursoya'),
+            value: '4'
+        },
+        {
+            label: t('Kewetang'),
+            value: '4'
+        },
+        {
+            label: t('Turyu'),
+            value: '4'
+        },
+        {
+            label: t('Pangur'),
+            value: '4'
+        },
+    ],
+    [t('Kanarowan')]: [
+        {
+            label: t('Jarakel'),
+            value: '5'
+        },
+        {
+            label: t('Baromda'),
+            value: '5'
+        }, {
+            label: t('Jambera'),
+            value: '5'
+        }, {
+            label: t('Barbera'),
+            value: '5'
+        }, {
+            label: t('Kanarowan'),
+            value: '6'
+        },
+    ],
+    [t('Pabura')]: [{
+        label: t('Bamulda'),
+        value: '6'
+    },
+  
+    {
+        label: t('Nitmur'),
+        value: '6'
+    }, {
+        label: t('Jamang'),
+        value: '6'
+    },
+    {
+        label: t('Pabura'),
+        value: '7'
+    }, {
+        label: t('Kenduda'),
+        value: '7'
+    }, {
+        label: t('Chodordah'),
+        value: '7'
+    },
+    ],
+  
+    [t('Soy')]: [
+        {
+            label: t('Soy'),
+            value: '7'
+        }, {
+            label: t('Barbera'),
+            value: '7'
+        },
+        {
+            label: t('Ela'),
+            value: '7'
+        },
+        {
+            label: t('Kauwajor'),
+            value: '7'
+        }, {
+            label: t('Mahabuang'),
+            value: '7'
+        }, {
+            label: t('Sijang'),
+            value: '7'
+        },
+        {
+            label: t('Unikel'),
+            value: '7'
+        },
+    ],
+    [t('Konsode')]: [{
+        label: t('Bujaga'),
+        value: '8'
+    }, {
+        label: t('Kuruchdega'),
+        value: '8'
+    },
+    {
+        label: t('Chhotketunga'),
+        value: '8'
+    }, {
+        label: t('Jaldega'),
+        value: '8'
+    },
+    {
+        label: t('Virta'),
+        value: '8'
+    },],
+  
+    [t('Semhatu')]: [
+        {
+            label: t('Bandu'),
+            value: '2'
+        }, {
+            label: t('Boroseta'),
+            value: '2'
+        }, {
+            label: t('Jamtoli'),
+            value: '2'
+        }, {
+            label: t('Ketka'),
+            value: '2'
+        },
+        {
+            label: t('Simhatu'),
+            value: '2'
+        },
+    ],
+    [t('Simhatu')]: [
+        {
+            label: t('Bandu'),
+            value: '2'
+        }, {
+            label: t('Boroseta'),
+            value: '2'
+        }, {
+            label: t('Jamtoli'),
+            value: '2'
+        }, {
+            label: t('Ketka'),
+            value: '2'
+        },
+        {
+            label: t('Simhatu'),
+            value: '2'
+        },
+    ],
+    [t('Beraergi')]: [{
+        label: t('Beraergi'),
+        value: '9'
+    },
+    {
+        label: t('Buruergi'),
+        value: '9'
+    },
+    {
+        label: t('Olhan'),
+        value: '9'
+    },
+    {
+        label: t('Sumingbera'),
+        value: '9'
+    },
+    {
+        label: t('Vinjhamarcha'),
+        value: '9'
+    },
+    {
+        label: t('Rabbai'),
+        value: '9'
+    }, {
+        label: t('Sutriuli'),
+        value: '9'
+    },],
+    [t('Banki')]: [{
+        label: t('Helgara'),
+        value: '10'
+    },
+    {
+        label: t('Banki'),
+        value: '10'
+    },
+    {
+        label: t('Kanaroya'),
+        value: '10'
+    },
+    {
+        label: t('Pado'),
+        value: '10'
+    }],
+  
+    [t('Ukauli')]: [, {
+        label: t('Chaklabasa'),
+        value: '12'
+    }, {
+            label: t('Sora'),
+            value: '12'
+        }, {
+            label: t('Buruhonjar'),
+            value: '12'
+        }, {
+            label: t('Chorbandu'),
+            value: '12'
+        }],
+    [t('Dumariya')]: [{
+        label: t('Sotasoya'),
+        value: '13'
+    }],
+    [t('Sahubera')]: [{
+        label: t('Sahubera'),
+        value: '14'
+    },
+    {
+        label: t('Bokamara'),
+        value: '14'
+    },
+    ],
+    [t('Jamtai')]: [{
+        label: t('Jamtai'),
+        value: '15'
+    }, {
+        label: t('Hurda'),
+        value: '15'
+    }, {
+        label: t('Kohipath'),
+        value: '15'
+    }, {
+        label: t('Kewengutu'),
+        value: '15'
+    }, {
+        label: t('Jorobari'),
+        value: '15'
+    }, {
+        label: t('Jorponda'),
+        value: '15'
+    },],
+    [t('Raikera')]: [{
+        label: t('Birhuli'),
+        value: '16'
+    },
+    {
+        label: t('Kanta'),
+        value: '16'
+    },
+    {
+        label: t('Marani'),
+        value: '16'
+    },
+    {
+        label: t('Raikera'),
+        value: '16'
+    },
+    {
+        label: t('Tembro'),
+        value: '16'
+    }],
+    [t('Genmer')]: [
+        {
+            label: t('Chandsai'),
+            value: '17'
+        },
+        {
+            label: t('Genmer'),
+            value: '17'
+        },
+  
+        {
+            label: t('Gerda'),
+            value: '17'
+        },
+        {
+            label: t('Khijurbahar'),
+            value: '17'
+        }, {
+            label: t('Toniya'),
+            value: '17'
+        }],
+    [t('Badkaduel')]: [{
+        label: t('Badkaduel'),
+        value: '1'
+    }, {
+        label: t('Barerpa'),
+        value: '2'
+    }, {
+        label: t('Chhotkaduel'),
+        value: '3'
+    }, {
+        label: t('Kudrum'),
+        value: '4'
+    }, {
+        label: t('Lamgarh'),
+        value: '5'
+    }, {
+        label: t('Maimsora'),
+        value: '6'
+    }, {
+        label: t('Navagaon'),
+        value: '7'
+    }
+    ],
+  
+  
+    // KOLIBERA
+  
+    [t('Ransiya')]: [
+        {
+            label: t('Bokba'),
+            value: '28',
+        },
+        {
+            label: t('Bongram'),
+            value: '28',
+        },
+        {
+            label: t('Keyondpani'),
+            value: '28',
+        },
+        {
+            label: t('Kinbira'),
+            value: '28'
+        }, {
+            label: t('Sirikonde Kera'),
+            value: '28'
+        }, {
+            label: t('Takba'),
+            value: '28'
+        },
+    ],
+  
+    [t('Shapur')]: [{
+        label: t('Kombakera'),
+        value: '29'
+    }, {
+        label: t('Konjoba'),
+        value: '29'
+    }, {
+        label: t('Shahpur Kondekera'),
+        value: '20'
+    },
+    ],
+  
+  
+    [t('Agharma')]: [{
+        label: t('Dumardih'),
+        value: '30'
+    }, {
+        label: t('Jurkela'),
+        value: '30'
+    }, {
+        label: t('Karamtoli'),
+        value: '30'
+    }, {
+        label: t('Larba'),
+        value: '30'
+    }, {
+        label: t('Shivnathpur'),
+        value: '30'
+  
+    }, {
+        label: t('Tangertoli'),
+        value: '30'
+    },],
+  
+  
+    [t('Kolebira')]: [{
+        label: t('Jamtoli'),
+        value: '31'
+    }, {
+        label: t('Kunderdega'),
+        value: '31'
+    }],
+  
+    [t('Nawatoli')]: [{
+        label: t('Bhanwarpahari'),
+        value: '32'
+    }, {
+        label: t('Bhanwarpahari'),
+        value: '32'
+  
+    }, {
+        label: t('Saraipani'),
+        value: '32'
+  
+    }, {
+        label: t('Sarangapani'),
+        value: '32'
+  
+    }, {
+        label: t('Machka'),
+        value: '32'
+    }, {
+        label: t('Sundratoli'),
+        value: '32'
+    },],
+  
+  
+    [t('Domtoli')]: [{
+        label: t('Barwadih'),
+        value: '33'
+  
+    }, {
+        label: t('Ghansilari'),
+        value: '33'
+    }, {
+        label: t('Tainsera'),
+        value: '33'
+    },],
+  
+  
+  
+    [t('Bandarchuwan')]: [{
+        label: t('Bandarchuwan'),
+        value: '34'
+    }, {
+        label: t('Besrajara'),
+        value: '34'
+    }, {
+        label: t('Selsoya'),
+        value: '34'
+    }, {
+        label: t('Setasoya'),
+        value: '34'
+    }],
+  
+    [t('Tutikel')]: [{
+        label: t('Sardhatoli'),
+        value: '35'
+    }, {
+        label: t('Jhapla'),
+        value: '35'
+    }, {
+        label: t('Sokorla'),
+        value: '35'
+    }
+        , {
+        label: t('Tutikel'),
+        value: '35'
+    },],
+  
+    [t('Eidega')]: [
+        , {
+            label: t('Eidega'),
+            value: '36'
+        }, {
+            label: t('Kudabera'),
+            value: '36'
+        }, {
+            label: t('Kalhatoli'),
+            value: '36'
+        }, {
+            label: t('Pogloya'),
+            value: '36'
+        }, {
+            label: t('Ramjari'),
+            value: '36'
+        }],
+  
+  
+    [t('Barasloya')]: [{
+        label: t('Barasloya'),
+        value: '37'
+    }, {
+        label: t('Barketunga'),
+        value: '37'
+    }, {
+        label: t('Kulasoya'),
+        value: '37'
+    }
+        , {
+        label: t('Sijang'),
+        value: '37'
+    }],
+  
+  
+    [t('Lachragarh')]: [, {
+        label: t('Kombakra'),
+        value: '38'
+    }, {
+            label: t('Lachragarh'),
+            value: '38'
+        }],
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    // JALDEGA
+  
+    [t('Jaldega')]: [{
+        label: t('Jamtoli'),
+        value: '18'
+    },
+    {
+        label: t('Pahantoli'),
+        value: '18'
+    }, {
+        label: t('Mahomdega'),
+        value: '18'
+    },
+    {
+        label: t('Sawanjara'),
+        value: '18'
+    }],
+  
+  
+    [t('Kutungiya')]: [
+        {
+            label: t('Menjurgara'),
+            value: '20'
+        },
+        {
+            label: t('Ramjari'),
+            value: '19'
+        },
+        {
+            label: t('Dumarmunda'),
+            value: '20'
+        }],
+  
+  
+    [t('Patiamba')]: [
+        {
+            label: t('Kharwagarha'),
+            value: '12'
+        },
+  
+        {
+            label: t('Gattigarha'),
+            value: '20'
+        }, {
+            label: t('Kinirkela'),
+            value: '20'
+        }, {
+            label: t('Patiamba'),
+            value: '20'
+        },],
+  
+  
+    [t('Konmerla')]: [{
+        label: t('Dumarbera'),
+        value: '21'
+    }, {
+        label: t('Gangutoli'),
+        value: '21'
+    }, {
+        label: t('Badkitanger'),
+        value: '21'
+    }, {
+        label: t('Konmerla'),
+        value: '21'
+    }, {
+        label: t('Kolomdega'),
+        value: '21'
+    }, {
+        label: t('Baldega'),
+        value: '23'
+    }],
+  
+  
+  
+    [t('Lamdega')]: [{
+        label: t('Baraibera'),
+        value: '23'
+    },
+  
+    {
+        label: t('Bhitbuna'),
+        value: '23',
+    },
+  
+  
+    {
+        label: t('Hututuwa'),
+        value: '23'
+    },
+    {
+        label: t('Lamdega'),
+        value: '23'
+    }, {
+        label: t('Parba lamdega'),
+        value: '23'
+    }
+    ],
+  
+  
+  
+    [t('Tingina')]: [{
+        label: t('Dhorhibahar'),
+        value: '24'
+    }, {
+        label: t('Tikra'),
+        value: '24'
+    },
+  
+    {
+        label: t('Tingina'),
+        value: '23'
+    },
+    {
+        label: t('Silinga'),
+        value: '24'
+    }],
+  
+  
+    [t('Orga')]: [{
+        label: t('Dhelsera'),
+        value: '25'
+    }, {
+        label: t('Orga'),
+        value: "25"
+    }, {
+        label: t('Sarubahar'),
+        value: '25'
+    }],
+  
+  
+  
+    [t('Parba')]: [{
+        label: t('Dhingurpani'),
+        value: '26'
+    }, {
+        label: t('Dhouranjan'),
+        value: '28'
+    }, {
+        label: t('Kouwadarha'),
+        value: '26'
+    }, {
+        label: t('Lachhanpur'),
+        value: '26'
+    }, {
+        label: t('Siharmunda'),
+        value: '26'
+    }, {
+        label: t('Sukhajhariya'),
+        value: '26'
+    }, {
+        label: t('Mangaspur'),
+        value: '26'
+    }, {
+        label: t('Bendosera'),
+        value: '26'
+    }, {
+        label: t('Janoda'),
+        value: '26'
+    }],
+  
+  
+  
+    [t('Tati')]: [{
+        label: t('Hutubda'),
+        value: '29'
+    },
+    {
+        label: t('Turupdega'),
+        value: '27'
+    },
+    {
+        label: t('Barbera'),
+        value: '27'
+    }, {
+        label: t('Phirka'),
+        value: '27'
+    }, {
+        label: t('Tati'),
+        value: '28'
+    }, {
+        label: t('Torian'),
+        value: '29'
+    }
+  
+        // {
+        //     value: t('Toniya'),
+        //     value: '27'
+        // },
+  
+        // {
+        //     label: t('Tilaijara'),
+        //     value: '22'
+        // }, {
+        //     label: t('Harrapnai'),
+        //     value: '22'
+        // }, {
+        //     label: t('Karmapani'),
+        //     value: '22'
+        // }, {
+        //     label: t('Bendojara'),
+        //     value: '22'
+        // }, {
+        //     label: t('Lomboi Mahua Toli'),
+        //     value: '22'
+        // },
+        // {
+        //     label: t('Basaer'),
+        //     value: '22'
+        // }, {
+        //     label: t('Mama Bhagina'),
+        //     value: '22'
+        // },
+        // {
+        //     label: t('Jundih'),
+        //     value: '26'
+        // }, {
+        //     label: t('Hutubada'),
+        //     value: '27'
+        // },
+  
+        // {
+        //     label: t('Bhanvarchawa'),
+        //     value: '26'
+        // },
+    ]
+  
+  }
 
   useEffect(()=>{
-    let temp=states[0].Districts;
-    for(let key of temp ){
-      for(let th of key.Tehsils){
-        if(th.label===profile?.tehsil){
-          console.log("TH",th.Villages);
-          setVData(th.Villages)
-        }
-      }
-    }
-    // // Instead of taking all villages from state, we will take villages from Panchayats
-    // // select the state selected by user 
-    // let temp_state = states.filter((state) => state.label === profile?.state);
-    // console.log("state of user: ", temp_state);
-    // let temp_district = temp_state[0].Districts.filter((district) => district.label === profile?.district);
-    // console.log("district of user: ", temp_district);
-    // let temp_tehsil = temp_district[0].Tehsils.filter((tehsil) => tehsil.label === profile?.tehsil);
-    // console.log("tehsil of user: ", temp_tehsil);
-    // let temp_panchayat = temp_tehsil[0].Panchayats.filter((panchayat) => panchayat.label === profile?.panchayat);
-    // console.log("panchayat of user: ", temp_panchayat);
-    // // Check all the villages in the panchayat
-    // // go through all the villages and check if the village has same pancayat as the user
-    // let temp_villages = [];
-    // for (let village of villagesData) {
-    //   console.log("village: and panchayat: ", village, temp_panchayat[0].value);
-    //   if (village.panchayat === temp_panchayat[0].value) {
-    //     temp_villages.push(village);
+    
+    // let temp=states[0].Districts;
+    // for(let key of temp ){
+    //   for(let th of key.Tehsils){
+    //     if(th.label===profile?.tehsil){
+    //       console.log("TH",th.Villages);
+    //       setVData(th.Villages)
+    //     }
     //   }
     // }
-    // console.log("villages of user: ", temp_villages);
+        let tempData=[];
+        // find all villages tht are mapped with the panchayat in const panchayatToVillageMapping
+        for(let key of Object.keys(panchayatToVillageMapping)){
+          if(key===profile?.panchayat){
+            tempData=panchayatToVillageMapping[key];
+          }
+        }
+        setVData(tempData);
   },[])
 
 
@@ -933,6 +1655,10 @@ const DownloadPDFScreen = ({ navigation }) => {
 
 
 
+
+
+
+
   return (
     // flexWrap: 'wrap',
     <ImageBackground
@@ -948,30 +1674,6 @@ const DownloadPDFScreen = ({ navigation }) => {
           <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} color="white" /> </Text>
         </TouchableOpacity>
 
-
-        {/* <Dropdown
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={villages}
-          search={false}
-          maxHeight={300}
-          labelField="Village"
-          valueField="value"
-          placeholder={t('gram sabha')}
-          searchPlaceholder="Search..."
-          value={val5}
-          onChange={item => {
-            console.log(item);
-            setVal5(item.value);
-            setVillage(item.Village);
-          }}
-          dropdownPosition="bottom"
-        /> */}
-
-        {/* Show village of only the given panchayat in the dropdown */}
         <Dropdown
           downloadPDFScreenFix={setVal5}
           visible={true}
