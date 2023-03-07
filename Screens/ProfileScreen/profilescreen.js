@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
     StyleSheet,
     Text,
@@ -20,7 +21,9 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 import { fetchClaimDetailsHandler } from '../../services/claimService';
-import { BackHandler } from 'react-native';
+import { BackHandler  } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ProfileScreen = ({ navigation }) => {
@@ -53,6 +56,8 @@ const ProfileScreen = ({ navigation }) => {
     // const [panchayat, setPanchayat] = useState('Gopalpur');
     // const [village, setVillage] = useState('Gujrehra');
     const { profile } = useSelector(state => state.entities.auth.userInfo);
+
+    const [selectedValue, setSelectedValue] = useState('form0');
 
     const [claim, setClaim] = useState(null);
     useEffect(() => {
@@ -118,8 +123,61 @@ const ProfileScreen = ({ navigation }) => {
                                 {t('Check your upoad documents here')}
                             </Text>
                         </View>
+                        <View>
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={(itemValue, itemIndex) =>
+          setSelectedValue(itemValue)
+        }>
+        <Picker.Item label="Form 0" value="form0" />
+        <Picker.Item label="Form 1" value="form1" />
+        <Picker.Item label="Form 2" value="form2" />
+        <Picker.Item label="Form 3" value="form3" />
+        <Picker.Item label="Form 4" value="form4" />
+        <Picker.Item label="Form 5" value="form5" />
+        <Picker.Item label="Form 6" value="form6" />
+        <Picker.Item label="Form 7" value="form7" />
+        <Picker.Item label="Form 8" value="form8" />
+        <Picker.Item label="Form 9" value="form9" />
+        <Picker.Item label="Form 10" value="form10" />
+        <Picker.Item label="Form 11" value="form11" />
+        <Picker.Item label="Form 12" value="form12" />
+        <Picker.Item label="Form 13" value="form13" />
+        <Picker.Item label="Form 14" value="form14" />
+        <Picker.Item label="Form 15" value="form15" />
+        <Picker.Item label="Form 16" value="form16" />
+        <Picker.Item label="Form 17" value="form17" />
+        <Picker.Item label="Form 18" value="form18" />
+      </Picker>
+      <CustomButton
+                                        onPress={() => {
 
-                        <View
+                                            let ind = selectedValue.slice(4); 
+                                            ind = parseInt(ind);
+
+                                            if (claim?.courtDocuments[ind]?.storageUrl) {
+                                                    navigation.navigate("PDFPreviewScreen", {
+                                                    url: claim?.courtDocuments[ind]?.storageUrl
+                                                })
+                                            }
+                                            else {
+                                                alert("No document found")
+                                            }
+                                        }}
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        {t('View Document')}
+                                    </CustomButton>
+    </View>
+
+
+
+
+
+
+
+
+
+                        {/* <View
                             style={styles.fileSection}>
                             <View style={styles.fileContent}>
                                 <Text style={{ margin: 10, fontSize: 16, fontWeight: '800', color: "white" }}>
@@ -288,7 +346,7 @@ const ProfileScreen = ({ navigation }) => {
                                     }}
                                     button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                     {t('View Document')}
-                                </CustomButton> */}
+                                </CustomButton> 
                                                                     <CustomButton
                                         onPress={() => {
                                             if (claim?.courtDocuments[8]?.storageUrl) {
@@ -507,10 +565,12 @@ const ProfileScreen = ({ navigation }) => {
                                     button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
                                     {t('View Document')}
                                 </CustomButton>
-                            </View> */}
+                            </View> 
 
 
                         </View>
+ */}
+
 
                     </KeyboardAvoidingView>
                 </TouchableWithoutFeedback>
