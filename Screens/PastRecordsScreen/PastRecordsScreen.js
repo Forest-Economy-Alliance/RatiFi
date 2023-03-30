@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
     StyleSheet,
     Text,
@@ -407,7 +408,13 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                <View 
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }}
+                                >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -422,7 +429,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[0]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -432,7 +439,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_1')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -452,7 +459,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -467,7 +479,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        
+                                            style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
+
                                     >
                                         {!(claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -477,7 +491,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_2')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -497,7 +511,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -512,7 +531,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[2]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -522,7 +541,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_3')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -543,7 +562,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -558,7 +582,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[3]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -568,7 +592,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_4')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -589,7 +613,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -604,7 +633,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[4]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -614,7 +643,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_5')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -634,7 +663,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -649,7 +683,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[5]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -659,7 +693,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_6')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -680,7 +714,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -695,7 +734,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[6]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -705,7 +744,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_7')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -725,7 +764,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -740,7 +784,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[7]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -750,7 +794,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_8')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -771,7 +815,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -786,7 +835,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[8]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -796,7 +845,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_9')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -816,7 +865,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -831,7 +885,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[9]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -841,7 +895,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_10')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -862,7 +916,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -877,7 +936,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[10]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[10]?.title === 'SDM_SUMMON_RESULT_11') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -887,7 +946,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_11')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -908,7 +967,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -923,7 +987,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[11]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[11]?.title === 'SDM_SUMMON_RESULT_12') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -933,7 +997,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_12')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -953,7 +1017,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -968,7 +1037,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[12]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[12]?.title === 'SDM_SUMMON_RESULT_13') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -978,7 +1047,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_13')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -999,7 +1068,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1014,7 +1088,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[13]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[13]?.title === 'SDM_SUMMON_RESULT_14') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1024,7 +1098,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_14')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -1045,7 +1119,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1060,7 +1139,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[14]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[14]?.title === 'SDM_SUMMON_RESULT_15') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1070,7 +1149,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_15')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -1090,7 +1169,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1105,7 +1189,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[15]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[15]?.title === 'SDM_SUMMON_RESULT_16') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1115,7 +1199,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_16')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -1136,7 +1220,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1151,7 +1240,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[16]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[16]?.title === 'SDM_SUMMON_RESULT_17') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1161,7 +1250,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_17')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -1182,7 +1271,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1197,7 +1291,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[17]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[17]?.title === 'SDM_SUMMON_RESULT_18') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1207,7 +1301,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_18')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
@@ -1228,7 +1322,12 @@ const PastRecordsScreen = ({ navigation }) => {
                                     </View>
 
                                 </View>
-                                <View >
+                                 <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
                                     <CustomButton
                                         onPress={() => {
                                             // fetch Details on basis of applicato
@@ -1243,7 +1342,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                 handleDocPreview(claim?.courtDocuments[18]?.storageUrl)
                                             }
                                         }}
-                                        style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                        style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
                                     >
                                         {!(claim?.courtDocuments[18]?.title === 'SDM_SUMMON_RESULT_19') ? <Ionicons name="camera" color="white" size={20} />
                                             : <Text style={{ fontSize: 12 }}> फोटो देखें</Text>}
@@ -1253,7 +1352,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                                     setDocName('SDM_SUMMON_RESULT_19')
                                                     setCameraModalVis(true)
                                             }}
-                                            style={{ width: '100%', marginTop: 10, paddingRight: 30, alignItems: 'flex-end' }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
                                         >
                                             {<Ionicons name="camera" color="white" size={20} />}
                                         </CustomButton>
