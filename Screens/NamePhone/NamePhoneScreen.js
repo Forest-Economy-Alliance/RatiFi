@@ -141,6 +141,16 @@ const NamePhoneScreen = ({navigation}) => {
               }}
               style={styles.otpBtn}
             />
+
+            <CustomButton
+              text={t('Already a User?')}
+              onPress={() => {
+                navigation.navigate('LoginPassword');
+              }}
+              // add style
+              style={{marginLeft: "-25%", marginTop: '10%', width: '150%'}}
+              // style={{alignself: "center", marginTop: '10%', width: '150%'}}
+            />
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
