@@ -29,7 +29,7 @@ import { BASE_URL } from '../../services/APICentral';
 import { BackHandler } from 'react-native';
 import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
-
+import RoleScreen from '../Role/RoleScreen';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({ navigation }) => {
@@ -133,6 +133,11 @@ const HomeScreen = ({ navigation }) => {
             }
         }
 
+    }
+
+    const UpdateRole = () =>{
+        // Move to RoleScreen
+        navigation.navigate("Role")
     }
 
 
@@ -241,6 +246,16 @@ const HomeScreen = ({ navigation }) => {
                         navigation.navigate("Location", {
                             editProfile: true
                         })
+                    }}
+
+                />
+                {/* Add a button to change Role */}
+                <CustomButton
+                    style={{ marginBottom: 20 }}
+                    button={{ width: 300 }}
+                    text={t('Edit Role')}
+                    onPress={() => {
+                        UpdateRole();
                     }}
 
                 />

@@ -59,7 +59,7 @@ const RoleScreen = ({navigation}) => {
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
-            navigation.navigate("DownloadPDF")
+            navigation.navigate("HomeScreen")
             // navigation.navigate('IdCard');
 
           }
@@ -198,12 +198,13 @@ const RoleScreen = ({navigation}) => {
             />
             <CustomButton
               text={t('Next')}
-              onPress={() => {
+              onPress={async () => {
                 if (formik.errors.member || formik.errors.role) {
                   console.log(formik.errors);
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
+                navigation.navigate('FRCHome');
               }}
               style={styles.otpBtn}
             />
