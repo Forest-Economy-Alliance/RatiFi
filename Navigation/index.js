@@ -16,6 +16,7 @@ import OTPScreen from '../Screens/OTPScreen/OTPScreen';
 import IdCardScreen from '../Screens/IdCard/IdCardScreen';
 import LoginScreen from '../Screens/Login/LoginScreen';
 import LoginPasswordScreen from '../Screens/LoginPassword/LoginPassword';
+import MobilePasswordScreen from '../Screens/MobilePassword/MobilePassword';
 import ForgotPasswordScreen from '../Screens/ForgotPassword/ForgotPasswordScreen';
 import RoleScreen from '../Screens/Role/RoleScreen';
 import LocationScreen from '../Screens/Location/Location';
@@ -77,6 +78,13 @@ export const Navigation = () => {
         <Stack.Screen
           name="LoginPassword"
           component={LoginPasswordScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="MobilePassword"
+          component={MobilePasswordScreen}
           options={{
             headerShown: false,
           }}

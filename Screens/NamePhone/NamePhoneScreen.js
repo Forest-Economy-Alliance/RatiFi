@@ -145,7 +145,7 @@ const NamePhoneScreen = ({navigation}) => {
             <CustomButton
               text={t('Already a User?')}
               onPress={() => {
-                navigation.navigate('LoginPassword');
+                navigation.navigate('MobilePassword');
               }}
               // add style
               style={{marginLeft: "-25%", marginTop: '10%', width: '150%'}}

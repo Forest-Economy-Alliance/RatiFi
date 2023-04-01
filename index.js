@@ -7,7 +7,8 @@ import App from './App';
 import {name as appName} from './app.json';
 import {LogBox} from 'react-native';
 import ignoreWarnings from 'ignore-warnings';
-
+import { YellowBox } from 'react-native';
+console.disableYellowBox = true;
 
 if (!__DEV__) {
   console.log = () => {};
