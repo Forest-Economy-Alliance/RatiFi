@@ -21,14 +21,17 @@ import {
   import {ref} from 'yup';
   import CustomError from '../../components/CustomError';
   import {useToast} from 'react-native-toast-notifications';
-  
-  
-  const BG_IMG_PATH = require('../../assets/images/background.png');
-  const MobilePasswordScreen = ({navigation}) => {
+import axios from 'axios';
+import { useDebugValue } from 'react';
+// import { BASE_URL } from '../../services/APICentral';
+const BG_IMG_PATH = require('../../assets/images/background.png');
+
+
+const MobilePasswordScreen = ({navigation}) => {
     const language = 'hi';
     const toast=useToast();
     const dispatch = useDispatch();
-    const {name} = useSelector(state => state.entities.auth.userInfo?.profile);
+    // const {name} = useSelector(state => state.entities.auth.userInfo?.profile);
   
    
     const state = {
@@ -49,48 +52,51 @@ import {
       password: string().required(t('Password is Required')),
     });
   
-    const pwdToVerify = useSelector(
-      state => state.entities.auth.userInfo.profile.password
-    );
+    // const pwdToVerify = useSelector(
+    //   state => state.entities.auth.userInfo.profile.password
+    // );
+    // check list of all users from database
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+      axios.get('http://localhost:3000/get-users').then(res => {
+        setUsers(res.data);
+      });
+    }, []);
+
+    // for all users, /get-users
+    
+
+    const LoginByNumber = () => {
+      console.log(formik.values.phoneNumber + ' ' + formik.values.password);
+      console.log(users.data.length); 
+      let ok = false;
+      for(let i=0;i<users.data.length;i++){
+        if(users.data[i].mobile===formik.values.phoneNumber){
+          ok = true;
+          if(users.data[i].password===formik.values.password){
+            // remaining part
+            // set user and navigate to home screen
+          } else{
+            // show error that password is incorrect
+            alert("Password is incorrect");
+          }
+        }
+      }
+      if(!ok){
+        alert("User not found");
+      }
+      // check if there is a user with given number
+      // const us = users.find(user => user.data.mobile === formik.values.phoneNumber);
+      // if (us) {
+      //   console.log('user found');34
+      // } else {
+      //   console.log('user not found');
+      // }
+    };
+
   
     const onLogin = (values, formikActions) => {
-      formikActions.setSubmitting(false);
-      // dispatch({type: 'ENABLE_LOADING'});
-      let loginflow=true;
-      if (loginflow) {
-        console.log("PTV",pwdToVerify)
-        if (pwdToVerify === formik.values.password) {
-          navigation.replace('HomeScreen');
-        } else {
-          toast.show(t('INCORRECT_PASSWORD'), {
-            type: 'success',
-            animationType: 'zoom-in',
-            successColor: '#480E09',
-            placement: 'top',
-            duration: 5000,
-          });
-        }
-      } else {
-  
-        dispatch(
-          updatePasswordAction(
-            {
-              mobile: mobile,
-              password: formik.values.password,
-              confirmPassword: formik.values.confirmPassword,
-            },
-            args => {
-              if (args) {
-                // screen code 3 means , password set 
-                dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-                navigation.replace('Location');
-              }
-            },
-          ),
-        );
-        
-      }
-      // dispatch({type: 'DISABLE_LOADING'});
+      console.log(values);
     };
   
     const buttonText = {
@@ -108,9 +114,9 @@ import {
     useEffect(() => {
       changeLanguage(language);
     }, []);
-    if(!name){
-      navigation.navigate('NamePhone');
-    }
+    // if(!name){
+    //   navigation.navigate('NamePhone');
+    // }
     return (
       <ImageBackground
         source={BG_IMG_PATH}
@@ -124,9 +130,6 @@ import {
                 <Text style={styles.headerText}>{t('Login')}</Text>
                 <View style={styles.horizontalLine} />
               </View>
-              {/* <View style={styles.name}>
-                <Text style={styles.nameTxt}>{name}</Text>
-              </View> */}
               <View style={styles.title}>
                 <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
               </View>
@@ -151,15 +154,12 @@ import {
               <CustomButton
                 text={t('Login')}
                 onPress={() => {
-                  if (formik.errors.password) {
-                    setErrorVisible(true);
-                  }
-                  formik.handleSubmit();
+                  LoginByNumber();
                 }}
                 style={styles.otpBtn}
               />
   
-              <View style={{marginTop:'30%'}}>
+              <View style={{marginTop:'10%'}}>
               <CustomButton
               style={{marginBottom:10}}
               button={{width:200}}
@@ -190,8 +190,7 @@ import {
       </ImageBackground>
     );
   };
-  
-  export default MobilePasswordScreen;
+export default MobilePasswordScreen;  
   
   const styles = StyleSheet.create({
     bg: {
