@@ -1743,7 +1743,7 @@ const DownloadPDFScreen = ({ navigation }) => {
                 
               )}
             </View>
-            <Text style={styles.subMsg}>
+            <Text style={styles.subMsg2}>
               {t('download application document')}
             </Text>
             {pressed && (
@@ -1885,6 +1885,12 @@ const styles = StyleSheet.create({
   subMsg: {
     fontSize: 20,
     color: '#480E09',
+    textAlign: 'center',
+    marginTop: '5%',
+  },
+  subMsg2: {
+    fontSize: 20,
+    color: 'white',
     textAlign: 'center',
     marginTop: '5%',
   },
