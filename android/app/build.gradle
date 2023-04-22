@@ -250,12 +250,6 @@ android {
             keyPassword 'android'
         }
 
-        release {
-            storeFile file('release.keystore')
-            storePassword 'Apple@123'
-            keyAlias 'Alias'
-            keyPassword ''
-        }
     }
     buildTypes {
         debug {
