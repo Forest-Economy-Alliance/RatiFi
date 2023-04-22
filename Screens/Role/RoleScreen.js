@@ -14,22 +14,25 @@ import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
-import { updateUserInfoAction } from '../../redux-store/actions/auth';
+import {updateUserInfoAction} from '../../redux-store/actions/auth';
+import {useToast} from 'react-native-toast-notifications';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
   const language = 'hi';
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
+
+  const {village} = useSelector(state => state.entities.auth.userInfo?.profile);
   const state = {
     member: '',
     role: '',
   };
 
   const {t, i18n} = useTranslation();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
+  const toast = useToast();
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -44,30 +47,34 @@ const RoleScreen = ({navigation}) => {
     console.log(values);
     formikActions.setSubmitting(false);
 
-
     dispatch(
       updateUserInfoAction(
         {
-
-          authLevel:values.member,
-          postLevel:values.role
-          
+          authLevel: values.member,
+          postLevel: values.role,
+          village: village,
+          isMember: values.role === t('Member'),
         },
         args => {
           if (args) {
-
+            alert(args)
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
-            navigation.navigate("HomeScreen")
+            navigation.navigate('HomeScreen');
             // navigation.navigate('IdCard');
-
+          } else {
+            toast.show(t('ALREADY_ASSIGNED_ROLE'), {
+              type: 'success',
+              animationType: 'zoom-in',
+              successColor: '#480E09',
+              placement: 'top',
+              duration: 5000,
+            });
           }
         },
       ),
     );
-
-    
   };
 
   const uidSchema = object().shape({
@@ -127,19 +134,19 @@ const RoleScreen = ({navigation}) => {
       value: '3',
       roleData: [
         {
-          label: 'District Collector',
+          label: t('District Collector'),
           value: '1',
         },
         {
-          label: 'District Forest Officer',
+          label: t('District Forest Officer'),
           value: '2',
         },
         {
-          label: 'Officer-in-Charge (Tribal Affairs)',
+          label: t('Officer-in-Charge (Tribal Affairs)'),
           value: '3',
         },
         {
-          label: 'Member',
+          label: t('Member'),
           value: '4',
         },
       ],

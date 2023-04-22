@@ -49,3 +49,17 @@ export const updateUserHandler = data => {
     false,
   );
 };
+
+
+
+export const postSignInHandler = data => {
+  return request(
+    '/sigin',
+    {
+      method: 'POST',
+      data,
+    },
+    false,
+    false,
+  );
+};

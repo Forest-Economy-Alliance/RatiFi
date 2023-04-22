@@ -17,7 +17,6 @@ export const request = async (
     // var state = store.getState();
     let token = store.store.getState().entities.auth.userInfo.token;
     authHeader = token != ' ' ? `Bearer ${token}` : '';
-
     const client = axios.create({
         baseURL: BASE_URL + url,
         headers: {
