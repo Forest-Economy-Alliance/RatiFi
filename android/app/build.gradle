@@ -260,7 +260,6 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             shrinkResources true
             minifyEnabled true
-            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             firebaseCrashlytics {
