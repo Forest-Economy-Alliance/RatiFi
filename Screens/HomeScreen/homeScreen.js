@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
     StyleSheet,
     Text,
@@ -36,6 +37,7 @@ const HomeScreen = ({ navigation }) => {
     const [imgUrl, setImgUrl] = useState('x');
     const [vData, setVData] = useState([]);
     const { name, panchayat, tehsil, state, district, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
+    // console.log(authLevel=="एसडीएलसी");
 
     const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
     const [vis, setVis] = useState(false);
@@ -77,10 +79,11 @@ const HomeScreen = ({ navigation }) => {
         setVis(true);
     }
     const signout = () => {
-        //   dispatch({type: 'SAVE_TOKEN', payload: null});
-        //   setVis(false);
         setVis(false);
-        navigation.navigate("LoginPassword")
+        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+        dispatch({type: 'SAVE_TOKEN', payload: null});
+        navigation.replace("NamePhone")
+        // dispatch({type: 'SAVE_PROFILE', payload: null});
     }
     // console.log(districts);
 
@@ -243,9 +246,21 @@ const HomeScreen = ({ navigation }) => {
                     button={{ width: 300 }}
                     text={t('Edit Profile')}
                     onPress={() => {
+
                         navigation.navigate("Location", {
-                            editProfile: true
-                        })
+                                    editProfile: true , 
+                                    role: authLevel
+                                })
+
+                        // if(authLevel=="एसडीएलसी"){
+                        //     navigation.navigate("LocationInformationSDLC")    
+                        // }
+                        // else{
+                        //     navigation.navigate("Location", {
+                        //         editProfile: true
+                        //     })
+                        // }
+                        
                     }}
 
                 />
@@ -271,7 +286,18 @@ const HomeScreen = ({ navigation }) => {
                             navigation.navigate('PastRecordsScreen')
                     }}
                 />
-
+                {authLevel=="एसडीएलसी"&&<CustomButton
+                    style={{ marginBottom: 20 }}
+                    button={{ width: 300 }}
+                    // dsbled={profile?.claims?.length==0}
+                    text={t('Check Status')}
+                    onPress={() => {
+                      console.log("ji")
+                            navigation.navigate('LocationSdlc')
+                }}
+                />
+}
+                
             </View>
         </ImageBackground>
     );

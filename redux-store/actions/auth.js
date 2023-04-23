@@ -3,6 +3,7 @@ import {
   updateUserHandler,
   updatePasswordHandler,
   verifyOTPHandler,
+  postSignInHandler,
 } from '../../services/authService';
 import {ToastAndroid} from 'react-native';
 import {getDeviceHash} from '../../utils/DeviceUtil';
@@ -15,7 +16,7 @@ export const postOTPAction = (data, callback) => dispatch => {
 
       dispatch({type: 'SAVE_PROFILE', payload: response.data});
       const DD = await getDeviceHash();
-    
+
       // ToastAndroid.showWithGravityAndOffset(
       //   'OTP_SENT' + '  ' + response.data.otp,
       //   ToastAndroid.LONG,
@@ -48,8 +49,6 @@ export const verifyOTPAction = (data, callback) => dispatch => {
     .then(async ({data: response}) => {
       console.log('OTPR', response);
       if (response.success) {
-        
-
         dispatch({type: 'SAVE_TOKEN', payload: response.data.token});
       }
 
@@ -86,15 +85,26 @@ export const updatePasswordAction = (data, callback) => dispatch => {
 };
 
 export const updateUserInfoAction = (data, callback) => dispatch => {
-  console.log("DATA--",data);
-  dispatch({type: 'ENABLE_LOADING'});
+  console.log('DATA--', data);
+  // dispatch({type: 'ENABLE_LOADING'});
+
+  let updatingRole = false;
+  if (
+    //including data?.isMemeber we have = 4
+    Object.keys(data).length === 4 &&
+    data?.authLevel &&
+    data?.postLevel &&
+    data?.village
+  ) {
+    updatingRole = true;
+  }
+
   return updateUserHandler(data)
     .then(async ({data: response}) => {
       console.log('RES--', response);
 
-      dispatch({type: 'SAVE_PROFILE', payload: response.data});
-
       if (response.success) {
+        dispatch({type: 'SAVE_PROFILE', payload: response.data});
         dispatch({type: 'DISABLE_LOADING'});
       }
       console.log(response.success);
@@ -103,6 +113,9 @@ export const updateUserInfoAction = (data, callback) => dispatch => {
         // or location is updated as per code
         // location -> 4
         // role-> 5
+
+        // 22 April 2023 Edit - Check if role already exists in village or not
+
         dispatch({
           type: 'UPDATE_REGISTRATION_SCREEN_CODE',
           payload: data.authLevel ? 5 : 4,
@@ -112,5 +125,26 @@ export const updateUserInfoAction = (data, callback) => dispatch => {
     })
     .catch(err => {
       console.log('NETWOEK', err);
+    });
+};
+
+export const signInAction = (data, callback) => dispatch => {
+  dispatch({type: 'ENABLE_LOADING'});
+  return postSignInHandler(data)
+    .then(async ({data: response}) => {
+      console.log(response);
+      if (response.success) {
+        dispatch({type: 'SAVE_TOKEN', payload: response.token});
+        dispatch({type: 'SAVE_PROFILE', payload: response.user});
+        dispatch({
+          type: 'UPDATE_REGISTRATION_SCREEN_CODE',
+          payload: 5,
+        });
+      }
+      callback(response.success);
+    })
+    .catch(err => {})
+    .finally(f => {
+      dispatch({type: 'DISABLE_LOADING'});
     });
 };

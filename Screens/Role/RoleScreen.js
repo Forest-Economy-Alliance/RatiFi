@@ -9,8 +9,6 @@ import {
   ScrollView,
   Alert,
   Linking,
-  Alert,
-  Linking,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -19,16 +17,13 @@ import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
 import {useSelector,useDispatch} from 'react-redux';
-import {useSelector,useDispatch} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
-import { updateUserInfoAction } from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
   const language = 'hi';
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const state = {
     member: '',
@@ -37,10 +32,8 @@ const RoleScreen = ({navigation}) => {
 
   const {t, i18n} = useTranslation();
   const dispatch=useDispatch();
-  const dispatch=useDispatch();
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
-
 
   const changeLanguage = value => {
     i18n
@@ -54,7 +47,6 @@ const RoleScreen = ({navigation}) => {
     formikActions.setSubmitting(false);
 
 
-
     dispatch(
       updateUserInfoAction(
         {
@@ -66,17 +58,9 @@ const RoleScreen = ({navigation}) => {
         args => {
           if (args) {
 
-
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
-            // navigation.navigate('HomeScreen');
-            navigation.navigate('FRCHome');
-<<<<<<< Updated upstream
-            navigation.navigate("HomeScreen")
-            // navigation.navigate('IdCard');
-
-=======
             // navigation.navigate('HomeScreen');
             navigation.navigate('FRCHome');
             // navigation.navigate('IdCard');
@@ -102,34 +86,10 @@ const RoleScreen = ({navigation}) => {
               }},
             ]);
         
-            // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
-            //   type: 'success',
-            //   animationType: 'zoom-in',
-            //   successColor: '#480E09',
-            //   placement: 'top',
-            //   duration: 5000,
-            // });
-            // alert(t('ALREADY_ASSIGNED_ROLE'));
-            // this alert button should have a help button which will redirect to the help screen
-            Alert.alert(t('ALREADY_ASSIGNED_ROLE'), "", [
-              {
-                text: "Ok",
-                // onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {text: 'Help', onPress: () => {
-                // link to whatsapp
-                Linking.openURL("https://wa.me/918107204259?text=I'm%20having%20issue%20with%20Ratifi%20Registration.");
-              }},
-            ]);
-        
->>>>>>> Stashed changes
           }
         },
       ),
     );
-
-    
 
     
   };
@@ -196,16 +156,13 @@ const RoleScreen = ({navigation}) => {
         },
         {
           label: 'District Forest Officer',
-          label: 'District Forest Officer',
           value: '2',
         },
         {
           label: 'Officer-in-Charge (Tribal Affairs)',
-          label: 'Officer-in-Charge (Tribal Affairs)',
           value: '3',
         },
         {
-          label: 'Member',
           label: 'Member',
           value: '4',
         },
