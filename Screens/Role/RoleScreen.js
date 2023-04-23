@@ -7,6 +7,8 @@ import {
   KeyboardAvoidingView,
   ImageBackground,
   ScrollView,
+  Alert,
+  Linking,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -59,9 +61,37 @@ const RoleScreen = ({navigation}) => {
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
+<<<<<<< Updated upstream
             navigation.navigate("HomeScreen")
             // navigation.navigate('IdCard');
 
+=======
+            // navigation.navigate('HomeScreen');
+            navigation.navigate('FRCHome');
+            // navigation.navigate('IdCard');
+          } else {
+            // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
+            //   type: 'success',
+            //   animationType: 'zoom-in',
+            //   successColor: '#480E09',
+            //   placement: 'top',
+            //   duration: 5000,
+            // });
+            // alert(t('ALREADY_ASSIGNED_ROLE'));
+            // this alert button should have a help button which will redirect to the help screen
+            Alert.alert(t('ALREADY_ASSIGNED_ROLE'), "", [
+              {
+                text: "Ok",
+                // onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'Help', onPress: () => {
+                // link to whatsapp
+                Linking.openURL("https://wa.me/918107204259?text=I'm%20having%20issue%20with%20Ratifi%20Registration.");
+              }},
+            ]);
+        
+>>>>>>> Stashed changes
           }
         },
       ),
@@ -204,7 +234,7 @@ const RoleScreen = ({navigation}) => {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
-                navigation.navigate('FRCHome');
+                // navigation.navigate('FRCHome');
               }}
               style={styles.otpBtn}
             />
