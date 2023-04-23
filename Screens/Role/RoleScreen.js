@@ -16,23 +16,26 @@ import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
-import { updateUserInfoAction } from '../../redux-store/actions/auth';
+import {updateUserInfoAction} from '../../redux-store/actions/auth';
+
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
   const language = 'hi';
-  const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const state = {
     member: '',
     role: '',
   };
 
   const {t, i18n} = useTranslation();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const {name, village} = useSelector(
+    state => state.entities.auth.userInfo.profile,
+  );
   const [errorVisible, setErrorVisible] = useState(false);
 
   const changeLanguage = value => {
@@ -46,18 +49,16 @@ const RoleScreen = ({navigation}) => {
     console.log(values);
     formikActions.setSubmitting(false);
 
-
     dispatch(
       updateUserInfoAction(
         {
-
-          authLevel:values.member,
-          postLevel:values.role
-          
+          authLevel: values.member,
+          postLevel: values.role,
+          village: village,
+          isMember: values.role === t('Member'),
         },
         args => {
           if (args) {
-
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
@@ -74,24 +75,26 @@ const RoleScreen = ({navigation}) => {
             // });
             // alert(t('ALREADY_ASSIGNED_ROLE'));
             // this alert button should have a help button which will redirect to the help screen
-            Alert.alert(t('ALREADY_ASSIGNED_ROLE'), "", [
+            Alert.alert(t('ALREADY_ASSIGNED_ROLE'), '', [
               {
-                text: "Ok",
+                text: 'Ok',
                 // onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              {text: 'Help', onPress: () => {
-                // link to whatsapp
-                Linking.openURL("https://wa.me/918107204259?text=I'm%20having%20issue%20with%20Ratifi%20Registration.");
-              }},
+              {
+                text: 'Help',
+                onPress: () => {
+                  // link to whatsapp
+                  Linking.openURL(
+                    "https://wa.me/918107204259?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
+                  );
+                },
+              },
             ]);
-        
           }
         },
       ),
     );
-
-    
   };
 
   const uidSchema = object().shape({
@@ -228,7 +231,7 @@ const RoleScreen = ({navigation}) => {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
-                // navigation.navigate('FRCHome');
+                navigation.navigate('FRCHome');
               }}
               style={styles.otpBtn}
             />
