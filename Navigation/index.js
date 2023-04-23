@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -6,6 +7,8 @@ import LangSelectionScreen from '../Screens/LanguageSelection/LangSelectionScree
 import NamePhoneScreen from '../Screens/NamePhone/NamePhoneScreen';
 import PasswordScreen from '../Screens/Password/PasswordScreen';
 import LocationInformationScreen from '../Screens/LocationInformation/LocationInformationScreen';
+import LocationInformationScreenSdlc from '../Screens/LocationInformation/LocationInformationSDLC';
+
 // import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
@@ -30,6 +33,7 @@ import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
 import HomeScreen from '../Screens/HomeScreen/homeScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
+
 
 
 
@@ -139,6 +143,16 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="LocationSdlc"
+          component={LocationInformationScreenSdlc}
+          options={{
+            headerShown: false,
+          }}
+        />
+         {/* <CheckStatus>
+
+         </CheckStatus> */}
         <Stack.Screen
           name="Role"
           component={RoleScreen}

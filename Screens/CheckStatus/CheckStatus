@@ -26,7 +26,7 @@ import { updateUserInfoAction } from '../../redux-store/actions/auth';
 import { useRoute } from '@react-navigation/native';
 import { G } from 'react-native-svg';
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const LocationScreen = ({ navigation }) => {
+const CheckStatus = ({ navigation }) => {
 
 
     const [editProfileMode, setEditProfileMode] = useState(false);
@@ -1667,7 +1667,7 @@ const LocationScreen = ({ navigation }) => {
                             </View>
                             <View style={styles.horizontalLine} />
                         </View>
-                        <View style={styles.title}>
+                        {/* <View style={styles.title}>
                             <Text style={styles.titleText}>{t('State')}</Text>
                         </View>
                         <Dropdown
@@ -1675,8 +1675,8 @@ const LocationScreen = ({ navigation }) => {
                             data={states}
                             formik={formik}
                             variable={'state'}
-                        />
-                        {formik.values.state !== '' && (
+                        /> */}
+                        { (
                             <>
                                 <View style={styles.title}>
                                     <Text style={styles.titleText}>{t('District')}</Text>
@@ -1695,7 +1695,7 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
-                        {formik.values.district !== '' && (
+                        {  (
                             <>
                                 <View style={styles.title}>
                                     <Text style={styles.titleText}>{t('Tehsil')}</Text>
@@ -1718,7 +1718,7 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
-                        {formik.values.tehsil !== '' && authLevel!="एसडीएलसी" && (
+                        {/* {formik.values.tehsil !== '' && authLevel!="एसडीएलसी" && (
                             <>
                                 <View style={styles.title}>
                                     <Text style={styles.titleText}>{t('Panchayat')}</Text>
@@ -1784,7 +1784,7 @@ const LocationScreen = ({ navigation }) => {
                                 />
 
                             </>
-                        )}
+                        )} */}
                         <CustomButton
                             text={t('Next')}
                             onPress={() => {
@@ -1816,7 +1816,7 @@ const LocationScreen = ({ navigation }) => {
     );
 };
 
-export default LocationScreen;
+export default CheckStatus;
 
 const styles = StyleSheet.create({
     bg: {
