@@ -134,8 +134,6 @@ export const signInAction = (data, callback) => dispatch => {
     .then(async ({data: response}) => {
       console.log(response);
       if (response.success) {
-        alert(response.token)
-
         dispatch({type: 'SAVE_TOKEN', payload: response.token});
         dispatch({type: 'SAVE_PROFILE', payload: response.user});
         dispatch({

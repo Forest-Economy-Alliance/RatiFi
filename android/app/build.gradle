@@ -249,6 +249,13 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('release.keystore')
+            storePassword 'Apple@123'
+            keyAlias 'key0'
+            keyPassword 'Apple@123'
+        }
+
 
     }
     buildTypes {
@@ -260,6 +267,7 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             shrinkResources true
             minifyEnabled true
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             firebaseCrashlytics {

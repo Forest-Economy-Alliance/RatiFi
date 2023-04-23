@@ -35,7 +35,7 @@ const RoleScreen = ({navigation}) => {
   const toast = useToast();
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
-
+  const {name} = useSelector(state => state.entities.auth.userInfo.profile);
   const changeLanguage = value => {
     i18n
       .changeLanguage(value)
@@ -57,7 +57,6 @@ const RoleScreen = ({navigation}) => {
         },
         args => {
           if (args) {
-            alert(args)
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
