@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   StyleSheet,
   Text,
@@ -127,6 +128,10 @@ const LocationInformationScreen = ({navigation}) => {
   const [tehsil, setTehsil] = useState('');
   const [panchayat, setPanchayat] = useState('');
   const [village, setVillage] = useState('');
+  const { namet, panchayatt, tehsilt, statet, districtt, postLevelt, authLevelt } = useSelector(state => state.entities.auth.userInfo?.profile);
+  
+  
+  console.log(authLevelt)
 
   const [val1, setVal1] = useState('');
   const [val2, setVal2] = useState('');
@@ -281,7 +286,7 @@ const LocationInformationScreen = ({navigation}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.container}>
-        <Dropdown
+        {/* <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -301,7 +306,7 @@ const LocationInformationScreen = ({navigation}) => {
             setState(item.State);
           }}
           dropdownPosition="bottom"
-        />
+        /> */}
         <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
@@ -344,7 +349,7 @@ const LocationInformationScreen = ({navigation}) => {
           }}
           dropdownPosition="bottom"
         />
-        <Dropdown
+        {authLevelt!="एसडीएलसी" &&        <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -364,8 +369,8 @@ const LocationInformationScreen = ({navigation}) => {
             setPanchayat(item.Panchayat);
           }}
           dropdownPosition="bottom"
-        />
-        <Dropdown
+        />}
+        {authLevelt!="एसडीएलसी" &&<Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -385,7 +390,9 @@ const LocationInformationScreen = ({navigation}) => {
             setVillage(item.Village);
           }}
           dropdownPosition="bottom"
-        />
+        />}
+
+        
         {err === 1 ? (
           <Text style={styles.error}>{t('Fill all the fields')}</Text>
         ) : null}
