@@ -8,7 +8,7 @@ import {
     KeyboardAvoidingView,
     ImageBackground,
     ScrollView,
-    Modal,
+    Modal,Pressable
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -19,6 +19,7 @@ import { object, string } from 'yup';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomError from '../../components/CustomError';
 import { fetchClaimDetailsHandler } from '../../services/claimService';
 import { BackHandler  } from 'react-native';
@@ -87,12 +88,23 @@ const ProfileScreen = ({ navigation }) => {
         );
         return () => backHandler.remove();
     }, []);
+    const goBack = () =>{
+        // Move to RoleScreen
+        navigation.navigate("HomeScreen")
+    }
+    
     return (
         <ImageBackground
             source={BG_IMG_PATH}
             resizeMode="cover"
             blurRadius={10}
             style={styles.bg}>
+                 <View style={{marginTop:10, marginBottom:10,marginLeft:10 }} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
+
+            </Pressable>
+          </View>
             <ScrollView style={styles.darkness}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <KeyboardAvoidingView>

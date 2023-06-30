@@ -27,10 +27,11 @@ import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
 import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
 import { useTranslation } from 'react-i18next';
 // import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
-
+import GenderScreen from '../Screens/Gender/GenderScreen'
 
 import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
 import HomeScreen from '../Screens/HomeScreen/homeScreen';
+import FRCMembersScreen from '../Screens/HomeScreen/FRCMembersScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 
@@ -161,6 +162,13 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
+          name="Gender"
+          component={GenderScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="Location"
           component={LocationScreen}
           options={{
@@ -177,6 +185,13 @@ export const Navigation = () => {
 <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FRCMembers"
+        component={FRCMembersScreen}
         options={{
           headerShown: false,
         }}

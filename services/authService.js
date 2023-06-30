@@ -14,7 +14,7 @@ export const loginHandler = data => {
 
 export const verifyOTPHandler = data => {
   return request(
-    '/verify-otp',
+    '/verify-otp',  
     {
       method: 'POST',
       data,
@@ -24,12 +24,12 @@ export const verifyOTPHandler = data => {
   );
 };
 
-export const updatePasswordHandler = data => {
+export const updatePasswordHandler = village => {
   return request(
     '/update-password',
     {
       method: 'POST',
-      data,
+      village,
     },
     false,
     false,
@@ -50,7 +50,35 @@ export const updateUserHandler = data => {
   );
 };
 
+export const verifyyMember = (data) =>{
+  return request('/verify-member',{
+    method: 'PATCH',
+   data,
+  },
+  false,
+  false,
+  )
+}
 
+export const viewFRCMember = (data) =>{
+  return request('/fetch-frcTeam',{
+    method: 'POST',
+    data,
+  },
+  false,
+  false,
+  )
+}
+export const setGender=(data)=>{
+  return request('/set-gender',{
+    method: 'PATCH',
+    data,
+  },
+  false,
+  false,
+  )
+
+}
 
 export const postSignInHandler = data => {
   return request(

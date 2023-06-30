@@ -8,9 +8,10 @@ import {
   ImageBackground,
   ScrollView,
   Alert,
-  Linking,
+  Linking,Pressable
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 import {useFormik} from 'formik';
@@ -181,6 +182,12 @@ const RoleScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
+  
+  const goBack = () =>{
+    // Move to RoleScreen
+    navigation.navigate("HomeScreen")
+}
+
 
   return (
     <ImageBackground
@@ -188,6 +195,12 @@ const RoleScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
+         <View style={{marginTop:10, marginBottom:10,marginLeft:10 }} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
+
+            </Pressable>
+          </View>
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>

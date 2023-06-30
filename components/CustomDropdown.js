@@ -28,7 +28,7 @@ const Dropdown = props => {
 
   const onSelect = item => {
 
-
+    console.log(item)
     setSelectedValue(item.label);
       if(props.downloadPDFScreenFix){
    props.downloadPDFScreenFix(item);}else{

@@ -302,8 +302,11 @@
     "Kenduda":"केन्दूदा",
     "Baldega":"बलड़ेगा",
     "Already a User?":"पहले से ही पंजीकृत ?",
-    "ALREADY_ASSIGNED_ROLE":"आपके गांव में पहले से ही पंजीकृत भूमिका"
-}
+    "ALREADY_ASSIGNED_ROLE":"आपके गांव में पहले से ही पंजीकृत भूमिका",
+    "VERIFY MEMBER":"सदस्य की पुष्टि करें",
+    "View All Members":"सभी सदस्यों को देखें",
+    "Go Back":"पीछे जाओ"
+  }
 }
 
 

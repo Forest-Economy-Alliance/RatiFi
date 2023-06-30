@@ -20,7 +20,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const LoginScreen = ({navigation}) => {
+const  LoginScreen = ({navigation}) => {
   const language = 'hi';
   const dispatch = useDispatch();
 
@@ -88,6 +88,7 @@ const LoginScreen = ({navigation}) => {
             
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
+              {/* <TexT>hello</TexT> */}
             </View>
 
             <CustomInput

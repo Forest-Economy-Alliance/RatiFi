@@ -13,7 +13,7 @@ import {
     Modal,
     TouchableOpacity,
     ActivityIndicator,
-    BackHandler,
+    BackHandler,Pressable
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -26,6 +26,7 @@ import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { fetchClaimDetailsHandler, patchClaimHandler } from '../../services/claimService';
 import { fetchClaimDetailsByIdAction } from '../../redux-store/actions/claim';
@@ -152,6 +153,11 @@ const PastRecordsScreen = ({ navigation }) => {
 
 
 
+    const goBack = () =>{
+        // Move to RoleScreen
+        navigation.navigate("HomeScreen")
+    }
+    
 
 
 
@@ -163,7 +169,12 @@ const PastRecordsScreen = ({ navigation }) => {
             blurRadius={10}
             style={styles.bg}>
 
+<View style={{marginTop:10, marginBottom:10,marginLeft:10 }} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
+            </Pressable>
+          </View>
 
             {cameraModalVis && <Modal style={{ padding: 100, backgroundColor: 'white' }}>
                 <RNCamera

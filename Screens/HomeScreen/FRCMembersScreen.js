@@ -10,7 +10,7 @@ import {
     ImageBackground,
     Image,
     KeyboardAvoidingView,
-    Alert
+    Alert,Pressable ,ScrollView
 } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import { useTranslation } from 'react-i18next';
@@ -33,11 +33,15 @@ import { getDeviceHash } from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
 import { verifYYMember } from '../../redux-store/actions/auth';
 import { verifyyMember, viewFRCMember } from '../../services/authService';
+import {Dimensions} from 'react-native';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation,route  }) => {
+    // const {state} = this.props.navigation;
+// console.log(route.params.members,"FRC Members");
     const [imgUrl, setImgUrl] = useState('x');
     const [vData, setVData] = useState([]);
+    const [members,setMembers] = useState(route.params.members)
     const { name, panchayat, tehsil, state, district, postLevel, authLevel,village } = useSelector(state => state.entities.auth.userInfo?.profile);
     // console.log(authLevel=="एसडीएलसी");
 
@@ -87,21 +91,53 @@ const HomeScreen = ({ navigation }) => {
         navigation.replace("NamePhone")
         // dispatch({type: 'SAVE_PROFILE', payload: null});
     }
-     
+    const verifyMember = (id) =>{
+       dispatch({ type: 'ENABLE_LOADING' });
+ 
+//   dispatch({ type: 'DISABLE_LOADING' });   
+console.log(id)     
+  return verifyyMember({id:id})
+  .then(async (response) => {
+    return viewFRCMember({village:village,authLevel:authLevel,postLevel:"सदस्य"}) 
+    .then(async (res) => {
+        setMembers(res.data);
+        dispatch({ type: 'DISABLE_LOADING' });
+    })
+        // console.log('Verify Member', response);
+    //     const newMembers = members;
+    //    const arr= await newMembers.filter(item=>
+    //        item._id !== id            
+    //     )
+    //     console.log(arr,"new Members");
+    //     console.log(response.data,"updated member")
+    //     arr.push(response.data);
+    //     setMembers(arr);
+    //     console.log(members)
+        
+    //     if (response.success) {
+    //       dispatch({ type: 'VERIFY_MEMBER', payload: {} });
+    //     }
+    //     if (callback) {
+    //       callback(response.message);
+    //     }
+      })
+      .catch(err => {
+        console.log('NETWORK', err);
+        dispatch({ type: 'DISABLE_LOADING' });
+      });
+    }
 
     const viewFRCMembers = (village) =>{
         console.log("view all FRC members of village" ,{village:village,authLevel:authLevel,postLevel:"सदस्य"});
-        dispatch({ type: 'ENABLE_LOADING' });
         return viewFRCMember({village:village,authLevel:authLevel,postLevel:"सदस्य"}) 
         .then(async (response) => {
             console.log('View Members', response.data);
-            navigation.navigate("FRCMembers",{members:response.data})
-            dispatch({ type: 'DISABLE_LOADING' });
         //     if (response.success) {
         //       dispatch({ type: 'VERIFY_MEMBER', payload: {} });
         //     }
         //     if (callback) {
         //       callback(response.message);
+        //       dispatch({ type: 'DISABLE_LOADING' });
         //     }
           })
           .catch(err => {
@@ -162,12 +198,18 @@ const HomeScreen = ({ navigation }) => {
 
     }
 
-    const UpdateRole = () =>{
+    const goBack = () =>{
         // Move to RoleScreen
-        navigation.navigate("Role")
+        navigation.navigate("HomeScreen")
     }
-
-
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const maleMember = members.filter((member)=>member.gender!="female")
+    const male = maleMember.length;
+    const female = members.length-male;
+    console.log(male,female)
+    const isEligible = female/members.length;
+    console.log(isEligible)
     return (
         // flexWrap: 'wrap',
         <ImageBackground
@@ -175,16 +217,115 @@ const HomeScreen = ({ navigation }) => {
             resizeMode="cover"
             blurRadius={10}
             style={styles.bg}>
-            <View style={{ paddingHorizontal: 20 }}>
+            <View>
 
+            <View style={{height:50,width:windowWidth}} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18,marginLeft:10,marginTop:10,color:'white',marginBottom:10}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
+            </Pressable>
+          </View>
+          <ScrollView style={{ backgroundColor: 'rgba(0,0,0,0.3)',height:windowHeight,width:'100%'}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView>
+            {
+                isEligible <= 0.33 ? 
+                <View style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',padding:15}}>
+                    <Text style={{color:'red'}}>{t('The FRC Team is not Eligible, The number of Women should be 1/3rd of total FRC Team.')} </Text>
+                    
+                    <Text style={{color:'red'}}>No  of Male: {maleMember.length} </Text>
+                    <Text style={{color:'red'}}>No  of Female: {members.length-maleMember.length} </Text>
+                </View>
+                :
+                <View></View>
+                }
+          <View style={styles.header}>
+                    {village === '-1'
+                        ? <Text>कृपया अपनी जानकरी अपडेट करें</Text> :
+                        <>
+                            <Text style={styles.headerText}>
+                                {name}
+                                {', '}
+                                {postLevel}
+                                {', '}
+                                {authLevel}
+                            </Text>
+                            <Text style={styles.subheaderText}>
+                                {/* {t(village)} */}
+                                {t(panchayat)}
+                                {', '}
+                                {t(tehsil)}
+                                {', '}
+                                {t(district)}
+                                {', '}
+                                {t(state)}
+                            </Text>
+                        </>}
+                </View>
+             
+             {
+          members.map((data)=>{
+                console.log(data.name)
+                return(
+                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center', marginBottom:35,marginLeft:20}}>
+                    <Text style={{color:'white'}}>
+                        {data.name}
+                    {/* {' '} */}
+                    </Text>
+                  {
+                    data.isVarified===false ?
+                    // <CustomButton
+                    // text={t('VERIFY MEMBER')}
+                    // onPress={() => {
+                    //     verifyMember(data._id)
+                    // }}
+                    // style={styles.epBtnView}
+                    // button={styles.epBtn}
+                    // />
+                    <Pressable
+                    style={{
+                        borderWidth:2, paddingTop:5,paddingBottom:5,paddingLeft:5,paddingRight:5,borderColor:'#fff',borderRadius:5,marginRight:10
+                    }}
+                    onPress={() => {
+                     verifyMember(data._id)
+                        }}
+                    >
+                    <Text style={{color:'white'}}>{t('VERIFY MEMBER')}</Text>
+                </Pressable>
+                    :
+                    // <CustomButton
+                    // text={'Already Verified'}
+                   
+                    // style={styles.epBtnView}
+                    // button={styles.epBtn}
+                    // />
+                    <Pressable
+                    style={{
+                        borderWidth:2, paddingTop:5,paddingBottom:5,paddingLeft:5,paddingRight:5,borderColor:'#fff',borderRadius:5,marginRight:10
+                    }}
+                    >
+                    <Text style={{color:'#fff'}}>{t('Already Verified')}</Text>
+                </Pressable>
+                }  
+                </View>
+                )
+              })
+                }
+                
+           
+            
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+           
 
+        
 
-                {vis && <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />}
+                {/* {vis && <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />}
 
                 <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
                     <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} color="white" /> </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
 
                 {/* <Dropdown
@@ -221,129 +362,7 @@ const HomeScreen = ({ navigation }) => {
   
    */}
 
-
-                <View style={styles.header}>
-                    {village === '-1'
-                        ? <Text>कृपया अपनी जानकरी अपडेट करें</Text> :
-                        <>
-                            <Text style={styles.headerText}>
-                                {name}
-                                {', '}
-                                {postLevel}
-                                {', '}
-                                {authLevel}
-                            </Text>
-                            <Text style={styles.subheaderText}>
-                                {/* {t(village)} */}
-                                {t(panchayat)}
-                                {', '}
-                                {t(tehsil)}
-                                {', '}
-                                {t(district)}
-                                {', '}
-                                {t(state)}
-                            </Text>
-                        </>}
-                </View>
-
-
-
-                {<CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    text={t('Show Profile Details')}
-                    onPress={() => {
-                        if (profile?.claims?.length === 0) {
-                            alert(t("CLAIM_NOT_APPLIED"))
-                        } else
-                            navigation.navigate("ShowProfile", {
-                                editProfile: true
-                            })
-                    }}
-
-                />}
-
-
-
-                <CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    text={t('Edit Profile')}
-                    onPress={() => {
-
-                        navigation.navigate("Location", {
-                                    editProfile: true , 
-                                    role: authLevel
-                                })
-
-                        // if(authLevel=="एसडीएलसी"){
-                        //     navigation.navigate("LocationInformationSDLC")    
-                        // }
-                        // else{
-                        //     navigation.navigate("Location", {
-                        //         editProfile: true
-                        //     })
-                        // }
-                        
-                    }}
-
-                />
-                {/* Add a button to change Role */}
-                <CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    text={t('Edit Role')}
-                    onPress={() => {
-                        UpdateRole();
-                    }}
-
-                />
-                <CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    // dsbled={profile?.claims?.length==0}
-                    text={t('Track old claim')}
-                    onPress={() => {
-                        if (profile?.claims?.length === 0) {
-                            alert(t("CLAIM_NOT_APPLIED"))
-                        } else
-                            navigation.navigate('PastRecordsScreen')
-                    }}
-                />
-                {/* <CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    // dsbled={profile?.claims?.length==0}
-                    text={t('Change Gender')}
-                    onPress={() => {
-                         
-                            navigation.navigate('Gender')
-                    }}
-                /> */}
-                {
-                    postLevel=="अध्यक्ष" && <CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    // dsbled={profile?.claims?.length==0}
-                    // text={t('VERIFY MEMBER')}
-                        text = {t('View All Members')}
-                    onPress={() => {
-                        viewFRCMembers(village)
-                        }}
-                />
-                }
-                {authLevel=="एसडीएलसी"&&<CustomButton
-                    style={{ marginBottom: 20 }}
-                    button={{ width: 300 }}
-                    // dsbled={profile?.claims?.length==0}
-                    text={t('Check Status')}
-                    onPress={() => {
-                      console.log("ji")
-                            navigation.navigate('LocationSdlc')
-                }}
-                />
-}
-                
+ 
             </View>
         </ImageBackground>
     );
@@ -361,18 +380,17 @@ const HomeScreen = ({ navigation }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        padding: '20%',
-    },
+     
+    //  darkness: {
+    //     // flex: 0.1,
+    //     backgroundColor: 'rgba(0,0,0,0.3)',
+    //     width:windowWidth
+    //   },
     roleContainer: {
 
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginTop: '5%',
+        marginTop: '1%',
         marginBottom: '5%',
         // backgroundColor: '#D3F2D3',
         alignSelf: 'flex-end',

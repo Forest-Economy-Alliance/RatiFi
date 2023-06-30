@@ -36,6 +36,13 @@ const appUtil = (state = INIT_STATE, action) => {
         ...state,
         name: action.payload,
       };
+      
+    case 'VERIFY_MEMBER':
+      return {
+        ...state,
+        isVerified:true,
+      }
+
     case 'UPDATE_FORMDATA':
 
       // console.log("ITS COMING");

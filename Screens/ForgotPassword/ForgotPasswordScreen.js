@@ -58,8 +58,8 @@ const ForgotPasswordScreen = ({navigation}) => {
         {
           mobile: formik.values.phoneNumber,
           name: formik.values.name,
-          lat: '123.23',
-          lng: '123.2',
+          // lat: '123.23',
+          // lng: '123.2',
           // dd: DD,
         },
         args => {

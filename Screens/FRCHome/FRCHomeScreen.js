@@ -15,6 +15,7 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch,useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
+ 
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
@@ -40,12 +41,14 @@ const FRCHomeScreen = ({navigation}) => {
   };
 
   const {name,panchayat,tehsil,state,district,village,postLevel,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
+ 
 
   // console.log("UIF",UIF);
 
   // const [name, setName] = useState('Ram Krishna');
   const [member, setMember] = useState('FRC');
   const [role, setRole] = useState('Secretary');
+  console.log(postLevel,"postLevel ")
   // const [state, setState] = useState('Himachal Pradesh');
   // const [district, setDistrict] = useState('Kagda');
   // const [tehsil, setTehsil] = useState('Palampur');
@@ -67,6 +70,7 @@ const FRCHomeScreen = ({navigation}) => {
           <KeyboardAvoidingView>
             <View style={styles.header}>
               <Text style={styles.headerText}>
+                {"Hello"}
                 {name}
                 {', '}
                 {postLevel}
@@ -113,6 +117,19 @@ const FRCHomeScreen = ({navigation}) => {
               style={styles.ntBtnView}
               button={styles.ntBtn}
             />
+            {
+              postLevel===''?
+             <CustomButton
+              text={'verify member'}
+              onPress={() => {
+                navigation.navigate("DownloadPDF")
+              }}
+              style={styles.ntBtnView}
+              button={styles.ntBtn}
+            />
+            :
+            <Text></Text>
+}
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
       </ScrollView>

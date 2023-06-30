@@ -7,7 +7,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     ImageBackground,
-    ScrollView,
+    ScrollView,Pressable
 } from 'react-native';
 import { BackHandler } from 'react-native';
 
@@ -24,6 +24,7 @@ import { object, string } from 'yup';
 import CustomError from '../../components/CustomError';
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
 import { useRoute } from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { G } from 'react-native-svg';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LocationScreen = ({ navigation }) => {
@@ -31,7 +32,7 @@ const LocationScreen = ({ navigation }) => {
 
     const [editProfileMode, setEditProfileMode] = useState(false);
     const { namet, panchayat, tehsil, statet, district, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
-    console.log(authLevel); 
+    // console.log(authLevel); 
     // console.log(authLevel=="एसडीएलसी");
     const route = useRoute();
 
@@ -63,6 +64,7 @@ const LocationScreen = ({ navigation }) => {
 
     const [currentLanguage, setCurrentLanguage] = useState('en');
     const [errorVisible, setErrorVisible] = useState(false);
+    const [panchayatInfoShow,setPanchayatInfoShow] = useState(false);
 
     const changeLanguage = value => {
         i18n
@@ -71,11 +73,12 @@ const LocationScreen = ({ navigation }) => {
             .catch(err => console.log(err));
     };
 
+  
     const onNext = (values, formikActions) => {
-        // console.log(values);
+        setPanchayatInfoShow(true)
         formikActions.setSubmitting(false);
         // navigation.navigate('FRCHome');
-
+        
 
         dispatch(
             updateUserInfoAction(
@@ -97,7 +100,7 @@ const LocationScreen = ({ navigation }) => {
                             //screen code 4 , means location information set
                             dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
 
-                            navigation.navigate("Role")
+                            navigation.navigate("Gender")
                         }
                     }
                 },
@@ -123,6 +126,20 @@ const LocationScreen = ({ navigation }) => {
         validationSchema: locSchema,
         onSubmit: onNext,
     });
+    const gender = [
+        {
+            label:t('not selected'),
+            value:0
+        },
+        {
+            label:t('male'),
+            value:1
+        },
+        {
+            label:t('female'),
+            value:2
+        },
+    ]
 
     const states = [
         {
@@ -1636,7 +1653,7 @@ const LocationScreen = ({ navigation }) => {
 
 
 
-    const buttonText = {
+    const   buttonText = {
         state: t('Fill State'),
         district: t('Fill District'),
         tehsil: t('Fill Tehsil'),
@@ -1647,13 +1664,23 @@ const LocationScreen = ({ navigation }) => {
     useEffect(() => {
         changeLanguage(language);
     }, []);
-
+    // console.log(formik.values);
+    const goBack = () =>{
+        // Move to RoleScreen
+        navigation.navigate("HomeScreen")
+    }
     return (
         <ImageBackground
             source={BG_IMG_PATH}
             resizeMode="cover"
             blurRadius={10}
             style={styles.bg}>
+                 <View style={{marginTop:10, marginBottom:10,marginLeft:10,}} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
+
+            </Pressable>
+          </View>
             <ScrollView style={styles.darkness}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <KeyboardAvoidingView>
@@ -1675,6 +1702,7 @@ const LocationScreen = ({ navigation }) => {
                             data={states}
                             formik={formik}
                             variable={'state'}
+                            
                         />
                         {formik.values.state !== '' && (
                             <>
@@ -1695,6 +1723,7 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
+                        
                         {formik.values.district !== '' && (
                             <>
                                 <View style={styles.title}>
@@ -1715,6 +1744,7 @@ const LocationScreen = ({ navigation }) => {
                                     }
                                     formik={formik}
                                     variable={'tehsil'}
+                                    
                                 />
                             </>
                         )}
@@ -1745,6 +1775,13 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
+                        <CustomError
+                            visible={panchayatInfoShow}
+                            setVisible={setErrorVisible}
+                            errorText={`you have chosen panchayat ${panchayat}`}
+                            errors={formik.errors}
+                            buttonText={buttonText}
+                        />
                         {formik.values.panchayat !== '' && authLevel!="एसडीएलसी"&& (
                             <>
                                 <View style={styles.title}>
