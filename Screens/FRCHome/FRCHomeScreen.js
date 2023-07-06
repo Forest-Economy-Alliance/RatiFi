@@ -58,7 +58,7 @@ const FRCHomeScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
-
+  console.log("hello FRC Home")
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -112,7 +112,7 @@ const FRCHomeScreen = ({navigation}) => {
             <CustomButton
               text={t('File claim')}
               onPress={() => {
-                navigation.navigate("DownloadPDF")
+                navigation.navigate("DownloadPDF",{code:'member'})
               }}
               style={styles.ntBtnView}
               button={styles.ntBtn}

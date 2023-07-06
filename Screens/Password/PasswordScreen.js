@@ -41,14 +41,16 @@ const PasswordScreen = ({navigation}) => {
   }, [route?.params]);
   const route = useRoute();
   console.log('P', route.params);
-
+  const forgetPasswordCode = route.params.forgetPasswordCode || "2";
+  console.log(forgetPasswordCode)
   const state = {
     password: '',
     confirmPassword: '',
   };
-  const mobile = useSelector(
-    state => state.entities.auth.userInfo.profile.mobile,
-  );
+  const mobile = route.params.mobile
+  // const mobile = useSelector(
+  //   state => state.entities.auth.userInfo.profile.mobile,
+  // );
   const pwdToVerify = useSelector(
     state => state.entities.auth.userInfo.profile.password
   );
@@ -72,11 +74,12 @@ const PasswordScreen = ({navigation}) => {
         t('Password and Confirm Password does not match'),
       ),
   });
+  console.log("loginflow--",loginflow);
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // dispatch({type: 'ENABLE_LOADING'});
-    if (loginflow) {
+    if (loginflow===true) {
       console.log("PTV",pwdToVerify)
       if (pwdToVerify === formik.values.password) {
         navigation.replace('DownloadPDF');
@@ -89,17 +92,20 @@ const PasswordScreen = ({navigation}) => {
           duration: 5000,
         });
       }
-    } else {
+    } 
+    else {
 
       dispatch(
         updatePasswordAction(
           {
             mobile: mobile,
             password: formik.values.password,
-            confirmPassword: formik.values.confirmPassword,
           },
           args => {
-            if (args) {
+            if(forgetPasswordCode==1){
+              navigation.navigate('HomeScreen');
+            }
+           else if (args) {
               // screen code 3 means , password set 
               dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
               navigation.navigate('Location');

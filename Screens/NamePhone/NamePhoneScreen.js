@@ -46,6 +46,7 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const onGetOtp = async (values, formikActions) => {
+    console.log("getting otp")
     formikActions.setSubmitting(false);
     console.log('values', values);
   
@@ -57,9 +58,9 @@ const NamePhoneScreen = ({navigation}) => {
         {
           mobile: formik.values.phoneNumber,
           name: formik.values.name,
-          // lat: '123.23',
-          // lng: '123.2',
-          // dd:DD || "-1"
+          lat: '123.23',
+          lng: '123.2',
+          dd:DD || "-1"
         },
         args => {
           // sending phone number in OTP Screen, as we need their to send in API Call

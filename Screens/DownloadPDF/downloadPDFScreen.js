@@ -8,10 +8,11 @@ import {
   Keyboard,
   ImageBackground,
   Image,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView,Pressable,ScrollView
 } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import { useTranslation } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
 import '../../assets/i18n/i18n';
 import React, { useEffect, useState } from 'react';
 // import {Dropdown} from 'react-native-element-dropdown';
@@ -61,6 +62,7 @@ const DownloadPDFScreen = ({ navigation }) => {
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
   const { t, i18n } = useTranslation();
+  const route = useRoute();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
@@ -74,6 +76,13 @@ const DownloadPDFScreen = ({ navigation }) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
+   
+  
+  const goBack = () =>{
+ 
+    navigation.navigate("HomeScreen")
+  
+}
 
   // const imgUrls = {
   //   ambepadar:
@@ -1670,12 +1679,18 @@ const DownloadPDFScreen = ({ navigation }) => {
       style={styles.bg}>
       <View style={{ paddingHorizontal: 20 }}>
 
-     {vis &&  <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout}/>}
+      <View style={{marginTop:10, marginBottom:30,marginLeft:10 }} >
+            <Pressable onPress={goBack}>
+            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
-        <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
-          <Text style={styles.roleText}> <FontAwesome name="user-circle-o" size={30} color="white" /> </Text>
-        </TouchableOpacity>
+            </Pressable>
+          </View>
 
+          <ScrollView style={styles.darkness}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView>
+
+         
         <Dropdown
           downloadPDFScreenFix={setVal5}
           visible={true}
@@ -1766,7 +1781,9 @@ const DownloadPDFScreen = ({ navigation }) => {
 
           </>
         )}
-
+  </KeyboardAvoidingView>
+</TouchableWithoutFeedback>
+</ScrollView>
       </View>
     </ImageBackground>
   );
@@ -1901,4 +1918,5 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+  
 });

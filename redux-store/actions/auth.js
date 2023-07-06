@@ -11,6 +11,7 @@ import { getDeviceHash } from '../../utils/DeviceUtil';
 
 export const postOTPAction = (data, callback) => dispatch => {
   dispatch({ type: 'ENABLE_LOADING' });
+  console.log(data,"before data");
   return loginHandler(data)
     .then(async ({ data: response }) => {
       console.log('RES', response);
@@ -88,10 +89,10 @@ export const verifYYMember = (data, callback) => dispatch => {
 };
 
 export const updatePasswordAction = (data, callback) => dispatch => {
-  dispatch({ type: 'ENABLE_LOADING' });
+  console.log("updatepassword action before data",data)
   return updatePasswordHandler(data)
     .then(async ({ data: response }) => {
-      console.log('RES', response);
+      console.log('RES updatepassword action', response);
       if (response.success) {
         dispatch({ type: 'SAVE_PROFILE', payload: response.data });
 
