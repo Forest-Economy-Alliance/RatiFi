@@ -50,7 +50,7 @@ import { BASE_URL } from '../../services/APICentral';
 import { useRoute } from '@react-navigation/native';
 import { postClaimHandler } from '../../services/claimService';
 const BG_IMG_PATH = require('../../assets/images/background.png');
-
+    
 
 const FormsPage = ({ navigation }) => {
 
@@ -286,12 +286,13 @@ const FormsPage = ({ navigation }) => {
     const handleDownload = async (vNameEnglish) => {
         // console.log("HD START",new Date().getTime())
         // console.log("REDUX",formData) // working incorrectlry
-        // console.log("HANDLE DOWNLOAD CALLED")
+        console.log("HANDLE DOWNLOAD CALLED")
         // 
 
         // BELOW IS WORKING FINE
+        console.log(store.store.getState().entities.appUtil.appUtil,"store")
         const FD = store.store.getState().entities.appUtil.appUtil.formData;
-
+         console.log(FD,"FD");
         if (FD.length !== 2) {
             alert("Please try again later")
             return;
@@ -300,7 +301,7 @@ const FormsPage = ({ navigation }) => {
 
         try {
             // console.log("REDUX",formData)
-
+             console.log("try downloading..")
             // console.log("URI",`https://ratifi-backend-v2.herokuapp.com/get-documents?f0=${formData[0]}&f9=${formData[1]}`)
             const response = await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[1]}&vName=${vNameEnglish}`);
 
@@ -358,7 +359,8 @@ const FormsPage = ({ navigation }) => {
 
     const generatePDF = async (obj, name) => {
         // if (requestPermission()) {
-        // file location returned by the createPDF
+            // file location returned by the createPDF
+            console.log("generating pdf...")
         // replace the '' empty string with directory info if you want to any directory
         return await obj.createPDF('DD', name);
         // alert(location);
@@ -517,11 +519,11 @@ text={t('Track old claim')}
                             const response = await generatePDF(key.form, key.title);
                             setProgress(e => e + 1 / 2)
                         }
-
+                        console.log("generating pdf done...")
 
 
                         console.log("OK")
-
+                        console.log("owner id",profile._id.toString())
                         const rsponse = await postClaimHandler({
                             ownerId: profile._id.toString()
                         })

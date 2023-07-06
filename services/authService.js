@@ -24,12 +24,12 @@ export const verifyOTPHandler = data => {
   );
 };
 
-export const updatePasswordHandler = village => {
+export const updatePasswordHandler = data => {
   return request(
     '/update-password',
     {
       method: 'POST',
-      village,
+      data,
     },
     false,
     false,
@@ -78,6 +78,16 @@ export const setGender=(data)=>{
   false,
   )
 
+}
+
+export const checkAccount = (data) =>{
+  return request('/account-details',{
+    method: 'POST',
+    data,
+  },
+  false,
+  false,
+  )
 }
 
 export const postSignInHandler = data => {

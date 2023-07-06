@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Modal} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Modal, Pressable} from 'react-native';
 
 export default function CustomError({
   visible,
@@ -25,13 +25,13 @@ export default function CustomError({
               <View style={styles.titleErr}>
                 <Text style={styles.titleTextErr}>{errors.name}</Text>
               </View>
-              <TouchableOpacity
+              <Pressable
                 style={styles.button}
                 onPress={() => {
                   setVisible(!visible);
                 }}>
                 <Text style={styles.buttonText}>{buttonText.name}</Text>
-              </TouchableOpacity>
+              </Pressable>
             </>
           )}
           {errors.phoneNumber && (

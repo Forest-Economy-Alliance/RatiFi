@@ -39,10 +39,11 @@ const NamePhoneScreen = ({navigation}) => {
   };
 
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
-
+  const forgetPasswordCode = route.params.forgetPasswordCode || "2";
   const state = {
     otp: '',
   };
+  console.log(forgetPasswordCode,"forgetPassword Code");
   const onVerifyOtp = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // navigation.navigate('Password');
@@ -54,7 +55,10 @@ const NamePhoneScreen = ({navigation}) => {
         },
         args => {
           console.log("ARGS->",args);
-          if (args === "AVAILABLE") {
+          if(forgetPasswordCode==1){
+            navigation.navigate("Password",{mobile:route.params.phoneNumber,forgetPasswordCode:"1"})
+          }
+          else if (args === "AVAILABLE") {
 
             navigation.navigate("HomeScreen")
             // navigation.navigate("DownloadPDF")
@@ -70,7 +74,7 @@ const NamePhoneScreen = ({navigation}) => {
           } else if(args==="CREATED"){
              
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-            navigation.navigate("Password")
+            navigation.navigate("Password",{mobile:route.params.phoneNumber})
           }else {
             setWrongOTP(t('Wrong OTP'));
           }

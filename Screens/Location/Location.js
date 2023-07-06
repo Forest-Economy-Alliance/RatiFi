@@ -7,7 +7,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     ImageBackground,
-    ScrollView,Pressable
+    ScrollView,Pressable,Modal
 } from 'react-native';
 import { BackHandler } from 'react-native';
 
@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
 import { object, string } from 'yup';
 import CustomError from '../../components/CustomError';
+import CustomNotification from '../../components/CustomNotification'
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
 import { useRoute } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -32,7 +33,6 @@ const LocationScreen = ({ navigation }) => {
 
     const [editProfileMode, setEditProfileMode] = useState(false);
     const { namet, panchayat, tehsil, statet, district, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
-    // console.log(authLevel); 
     // console.log(authLevel=="एसडीएलसी");
     const route = useRoute();
 
@@ -49,7 +49,7 @@ const LocationScreen = ({ navigation }) => {
 
     const language = 'hi';
     const dispatch = useDispatch();
-    const name = useSelector(state => state.entities.appUtil.appUtil.name);
+    const stateName = useSelector(state => state.entities.appUtil.appUtil.name);
     
     
     const state = {
@@ -75,7 +75,8 @@ const LocationScreen = ({ navigation }) => {
 
   
     const onNext = (values, formikActions) => {
-        setPanchayatInfoShow(true)
+        setPanchayatInfoShow(false)
+
         formikActions.setSubmitting(false);
         // navigation.navigate('FRCHome');
         
@@ -126,20 +127,7 @@ const LocationScreen = ({ navigation }) => {
         validationSchema: locSchema,
         onSubmit: onNext,
     });
-    const gender = [
-        {
-            label:t('not selected'),
-            value:0
-        },
-        {
-            label:t('male'),
-            value:1
-        },
-        {
-            label:t('female'),
-            value:2
-        },
-    ]
+ console.log(panchayat)
 
     const states = [
         {
@@ -1659,6 +1647,7 @@ const LocationScreen = ({ navigation }) => {
         tehsil: t('Fill Tehsil'),
         panchayat: t('Fill Panchayat'),
         village: t('Fill Village'),
+        panchayatName:t('Ok')
     };
 
     useEffect(() => {
@@ -1675,19 +1664,22 @@ const LocationScreen = ({ navigation }) => {
             resizeMode="cover"
             blurRadius={10}
             style={styles.bg}>
+                {
+                    editProfileMode?
                  <View style={{marginTop:10, marginBottom:10,marginLeft:10,}} >
             <Pressable onPress={goBack}>
             <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
             </Pressable>
-          </View>
+          </View>:<View></View>
+                }
             <ScrollView style={styles.darkness}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <KeyboardAvoidingView>
                         <View style={styles.header}>
                             <View style={styles.name}>
                                 <Text style={styles.nameTxt}>
-                                    {name}
+                                    
 
                                     {t('Select your location')}
                                 </Text>
@@ -1748,7 +1740,7 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
-                        {formik.values.tehsil !== '' && authLevel!="एसडीएलसी" && (
+                        {formik.values.tehsil !== '' && (
                             <>
                                 <View style={styles.title}>
                                     <Text style={styles.titleText}>{t('Panchayat')}</Text>
@@ -1775,14 +1767,9 @@ const LocationScreen = ({ navigation }) => {
                                 />
                             </>
                         )}
-                        <CustomError
-                            visible={panchayatInfoShow}
-                            setVisible={setErrorVisible}
-                            errorText={`you have chosen panchayat ${panchayat}`}
-                            errors={formik.errors}
-                            buttonText={buttonText}
-                        />
-                        {formik.values.panchayat !== '' && authLevel!="एसडीएलसी"&& (
+                   
+                        
+                        {formik.values.panchayat !== '' && (
                             <>
                                 <View style={styles.title}>
                                     <Text style={styles.titleText}>{t('village')}</Text>
@@ -1825,11 +1812,7 @@ const LocationScreen = ({ navigation }) => {
                         <CustomButton
                             text={t('Next')}
                             onPress={() => {
-                                if (formik.errors.state || formik.errors.district) {
-                                    console.log(formik.errors);
-                                    setErrorVisible(true);
-                                }
-                                formik.handleSubmit();
+                               setPanchayatInfoShow(true);
                                 // Send Data to next screen
                             }}
                             style = {
@@ -1844,8 +1827,34 @@ const LocationScreen = ({ navigation }) => {
                             setVisible={setErrorVisible}
                             errorText={t('Please fill all the fields')}
                             errors={formik.errors}
-                            buttonText={buttonText}
+                            buttonText={t('Next')}
                         />
+                                <Modal
+    //   animationType="fade"
+      transparent={true}
+      visible={panchayatInfoShow}
+       >
+      <View style={styles.errorView}>
+        <View style={styles.errorCard}>
+          <Text style={styles.errorText}>{`${t('you have chosen panchayat')} ${formik.values.panchayat} ${t('chosen')}` }</Text>
+          <View style={styles.horizontalLineErr} />
+           
+              <Pressable
+                style={styles.button}
+                onPress={() => {
+                    if (formik.errors.state || formik.errors.district) {
+                        console.log(formik.errors);
+                        setErrorVisible(true);
+                    }
+                    console.log(formik.errors,"formik Errors");
+                    formik.handleSubmit();
+                }}>
+                <Text style={styles.buttonText}>{t('Ok')}</Text>
+              </Pressable>
+          
+        </View>
+      </View>
+    </Modal>
                     </KeyboardAvoidingView>
                 </TouchableWithoutFeedback>
             </ScrollView>
@@ -2010,4 +2019,50 @@ const styles = StyleSheet.create({
         color: 'red',
         marginTop: '2%',
     },
+    errorView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.8)',
+      },
+      errorCard: {
+        width: '80%',
+        backgroundColor: '#193E05',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      errorText: {
+        fontSize: 34,
+        color: '#FF6C00',
+        margin: '15%',
+      },
+      horizontalLineErr: {
+        width: '90%',
+        borderWidth: 0.5,
+        borderColor: '#FF6C00',
+        marginBottom: '10%',
+      },
+      titleErr: {
+        marginTop: '10%',
+      },
+      titleTextErr: {
+        fontSize: 22,
+        color: '#FFFFFF',
+      },
+      button: {
+        backgroundColor: '#538415',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '10%',
+        marginBottom: '10%',
+        padding: '4%',
+        paddingHorizontal: '8%',
+        borderRadius: 20,
+      },
+      buttonText: {
+        color: 'white',
+        textTransform: 'uppercase',
+        fontSize: 18,
+      },
 });

@@ -254,7 +254,7 @@ const HomeScreen = ({ navigation }) => {
                     text={t('Show Profile Details')}
                     onPress={() => {
                         if (profile?.claims?.length === 0) {
-                            alert(t("CLAIM_NOT_APPLIED"))
+                                navigation.navigate("DownloadPDF",{code:'president'})
                         } else
                             navigation.navigate("ShowProfile", {
                                 editProfile: true

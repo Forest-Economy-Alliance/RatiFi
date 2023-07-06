@@ -79,14 +79,14 @@ export const Navigation = () => {
           options={{
             headerShown: false,
           }}
-        />
-        <Stack.Screen
-          name="LoginPassword"
-          component={LoginPasswordScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+        />  
+          <Stack.Screen
+            name="LoginPassword"
+            component={LoginPasswordScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         <Stack.Screen
           name="MobilePassword"
           component={MobilePasswordScreen}
