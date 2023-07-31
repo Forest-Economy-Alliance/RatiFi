@@ -28,7 +28,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
 const PasswordScreen = ({navigation}) => {
-  const language = 'hi';
+  const language = 'or';
   const dispatch = useDispatch();
   const toast = useToast();
   const [password, setPassword] = useState('');
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     // backgroundColor: '#480E09',
-    // width: '100%',
+  
     // height: '8%',
     alignItems: 'center',
     justifyContent: 'center',

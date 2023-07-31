@@ -286,13 +286,16 @@ const FormsPage = ({ navigation }) => {
     const handleDownload = async (vNameEnglish) => {
         // console.log("HD START",new Date().getTime())
         // console.log("REDUX",formData) // working incorrectlry
+
+        
         console.log("HANDLE DOWNLOAD CALLED")
         // 
 
         // BELOW IS WORKING FINE
         console.log(store.store.getState().entities.appUtil.appUtil,"store")
         const FD = store.store.getState().entities.appUtil.appUtil.formData;
-         console.log(FD,"FD");
+        console.log(FD,"FD");
+
         if (FD.length !== 2) {
             alert("Please try again later")
             return;
