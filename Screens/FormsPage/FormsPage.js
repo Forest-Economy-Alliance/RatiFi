@@ -42,7 +42,7 @@ import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import { useTranslation } from 'react-i18next';
 import store from '../../redux-store';
 import * as Progress from 'react-native-progress';
-import HI from '../../assets/i18n/hi.json';
+import HI from '../../assets/i18n/or.json';
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
@@ -53,6 +53,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
     
 
 const FormsPage = ({ navigation }) => {
+    const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
     const route = useRoute();
     const [vName, setVName] = useState('');
@@ -499,7 +500,8 @@ text={t('Track old claim')}
                         }}
                     >
                         <Ionicons name="ios-home" size={20} />
-                        &nbsp; होम स्क्रीन
+                        &nbsp; 
+                        {language==='or' ? "ମୂଳ ପରଦା":"होम स्क्रीन"}
                     </CustomButton>
                 }
                 {!homeScreenButtonShow &&
@@ -540,7 +542,7 @@ text={t('Track old claim')}
 
                     }}
                 >
-                    फॉर्म डाउनलोड करें
+                    {language==='or' ? "ଡାଉନଲୋଡ୍ ଫର୍ମ":"फॉर्म डाउनलोड करें"}
                 </CustomButton>
             }
 

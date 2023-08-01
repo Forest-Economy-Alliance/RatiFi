@@ -12,10 +12,10 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useDispatch,useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
- 
+
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
@@ -23,7 +23,8 @@ import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const FRCHomeScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
 
   const [curLen, setCurLen] = useState(0);
@@ -40,15 +41,23 @@ const FRCHomeScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-  const {name,panchayat,tehsil,state,district,village,postLevel,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
- 
+  const {
+    name,
+    panchayat,
+    tehsil,
+    state,
+    district,
+    village,
+    postLevel,
+    authLevel,
+  } = useSelector(state => state.entities.auth.userInfo?.profile);
 
   // console.log("UIF",UIF);
 
   // const [name, setName] = useState('Ram Krishna');
   const [member, setMember] = useState('FRC');
   const [role, setRole] = useState('Secretary');
-  console.log(postLevel,"postLevel ")
+  console.log(postLevel, 'postLevel ');
   // const [state, setState] = useState('Himachal Pradesh');
   // const [district, setDistrict] = useState('Kagda');
   // const [tehsil, setTehsil] = useState('Palampur');
@@ -58,7 +67,7 @@ const FRCHomeScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
-  console.log("hello FRC Home")
+  console.log('hello FRC Home');
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -70,7 +79,7 @@ const FRCHomeScreen = ({navigation}) => {
           <KeyboardAvoidingView>
             <View style={styles.header}>
               <Text style={styles.headerText}>
-                {"Hello"}
+                {'Hello'}
                 {name}
                 {', '}
                 {postLevel}
@@ -92,44 +101,52 @@ const FRCHomeScreen = ({navigation}) => {
             <CustomButton
               text={t('Edit Profile')}
               onPress={() => {
-                navigation.navigate("Location",{
-                  editProfile:true
-                })
+                // if (redux vairable ===or){}
+                if (language === 'or') {
+                  navigation.navigate('LocationOdisha', {
+                    editProfile: true,
+                  });
+                } else {
+                  navigation.navigate('Location', {
+                    editProfile: true,
+                    role: authLevel,
+                  });
+                }
+                // navigation.navigate("Location",{
+                //   editProfile:true
+                // })
               }}
               style={styles.epBtnView}
               button={styles.epBtn}
             />
             {/* <View styl123e={styles.horizontalLine} /> */}
-            <CustomInput/>
-           <CustomButton
+            <CustomInput />
+            <CustomButton
               text={t('Track old claim')}
-              onPress={() => {
-
-              }}
+              onPress={() => {}}
               style={styles.otBtnView}
               button={styles.otBtn}
             />
             <CustomButton
               text={t('File claim')}
               onPress={() => {
-                navigation.navigate("DownloadPDF",{code:'member'})
+                navigation.navigate('DownloadPDF', {code: 'member'});
               }}
               style={styles.ntBtnView}
               button={styles.ntBtn}
             />
-            {
-              postLevel===''?
-             <CustomButton
-              text={'verify member'}
-              onPress={() => {
-                navigation.navigate("DownloadPDF")
-              }}
-              style={styles.ntBtnView}
-              button={styles.ntBtn}
-            />
-            :
-            <Text></Text>
-}
+            {postLevel === '' ? (
+              <CustomButton
+                text={'verify member'}
+                onPress={() => {
+                  navigation.navigate('DownloadPDF');
+                }}
+                style={styles.ntBtnView}
+                button={styles.ntBtn}
+              />
+            ) : (
+              <Text></Text>
+            )}
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
       </ScrollView>

@@ -6,7 +6,7 @@ import {
   ScrollView,
   ImageBackground,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
@@ -58,9 +58,8 @@ const LangSelectionScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    changeLanguage('or');
+    changeLanguage('en');
   }, []);
-
 
   return (
     <ImageBackground
@@ -78,10 +77,14 @@ const LangSelectionScreen = ({navigation}) => {
             <TouchableOpacity
               key={lang.value}
               onPress={() => {
-                i18n
-                  .changeLanguage(lang.value)
-                  .then(() => null)
-                  .catch(err => console.log(err));
+
+
+                
+                dispatch({type: 'SAVE_APP_LANGUAGE', payload: lang.value});
+                // i18n
+                //   .changeLanguage(lang.value)
+                //   .then(() => null)
+                //   .catch(err => console.log(err));
 
                 // updating screen registration code  to 1 , means we have choosed the lanuage
                 // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});

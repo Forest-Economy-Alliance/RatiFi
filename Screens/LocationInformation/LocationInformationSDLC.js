@@ -46,7 +46,8 @@ const LocationInformationScreenSdlcs = ({ navigation }) => {
 
   }, [route?.params?.editProfile])
 
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
   

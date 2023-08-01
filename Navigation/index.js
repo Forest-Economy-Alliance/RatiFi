@@ -34,6 +34,7 @@ import HomeScreen from '../Screens/HomeScreen/homeScreen';
 import FRCMembersScreen from '../Screens/HomeScreen/FRCMembersScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
+import LocationScreenOdisha from '../Screens/Location/LocationOdisha';
 
 
 
@@ -171,6 +172,13 @@ export const Navigation = () => {
         <Stack.Screen
           name="Location"
           component={LocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+         <Stack.Screen
+          name="LocationOdisha"
+          component={LocationScreenOdisha}
           options={{
             headerShown: false,
           }}

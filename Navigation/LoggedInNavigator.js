@@ -6,6 +6,7 @@ import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
 import HomeScreen from '../Screens/HomeScreen/homeScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
+import LocationInformationScreenOdisha from '../Screens/LocationInformation/LocationInformationScreenOdisha';
 const Stack = createNativeStackNavigator();
 
 const LoggedInNavigator = () => {
@@ -62,6 +63,13 @@ const LoggedInNavigator = () => {
       <Stack.Screen
         name="LocationInformation"
         component={LocationInformationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="LocationInformationOdisha"
+        component={LocationInformationScreenOdisha}
         options={{
           headerShown: false,
         }}

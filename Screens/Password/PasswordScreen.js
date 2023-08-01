@@ -21,14 +21,9 @@ import {useToast} from 'react-native-toast-notifications';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 
-
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-
-
-
 const PasswordScreen = ({navigation}) => {
-  const language = 'or';
   const dispatch = useDispatch();
   const toast = useToast();
   const [password, setPassword] = useState('');
@@ -41,20 +36,22 @@ const PasswordScreen = ({navigation}) => {
   }, [route?.params]);
   const route = useRoute();
   console.log('P', route.params);
-  const forgetPasswordCode = route.params.forgetPasswordCode || "2";
-  console.log(forgetPasswordCode)
+  const forgetPasswordCode = route.params.forgetPasswordCode || '2';
+  console.log(forgetPasswordCode);
   const state = {
     password: '',
     confirmPassword: '',
   };
-  const mobile = route.params.mobile
+  const mobile = route.params.mobile;
   // const mobile = useSelector(
   //   state => state.entities.auth.userInfo.profile.mobile,
   // );
   const pwdToVerify = useSelector(
-    state => state.entities.auth.userInfo.profile.password
+    state => state.entities.auth.userInfo.profile.password,
   );
-  
+
+  const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
+
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -74,13 +71,13 @@ const PasswordScreen = ({navigation}) => {
         t('Password and Confirm Password does not match'),
       ),
   });
-  console.log("loginflow--",loginflow);
+  console.log('loginflow--', loginflow);
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // dispatch({type: 'ENABLE_LOADING'});
-    if (loginflow===true) {
-      console.log("PTV",pwdToVerify)
+    if (loginflow === true) {
+      console.log('PTV', pwdToVerify);
       if (pwdToVerify === formik.values.password) {
         navigation.replace('DownloadPDF');
       } else {
@@ -92,9 +89,7 @@ const PasswordScreen = ({navigation}) => {
           duration: 5000,
         });
       }
-    } 
-    else {
-
+    } else {
       dispatch(
         updatePasswordAction(
           {
@@ -102,22 +97,25 @@ const PasswordScreen = ({navigation}) => {
             password: formik.values.password,
           },
           args => {
-            if(forgetPasswordCode==1){
+            if (forgetPasswordCode == 1) {
               navigation.navigate('HomeScreen');
-            }
-           else if (args) {
-              // screen code 3 means , password set 
+            } else if (args) {
+              // screen code 3 means , password set
               dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+
+              // odish screen if oritya
+              if(language==='or'){
+                navigation.navigate("LocationOdisha")
+              }else
               navigation.navigate('Location');
             }
           },
         ),
       );
-      
     }
     // dispatch({type: 'DISABLE_LOADING'});
   };
-// alert("HI")
+  // alert("HI")
   const formik = useFormik({
     initialValues: state,
     validationSchema: !loginflow ? PassSchema : null,
@@ -129,50 +127,45 @@ const PasswordScreen = ({navigation}) => {
   }, []);
 
   return (
-   
-      <ImageBackground
-    source={BG_IMG_PATH}
-    resizeMode="cover"
-    blurRadius={10}
-    style={styles.bg}>
+    <ImageBackground
+      source={BG_IMG_PATH}
+      resizeMode="cover"
+      blurRadius={10}
+      style={styles.bg}>
+      <CustomInput
+        style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#480E09"
+        onChangeText={formik.handleChange('password')}
+        secureTextEntry={true}
+        onBlur={formik.handleBlur('password')}
+        value={formik.values.password}
+        keyboardType="number-pad"
+      />
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.error}>{formik.errors.password}</Text>
+      )}
+      {!loginflow && (
         <CustomInput
-          style={styles.inputPass}
-          placeholder={t('password')}
+          style={styles.inputConfPass}
+          placeholder={t('confirm password')}
           placeholderTextColor="#480E09"
-          onChangeText={formik.handleChange('password')}
+          onChangeText={formik.handleChange('confirmPassword')}
           secureTextEntry={true}
-          onBlur={formik.handleBlur('password')}
-          value={formik.values.password}
           keyboardType="number-pad"
+          onBlur={formik.handleBlur('confirmPassword')}
+          value={formik.values.confirmPassword}
         />
-        {formik.touched.password && formik.errors.password && (
-          <Text style={styles.error}>{formik.errors.password}</Text>
-        )}
-        {!loginflow && (
-          <CustomInput
-            style={styles.inputConfPass}
-            placeholder={t('confirm password')}
-            placeholderTextColor="#480E09"
-            onChangeText={formik.handleChange('confirmPassword')}
-            secureTextEntry={true}
-            keyboardType="number-pad"
-            onBlur={formik.handleBlur('confirmPassword')}
-            value={formik.values.confirmPassword}
-          />
-        )}
-        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-          <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
-        )}
-        <CustomButton
-          style={styles.nextButton}
-          onPress={formik.handleSubmit}
-        >
-          <Text style={styles.nextButtonText}>
-            {loginflow ? 'LOGIN' : t('next')}
-          </Text>
-        </CustomButton>
-        </ImageBackground>
-      
+      )}
+      {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+        <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
+      )}
+      <CustomButton style={styles.nextButton} onPress={formik.handleSubmit}>
+        <Text style={styles.nextButtonText}>
+          {loginflow ? 'LOGIN' : t('next')}
+        </Text>
+      </CustomButton>
+    </ImageBackground>
   );
 };
 
@@ -184,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     // justifyContent: 'center',
-    paddingHorizontal:'10%'
+    paddingHorizontal: '10%',
     // padding: '15%',
   },
   inputPass: {
@@ -203,7 +196,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     // backgroundColor: '#480E09',
-  
+
     // height: '8%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -223,12 +216,11 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: '2%',
   },
-    bg: {
-      flex: 1,
-      // height: '100%',
-      // width: '100%',
-      paddingHorizontal:'10%',
-      paddingVertical:'10%'
-    }
-
+  bg: {
+    flex: 1,
+    // height: '100%',
+    // width: '100%',
+    paddingHorizontal: '10%',
+    paddingVertical: '10%',
+  },
 });

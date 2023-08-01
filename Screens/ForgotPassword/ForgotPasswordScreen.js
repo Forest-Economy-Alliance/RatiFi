@@ -25,7 +25,8 @@ import { checkAccount } from '../../services/authService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ForgotPasswordScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
 
   // const [name, setName] = useState('Ram Krishna');

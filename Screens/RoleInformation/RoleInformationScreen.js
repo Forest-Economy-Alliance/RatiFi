@@ -27,7 +27,8 @@ const data = [
 ];
 
 const RoleInformationScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
   const [id, setId] = useState('');
   const [idType, setIdType] = useState('');

@@ -22,7 +22,8 @@ import CustomError from '../../components/CustomError';
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const IdCardScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
 
   const dispatch=useDispatch();
 

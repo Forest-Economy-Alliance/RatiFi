@@ -24,7 +24,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 const NamePhoneScreen = ({navigation}) => {
 
   const dispatch=useDispatch();
-  const language = 'hi';
+  const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
   const route=useRoute();
   console.log(route?.params?.phoneNumber);
   const {t, i18n} = useTranslation();

@@ -49,11 +49,12 @@ const data = [
 
 
 const DownloadPDFScreen = ({ navigation }) => {
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
   const [imgUrl,setImgUrl]=useState('x');
   const [vData,setVData]=useState([]);
   const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
   const [vis,setVis]=useState(false);
-  const language = 'hi';
+
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
   const [val5, setVal5] = useState('');
@@ -1624,6 +1625,802 @@ const DownloadPDFScreen = ({ navigation }) => {
   
   }
 
+
+  const panchayatToVillageMappingOdisha = {
+
+    // KALIMELA
+
+    [t('BHEJANGIWADA')]: [
+        {
+            label: t('Arnamala'),
+            value: '1',
+        },
+
+        {
+            label: t('Badaliguda'),
+            value: '1'
+        },
+        {
+            label: t('Bapanpali'),
+            value: '1'
+        },
+        {
+            label: t('Kurukundi'),
+            value: '1'
+        },
+        
+    ],
+    [t('BODIGETTA')]: [
+        {
+            label: t('Badigata'),
+            value: '4'
+        },
+        {
+            label: t('Kurubu'),
+            value: '4'
+        },
+        {
+            label: t('Kutmanpali'),
+            value: '4'
+        },
+        {
+            label: t('Marigata'),
+            value: '4'
+        },
+        {
+            label: t('Tekagura'),
+            value: '4'
+        },
+    ],
+    [t('CHINTALWADA')]: [
+        {
+            label: t('CHINTALWADA'),
+            value: '5'
+        },
+        {
+            label: t('Karkatpalli'),
+            value: '5'
+        }, {
+            label: t('Kosalkunda'),
+            value: '5'
+        }, {
+            label: t('Pitakonda'),
+            value: '5'
+        }, {
+            label: t('Sindhiguda'),
+            value: '6'
+        },
+    ],
+    [t('CHITRANGAPALLI')]: [{
+        label: t('Chitrangpali'),
+        value: '6'
+    },
+
+    {
+        label: t('Doraguda (MPV-9)'),
+        value: '6'
+    }, {
+        label: t('Gumukaguda'),
+        value: '6'
+    },
+    {
+        label: t('Mudakhal'),
+        value: '7'
+    }, {
+        label: t('Odelguda'),
+        value: '7'
+    }, {
+        label: t('Supali'),
+        value: '7'
+    }, {
+        label: t('Usakapali'),
+        value: '7'
+    }
+    ],
+
+    [t('GOMPAKUNDA')]: [
+        {
+            label: t('Gagarmetla'),
+            value: '7'
+        }, {
+            label: t('Barbera'),
+            value: '7'
+        },
+        {
+            label: t('Gampakonda'),
+            value: '7'
+        },
+        {
+            label: t('Iralgonda'),
+            value: '7'
+        }, {
+            label: t('Kanheiguda'),
+            value: '7'
+        }, 
+    ],
+    [t('GUMUKA')]: [{
+        label: t('GUMUKA'),
+        value: '8'
+    }, {
+        label: t('Pedakonda'),
+        value: '8'
+    }],
+
+    [t('kALIMELA')]: [
+        {
+            label: t('Ambaguda'),
+            value: '2'
+        }, {
+            label: t('kALIMELA'),
+            value: '2'
+        }, {
+            label: t('Kotaguda'),
+            value: '2'
+        },
+    ],
+    [t('KANGURUKUNDA')]: [
+        {
+            label: t('Kangurkonda'),
+            value: '2'
+        }, {
+            label: t('Patakonda'),
+            value: '2'
+        }, {
+            label: t('Salamarikonda'),
+            value: '2'
+        }
+    ],
+    [t('KOIMETLA')]: [{
+        label: t('KOIMETLA'),
+        value: '9'
+    },
+    {
+        label: t('Kowasiguda'),
+        value: '9'
+    },
+    {
+        label: t('Maranpalli'),
+        value: '9'
+    }
+   ],
+    [t('LUGEL')]: [{
+        label: t('Krushnanagar'),
+        value: '10'
+    },
+    {
+        label: t('LUGEL'),
+        value: '10'
+    },
+    {
+        label: t('Phulkonkonda'),
+        value: '10'
+    }],
+
+    [t('MAHARAJAPALLI')]: [, {
+        label: t('Biliguda'),
+        value: '12'
+    }, {
+            label: t('Koikonda'),
+            value: '12'
+        }, {
+            label: t('Maharajpalli'),
+            value: '12'
+        }, {
+            label: t('MPV -81'),
+            value: '12'
+        }],
+    [t('MALAVARAM')]: [
+        
+        {
+        label: t('Anantapalli'),
+        value: '13'
+    },
+    {
+        label: t('Berenpalli'),
+        value: '13'
+   
+    }
+    ,
+    {
+        label: t('Dopenkonda'),
+        value: '13'
+   
+    },
+    {
+        label: t('Malabharam'),
+        value: '13'
+   
+    },
+    {
+        label: t('Nilakota'),
+        value: '13'
+   
+    },
+    {
+        label: t('Tendraspaly'),
+        value: '13'
+   
+    }
+],
+    [t('MANYAMKUNDA')]: [{
+        label: t('Billigura'),
+        value: '14'
+    },
+    {
+        label: t('Doganda'),
+        value: '14'
+    },
+    {
+        label: t('Gunthabeda'),
+        value: '14'
+    },
+    {
+        label: t('Kantabanjiguda'),
+        value: '14'
+    },
+    {
+        label: t('Mangipalli'),
+        value: '14'
+    },
+    {
+        label: t('Manyamkonda'),
+        value: '14'
+    },
+    {
+        label: t('Pendikonda'),
+        value: '14'
+    },
+    {
+        label: t('Penkurai'),
+        value: '14'
+    },
+    {
+        label: t('Poluru'),
+        value: '14'
+    },
+    {
+        label: t('Potteru'),
+        value: '14'
+    },
+    {
+        label: t('Ramachandrapur'),
+        value: '14'
+    },
+    {
+        label: t('Sailuru'),
+        value: '14'
+    },
+    {
+        label: t('Singrajkota'),
+        value: '14'
+    },
+    {
+        label: t('Togurkota'),
+        value: '14'
+    },
+    ],
+    [t('NALAGUNTHI')]: [{
+        label: t('Idikonda'),
+        value: '15'
+    }, {
+        label: t('Nalagunti'),
+        value: '15'
+    }],
+    [t('TELERAI')]: [{
+        label: t('Ambapadar'),
+        value: '16'
+    },
+    {
+        label: t('Badapadar'),
+        value: '16'
+    },
+    {
+        label: t('Dayaltungi'),
+        value: '16'
+    },
+    {
+        label: t('Jabanpalli'),
+        value: '16'
+    },
+    {
+        label: t('Jakalgandi'),
+        value: '16'
+    },
+    {
+        label: t('Kandalgura'),
+        value: '16'
+    },
+    {
+        label: t('Oramgura'),
+        value: '16'
+    },
+    {
+        label: t('Pedawara'),
+        value: '16'
+    },
+    {
+        label: t('Singabaram'),
+        value: '16'
+    
+    },
+    {
+        label: t('Sudhakunta'),
+        value: '16'
+    },
+    {
+        label: t('TELERAI'),
+        value: '16'
+    }
+
+
+],
+    [t('TIGAL')]: [
+        {
+            label: t('Tamanpalli'),
+            value: '17'
+        },
+        {
+            label: t('TIGAL'),
+            value: '17'
+        }
+    ],
+    [t('VENKATAPALLAM')]: [{
+        label: t('Bhenkatapalli'),
+        value: '1'
+    }, {
+        label: t('Koyaguda'),
+        value: '2'
+    }, {
+        label: t('Mangipalli'),
+        value: '3'
+    }
+    ],
+
+
+
+
+
+
+
+
+
+    // CHITRAKONDA
+
+    [t('BADAPADAR')]: [
+        {
+            label: t('Badpader'),
+            value: '28',
+        },
+        {
+            label: t('Banguru'),
+            value: '28',
+        },
+        {
+            label: t('Bangurupoda'),
+            value: '28',
+        },
+        {
+            label: t('Hatipadar'),
+            value: '28'
+        }, {
+            label: t('Iswarguda'),
+            value: '28'
+        }, {
+            label: t('Janbai'),
+            value: '28'
+        },
+         {
+            label: t('Kamarguda'),
+            value: '28'
+        },
+         {
+            label: t('Khilaput'),
+            value: '28'
+        },
+         {
+            label: t('lambasingi'),
+            value: '28'
+        },
+         {
+            label: t('Limalori'),
+            value: '28'
+        },
+         {
+            label: t('Metaguda'),
+            value: '28'
+        },
+         {
+            label: t('Pabiliguda'),
+            value: '28'
+        },
+         {
+            label: t('Padmagiri'),
+            value: '28'
+        },
+         {
+            label: t('Paneshgandhi'),
+            value: '28'
+        },
+         {
+            label: t('Phulagandhi'),
+            value: '28'
+        },
+         {
+            label: t('Rekhapali'),
+            value: '28'
+        },
+         {
+            label: t('Sariapali'),
+            value: '28'
+        },
+    ],
+
+    [t('CHITRAKONDA')]: [{
+        label: t('Chitrakonda (CT)'),
+        value: '29'
+    }, {
+        label: t('Rajal konda'),
+        value: '29'
+    }
+    ],
+
+
+    [t('JODAMBA')]: [{
+        label: t('BADATALPADAR'),
+        value: '30'
+    }, {
+        label: t('Bhitardarlabeda'),
+        value: '30'
+    }, {
+        label: t('Bihanagudi'),
+        value: '30'
+    }, {
+        label: t('Darlabeda'),
+        value: '30'
+    }, {
+        label: t('Doraguda'),
+        value: '30'
+
+    }, {
+        label: t('GAJALGUMI'),
+        value: '30'
+    }, {
+        label: t('Gopinathguda'),
+        value: '30'
+    },
+    {
+        label: t('Jajpalama'),
+        value: '30'
+    },
+    {
+        label: t('jampurulu'),
+        value: '30'
+    },
+    {
+        label: t('Janturai'),
+        value: '30'
+    },
+    {
+        label: t('Jodamba'),
+        value: '30'
+    },
+    {
+        label: t('KARANJAGUDA'),
+        value: '30'
+    },
+    {
+        label: t('Khajuriguda'),
+        value: '30'
+    },
+    {
+        label: t('Kumbhipatiaguda'),
+        value: '30'
+    },
+    {
+        label: t('Kunturpader'),
+        value: '30'
+    },
+    {
+        label: t('Kusumput'),
+        value: '30'
+    },
+    {
+        label: t('Kutunipadar'),
+        value: '30'
+    },{
+        label:t('ladiguda'),
+        value:'30'
+    }
+    ,{
+        label:t('Matikhala'),
+        value:'30'
+    }
+    ,{
+        label:t('Nilaram'),
+        value:'30'
+    }
+    ,{
+        label:t('Nuaguda'),
+        value:'30'
+    }
+    ,{
+        label:t('PALASPADAR'),
+        value:'30'
+    }
+    ,{
+        label:t('Panapader'),
+        value:'30'
+    }
+    ,{
+        label:t('Panaspadar'),
+        value:'30'
+    }
+    ,{
+        label:t('PODKHAL'),
+        value:'30'
+    }
+    ,{
+        label:t('SANTALPADAR'),
+        value:'30'
+    }
+    ,{
+        label:t('Similipader'),
+        value:'30'
+    },{
+        label:t('Tarabeda'),
+        value:'30'
+    }
+    ,{
+        label:t('Tikarpada'),
+        value:'30'
+    }
+],
+
+
+    [t('NUAGUDA')]: [{
+        label: t('Badput'),
+        value: '31'
+    }, {
+        label: t('Ghagadabandha'),
+        value: '31'
+    },
+    {
+        label: t('Kalpadar'),
+        value: '31'
+    }, {
+        label: t('Narasingpur'),
+        value: '31'
+    }, {
+        label: t('Nuaguda'),
+        value: '31'
+    }, {
+        label: t('Paliguda'),
+        value: '31'
+    }, {
+        label: t('Purunapani'),
+        value: '31'
+    }, {
+        label: t('Ramaguda'),
+        value: '31'
+    }, {
+        label: t('Rathaguda'),
+        value: '31'
+    }
+
+
+
+],
+
+    [t('PANASPUT')]: [{
+        label: t('Bezing'),
+        value: '32'
+    }, {
+        label: t('Damagada'),
+        value: '32'
+
+    }, {
+        label: t('Dangarpadar'),
+        value: '32'
+
+    }, {
+        label: t('Ghanabeda'),
+        value: '32'
+
+    }, {
+        label: t('Goilikhari'),
+        value: '32'
+    }, {
+        label: t('Gorasethu'),
+        value: '32'
+    }, {
+        label: t('Handikhal'),
+        value: '32'
+    }, {
+        label: t('jamuguda'),
+        value: '32'
+    }, {
+        label: t('Kumudaguda'),
+        value: '32'
+    }, {
+        label: t('Mukudipali'),
+        value: '32'
+    }, {
+        label: t('Mulaput'),
+        value: '32'
+    }, {
+        label: t('Mundiguma'),
+        value: '32'
+    }, {
+        label: t('Panasput'),
+        value: '32'
+    }, {
+        label: t('Salgamput'),
+        value: '32'
+    }, {
+        label: t('Sindhiput'),
+        value: '32'
+    }, {
+        label: t('Singoi'),
+        value: '32'
+    }, {
+        label: t('Tabalaguda'),
+        value: '32'
+    },{
+        label:t('Tutugumi'),
+        value:'32'
+    }
+],
+
+
+    [t('PAPERMETLA')]: [{
+        label: t('Bhimaram'),
+        value: '33'
+
+    }, {
+        label: t('Bidarpakhana'),
+        value: '33'
+    }, {
+        label: t('Dudhapalli'),
+        value: '33'
+    },
+    {
+        label: t('Gandhiguda'),
+        value: '33'
+    },{
+        label: t('Jantapai'),
+        value: '33'
+    },{
+        label: t('Kadalibandha'),
+        value: '33'
+    },{
+        label: t('Katapali'),
+        value: '33'
+    },{
+        label: t('Kuniguda'),
+        value: '33'
+    },{
+        label: t('lauguda'),
+        value: '33'
+    },{
+        label: t('Lochapani'),
+        value: '33'
+    },{
+        label: t('Nuadoliamb'),
+        value: '33'
+    },{
+        label: t('Nuaguda'),
+        value: '33'
+    },{
+        label: t('Papermenta'),
+        value: '33'
+    },{
+        label: t('Purulubandha'),
+        value: '33'
+    },{
+        label: t('Tentaguda'),
+        value: '33'
+    },{
+        label: t('Tentuliguda'),
+        value: '33'
+    }
+],
+
+
+
+    [t('POPULUR')]: [{
+        label: t('Brundamamedi'),
+        value: '34'
+    }, {
+        label: t('Jadaput'),
+        value: '34'
+    }, {
+        label: t('Jalagulur'),
+        value: '34'
+    }, {
+        label: t('Muraliguda'),
+        value: '34'
+    
+    }, {
+        label: t('Naguluru'),
+        value: '34'
+    },
+    {
+    
+        label: t('Papulur'),
+        value: '34'
+    },
+    {
+    
+        label: t('Petal'),
+        value: '34'
+    },
+    {
+    
+        label: t('Sanapapulur'),
+        value: '34'
+    }
+
+],
+
+
+
+
+
+
+    // KHAIRAPUT
+
+    [t('ANDRAHAL')]: [
+        {
+        label: t('ANDRAHAL'),
+        value: '18'
+    },
+    {
+        label: t('Badabel'),
+        value: '18'
+    }, {
+        label: t('Bhaliapadar'),
+        value: '18'
+    },
+    {
+        label: t('Dumuripoda'),
+        value: '18'
+    },
+    {
+        label: t('Katamaguda'),
+        value: '18'
+    },
+    {
+        label: t('Khaliguda'),
+        value: '18'
+    },
+    {
+        label: t('Patraput'),
+        value: '18'
+    }
+
+],
+
+
+    [t('BADODURAL')]: [
+        {
+            label: t('Angel'),
+            value: '20'
+        },
+        {
+            label: t('Badadural'),
+            value: '19'
+        },
+        {
+            label: t('Baliguda'),
+            value: '20'
+        }],
+
+
+
+
+
+}
+
   useEffect(()=>{
     
     // let temp=states[0].Districts;
@@ -1636,12 +2433,25 @@ const DownloadPDFScreen = ({ navigation }) => {
     //   }
     // }
         let tempData=[];
+      
+      if(language==='or')
+      {
+        
+        for(let key of Object.keys(panchayatToVillageMappingOdisha)){
+          if(key===profile?.panchayat){
+            tempData=panchayatToVillageMappingOdisha[key];
+          }
+        }
+      }else{
         // find all villages tht are mapped with the panchayat in const panchayatToVillageMapping
         for(let key of Object.keys(panchayatToVillageMapping)){
           if(key===profile?.panchayat){
             tempData=panchayatToVillageMapping[key];
           }
         }
+      }
+
+
         setVData(tempData);
   },[])
 

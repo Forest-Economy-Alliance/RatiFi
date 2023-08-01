@@ -26,7 +26,8 @@ import {updateUserInfoAction} from '../../redux-store/actions/auth';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const state = {
     member: '',
     role: '',

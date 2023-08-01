@@ -11,7 +11,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import 'yup-phone';
@@ -21,7 +21,8 @@ import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const  LoginScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
 
   const [curLen, setCurLen] = useState(0);
@@ -85,7 +86,7 @@ const  LoginScreen = ({navigation}) => {
               <Text style={styles.headerText}>{t('Login')}</Text>
               <View style={styles.horizontalLine} />
             </View>
-            
+          
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
               {/* <TexT>hello</TexT> */}

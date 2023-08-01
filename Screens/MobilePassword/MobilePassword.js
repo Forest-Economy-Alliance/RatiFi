@@ -28,7 +28,8 @@ import {signInAction} from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const MobilePasswordScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const toast = useToast();
   const dispatch = useDispatch();
   // const {name} = useSelector(state => state.entities.auth.userInfo?.profile);

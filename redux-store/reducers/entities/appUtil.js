@@ -4,13 +4,18 @@ const INIT_STATE = {
   loading: false,
   registrationScreenCode: 0,
   formSaveDir: '',
-  language: 'hi', // not used yet
+  language: 'en', // not used yet
   name: '',
-  formData:[]
+  formData: [],
 };
 
 const appUtil = (state = INIT_STATE, action) => {
   switch (action.type) {
+    case 'SAVE_APP_LANGUAGE':
+      return {
+        ...state,
+        language: action.payload,
+      };
     case 'ENABLE_LOADING':
       return {
         ...state,
@@ -30,41 +35,40 @@ const appUtil = (state = INIT_STATE, action) => {
       return {
         ...state,
         formSaveDir: action.payload,
-      }
+      };
     case 'UPDATE_NAME':
       return {
         ...state,
         name: action.payload,
       };
-      
+
     case 'VERIFY_MEMBER':
       return {
         ...state,
-        isVerified:true,
-      }
+        isVerified: true,
+      };
 
     case 'UPDATE_FORMDATA':
-
       // console.log("ITS COMING");
-      var oldFormData=state.formData || [];
+      var oldFormData = state.formData || [];
       // console.log("OO",oldFormData)
-      if(oldFormData?.length===2){
-        oldFormData =[];
+      if (oldFormData?.length === 2) {
+        oldFormData = [];
         oldFormData.push(action.payload);
-      }else{
-        oldFormData.push(action.payload)
+      } else {
+        oldFormData.push(action.payload);
       }
       // console.log("COMPLETE")
       return {
         ...state,
-        formData:oldFormData
-      }
+        formData: oldFormData,
+      };
 
-    case "CLEAR_FORMS":
+    case 'CLEAR_FORMS':
       return {
         ...state,
-        formData:[]
-      }
+        formData: [],
+      };
     default:
       return state;
   }

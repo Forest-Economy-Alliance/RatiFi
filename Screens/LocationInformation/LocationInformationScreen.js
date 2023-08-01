@@ -121,7 +121,8 @@ const DATA = [
 ];
 
 const LocationInformationScreen = ({navigation}) => {
-  const language = 'hi';
+  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
   const dispatch = useDispatch();
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');

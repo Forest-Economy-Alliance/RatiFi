@@ -43,7 +43,8 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
 const PastRecordsScreen = ({ navigation }) => {
-    const language = 'hi';
+    const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
     const dispatch = useDispatch();
 
 
@@ -413,9 +414,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            भरा हुआ दावा प्रपत्र प्रारूप ख और ग एवं SDLC अन्तिम प्रस्तुति  - Form 0
+                                             Form 0
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -464,9 +465,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            ग्राम पंचायत द्वारा गांव में वन अधिकार समिति (FRC) गठित करने की अधिसूचना - Form 1
+                                             Form 1
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -518,7 +519,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 2
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -567,9 +568,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            ग्राम सभा की पहली बैठक कर वन अधिकार समिति (FRC) का गठन - Form 3
+                                           Form 3
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -618,9 +619,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            SDLC को सामुदायिक वन संसाधनों पर दावा की प्रक्रिया आरंभ करने की सूचना - Form 4
+                                            Form 4
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -668,9 +669,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            SDLC को दस्तावेजों को उपलब्ध कराने के लिए सूचना - Form 5
+                                             Form 5
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -719,9 +720,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 6
+                                          Form 6
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -769,9 +770,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 7
+                                             Form 7
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -820,9 +821,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 8
+                                            Form 8
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -870,9 +871,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 9
+                                            Form 9
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -921,9 +922,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 10
+                                          Form 10
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -972,9 +973,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            वन क्षेत्र एवं अंचल पदाधिकारी को स्थल निरीक्षण के लिए सूचना - Form 11
+                                             Form 11
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1024,7 +1025,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 12
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1073,9 +1074,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            एफआरसी द्वारा तैयार दस्तावेज - Form 13
+                                             Form 13
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1124,9 +1125,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            स्थल निरीक्षण की रिपोर्ट - Form 14
+                                            Form 14
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1176,7 +1177,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 15
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1225,9 +1226,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            ग्राम सभा की दूसरी बैठक कर CFR दावा को अनुमोदित करना और एसडीएलसी को नोटिस - Form 16
+                                            Form 16
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1276,9 +1277,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            भरा हुआ दावा प्रपत्र प्रारूप ख और ग एवं SDLC अन्तिम प्रस्तुति  - Form 17
+                                            Form 17
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1327,9 +1328,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            भरा हुआ दावा प्रपत्र प्रारूप ख और ग एवं SDLC अन्तिम प्रस्तुति  - Form 18
+                                            Form 18
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>तिथि : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>

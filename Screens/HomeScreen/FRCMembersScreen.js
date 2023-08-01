@@ -47,7 +47,8 @@ const HomeScreen = ({ navigation,route  }) => {
 
     const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
     const [vis, setVis] = useState(false);
-    const language = 'hi';
+    const {language} = useSelector(state => state.entities.appUtil.appUtil);
+
     const dispatch = useDispatch();
     const [role, setRole] = useState('FRC');
     const [val5, setVal5] = useState('');
