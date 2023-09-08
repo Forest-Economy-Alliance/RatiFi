@@ -312,7 +312,10 @@
     "No  of Female":"महिलाओं की संख्या",
     "you have chosen panchayat":"आपने पंचायत ",
     "chosen":"चुनी है!",
-    "Ok":"ठीक है!"
+    "Ok":"ठीक है!",
+    "specify your gender":"लिंग चयन कीजिए",
+    "male":"पुरुष",
+    "female":"महिला"
   }
 }
 

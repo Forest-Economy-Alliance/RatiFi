@@ -75,6 +75,7 @@ const FRCHomeScreen = ({navigation}) => {
       blurRadius={10}
       style={styles.bg}>
       <ScrollView style={styles.darkness}>
+    
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
