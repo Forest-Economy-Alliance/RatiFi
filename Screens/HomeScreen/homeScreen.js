@@ -29,17 +29,23 @@ import {useFormik} from 'formik';
 import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
-import {BASE_URL} from '../../services/APICentral';
+import {BASE_URL, request} from '../../services/APICentral';
 import {BackHandler} from 'react-native';
 import HI from '../../assets/i18n/hi.json';
 import {getDeviceHash} from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
 import {verifYYMember} from '../../redux-store/actions/auth';
-import {logoutHandler, verifyyMember, viewFRCMember} from '../../services/authService';
-import { firebase } from '@react-native-firebase/messaging';
+import {
+  logoutHandler,
+  verifyyMember,
+  viewFRCMember,
+} from '../../services/authService';
+import {firebase} from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
+  const [notificationCount,setNC]=useState(0);
+
   const [imgUrl, setImgUrl] = useState('x');
   const [vData, setVData] = useState([]);
   const {
@@ -87,38 +93,30 @@ const HomeScreen = ({navigation}) => {
   const handleSignOut = () => {
     setVis(true);
   };
- 
+
   const fetchData = async () => {
     await firebase.messaging().registerDeviceForRemoteMessages();
     const fcmToken = await firebase.messaging().getToken();
     console.log('fcm', fcmToken);
-   
+
     return fcmToken;
   };
-const signout=async()=>{
-
+  const signout = async () => {
     logoutHandler({
-      id:profile?._id?.toString(),
-      fcmToken:await fetchData()
-    }).then(res=>{
-
-
-      setVis(false);
-      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-      dispatch({type: 'SAVE_TOKEN', payload: null});
-      navigation.replace("NamePhone")
-
-
-
-    }).catch(error=>{
-
-      alert("Something went wrong")
-
-
+      id: profile?._id?.toString(),
+      fcmToken: await fetchData(),
     })
+      .then(res => {
+        setVis(false);
+        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+        dispatch({type: 'SAVE_TOKEN', payload: null});
+        navigation.replace('NamePhone');
+      })
+      .catch(error => {
+        alert('Something went wrong');
+      });
     // dispatch({type: 'SAVE_PROFILE', payload: null});
-  }
-
+  };
 
   const viewFRCMembers = village => {
     console.log('view all FRC members of village', {
@@ -202,6 +200,21 @@ const signout=async()=>{
     navigation.navigate('Role');
   };
 
+
+  useEffect(()=>{
+
+    request(`/fetch-notifications?id=${profile?._id}`, {method: 'GET'}, true, false)
+    .then(({data}) => {
+      console.log('x',data?.data?.length);
+      setNC(data?.data?.length);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  },[])
+
+
   return (
     // flexWrap: 'wrap',
     <ImageBackground
@@ -281,7 +294,7 @@ const signout=async()=>{
           )}
         </View>
 
-        {
+        { authLevel == 'एफआरसी' && 
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -333,7 +346,7 @@ const signout=async()=>{
             UpdateRole();
           }}
         /> */}
-        <CustomButton
+     { authLevel == 'एफआरसी' &&  <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
           // dsbled={profile?.claims?.length==0}
@@ -343,7 +356,7 @@ const signout=async()=>{
               alert(t('CLAIM_NOT_APPLIED'));
             } else navigation.navigate('PastRecordsScreen');
           }}
-        />
+        />}
         {/* <CustomButton
                     style={{ marginBottom: 20 }}
                     button={{ width: 300 }}
@@ -371,13 +384,40 @@ const signout=async()=>{
             style={{marginBottom: 20}}
             button={{width: 300}}
             // dsbled={profile?.claims?.length==0}
-            text={t('Check Status')}
+            text={'एफआरसी आवेदन स्थिति'}
             onPress={() => {
               console.log('ji');
               navigation.navigate('LocationSdlc');
             }}
           />
         )}
+
+        <View
+          style={{
+            backgroundColor: 'green',
+          }}></View>
+        <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          onPress={() => {
+            navigation.navigate("ClaimAlertsScreen")
+            // all the alers related to claim
+            // @ TODO
+            // Notii aiotn Badge Icon
+          }}>
+          {t('claim_alerts')}
+          &nbsp;&nbsp;
+       {notificationCount && <Text
+            style={{
+              color: '#fff',
+              fontSize: 18,
+              padding: 5,
+              zIndex: 199,
+              borderRadius: 10,
+            }}>
+            ({(notificationCount)})
+          </Text>}
+        </CustomButton>
       </View>
     </ImageBackground>
   );

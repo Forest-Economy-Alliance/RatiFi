@@ -130,19 +130,19 @@ const FormsPage = ({ navigation }) => {
             form: new Form0Jharkhand([t('Jharkhand'), getDistrict(false), getTehsil(false), getPanchayat(false), getVillage(false), getVillage(false)], null),
             imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
         },
-        {
-            title: 'Form 9',
-            form: new Form9Jharkhand(null, [route?.params?.url || 'none']),
-            imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
-        },
-        {
-            title: 'Form 1',
-            form: new Form1Jharkhand(
-                [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
-                null,
-            ),
-            imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
-        },
+        // {
+        //     title: 'Form 9',
+        //     form: new Form9Jharkhand(null, [route?.params?.url || 'none']),
+        //     imageName: require('../../assets/images/FormPreviews/Page9_Jharkhand.png'),
+        // },
+        // {
+        //     title: 'Form 1',
+        //     form: new Form1Jharkhand(
+        //         [getVillage(), getPanchayat(), getTehsil(), getDistrict()],
+        //         null,
+        //     ),
+        //     imageName: require('../../assets/images/FormPreviews/Page1_Jharkhand.jpg'),
+        // },
         // {
         //   title: 'Form 2',
         //   form: new Form2Jharkhand(
@@ -304,7 +304,7 @@ const FormsPage = ({ navigation }) => {
         const FD = store.store.getState().entities.appUtil.appUtil.formData;
         console.log(FD,"FD");
 
-        if (FD.length !== 2) {
+        if (FD.length !== 1) {
             alert("Please try again later")
             return;
         }
@@ -314,7 +314,7 @@ const FormsPage = ({ navigation }) => {
             // console.log("REDUX",formData)
              console.log("try downloading..")
             // console.log("URI",`https://ratifi-backend-v2.herokuapp.com/get-documents?f0=${formData[0]}&f9=${formData[1]}`)
-            const response = await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[1]}&vName=${vNameEnglish}`);
+            const response = await Linking.openURL(`${BASE_URL}/get-documents?f0=${FD[0]}&f9=${FD[0]}&vName=${vNameEnglish}`);
 
             setHomeScreenButtonShow(true)
         } catch (er) {
@@ -549,7 +549,7 @@ try{
   
                         setProgress(0.009);
                       
-                        let CIT = carouselItems.slice(0, 2);
+                        let CIT = carouselItems;
                         console.log("AA",CIT);
                         console.log("LENGTH", CIT.length);
 
@@ -562,7 +562,7 @@ try{
                         }
                         console.log("generating pdf done...")
 
-
+                      
                         console.log("OK")
                         console.log("owner id",profile._id.toString())
                         const rsponse = await postClaimHandler({
@@ -573,7 +573,7 @@ try{
 
                         dispatch({ type: 'SAVE_PROFILE', payload: rsponse?.data?.data });
                         console.log("EXIT", new Date().getTime())
-                        alert(getEnglish(vName))
+                        // alert(getEnglish(vName))
                         setTimeout(async () => { await handleDownload(getEnglish(vName)); setProgress(0); }, 100);
 
 

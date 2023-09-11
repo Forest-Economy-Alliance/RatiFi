@@ -24,7 +24,7 @@ import { object, string } from 'yup';
 import CustomError from '../../components/CustomError';
 import CustomNotification from '../../components/CustomNotification'
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { G } from 'react-native-svg';
 const BG_IMG_PATH = require('../../assets/images/background.png');
@@ -93,10 +93,14 @@ const LocationScreen = ({ navigation }) => {
                     panchayat: formik.values.panchayat,
                     village: formik.values.village,
                 },
+            
                 args => {
                     if (args) {
 
-                        if (editProfileMode) {
+                        if(editProfileMode && authLevel==='एसडीएलसी'){
+                            navigation.replace('HomeScreen')
+                        }
+                        else if (editProfileMode && authLevel==='एफआरसी') {
                             navigation.navigate("DownloadPDF")
                         }
                         else {// navigation.navigate('RoleInformation');
