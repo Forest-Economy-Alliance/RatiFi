@@ -1,3 +1,7 @@
+/**
+ * NOT USED AS OF 8 SEPT 2023
+ */
+
 import {
   StyleSheet,
   Text,

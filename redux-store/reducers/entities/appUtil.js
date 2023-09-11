@@ -51,7 +51,7 @@ const appUtil = (state = INIT_STATE, action) => {
     case 'UPDATE_FORMDATA':
       // console.log("ITS COMING");
       var oldFormData = state.formData || [];
-      // console.log("OO",oldFormData)
+      console.log("OO",oldFormData)
       if (oldFormData?.length === 2) {
         oldFormData = [];
         oldFormData.push(action.payload);

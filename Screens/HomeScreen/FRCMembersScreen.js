@@ -32,8 +32,9 @@ import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
 import { verifYYMember } from '../../redux-store/actions/auth';
-import { verifyyMember, viewFRCMember } from '../../services/authService';
+import { logoutHandler, verifyyMember, viewFRCMember } from '../../services/authService';
 import {Dimensions} from 'react-native';
+import { firebase } from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({ navigation,route  }) => {
@@ -85,13 +86,38 @@ const HomeScreen = ({ navigation,route  }) => {
     const handleSignOut = () => {
         setVis(true);
     }
-    const signout = () => {
-        setVis(false);
-        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-        dispatch({type: 'SAVE_TOKEN', payload: null});
-        navigation.replace("NamePhone")
+   
+    const fetchData = async () => {
+        await firebase.messaging().registerDeviceForRemoteMessages();
+        const fcmToken = await firebase.messaging().getToken();
+        console.log('fcm', fcmToken);
+       
+        return fcmToken;
+      };
+    const signout=async()=>{
+
+        logoutHandler({
+          id:profile?._id?.toString(),
+          fcmToken:await fetchData()
+        }).then(res=>{
+    
+    
+          setVis(false);
+          dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+          dispatch({type: 'SAVE_TOKEN', payload: null});
+          navigation.replace("NamePhone")
+    
+    
+    
+        }).catch(error=>{
+    
+          alert("Something went wrong")
+    
+    
+        })
         // dispatch({type: 'SAVE_PROFILE', payload: null});
-    }
+      }
+
     const verifyMember = (id) =>{
        dispatch({ type: 'ENABLE_LOADING' });
  
@@ -186,7 +212,7 @@ console.log(id)
     const getEnglish = (param) => {
 
 
-        console.log("OK", HI.translation)
+        // console.log("OK", HI.translation)
 
         const left = Object.keys(HI.translation);
         const right = Object.values(HI.translation);

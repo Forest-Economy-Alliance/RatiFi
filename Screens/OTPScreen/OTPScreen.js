@@ -23,6 +23,12 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const NamePhoneScreen = ({navigation}) => {
 
+
+useEffect(()=>{
+formik.handleReset()
+},[])
+
+
   const dispatch=useDispatch();
   const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
   const route=useRoute();
@@ -76,6 +82,7 @@ const NamePhoneScreen = ({navigation}) => {
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
             navigation.navigate("Password",{mobile:route.params.phoneNumber})
           }else {
+        
             setWrongOTP(t('Wrong OTP'));
           }
         },

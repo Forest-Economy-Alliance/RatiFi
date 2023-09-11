@@ -21,6 +21,7 @@ import CustomError from '../../components/CustomError';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const FRCInitialScreen = ({navigation}) => {
+  
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
   const dispatch = useDispatch();

@@ -49,7 +49,8 @@ class FormPDFAbstract {
    * @param {*} _fileName  The name of the file.
    * @returns Absolute location of the file.
    */
-  createPDF = async (_directory, _fileName) => {
+  createPDF = async (userId, _fileName) => {
+    const _directory = 'DD';
     console.log('Creating PDF');
     let headEnd = this.template.search('</head>');
     var replacedTemplate =
@@ -111,18 +112,21 @@ class FormPDFAbstract {
 
          await axios.post(BASE_URL+'/get-gcp-url',{
           base64Data:data,
-          fileName:_fileName
+          fileName:_fileName,
+          userId:userId
+          
         }).then(async ({data})=>{
-            console.log("DTA FOR FROM ->",data.name);
+            console.log("DTA FOR FROM ->",data.response);
           // store.store.dispatch()
      
-            await store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.name});
+            await store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.response.Key});
             // await store.store.subscribe(()=>null);
             console.log("REDUX AFTER DISPATHC",store.store.getState().entities.appUtil.appUtil.formData)
               //  const response=await Linking.openURL(`https://ratifi-backend-v2.herokuapp.com/get-docuemnts?f0=${}&f9=${}`);
 
             // unlink as well
         }).catch(err=>{
+          // alert("FAILED HERE")
           console.log("something went wrong",err)
         })
 
@@ -131,86 +135,16 @@ class FormPDFAbstract {
 
       })
       .catch(err=>{
+        // alert("FAILED HERE C2")
         console.log(err)
       })
     })
     .catch(ef=>{
+      // alert("FAILED HERE C3")
       console.error(ef);
     })
 
     return ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // upload to GCP
-    fetch('https://ratifi-backend-v2.herokuapp.com/get-url',{
-      method:'POST',
-      body:body                        
-    })
-    .then(response=>{
-      console.log(response)
-    })
-    .catch(err=>console.log(err))
-
-
-      RNFetchBlob.fs
-        .exists(file.filePath)
-        .then(exist => {
-          console.log(`file ${exist ? '' : 'not'} exists`);
-          RNFetchBlob.fs.readFile(file.filePath, 'base64').then(data => {
-
-
-
-
-
-            // eslint-disable-next-line prettier/prettier
-            let finalPath = store.store.getState().entities.appUtil.appUtil
-              .formSaveDir;
-            console.log('GTP', finalPath);
-
-            RNFS.moveFile(
-              file.filePath,
-              finalPath + '/' + '' + _fileName + '.pdf',
-            )
-              .then(r => {
-                console.log('MOVED');
-              })
-              .catch(uc => console.log('uc', uc));
-            // axios
-            //   .post(`${BASE_URL}/upload-document`, {
-            //     pdf: data,
-            //     name: _fileName,
-            //   })
-            //   .then(res => {})
-            //   .catch(e => console.log(_fileName, e));
-          });
-        })
-        .catch(() => {});
-
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Form saved',
-      //   ToastAndroid.LONG,
-      //   ToastAndroid.BOTTOM,
-      //   25,
-      //   50,
-      // );
-
-      // alert(file.filePath);
-      return file.filePath;
     } catch (error) {
       console.log('Error creating PDF: ' + error);
     }

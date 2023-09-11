@@ -224,23 +224,24 @@ const PastRecordsScreen = ({ navigation }) => {
                                     getGCPUrlImageHandler({
                                         fileName: 'Hello',
                                         base64Data: data?.base64,
-                                        isPdf: false
+                                        isPdf: false,
+                                        userId:profile?._id || 'unknown-asset'
                                     }).then(async ({ data }) => {
-                                        console.log("RESPONSE", data.name);
+                                        console.log("RESPONSE", data.response.Key);
 
 
                                         console.warn("CID", claim?._id)
                                         const rssponse = await patchClaimHandler({
                                             claimId: claim?._id.toString(),
                                             title: docName,
-                                            storageUrl: `https://storage.googleapis.com/ratifi-document-storage/${data.name}`
+                                            storageUrl: data.response.Location
                                         })
 
-                                        console.log("WOW", rssponse.data);
+                                        // console.log("WOW", rssponse.data);
 
                                         setCameraModalVis(false);
 
-                                        if (rssponse.data.success === true) {
+                                        if ( data.response.Location) {
 
 
                                             toast.show(t('FILE_UPLOADED'), {

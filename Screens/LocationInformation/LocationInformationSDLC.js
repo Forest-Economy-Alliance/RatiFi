@@ -1677,21 +1677,7 @@ const LocationInformationScreenSdlcs = ({ navigation }) => {
                           formik={formik}
                           variable={'state'}
                       /> */}
-                      { (
-                          <>
-                              <View style={styles.title}>
-                                  <Text style={styles.titleText}>{t('District')}</Text>
-                              </View>
-                              <Dropdown
-                                  visible={true}
-                                  data={
-                                      []
-                                  }
-                                  formik={formik}
-                                  variable={'district'}
-                              />
-                          </>
-                      )}
+                    
                       {  (
                           <>
                               <View style={styles.title}>
@@ -1700,13 +1686,38 @@ const LocationInformationScreenSdlcs = ({ navigation }) => {
                               <Dropdown
                                   visible={true}
                                   data={
-                                     []
+                                    states[0]?.Districts?.length && states[0]?.Districts[0]?.Tehsils
                                   }
                                   formik={formik}
                                   variable={'tehsil'}
                               />
                           </>
                       )}
+
+<>
+                              <View style={styles.title}>
+                                  <Text style={styles.titleText}>{t('FRC')}</Text>
+                              </View>
+                              <Dropdown
+                                  visible={true}
+                                  data={
+                                    states
+                                    ?.filter(item => item.label === t('Jharkhand'))
+                                    ?.map(item => {
+                                        return item.Districts;
+                                    })[0]
+                                    ?.filter(item => item.label === t('Samdega'))
+                                    ?.map(item => {
+                                        return item.Tehsils;
+                                    })[0]?.filter(item => item.label === t('Bano'))
+                                    ?.map(item => {
+                                        return item.Panchayats;
+                                    })[0]
+                                  }
+                                  formik={formik}
+                                  variable={'gramsabha'}
+                              />
+                          </>
                       {/* {formik.values.tehsil !== '' && authLevel!="एसडीएलसी" && (
                           <>
                               <View style={styles.title}>
@@ -1774,6 +1785,11 @@ const LocationInformationScreenSdlcs = ({ navigation }) => {
 
                           </>
                       )} */}
+
+
+                      <View style={{marginVertical:20}}>
+                        <CustomButton>Search</CustomButton>
+                      </View>
                       <View style={styles.screen}>
                     <View style={styles.container}>
       <Text style={styles.text}>Active Claims : 0 </Text>

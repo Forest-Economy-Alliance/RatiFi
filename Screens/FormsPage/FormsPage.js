@@ -42,13 +42,15 @@ import Form19Jharkhand from '../../utility/Form19_Jharkhand';
 import { useTranslation } from 'react-i18next';
 import store from '../../redux-store';
 import * as Progress from 'react-native-progress';
-import HI from '../../assets/i18n/or.json';
+import HI from '../../assets/i18n/hi.json';
 import DownloadLoader from '../../components/DownloadLoader';
 import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import { BASE_URL } from '../../services/APICentral';
 import { useRoute } from '@react-navigation/native';
 import { postClaimHandler } from '../../services/claimService';
+import { logoutHandler } from '../../services/authService';
+import { firebase } from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
     
 
@@ -259,23 +261,28 @@ const FormsPage = ({ navigation }) => {
 
     useEffect(() => {
         if (route?.params?.vName != undefined)
+        {
+
             setVName(route?.params?.vName)
+    }
     }, [route?.params?.vName])
 
 
 
 
 
-    const getEnglish = (param) => {
+    const getEnglish = (vName) => {
 
 
-        console.log("OK", HI.translation)
-
+        // console.log("OK", HI.translation)
+        // alert(vName)
         const left = Object.keys(HI.translation);
         const right = Object.values(HI.translation);
+        console.warn(left);
         const len = left.length;
         for (let i = 0; i < len; i++) {
-            if (right[i] === vName.label) {
+            if (right[i] === vName) {
+              
                 return left[i].toLowerCase();
             }
         }
@@ -353,20 +360,44 @@ const FormsPage = ({ navigation }) => {
     const handleSignOut = () => {
         setVis(true);
     }
-    const signout = () => {
-        setVis(false);
-        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-        dispatch({type: 'SAVE_TOKEN', payload: null});
-        navigation.replace("NamePhone")
-    // dispatch({type: 'SAVE_PROFILE', payload: null});
-    }
+
+    const fetchData = async () => {
+        await firebase.messaging().registerDeviceForRemoteMessages();
+        const fcmToken = await firebase.messaging().getToken();
+        console.log('fcm', fcmToken);
+       
+        return fcmToken;
+      };
+    const signout=async()=>{
+
+        logoutHandler({
+          id:profile?._id?.toString(),
+          fcmToken:await fetchData()
+        }).then(res=>{
+    
+    
+          setVis(false);
+          dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+          dispatch({type: 'SAVE_TOKEN', payload: null});
+          navigation.replace("NamePhone")
+    
+    
+    
+        }).catch(error=>{
+    
+          alert("Something went wrong")
+    
+    
+        })
+        // dispatch({type: 'SAVE_PROFILE', payload: null});
+      }
 
     const generatePDF = async (obj, name) => {
         // if (requestPermission()) {
             // file location returned by the createPDF
-            console.log("generating pdf...")
+            // console.log("generating pdf...",obj,name)
         // replace the '' empty string with directory info if you want to any directory
-        return await obj.createPDF('DD', name);
+        return await obj.createPDF(profile?._id || 'unknown-asset', name);
         // alert(location);
         // } else {
         // console.log('NO PERMISSION');
@@ -509,19 +540,24 @@ text={t('Track old claim')}
                     button={{ width: 250 }}
 
                     onPress={async () => {
-                        // dispatch({type:"CLEAR_FORMS"})
+                        dispatch({type:"CLEAR_FORMS"})
                         console.log('====================================');
                         console.log('VVVVNAME', vName);
                         console.log('====================================');
-
-
+                     
+try{
+  
                         setProgress(0.009);
+                      
                         let CIT = carouselItems.slice(0, 2);
-                        // console.log("AA",CIT);
+                        console.log("AA",CIT);
                         console.log("LENGTH", CIT.length);
+
                         for (const key of CIT) {
                             console.log("ENTRY", new Date().getTime())
                             const response = await generatePDF(key.form, key.title);
+                            console.log("_RSP",response)
+                        
                             setProgress(e => e + 1 / 2)
                         }
                         console.log("generating pdf done...")
@@ -537,15 +573,27 @@ text={t('Track old claim')}
 
                         dispatch({ type: 'SAVE_PROFILE', payload: rsponse?.data?.data });
                         console.log("EXIT", new Date().getTime())
-
+                        alert(getEnglish(vName))
                         setTimeout(async () => { await handleDownload(getEnglish(vName)); setProgress(0); }, 100);
 
+
+}catch(err){
+    console.error("err",err)
+    
+}finally{
+    // alert("FAILED")
+    setProgress(0);
+}
+                       
                     }}
                 >
                     {language==='or' ? "ଡାଉନଲୋଡ୍ ଫର୍ମ":"फॉर्म डाउनलोड करें"}
                 </CustomButton>
             }
 
+            </View>
+            <View>
+                <Text>{vName}</Text>
             </View>
             {progress != 0 ? (
                 <DownloadLoader>

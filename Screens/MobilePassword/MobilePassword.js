@@ -24,6 +24,7 @@ import CustomError from '../../components/CustomError';
 import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
 import {signInAction} from '../../redux-store/actions/auth';
+import {firebase} from '@react-native-firebase/messaging';
 // import { BASE_URL } from '../../services/APICentral';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -52,12 +53,22 @@ const MobilePasswordScreen = ({navigation}) => {
     password: string().required(t('Password is Required')),
   });
 
-  const LoginByNumber = () => {
+  const fetchData = async () => {
+    await firebase.messaging().registerDeviceForRemoteMessages();
+    const fcmToken = await firebase.messaging().getToken();
+    console.log('fcm', fcmToken);
+   
+    return fcmToken;
+  };
+
+  const LoginByNumber = async () => {
+
     dispatch(
       signInAction(
         {
           mobile: formik.values.phoneNumber,
           password: formik.values.password,
+          fcmToken: await fetchData(),
         },
         args => {
           if (args) {

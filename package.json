@@ -13,10 +13,12 @@
     "preset": "react-native"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.8.0",
     "@react-native-async-storage/async-storage": "^1.17.6",
     "@react-native-firebase/app": "^14.11.0",
     "@react-native-firebase/auth": "^14.11.0",
     "@react-native-firebase/crashlytics": "^14.11.0",
+    "@react-native-firebase/messaging": "14.11.0",
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",

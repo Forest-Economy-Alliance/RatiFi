@@ -78,10 +78,10 @@ const LocationScreen = ({ navigation }) => {
     const onNext = (values, formikActions) => {
         setPanchayatInfoShow(false)
 
-        alert(JSON.stringify(formik.values))
+        // alert(JSON.stringify(formik.values))
         formikActions.setSubmitting(false);
         // navigation.navigate('FRCHome');
-        return ;
+        // return ;
         
 
         dispatch(

@@ -1,4 +1,7 @@
 /* eslint-disable prettier/prettier */
+/**
+ * Comment - This is Central Home Screen with 4 Menus
+ */
 import {
   StyleSheet,
   Text,
@@ -32,7 +35,8 @@ import HI from '../../assets/i18n/hi.json';
 import {getDeviceHash} from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
 import {verifYYMember} from '../../redux-store/actions/auth';
-import {verifyyMember, viewFRCMember} from '../../services/authService';
+import {logoutHandler, verifyyMember, viewFRCMember} from '../../services/authService';
+import { firebase } from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
@@ -49,12 +53,12 @@ const HomeScreen = ({navigation}) => {
     village,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
   // console.log(authLevel=="एसडीएलसी");
-
+  // alert("Hi")
   const vil = useSelector(
     state => state.entities.auth.userInfo.profile.village,
   );
   const [vis, setVis] = useState(false);
-  const language = 'or';
+  const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
   const [val5, setVal5] = useState('');
@@ -83,13 +87,38 @@ const HomeScreen = ({navigation}) => {
   const handleSignOut = () => {
     setVis(true);
   };
-  const signout = () => {
-    setVis(false);
-    dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-    dispatch({type: 'SAVE_TOKEN', payload: null});
-    navigation.replace('NamePhone');
-    // dispatch({type: 'SAVE_PROFILE', payload: null});
+ 
+  const fetchData = async () => {
+    await firebase.messaging().registerDeviceForRemoteMessages();
+    const fcmToken = await firebase.messaging().getToken();
+    console.log('fcm', fcmToken);
+   
+    return fcmToken;
   };
+const signout=async()=>{
+
+    logoutHandler({
+      id:profile?._id?.toString(),
+      fcmToken:await fetchData()
+    }).then(res=>{
+
+
+      setVis(false);
+      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+      dispatch({type: 'SAVE_TOKEN', payload: null});
+      navigation.replace("NamePhone")
+
+
+
+    }).catch(error=>{
+
+      alert("Something went wrong")
+
+
+    })
+    // dispatch({type: 'SAVE_PROFILE', payload: null});
+  }
+
 
   const viewFRCMembers = village => {
     console.log('view all FRC members of village', {
@@ -296,14 +325,14 @@ const HomeScreen = ({navigation}) => {
           }}
         />
         {/* Add a button to change Role */}
-        <CustomButton
+        {/* @COMMENTED OUT ON 7 SEPT - 7:39PM <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
           text={t('Edit Role')}
           onPress={() => {
             UpdateRole();
           }}
-        />
+        /> */}
         <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}

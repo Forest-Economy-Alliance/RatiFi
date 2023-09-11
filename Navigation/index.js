@@ -58,13 +58,17 @@ export const Navigation = () => {
   return (
     <NavigationContainer>
       {loading && <Loader />}
-      <Stack.Navigator initialRouteName="ForestFiSplash">
+      <Stack.Navigator initialRouteName="ForestFiSplash"
+      
+      screenOptions={{
+        animation:'none'
+      }}
+      >
         <Stack.Screen
           name="ForestFiSplash"
           component={ForestFiSplashScreen}
           options={{
             headerShown: false,
-            animation: 'default',
           }}
         />
         <Stack.Screen
@@ -107,7 +111,7 @@ export const Navigation = () => {
           component={ForgotPasswordScreen}
           options={{
             headerShown: false,
-            animation: 'default',
+
           }}
         />
         <Stack.Screen

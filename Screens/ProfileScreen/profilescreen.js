@@ -28,6 +28,7 @@ import {Picker} from '@react-native-picker/picker';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ProfileScreen = ({ navigation }) => {
+
     const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
     const dispatch = useDispatch();
