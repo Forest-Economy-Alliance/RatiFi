@@ -35,6 +35,7 @@ import FRCMembersScreen from '../Screens/HomeScreen/FRCMembersScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 import LocationScreenOdisha from '../Screens/Location/LocationOdisha';
+import ClaimAlertsScreen from '../Screens/ClaimAlerts/ClaimAlertsScreen';
 
 
 
@@ -266,6 +267,14 @@ export const Navigation = () => {
 
       />
       
+      <Stack.Screen
+      name="ClaimAlertsScreen"
+      component={ClaimAlertsScreen}
+      options={{
+        headerShown:false
+      }}
+
+      />
 
       
       </Stack.Navigator>

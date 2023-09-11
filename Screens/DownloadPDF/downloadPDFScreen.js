@@ -31,6 +31,8 @@ import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
 import { logoutHandler } from '../../services/authService';
 import { firebase } from '@react-native-firebase/messaging';
+import WebView from 'react-native-webview';
+import Pdf from 'react-native-pdf';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
@@ -2551,8 +2553,8 @@ const DownloadPDFScreen = ({ navigation }) => {
             // console.log(res.data);
 
             if(res.data.success){
-              // console.warn("DATA",res.data.data)
-              setImgUrl(res.data.data)
+              console.warn("DATA",res?.data?.data?.storageUrl)
+              setImgUrl(res?.data?.data?.storageUrl)
 
           dispatch({type:'DISABLE_LOADING'});
             }
@@ -2583,19 +2585,20 @@ const DownloadPDFScreen = ({ navigation }) => {
                   ? t('your forest map is available')
                   : t('your_forest_map_is_not_available')}
               </Text>
-              {imgUrl!=='x' && (
-                <FastImage
-                
-                  source={{ uri: `data:image/jpg;base64,${imgUrl}` ,priority :FastImage.priority.high}}
-                  style={{
-                    height: 100,
-                    width: 100,
-                    
-                  }}
-                  resizeMode={FastImage.resizeMode.contain}
-                />
+              {imgUrl!=='x' && (<>
+             
+               <WebView
+               source={{
+                uri:'https://drive.google.com/viewerng/viewer?embedded=true&url='+imgUrl
+               }}
+               style={{
+                height:200,
+                width:200
+               }}
 
-                
+               />
+
+                </>
               )}
             </View>
             <Text style={styles.subMsg2}>

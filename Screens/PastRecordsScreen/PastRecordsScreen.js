@@ -113,6 +113,7 @@ const PastRecordsScreen = ({ navigation }) => {
 
 
     const handleDocPreview = (url) => {
+        // alert(url)
         setDocUrlToPreview(url)
         // get-image-for-previev
 
@@ -333,7 +334,10 @@ const PastRecordsScreen = ({ navigation }) => {
                 previewDocModalVis && <Modal style={{ padding: 100, backgroundColor: 'white' }}>
 
                     <View style={{ flex: 0.8 }}>
-                        <Image source={{ uri: docUrlToPreview }} style={{ flex: 1 }} />
+                        <Image 
+                        onLoadStart={()=> dispatch({ type: "ENABLE_LOADING" })}
+                        onLoadEnd={()=> dispatch({ type: "DISABLE_LOADING" })}
+                        source={{ uri: docUrlToPreview }} style={{ flex: 1 }} />
                     </View>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingTop: 'auto', paddingBottom: 'auto', backgroundColor: 'black', flex: 0.2 }}>
@@ -385,7 +389,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         </View>
 
                         {/* <CustomButton
-                text={t('Track old claim')}
+                text={t('Track old claim')} 
                 onPress={() => {
   
                 }}
@@ -417,7 +421,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 0
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -468,7 +472,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 1
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -520,7 +524,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 2
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -571,7 +575,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                            Form 3
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -622,7 +626,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 4
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -672,7 +676,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 5
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -723,7 +727,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                           Form 6
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -773,7 +777,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 7
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -824,7 +828,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 8
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -874,7 +878,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 9
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -925,7 +929,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                           Form 10
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -976,7 +980,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 11
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1026,7 +1030,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 12
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1077,7 +1081,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                              Form 13
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1128,7 +1132,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 14
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1178,7 +1182,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 15
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1229,7 +1233,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 16
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1280,7 +1284,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 17
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>
@@ -1331,7 +1335,7 @@ const PastRecordsScreen = ({ navigation }) => {
                                             {/* <Image /> */}
                                             Form 18
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>ତାରିଖ : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
                                     </View>
 
                                 </View>

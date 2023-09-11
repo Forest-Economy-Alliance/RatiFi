@@ -51,7 +51,7 @@ class FormPDFAbstract {
    */
   createPDF = async (userId, _fileName) => {
     const _directory = 'DD';
-    console.log('Creating PDF');
+    console.log('Creating PDF', _fileName);
     let headEnd = this.template.search('</head>');
     var replacedTemplate =
       this.template.slice(0, headEnd) +
@@ -71,8 +71,6 @@ class FormPDFAbstract {
       });
     }
 
-
-    
     try {
       let file = await RNHTMLtoPDF.convert({
         html: replacedTemplate,
@@ -83,68 +81,68 @@ class FormPDFAbstract {
 
       // console.log('FF', file);
 
-
-
-
       const pdfFile = {
         uri: file.filePath,
         type: 'application/pdf',
         name: `${_fileName}.pdf`,
-    };
-    
-    var body = new FormData();
- 
-    body.append('pdfFile', pdfFile);
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'http://localhost:3000/get-documents');                                 
-    // xhr.send(body);
-    
+      };
 
+      var body = new FormData();
 
-    return await RNFetchBlob.fs
-    .exists(file.filePath)
-    .then(async(exist )=> {
-      console.log(`file ${exist ? '' : 'not'} exists`);
+      body.append('pdfFile', pdfFile);
+      // var xhr = new XMLHttpRequest();
+      // xhr.open('POST', 'http://localhost:3000/get-documents');
+      // xhr.send(body);
 
-      await RNFetchBlob.fs.readFile(file.filePath, 'base64')
-      .then(async (data) => {
-        // console.log("DATA",data);
+      return await RNFetchBlob.fs
+        .exists(file.filePath)
+        .then(async exist => {
+          console.log(`file ${exist ? '' : 'not'} exists`);
 
-         await axios.post(BASE_URL+'/get-gcp-url',{
-          base64Data:data,
-          fileName:_fileName,
-          userId:userId
-          
-        }).then(async ({data})=>{
-            console.log("DTA FOR FROM ->",data.response);
-          // store.store.dispatch()
-     
-            await store.store.dispatch({type:'UPDATE_FORMDATA',payload:data.response.Key});
-            // await store.store.subscribe(()=>null);
-            console.log("REDUX AFTER DISPATHC",store.store.getState().entities.appUtil.appUtil.formData)
-              //  const response=await Linking.openURL(`https://ratifi-backend-v2.herokuapp.com/get-docuemnts?f0=${}&f9=${}`);
+          await RNFetchBlob.fs
+            .readFile(file.filePath, 'base64')
+            .then(async data => {
+              // console.log("DATA",data);
 
-            // unlink as well
-        }).catch(err=>{
-          // alert("FAILED HERE")
-          console.log("something went wrong",err)
+              await axios
+                .post(BASE_URL + '/get-gcp-url', {
+                  base64Data: data,
+                  fileName: _fileName,
+                  userId: userId,
+                })
+                .then(async ({data}) => {
+                  console.log('DTA FOR FROM ->', data.response);
+                  // store.store.dispatch()
+
+                  await store.store.dispatch({
+                    type: 'UPDATE_FORMDATA',
+                    payload: data.response.Key,
+                  });
+                  // await store.store.subscribe(()=>null);
+                  console.log(
+                    'REDUX AFTER DISPATHC',
+                    store.store.getState().entities.appUtil.appUtil.formData,
+                  );
+                  //  const response=await Linking.openURL(`https://ratifi-backend-v2.herokuapp.com/get-docuemnts?f0=${}&f9=${}`);
+
+                  // unlink as well
+                })
+                .catch(err => {
+                  // alert("FAILED HERE")
+                  console.log('something went wrong', err);
+                });
+            })
+            .catch(err => {
+              // alert("FAILED HERE C2")
+              console.log(err);
+            });
         })
+        .catch(ef => {
+          // alert("FAILED HERE C3")
+          console.error(ef);
+        });
 
-
-
-
-      })
-      .catch(err=>{
-        // alert("FAILED HERE C2")
-        console.log(err)
-      })
-    })
-    .catch(ef=>{
-      // alert("FAILED HERE C3")
-      console.error(ef);
-    })
-
-    return ;
+      return;
     } catch (error) {
       console.log('Error creating PDF: ' + error);
     }
