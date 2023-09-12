@@ -407,7 +407,7 @@ const HomeScreen = ({navigation}) => {
           }}>
           {t('claim_alerts')}
           &nbsp;&nbsp;
-       {notificationCount && <Text
+       {notificationCount!==0 && <Text
             style={{
               color: '#fff',
               fontSize: 18,

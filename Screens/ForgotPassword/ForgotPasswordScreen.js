@@ -6,7 +6,9 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ImageBackground,
-  ScrollView,Modal,Pressable
+  ScrollView,
+  Modal,
+  Pressable,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -18,10 +20,9 @@ import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
-import { postOTPAction } from '../../redux-store/actions/auth';
-import { getDeviceHash } from '../../utils/DeviceUtil';
-import { checkAccount } from '../../services/authService';
-
+import {postOTPAction} from '../../redux-store/actions/auth';
+import {getDeviceHash} from '../../utils/DeviceUtil';
+import {checkAccount} from '../../services/authService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ForgotPasswordScreen = ({navigation}) => {
@@ -30,15 +31,16 @@ const ForgotPasswordScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   // const [name, setName] = useState('Ram Krishna');
- 
-  const {name} = useSelector(state => state.entities.auth.userInfo.profile)||"";
+
+  const {name} =
+    useSelector(state => state.entities.auth.userInfo.profile) || '';
   const [curLen, setCurLen] = useState(0);
 
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
-  const [accountNotification,setAccountNotification] = useState(false);
+  const [accountNotification, setAccountNotification] = useState(false);
 
   const changeLanguage = value => {
     i18n
@@ -52,20 +54,19 @@ const ForgotPasswordScreen = ({navigation}) => {
   };
 
   const onGetOtp = async (values, formikActions) => {
-    console.log("sending otp");
+    console.log('sending otp');
     formikActions.setSubmitting(false);
     console.log('values', values);
-  
-    // dispatch({ type: 'ENABLE_LOADING' });
-    console.log(values.phoneNumber)
 
-   return checkAccount({mobile:values.phoneNumber})
-   .then(async (response) => {
-    console.log(response.data,"forget paasword data before")
-    if(response.data.success){
-      console.log(response.data, "forget paasword data");
-      const DD=await getDeviceHash();
-      console.log("sending otp...")
+    // dispatch({ type: 'ENABLE_LOADING' });
+    console.log(values.phoneNumber);
+
+    return checkAccount({mobile: values.phoneNumber}).then(async response => {
+      console.log(response.data, 'forget paasword data before');
+      if (response.data.success) {
+        console.log(response.data, 'forget paasword data');
+        const DD = await getDeviceHash();
+        console.log('sending otp...');
         dispatch(
           postOTPAction(
             {
@@ -73,24 +74,21 @@ const ForgotPasswordScreen = ({navigation}) => {
               name: response.data.name,
               lat: '123.23',
               lng: '123.2',
-              dd:DD || "-1"
+              dd: DD || '-1',
             },
             args => {
               // sending phone number in OTP Screen, as we need their to send in API Call
-              navigation.navigate('OTP',{
-                phoneNumber:formik.values.phoneNumber,
-                forgetPasswordCode:"1"
-              });        
+              navigation.navigate('OTP', {
+                phoneNumber: formik.values.phoneNumber,
+                forgetPasswordCode: '1',
+              });
             },
           ),
         );
-      
-    }
-    else{
-      setAccountNotification(true);
-    }
-
-   })
+      } else {
+        setAccountNotification(true);
+      }
+    });
     // dispatch({type: 'UPDATE_NAME', payload: values.name});
   };
 
@@ -163,27 +161,31 @@ const ForgotPasswordScreen = ({navigation}) => {
               buttonText={buttonText}
             />
             <Modal
-    //   animationType="fade"
-      transparent={true}
-      visible={accountNotification}
-       >
-      <View style={styles.errorView}>
-        <View style={styles.errorCard}>
-          <Text style={styles.errorText}>{t('Account is not associated with this number. Please Register First.')}</Text>
-          <View style={styles.horizontalLineErr} />
-           
-              <Pressable
-                style={styles.button}
-                onPress={() => {
-                  navigation.navigate('NamePhone');
-                  setAccountNotification(false);
-                }}>
-                <Text style={styles.buttonText}>{t('Please Register')}</Text>
-              </Pressable>
-          
-        </View>
-      </View>
-    </Modal>
+              //   animationType="fade"
+              transparent={true}
+              visible={accountNotification}>
+              <View style={styles.errorView}>
+                <View style={styles.errorCard}>
+                  <Text style={styles.errorText}>
+                    {t(
+                      'Account is not associated with this number. Please Register First.',
+                    )}
+                  </Text>
+                  <View style={styles.horizontalLineErr} />
+
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => {
+                      navigation.navigate('NamePhone');
+                      setAccountNotification(false);
+                    }}>
+                    <Text style={styles.buttonText}>
+                      {t('Please Register')}
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
       </ScrollView>
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: '2%',
   },
-errorView: {
+  errorView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

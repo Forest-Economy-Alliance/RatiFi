@@ -316,7 +316,10 @@
     "specify your gender":"लिंग चयन कीजिए",
     "male":"पुरुष",
     "female":"महिला",
-    "claim_alerts":"आवेदन के संबंध में अलर्ट"
+    "claim_alerts":"आवेदन के संबंध में अलर्ट",
+    "No Alerts":"कोई अलर्ट नहीं",
+    "Alerts regarding claim will appear here":"आवेदन से संबंधित अलर्ट यहां दिखाई देंगे"
+    
   }
 }
 

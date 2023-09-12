@@ -66,6 +66,7 @@ const RoleScreen = ({navigation}) => {
           isMember: values.role === t('Member'),
         },
         args => {
+       console.log('role-args',args)
           if (args) {
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
@@ -192,7 +193,8 @@ const RoleScreen = ({navigation}) => {
   
   const goBack = () =>{
     // Move to RoleScreen
-    navigation.navigate("HomeScreen")
+    navigation.goBack();
+    // navigation.navigate("HomeScreen")
 }
 
 
@@ -255,7 +257,7 @@ const RoleScreen = ({navigation}) => {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
-                navigation.navigate('FRCHome');
+                // navigation.navigate('FRCHome');
               }}
               style={styles.otpBtn}
             />

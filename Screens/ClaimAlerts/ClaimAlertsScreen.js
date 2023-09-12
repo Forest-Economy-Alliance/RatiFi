@@ -104,6 +104,15 @@ return (
       <ScrollView style={styles.darkness}>
         <Text style={{fontSize:20,marginVertical:10,marginHorizontal:10}} numberOfLines={2}>{t('claim_alerts')}</Text>
         <FlatList
+        ListEmptyComponent={()=>{
+          return <View style={{
+            margin:10,
+            padding:10
+          }}>
+      <Text style={{color:'#fff',fontWeight:'600',textDecorationLine:'underline'}}>{t('No Alerts')}</Text>
+      <Text style={{color:'#fff',marginTop:10}}>{t('Alerts regarding claim will appear here')}</Text>
+          </View>
+        }}
           data={alerts}
           renderItem={({item, index}) => (
             <View style={{marginHorizontal:10,marginVertical:5,borderWidth:1,padding:10,borderRadius:10,borderColor:'#fff'}}>
