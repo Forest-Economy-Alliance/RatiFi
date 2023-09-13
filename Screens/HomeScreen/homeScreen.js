@@ -36,6 +36,7 @@ import {getDeviceHash} from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
 import {verifYYMember} from '../../redux-store/actions/auth';
 import {
+  checkAccount,
   logoutHandler,
   verifyyMember,
   viewFRCMember,
@@ -44,7 +45,7 @@ import {firebase} from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
-  const [notificationCount,setNC]=useState(0);
+  const [notificationCount, setNC] = useState(0);
 
   const [imgUrl, setImgUrl] = useState('x');
   const [vData, setVData] = useState([]);
@@ -131,8 +132,8 @@ const HomeScreen = ({navigation}) => {
       postLevel: 'सदस्य',
     })
       .then(async response => {
-        console.log('View Members', response.data);
-        navigation.navigate('FRCMembers', {members: response.data});
+        console.log('View Members', response.data.data);
+        navigation.navigate('FRCMembers', {members: response.data.data});
         dispatch({type: 'DISABLE_LOADING'});
         //     if (response.success) {
         //       dispatch({ type: 'VERIFY_MEMBER', payload: {} });
@@ -200,20 +201,26 @@ const HomeScreen = ({navigation}) => {
     navigation.navigate('Role');
   };
 
-
-  useEffect(()=>{
-
-    request(`/fetch-notifications?id=${profile?._id}`, {method: 'GET'}, true, false)
-    .then(({data}) => {
-      console.log('x',data?.data?.length);
-      setNC(data?.data?.length);
-    })
-    .catch(err => {
-      console.log(err);
+  useEffect(() => {
+    // dispatch user profile
+    checkAccount({mobile: profile?.mobile}).then(data => {
+      dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
     });
 
-  },[])
-
+    request(
+      `/fetch-notifications?id=${profile?._id}`,
+      {method: 'GET'},
+      true,
+      false,
+    )
+      .then(({data}) => {
+        console.log('x', data?.data?.length);
+        setNC(data?.data?.length);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     // flexWrap: 'wrap',
@@ -294,13 +301,16 @@ const HomeScreen = ({navigation}) => {
           )}
         </View>
 
-        { authLevel == 'एफआरसी' && 
+        {true && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
             text={t('Show Profile Details')}
             onPress={() => {
-              if (profile?.claims?.length === 0) {
+              if (
+                profile?.claims?.length === 0 &&
+                (postLevel === 'अध्यक्ष' || postLevel === 'सचिव')
+              ) {
                 navigation.navigate('DownloadPDF', {code: 'president'});
               } else
                 navigation.navigate('ShowProfile', {
@@ -308,7 +318,7 @@ const HomeScreen = ({navigation}) => {
                 });
             }}
           />
-        }
+        )}
 
         <CustomButton
           style={{marginBottom: 20}}
@@ -346,17 +356,19 @@ const HomeScreen = ({navigation}) => {
             UpdateRole();
           }}
         /> */}
-     { authLevel == 'एफआरसी' &&  <CustomButton
-          style={{marginBottom: 20}}
-          button={{width: 300}}
-          // dsbled={profile?.claims?.length==0}
-          text={t('Track old claim')}
-          onPress={() => {
-            if (profile?.claims?.length === 0) {
-              alert(t('CLAIM_NOT_APPLIED'));
-            } else navigation.navigate('PastRecordsScreen');
-          }}
-        />}
+        {Boolean(authLevel == 'एफआरसी' && postLevel !== 'सदस्य') && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={t('Track old claim')}
+            onPress={() => {
+              if (profile?.claims?.length === 0) {
+                alert(t('CLAIM_NOT_APPLIED'));
+              } else navigation.navigate('PastRecordsScreen');
+            }}
+          />
+        )}
         {/* <CustomButton
                     style={{ marginBottom: 20 }}
                     button={{ width: 300 }}
@@ -367,7 +379,7 @@ const HomeScreen = ({navigation}) => {
                             navigation.navigate('Gender')
                     }}
                 /> */}
-        {postLevel == 'अध्यक्ष' && (
+        {postLevel === 'अध्यक्ष' && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -379,7 +391,7 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )}
-        {authLevel == 'एसडीएलसी' && (
+        {authLevel !== 'एफआरसी' && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -400,23 +412,25 @@ const HomeScreen = ({navigation}) => {
           style={{marginBottom: 20}}
           button={{width: 300}}
           onPress={() => {
-            navigation.navigate("ClaimAlertsScreen")
+            navigation.navigate('ClaimAlertsScreen');
             // all the alers related to claim
             // @ TODO
             // Notii aiotn Badge Icon
           }}>
           {t('claim_alerts')}
           &nbsp;&nbsp;
-       {notificationCount!==0 && <Text
-            style={{
-              color: '#fff',
-              fontSize: 18,
-              padding: 5,
-              zIndex: 199,
-              borderRadius: 10,
-            }}>
-            ({(notificationCount)})
-          </Text>}
+          {notificationCount !== 0 && (
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 18,
+                padding: 5,
+                zIndex: 199,
+                borderRadius: 10,
+              }}>
+              ({notificationCount})
+            </Text>
+          )}
         </CustomButton>
       </View>
     </ImageBackground>

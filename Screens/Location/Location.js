@@ -101,6 +101,9 @@ const LocationScreen = ({ navigation }) => {
                             navigation.replace('HomeScreen')
                         }
                         else if (editProfileMode && authLevel==='एफआरसी') {
+                            if(postLevel==='सदस्य')
+                            navigation.navigate("HomeScreen")
+                            else
                             navigation.navigate("DownloadPDF")
                         }
                         else {// navigation.navigate('RoleInformation');

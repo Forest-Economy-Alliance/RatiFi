@@ -247,7 +247,7 @@ console.log(id)
             <View>
 
             <View style={{height:50,width:windowWidth}} >
-            <Pressable onPress={goBack}>
+            <Pressable onPress={()=>goBack()}>
             <Text style={{fontSize:18,marginLeft:10,marginTop:10,color:'white',marginBottom:10}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
             </Pressable>

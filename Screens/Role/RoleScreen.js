@@ -8,13 +8,14 @@ import {
   ImageBackground,
   ScrollView,
   Alert,
-  Linking,Pressable
+  Linking,
+  Pressable,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import {useFormik} from 'formik';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
@@ -33,17 +34,15 @@ const RoleScreen = ({navigation}) => {
     role: '',
   };
   const route = useRoute();
-  
+
   const {t, i18n} = useTranslation();
   const dispatch = useDispatch();
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const {name, village} = useSelector(
+  const {name, village, postLevel} = useSelector(
     state => state.entities.auth.userInfo.profile,
   );
-  const state1 = useSelector(
-    state => state.entities.auth.userInfo.profile,
-  );
-  console.log(state1.postLevel,"state")
+  const state1 = useSelector(state => state.entities.auth.userInfo.profile);
+  console.log(state1.postLevel, 'state');
   const [errorVisible, setErrorVisible] = useState(false);
 
   const changeLanguage = value => {
@@ -66,14 +65,21 @@ const RoleScreen = ({navigation}) => {
           isMember: values.role === t('Member'),
         },
         args => {
-       console.log('role-args',args)
+          console.log('role-args', args);
           if (args) {
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
             // navigation.navigate('HomeScreen');
-            navigation.navigate('HomeScreen');
-            // navigation.navigate('IdCard');
+            console.log('yy', postLevel);
+            if (!(values.role === t('Member'))) {
+              navigation.navigate('DownloadPDF');
+            } else {
+              console.log('ok');
+              navigation.navigate('HomeScreen');
+            
+              // navigation.navigate('IdCard');
+            }
           } else {
             // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
             //   type: 'success',
@@ -190,13 +196,12 @@ const RoleScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
-  
-  const goBack = () =>{
+
+  const goBack = () => {
     // Move to RoleScreen
     navigation.goBack();
     // navigation.navigate("HomeScreen")
-}
-
+  };
 
   return (
     <ImageBackground
@@ -204,16 +209,18 @@ const RoleScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
- {
-  state1.postLevel!==undefined?
-  <View style={{marginTop:10, marginBottom:10,marginLeft:10 }} >
-            <Pressable onPress={goBack}>
-            <Text style={{fontSize:18}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
+      {state1.postLevel !== undefined ? (
+        <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+          <Pressable onPress={goBack}>
+            <Text style={{fontSize: 18}}>
+              <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
+            </Text>
+          </Pressable>
+        </View>
+      ) : (
+        <View></View>
+      )}
 
-            </Pressable>
-          </View> :<View></View>
-        }
-           
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
