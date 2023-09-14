@@ -135,7 +135,7 @@ const PasswordScreen = ({navigation}) => {
       <CustomInput
         style={styles.inputPass}
         placeholder={t('password')}
-        placeholderTextColor="#480E09"
+        placeholderTextColor="#FF6C00"
         onChangeText={formik.handleChange('password')}
         secureTextEntry={true}
         onBlur={formik.handleBlur('password')}
@@ -149,7 +149,7 @@ const PasswordScreen = ({navigation}) => {
         <CustomInput
           style={styles.inputConfPass}
           placeholder={t('confirm password')}
-          placeholderTextColor="#480E09"
+          placeholderTextColor="#FF6C00"
           onChangeText={formik.handleChange('confirmPassword')}
           secureTextEntry={true}
           keyboardType="number-pad"
