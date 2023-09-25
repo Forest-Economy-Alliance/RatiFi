@@ -12,9 +12,21 @@ export const patchClaimHandler = data => {
   );
 };
 
+
 export const fetchClaimDetailsHandler = data => {
 
   return request('/claims-by-id', {
+    method: 'POST',
+    data
+  },
+    false,
+    false)
+
+}
+
+export const fetchClaimDetailsByFRCHandler = data => {
+
+  return request('/claims-by-frc', {
     method: 'POST',
     data
   },

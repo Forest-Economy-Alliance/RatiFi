@@ -9,10 +9,16 @@ const INIT_STATE = {
 const userInfo = (state = INIT_STATE, action) => {
   switch (action.type) {
     case 'SAVE_PROFILE':
-      console.log("TALK IS CHEAP SHOW ME THE PAYLOAD",action.payload)
+      console.log('TALK IS CHEAP SHOW ME THE PAYLOAD', action.payload);
       return {
         ...state,
         profile: action.payload,
+      };
+    case 'CLEAR_PROFILE':
+      console.log('TALK IS CHEAP SHOW ME THE PAYLOAD', action.payload);
+      return {
+        ...state,
+        profile: null
       };
     case 'SAVE_DD':
       return {

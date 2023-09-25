@@ -24,6 +24,8 @@ import Dropdown from '../../components/CustomDropdown';
 import {object, string} from 'yup';
 import CustomError from '../../components/CustomError';
 import {updateUserInfoAction} from '../../redux-store/actions/auth';
+import {fetchClaimDetailsByFRCHandler} from '../../services/claimService';
+import {updateUserHandler} from '../../services/authService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
@@ -73,11 +75,29 @@ const RoleScreen = ({navigation}) => {
             // navigation.navigate('HomeScreen');
             console.log('yy', postLevel);
             if (!(values.role === t('Member'))) {
+              // check if secretyary or president have already filed a claim
+              fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
+       
+                if (res?.data?.data[0]?._id?.toString()) {
+                  // secretary ke claim me wahi id patch
+                  updateUserHandler({
+                    claims: [res?.data?.data[0]?._id?.toString()],
+                  })
+                    .then(rr => {
+                      navigation.navigate('HomeScreen');
+                    })
+                    .catch(e => {
+                      Alert.alert(t('info'), 'Something went wrong');
+                    });
+                } else {
+                  navigation.navigate('DownloadPDF');
+                }
+              });
               navigation.navigate('DownloadPDF');
             } else {
               console.log('ok');
               navigation.navigate('HomeScreen');
-            
+
               // navigation.navigate('IdCard');
             }
           } else {

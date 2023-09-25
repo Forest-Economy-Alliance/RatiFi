@@ -111,10 +111,11 @@ const HomeScreen = ({navigation}) => {
         setVis(false);
         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
         dispatch({type: 'SAVE_TOKEN', payload: null});
+        // App Breackage Issue - To be discussed later  dispatch({type: 'CLEAR_PROFILE', payload: null});
         navigation.replace('NamePhone');
       })
       .catch(error => {
-        alert('Something went wrong');
+        Alert.alert('Something went wrong',error?.toString());
       });
     // dispatch({type: 'SAVE_PROFILE', payload: null});
   };

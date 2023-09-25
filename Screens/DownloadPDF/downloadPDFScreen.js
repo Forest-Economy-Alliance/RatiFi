@@ -2601,6 +2601,8 @@ const DownloadPDFScreen = ({ navigation }) => {
                 </>
               )}
             </View>
+
+        
             <Text style={styles.subMsg2}>
               {t('download application document')}
             </Text>

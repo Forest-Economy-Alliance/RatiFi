@@ -419,9 +419,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 0
+                                             {t('form')}0
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -470,9 +470,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 1
+                                             {t('form')}1
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -522,9 +522,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 2
+                                            {t('form')}2
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -573,9 +573,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                           Form 3
+                                           {t('form')}3
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -624,9 +624,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 4
+                                            {t('form')}4
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -668,15 +668,15 @@ const PastRecordsScreen = ({ navigation }) => {
                                 </View>
 
                             </View>
-                            {/* Form 5 below */}
+                            {/* {t('form')}5 below */}
                             <View >
                                 <View style={styles.header}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 5
+                                             {t('form')}5
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -725,9 +725,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                          Form 6
+                                          {t('form')}6
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -775,9 +775,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 7
+                                             {t('form')}7
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -826,9 +826,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 8
+                                            {t('form')}8
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -876,9 +876,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 9
+                                            {t('form')}9
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -927,9 +927,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                          Form 10
+                                          {t('form')}10
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -978,9 +978,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 11
+                                             {t('form')}11
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1028,9 +1028,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 12
+                                            {t('form')}12
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1079,9 +1079,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                             Form 13
+                                             {t('form')}13
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1130,9 +1130,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 14
+                                            {t('form')}14
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1180,9 +1180,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 15
+                                            {t('form')}15
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1231,9 +1231,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 16
+                                            {t('form')}16
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1282,9 +1282,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 17
+                                            {t('form')}17
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1333,9 +1333,9 @@ const PastRecordsScreen = ({ navigation }) => {
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
                                             {/* <Image /> */}
-                                            Form 18
+                                            {t('form')}18
                                         </Text>
-                                        <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                                     </View>
 
                                 </View>
@@ -1427,7 +1427,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
     },
     subheaderText: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#FFFFFF',
     },
     horizontalLine: {

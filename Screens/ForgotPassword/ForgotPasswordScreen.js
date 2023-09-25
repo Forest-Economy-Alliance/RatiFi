@@ -126,7 +126,7 @@ const ForgotPasswordScreen = ({navigation}) => {
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>
-              <Text style={styles.nameTxt}>{name}</Text>
+              {/* <Text style={styles.nameTxt}>{name}</Text> */}
             </View>
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter mobile number')}</Text>

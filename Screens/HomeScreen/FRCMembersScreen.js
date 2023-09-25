@@ -40,6 +40,8 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 const HomeScreen = ({ navigation,route  }) => {
     // const {state} = this.props.navigation;
 // console.log(route.params.members,"FRC Members");
+const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
+
     const [imgUrl, setImgUrl] = useState('x');
     const [vData, setVData] = useState([]);
     const [members,setMembers] = useState(route.params.members)
@@ -128,6 +130,9 @@ console.log(id)
     return viewFRCMember({village:village,authLevel:authLevel,postLevel:"सदस्य"}) 
     .then(async (res) => {
         setMembers(res.data);
+        if(res.data.length===0){
+            setEmptyMemberMessage('आपके FRC में किसी भी सदस्य ने अभी तक पंजीकरण नहीं कराया है')
+        }
         dispatch({ type: 'DISABLE_LOADING' });
     })
         // console.log('Verify Member', response);
@@ -291,12 +296,12 @@ console.log(id)
                 </View>
              
              {
-          members.map((data)=>{
-                console.log(data.name)
+         Boolean(members?.length!==0) ? members.map((data)=>{
+               
                 return(
                 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center', marginBottom:35,marginLeft:20}}>
                     <Text style={{color:'white'}}>
-                        {data.name}
+                        {data?.name}
                     {/* {' '} */}
                     </Text>
                   {
@@ -337,6 +342,11 @@ console.log(id)
                 </View>
                 )
               })
+              :<View style={{paddingHorizontal:20}}>
+                  <Text style={{fontSize:20,color:"#FF6C00"}}>आपके FRC में किसी भी सदस्य ने अभी तक पंजीकरण नहीं कराया है </Text>
+              </View>
+                
+         
                 }
                 
            
