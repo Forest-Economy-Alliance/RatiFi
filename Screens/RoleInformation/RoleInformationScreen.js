@@ -54,7 +54,7 @@ const RoleInformationScreen = ({navigation}) => {
   ];
   const POS2 = [
     {label: t('Subdivisonal Officer'), value: '1'},
-    {label: t('Tehsildar'), value: '2'},
+    // {label: t('Tehsildar'), value: '2'},
     {label: t('Forest Range Officer'), value: '3'},
     {label: t('Member'), value: '3'},
   ];

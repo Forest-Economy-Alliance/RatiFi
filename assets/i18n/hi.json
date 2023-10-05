@@ -322,7 +322,11 @@
     "claim_alerts":"आवेदन के संबंध में अलर्ट",
     "No Alerts":"कोई अलर्ट नहीं",
     "Alerts regarding claim will appear here":"आवेदन से संबंधित अलर्ट यहां दिखाई देंगे",
-    "INCORRECT_PASSWORD":"गलत पासवर्ड"
+    "INCORRECT_PASSWORD":"गलत पासवर्ड",
+    "CFR":"सामुदायिक वन अधिकार",
+    "IFR":"व्यक्तिगत वन अधिकार",
+    "Select your claim":"अपना दावा चुनें",
+    "apply for individual forest right":"व्यक्तिगत वन अधिकार के लिए आवेदन करें"
   }
 }
 

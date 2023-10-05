@@ -9,46 +9,18 @@ import {
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import {useRoute} from '@react-navigation/native';
+import {useState} from 'react';
 
-const languages = [
-  {
-    name: 'English',
-    value: 'en',
-  },
-  {
-    name: 'हिन्दी',
-    value: 'hi',
-  },
-  // {
-  //   name: 'ગુજરાતી',
-  //   value: 'gu',
-  // },
-  // {
-  //   name: 'ଓଡ଼ିଆ',
-  //   value: 'or',
-  // },
-  // {
-  //   name: 'ಕನ್ನಡ',
-  //   value: 'kn',
-  // },
-  // {
-  //   name: 'മലയാളം',
-  //   value: 'ml',
-  // },
-  // {
-  //   name: 'தமிழ்',
-  //   value: 'ta',
-  // },
-  // {
-  //   name: 'తెలుగు',
-  //   value: 'te',
-  // },
-];
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const LangSelectionScreen = ({navigation}) => {
+const ClaimTypeSelectionScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {token} = useSelector(state => state.entities.auth.userInfo);
   const {t, i18n} = useTranslation();
+
+  const [userType, setUserType] = useState('');
+
+  const route = useRoute();
 
   const changeLanguage = value => {
     i18n
@@ -58,9 +30,20 @@ const LangSelectionScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    changeLanguage('en');
+    changeLanguage('hi');
+    console.log('ooooo->', route?.params?.isMember);
   }, []);
 
+  const claimTypes = [
+    {
+      name: t('CFR'),
+      value: 'cfr',
+    },
+    {
+      name: t('IFR'),
+      value: 'ifr',
+    },
+  ];
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -69,28 +52,28 @@ const LangSelectionScreen = ({navigation}) => {
       style={styles.bg}>
       <View style={styles.darkness}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('Select your language')}</Text>
+          <Text style={styles.headerText}>{t('Select your claim')}</Text>
           <View style={styles.horizontalLine} />
         </View>
         <ScrollView contentContainerStyle={styles.innerContainer}>
-          {languages.map(lang => (
+          {claimTypes.map(lang => (
             <TouchableOpacity
               key={lang.value}
               onPress={() => {
+                //
+                // const isMemeber = route?.params?.isMember;
 
-
-                
-                dispatch({type: 'SAVE_APP_LANGUAGE', payload: lang.value});
-                // i18n
-                //   .changeLanguage(lang.value)
-                //   .then(() => null)
-                //   .catch(err => console.log(err));
-
-                // updating screen registration code  to 1 , means we have choosed the lanuage
-                // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-                if (!token) {
-                  navigation.navigate('NamePhone');
-                } else navigation.navigate('Login');
+               
+                const loginMode = route?.params?.loginMode;
+                if (lang?.value === 'ifr') {
+                  dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
+                  navigation.navigate(
+                    loginMode ? 'HomeScreenIFR' : 'IFRDownloadPDF',
+                  );
+                } else {
+                  dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
+                  navigation.navigate(loginMode ? 'HomeScreen' : 'Role');
+                }
               }}
               style={styles.button}>
               <Text style={styles.text}>{lang.name}</Text>
@@ -102,7 +85,7 @@ const LangSelectionScreen = ({navigation}) => {
   );
 };
 
-export default LangSelectionScreen;
+export default ClaimTypeSelectionScreen;
 
 const styles = StyleSheet.create({
   innerContainer: {
@@ -121,11 +104,12 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: '4%',
+    minWidth: '50%',
     borderWidth: 1,
     marginTop: '7%',
     borderColor: '#fff',
     borderRadius: 70,
-    width: '40%',
+    // width: '40%',
     alignItems: 'center',
   },
   text: {

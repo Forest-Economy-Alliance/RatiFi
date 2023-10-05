@@ -229,7 +229,9 @@ const HomeScreen = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+      
+      >
       <View style={{paddingHorizontal: 20}}>
         {vis && (
           <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />
@@ -434,6 +436,18 @@ const HomeScreen = ({navigation}) => {
           )}
         </CustomButton>
       </View>
+
+{/* 
+      
+      <CustomButton
+          style={{marginBottom: 20,backgroundColor:'#480E09',paddingVertical:10,textAlign:'center'}}
+          button={{width: 300}}
+          btnText={{textAlign:'center'}}
+          onPress={() => {
+             navigation.navigate("IFRScreen");
+          }}>
+          {t('apply for individual forest right')}
+        </CustomButton> */}
     </ImageBackground>
   );
 };

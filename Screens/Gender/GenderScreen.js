@@ -106,7 +106,11 @@ import { setGender } from '../../services/authService';
         return setGender({id:_id,gender:formik.values.gender}) 
         .then(async (response) => {
             console.log('gender updated', response.data);
-            navigation.navigate('Role')
+
+            navigation.navigate("ClaimTypeSelectionScreen")
+            
+          
+            // navigation.navigate('Role')
             dispatch({ type: 'DISABLE_LOADING' });
             //     if (response.success) {
                 //       dispatch({ type: 'VERIFY_MEMBER', payload: {} });
@@ -191,7 +195,7 @@ import { setGender } from '../../services/authService';
                     setErrorVisible(true);
                   }
                   formik.handleSubmit();
-                  navigation.navigate('Role');
+                  // navigation.navigate('Role');
                 }}
                 style={styles.otpBtn}
               />

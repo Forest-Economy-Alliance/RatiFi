@@ -77,7 +77,6 @@ const RoleScreen = ({navigation}) => {
             if (!(values.role === t('Member'))) {
               // check if secretyary or president have already filed a claim
               fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
-       
                 if (res?.data?.data[0]?._id?.toString()) {
                   // secretary ke claim me wahi id patch
                   updateUserHandler({
@@ -93,9 +92,15 @@ const RoleScreen = ({navigation}) => {
                   navigation.navigate('DownloadPDF');
                 }
               });
-              navigation.navigate('DownloadPDF');
+
+              navigation.navigate('ClaimTypeSelectionScreen', {
+                isMember: false,
+              });
+
+              // navigation.navigate('DownloadPDF');
             } else {
               console.log('ok');
+
               navigation.navigate('HomeScreen');
 
               // navigation.navigate('IdCard');

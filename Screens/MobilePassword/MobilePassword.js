@@ -72,7 +72,10 @@ const MobilePasswordScreen = ({navigation}) => {
         },
         args => {
           if (args) {
-            navigation.navigate('HomeScreen');
+            navigation.navigate('ClaimTypeSelectionScreen',{
+              loginMode:true
+            })
+            // navigation.navigate('HomeScreen');
           } else {
             toast.show(t('INCORRECT_PASSWORD'), {
               type: 'success',

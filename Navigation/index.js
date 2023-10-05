@@ -36,6 +36,12 @@ import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
 import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 import LocationScreenOdisha from '../Screens/Location/LocationOdisha';
 import ClaimAlertsScreen from '../Screens/ClaimAlerts/ClaimAlertsScreen';
+import ClaimTypeSelectionScreen from '../Screens/ChooseIFRorCFR';
+import IFRScreen from '../Screens/PastRecordsIFR';
+import IFRDownloadPDF from '../Screens/IFRDownloadPDF';
+import HomeScreenIFR from '../Screens/HomeScreenIFR';
+import PastRecordsIFR from '../Screens/PastRecordsIFR';
+import { MarkBoundry } from '../Screens/MarkBoundry';
 
 
 
@@ -75,6 +81,27 @@ export const Navigation = () => {
         <Stack.Screen
           name="LangSelection"
           component={LangSelectionScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ClaimTypeSelectionScreen"
+          component={ClaimTypeSelectionScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="IFRDownloadPDF"
+          component={IFRDownloadPDF}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="PastRecordsIFR"
+          component={PastRecordsIFR}
           options={{
             headerShown: false,
           }}
@@ -195,9 +222,23 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="HomeScreenIFR"
+          component={HomeScreenIFR}
+          options={{
+            headerShown: false,
+          }}
+        />
 <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MarkBoundry"
+        component={MarkBoundry}
         options={{
           headerShown: false,
         }}

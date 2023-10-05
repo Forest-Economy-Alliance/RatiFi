@@ -12,6 +12,7 @@ import ProfileScreen from './Screens/ProfileScreen/profilescreen';
 import {useEffect} from 'react';
 import messaging, {firebase} from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import ClaimTypeSelectionScreen from './Screens/ChooseIFRorCFR';
 
 ignoreWarnings('warn', ['ViewPropTypes']);
 
