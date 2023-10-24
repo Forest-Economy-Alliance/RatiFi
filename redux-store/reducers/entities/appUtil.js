@@ -11,7 +11,7 @@ const INIT_STATE = {
   verificationAadharFrontUrl: '',
   verificationAadharBackUrl: '',
   formUploadSyncStatus: false,
-  globalSyncStatus:false
+  globalSyncStatus: false,
 };
 
 const appUtil = (state = INIT_STATE, action) => {

@@ -9,6 +9,8 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
 } from 'react-native';
+import queue, { Worker } from 'react-native-job-queue';
+
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
@@ -20,6 +22,7 @@ import {useRoute} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
+import {updatePasswordHandler} from '../../services/authService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -50,7 +53,9 @@ const PasswordScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.password,
   );
 
-  const {language,globalSyncStatus} = useSelector(e => e?.entities?.appUtil?.appUtil);
+  const {language, globalSyncStatus} = useSelector(
+    e => e?.entities?.appUtil?.appUtil,
+  );
 
   const {t, i18n} = useTranslation();
 
@@ -73,6 +78,9 @@ const PasswordScreen = ({navigation}) => {
   });
   console.log('loginflow--', loginflow);
 
+
+
+
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // dispatch({type: 'ENABLE_LOADING'});
@@ -90,7 +98,6 @@ const PasswordScreen = ({navigation}) => {
         });
       }
     } else {
-    
       dispatch({
         type: 'UPDATE_APPUTIL_KEY',
         payload: {
@@ -99,32 +106,17 @@ const PasswordScreen = ({navigation}) => {
         },
       });
 
+      queue.addJob('UPDATEPasswordWorker', {
+        mobile,
+        password: formik.values.password,
+      })
+
+      if (forgetPasswordCode == 1) {
+        navigation.navigate('HomeScreen');
+      }
+      navigation.navigate('Location');
 
       return;
-      dispatch(
-        updatePasswordAction(
-          {
-            mobile: mobile,
-            password: formik.values.password,
-          },
-          args => {
-
-            
-            if (forgetPasswordCode == 1) {
-              navigation.navigate('HomeScreen');
-            } else if (args) {
-              // screen code 3 means , password set
-              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-
-              // odish screen if oritya
-              if(language==='or'){
-                navigation.navigate("LocationOdisha")
-              }else
-              navigation.navigate('Location');
-            }
-          },
-        ),
-      );
     }
     // dispatch({type: 'DISABLE_LOADING'});
   };
@@ -138,6 +130,34 @@ const PasswordScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage(language);
   }, []);
+
+  function cb(response) {
+    const args = response?.success;
+    dispatch({type: 'SAVE_PROFILE', payload: response.data});
+
+    dispatch({type: 'DISABLE_LOADING'});
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: true,
+      },
+    });
+
+    if (forgetPasswordCode == 1) {
+      navigation.navigate('HomeScreen');
+    } else if (args) {
+      // screen code 3 means , password set
+      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+
+      // odish screen if oritya
+      if (language === 'or') {
+        navigation.navigate('LocationOdisha');
+      } else navigation.navigate('Location');
+    }
+  }
+
+
 
   return (
     <ImageBackground

@@ -10,7 +10,7 @@ import {
     ScrollView,Pressable,Modal
 } from 'react-native';
 import { BackHandler } from 'react-native';
-
+import queue from 'react-native-job-queue';
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, { useEffect, useState } from 'react';
@@ -83,6 +83,43 @@ const LocationScreen = ({ navigation }) => {
         // navigation.navigate('FRCHome');
         // return ;
         
+        dispatch({
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: true,
+            },
+          });
+
+queue.addJob("UPDATELocationWorker", {
+    state: formik.values.state,
+    district: formik.values.district,
+    tehsil: formik.values.tehsil,
+    panchayat: formik.values.panchayat,
+    village: formik.values.village,
+})
+
+
+if(editProfileMode && authLevel==='एसडीएलसी'){
+    navigation.replace('HomeScreen')
+}
+else if (editProfileMode && authLevel==='एफआरसी') {
+    if(postLevel==='सदस्य')
+    navigation.navigate("HomeScreen")
+    else
+    navigation.navigate("DownloadPDF")
+}
+else {// navigation.navigate('RoleInformation');
+
+    //screen code 4 , means location information set
+    dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
+
+    navigation.navigate("Gender")
+}
+return ;
+
+
+
         dispatch({type:'ENABLE_LOADING'})
         dispatch(
             updateUserInfoAction(

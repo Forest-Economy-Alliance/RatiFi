@@ -25,6 +25,7 @@ import {string} from 'yup';
 import {ref} from 'yup';
 import CustomError from '../../components/CustomError';
 import {useToast} from 'react-native-toast-notifications';
+import { updatePasswordAction } from '../../redux-store/actions/auth';
 
 
 const BG_IMG_PATH = require('../../assets/images/background.png');

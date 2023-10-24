@@ -12,7 +12,7 @@ import LocationInformationScreenSdlc from '../Screens/LocationInformation/Locati
 // import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
 import OTPScreen from '../Screens/OTPScreen/OTPScreen';
@@ -64,7 +64,8 @@ export const Navigation = () => {
   const {globalSyncStatus} = useSelector(
     state => state.entities.appUtil.appUtil,
   );
-
+ 
+  
   const MyTheme = {
     ...DefaultTheme,
     colors: {

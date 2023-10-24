@@ -331,7 +331,7 @@ const HomeScreen = ({navigation}) => {
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
-            text={t('Download Maps')}
+            text={t('Print Documents')}
             onPress={() => {
              
                 navigation.navigate('DownloadPDF', {code: 'president'});

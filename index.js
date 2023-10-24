@@ -17,6 +17,8 @@ import ignoreWarnings from 'ignore-warnings';
 import {YellowBox} from 'react-native';
 import {getGCPUrlImageHandler} from './services/commonService';
 import {patchClaimHandler} from './services/claimService';
+import { updatePasswordHandler, updateUserHandler } from './services/authService';
+
 console.disableYellowBox = true;
 
 if (!__DEV__) {
@@ -75,14 +77,97 @@ queue.addWorker(
 );
 
 queue.addWorker(
-  new Worker('UpdatePasswordWorker', async payload => {
-    return new Promise(async resolve => {
-      resolve();
+  new Worker('UPDATEPasswordWorker', async payload => {
+    return new Promise(async function(resolve, reject){
+      updatePasswordHandler({
+        mobile: payload?.mobile,
+        password: payload?.password,
+      })
+        .then(async ({data: response}) => {
+          console.log('RES updatepassword action', response);
+          const args = response?.success;
+          store.store.dispatch({type: 'SAVE_PROFILE', payload: response.data})
+          store.store.dispatch({type: 'DISABLE_LOADING'})
+          store.store.dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: true,
+      },
+    });
+
+    if(args) {
+      // screen code 3 means , password set
+      store.store.dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+      
+    }
+    resolve();
+        })
+        .catch(err => {
+          console.log('NETWOEK', err);
+          reject();
+        });
     }).catch(err => {
-      console.log(`ERR--->${payload?.docName}`, err);
+      console.log(`ERR--->`, err);
     });
   }),
 );
+
+
+queue.addWorker(
+  new Worker('UPDATELocationWorker', async data => {
+    return new Promise(async function(resolve, reject){
+      
+
+
+      console.log('DATA--', data);
+  // dispatch({type: 'ENABLE_LOADING'});
+
+  let updatingRole = false;
+  if (
+    //including data?.isMemeber we have = 4
+    Object.keys(data).length === 4 &&
+    data?.authLevel &&
+    data?.postLevel &&
+    data?.village
+  ) {
+    updatingRole = true;
+  }
+
+  return updateUserHandler(data)
+    .then(async ({ data: response }) => {
+      console.log('RES--', response);
+
+      if (response.success) {
+        store.store.dispatch({ type: 'SAVE_PROFILE', payload: response.data });
+        store.store.dispatch({ type: 'DISABLE_LOADING' });
+      }
+      console.log(response.success);
+      if (true) {
+        // now checking if authLevel, i.e role Information is update
+        // or location is updated as per code
+        // location -> 4
+        // role-> 5
+
+        // 22 April 2023 Edit - Check if role already exists in village or not
+
+        store.store.dispatch({
+          type: 'UPDATE_REGISTRATION_SCREEN_CODE',
+          payload: data.authLevel ? 5 : 4,
+        });
+        // callback(response.success);
+
+      }
+      resolve();
+    })
+    .catch(err => {
+      console.log('NETWOEK', err);
+      reject()
+    });
+
+  })
+}
+));
 
 ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]']);
 

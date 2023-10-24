@@ -23,6 +23,7 @@ import ClaimTypeSelectionScreen from './Screens/ChooseIFRorCFR';
 import {MarkBoundry} from './Screens/MarkBoundry';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
+import PasswordScreen from './Screens/Password/PasswordScreen';
 
 ignoreWarnings('warn', ['ViewPropTypes']);
 
@@ -89,7 +90,7 @@ function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Navigation />
-         
+        
           {/* <MarkBoundry/> */}
         </PersistGate>
       </Provider>
