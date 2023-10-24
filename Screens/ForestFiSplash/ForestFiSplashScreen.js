@@ -104,7 +104,7 @@ const ForestFiSplashScreen = ({ navigation }) => {
                 return;
             }
 
-            if (registrationScreenCode == 0) navigation.replace('LangSelection');
+            if (registrationScreenCode == 0) navigation.replace('NamePhone'); // LangSelection no longer needed
             else if (registrationScreenCode === 1) navigation.replace('NamePhone');
             else if (registrationScreenCode === 2) navigation.replace('Password');
             else if (registrationScreenCode === 3)

@@ -105,14 +105,14 @@ import {
     const signout = async () => {
       logoutHandler({
         id: profile?._id?.toString(),
-        fcmToken: await fetchData(),
+        fcmToken: 'await fetchData()',
       })
         .then(res => {
           setVis(false);
           dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
           dispatch({type: 'SAVE_TOKEN', payload: null});
           // App Breackage Issue - To be discussed later  dispatch({type: 'CLEAR_PROFILE', payload: null});
-          navigation.replace('NamePhone');
+          navigation.replace('MobilePassword');
         })
         .catch(error => {
           Alert.alert('Something went wrong',error?.toString());
@@ -209,7 +209,7 @@ import {
       });
   
       request(
-        `/fetch-notifications?id=${profile?._id}`,
+        `/ifr-fetch-notifications?id=${profile?._id}`,
         {method: 'GET'},
         true,
         false,
@@ -347,9 +347,9 @@ import {
               style={{marginBottom: 20}}
               button={{width: 300}}
               // dsbled={profile?.claims?.length==0}
-              text={t('Track old claim')}
+              text={t('File claim')}
               onPress={() => {
-                if (profile?.claims?.length === 0) {
+                if (profile?.IFRclaims?.length === 0) {
                   alert(t('CLAIM_NOT_APPLIED'));
                 } else navigation.navigate('PastRecordsIFR');
               }}
@@ -375,7 +375,7 @@ import {
             style={{marginBottom: 20}}
             button={{width: 300}}
             onPress={() => {
-              navigation.navigate('ClaimAlertsScreen');
+              navigation.navigate('ClaimAlertsScreenIFR');
               // all the alers related to claim
               // @ TODO
               // Notii aiotn Badge Icon

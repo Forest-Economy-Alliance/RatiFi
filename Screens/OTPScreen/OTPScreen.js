@@ -17,26 +17,23 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectName} from '../../redux-store/reducers/entities/appUtil';
-import { useRoute } from '@react-navigation/native';
-import { verifyOTPAction } from '../../redux-store/actions/auth';
+import {useRoute} from '@react-navigation/native';
+import {verifyOTPAction} from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const NamePhoneScreen = ({navigation}) => {
+  useEffect(() => {
+    formik.handleReset();
+  }, []);
 
-
-useEffect(()=>{
-formik.handleReset()
-},[])
-
-
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
-  const route=useRoute();
+  const route = useRoute();
   console.log(route?.params?.phoneNumber);
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [wrongOTP,setWrongOTP]=useState('');
+  const [wrongOTP, setWrongOTP] = useState('');
   const changeLanguage = value => {
     i18n
       .changeLanguage(value)
@@ -45,14 +42,52 @@ formik.handleReset()
   };
 
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
-  const forgetPasswordCode = route.params.forgetPasswordCode || "2";
+  const {otp,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
+
+  const forgetPasswordCode = route.params.forgetPasswordCode || '2';
   const state = {
     otp: '',
   };
-  console.log(forgetPasswordCode,"forgetPassword Code");
+  console.log(forgetPasswordCode, 'forgetPassword Code');
   const onVerifyOtp = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // navigation.navigate('Password');
+    if (formik.values.otp === otp) {
+
+      let PROFILE_STATUS = "CREATED";
+      if (authLevel && authLevel!=='-1') {
+        PROFILE_STATUS = "AVAILABLE"; // means he has done all resitration steps till last
+      }
+
+     
+      if (forgetPasswordCode == 1) {
+        navigation.navigate('Password', {
+          mobile: route.params.phoneNumber,
+          forgetPasswordCode: '1',
+        });
+      } else if (PROFILE_STATUS === 'AVAILABLE') {
+        navigation.navigate('HomeScreen');
+        // navigation.navigate("DownloadPDF")
+        // updating to screen code to 2 as otp verification is done ,
+        // now two cases ,
+        // in reponse if we get AVAILABLE
+        // else we get created
+        // if available -> Home Screen
+        // if created -> Password
+        // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+        //  navigation.navigate("Login")
+      } else if (PROFILE_STATUS === 'CREATED') {
+        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+        navigation.navigate('Password', {mobile: route.params.phoneNumber});
+      } else {
+        setWrongOTP(t('Wrong OTP'));
+      }
+    } else {
+      setWrongOTP(t('Wrong OTP'));
+    }
+
+    return;
+
     dispatch(
       verifyOTPAction(
         {
@@ -60,35 +95,32 @@ formik.handleReset()
           otp: formik.values.otp,
         },
         args => {
-          console.log("ARGS->",args);
-          if(forgetPasswordCode==1){
-            navigation.navigate("Password",{mobile:route.params.phoneNumber,forgetPasswordCode:"1"})
-          }
-          else if (args === "AVAILABLE") {
-
-            navigation.navigate("HomeScreen")
+          console.log('ARGS->', args);
+          if (forgetPasswordCode == 1) {
+            navigation.navigate('Password', {
+              mobile: route.params.phoneNumber,
+              forgetPasswordCode: '1',
+            });
+          } else if (args === 'AVAILABLE') {
+            navigation.navigate('HomeScreen');
             // navigation.navigate("DownloadPDF")
             // updating to screen code to 2 as otp verification is done ,
             // now two cases ,
             // in reponse if we get AVAILABLE
-            // else we get created  
+            // else we get created
             // if available -> Home Screen
             // if created -> Password
             // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-           //  navigation.navigate("Login")
-          
-          } else if(args==="CREATED"){
-             
+            //  navigation.navigate("Login")
+          } else if (args === 'CREATED') {
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-            navigation.navigate("Password",{mobile:route.params.phoneNumber})
-          }else {
-        
+            navigation.navigate('Password', {mobile: route.params.phoneNumber});
+          } else {
             setWrongOTP(t('Wrong OTP'));
           }
         },
       ),
     );
-   
   };
 
   const formik = useFormik({
@@ -120,7 +152,7 @@ formik.handleReset()
             <View style={styles.title}>
               <Text style={styles.titleText}>{t('Enter OTP')}</Text>
             </View>
-           
+
             <CustomInput
               onChangeText={formik.handleChange('otp')}
               onBlur={formik.handleBlur('otp')}
@@ -128,9 +160,9 @@ formik.handleReset()
               error={formik.errors.otp && formik.touched.otp}
               keyboardType="numeric"
             />
-             <Text style={{alignSelf:'center',color:'red',marginTop:10}}>
+            <Text style={{alignSelf: 'center', color: 'red', marginTop: 10}}>
               {wrongOTP}
-              </Text>
+            </Text>
             <CustomButton
               text={t('Next')}
               onPress={formik.handleSubmit}

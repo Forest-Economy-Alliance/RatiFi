@@ -14,9 +14,9 @@ export const postOTPAction = (data, callback) => dispatch => {
   console.log(data,"before data");
   return loginHandler(data)
     .then(async ({ data: response }) => {
-      console.log('RES', response);
+      dispatch({ type: 'SAVE_TOKEN', payload: response?.token });
 
-      dispatch({ type: 'SAVE_PROFILE', payload: response.data });
+      dispatch({ type: 'SAVE_PROFILE', payload: response?.data });
       const DD = await getDeviceHash();
 
       // ToastAndroid.showWithGravityAndOffset(

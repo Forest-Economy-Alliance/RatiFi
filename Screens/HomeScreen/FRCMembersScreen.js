@@ -76,7 +76,11 @@ const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
     }, []);
 
 
-
+    useEffect(()=>{
+        if(!authLevel || !postLevel){
+          navigation.navigate("Role")
+        }
+        },[])
 
 
     const { profile } = useSelector(state => state.entities.auth.userInfo);
@@ -100,14 +104,14 @@ const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
 
         logoutHandler({
           id:profile?._id?.toString(),
-          fcmToken:await fetchData()
+          fcmToken:'await fetchData()'
         }).then(res=>{
     
     
           setVis(false);
           dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
           dispatch({type: 'SAVE_TOKEN', payload: null});
-          navigation.replace("NamePhone")
+          navigation.replace('MobilePassword');
     
     
     

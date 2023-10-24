@@ -33,6 +33,7 @@ import { logoutHandler } from '../../services/authService';
 import { firebase } from '@react-native-firebase/messaging';
 import WebView from 'react-native-webview';
 import Pdf from 'react-native-pdf';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
@@ -887,14 +888,14 @@ const DownloadPDFScreen = ({ navigation }) => {
 
     logoutHandler({
       id:profile?._id?.toString(),
-      fcmToken:await fetchData()
+      fcmToken:'await fetchData()'
     }).then(res=>{
 
 
       setVis(false);
       dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
       dispatch({type: 'SAVE_TOKEN', payload: null});
-      navigation.replace("NamePhone")
+      navigation.replace('MobilePassword');
 
 
 
@@ -2506,7 +2507,7 @@ const DownloadPDFScreen = ({ navigation }) => {
 
 
 
-
+console.log(imgUrl)
 
 
 
@@ -2569,7 +2570,7 @@ const DownloadPDFScreen = ({ navigation }) => {
           button={{ width: 200,marginTop:20 }}
           dsbled={val5 ? false : true}
         >
-          {t('get documents')}
+          {t('GET MAP')}
         </CustomButton>
 
         
@@ -2585,6 +2586,9 @@ const DownloadPDFScreen = ({ navigation }) => {
                   ? t('your forest map is available')
                   : t('your_forest_map_is_not_available')}
               </Text>
+              
+          
+
               {imgUrl!=='x' && (<>
              
                <WebView
@@ -2602,6 +2606,10 @@ const DownloadPDFScreen = ({ navigation }) => {
               )}
             </View>
 
+            {/* <CustomButton button={{width:'80%',marginTop:20}}>
+                <Text>Upload Map&nbsp;</Text>
+                <Icon name="camera" size={20}/>
+            </CustomButton> */}
         
             <Text style={styles.subMsg2}>
               {t('download application document')}

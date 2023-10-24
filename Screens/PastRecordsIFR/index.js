@@ -29,7 +29,7 @@ import CustomError from '../../components/CustomError';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { fetchClaimDetailsHandler, patchClaimHandler } from '../../services/claimService';
+import { fetchClaimDetailsHandler, fetchClaimDetailsHandlerIFR, patchClaimFieldsIFRHandler, patchClaimHandler, patchClaimHandlerIFR } from '../../services/claimService';
 import { fetchClaimDetailsByIdAction } from '../../redux-store/actions/claim';
 
 
@@ -47,7 +47,7 @@ const PastRecordsIFR = ({ navigation }) => {
     const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
     const dispatch = useDispatch();
-
+    const [refresh,setRefresh]=useState(false);
 
     const toast = useToast();
     const cameraRef = useRef(null);
@@ -134,8 +134,8 @@ const PastRecordsIFR = ({ navigation }) => {
         // fetch Details on basis of applicaton
         // alert(profile?.claims[0])
 
-        console.warn("BEFORE_GOING", profile?.claims[profile?.claims.length - 1]);
-        fetchClaimDetailsHandler({ claimId: profile?.claims[profile?.claims.length - 1] })
+        console.warn("BEFORE_GOING", profile?.IFRclaims[profile?.IFRclaims.length - 1]);
+        fetchClaimDetailsHandlerIFR({ claimId: profile?.IFRclaims[profile?.IFRclaims.length - 1] })
             .then(response => {
                 console.warn(response.data.data);
                 setClaim(response.data.data);
@@ -144,7 +144,7 @@ const PastRecordsIFR = ({ navigation }) => {
             .catch(error => {
                 console.log("ERROR", error);
             })
-    }, [cameraModalVis, previewDocModalVis]);
+    }, [refresh,cameraModalVis]);
 
 
 
@@ -218,11 +218,11 @@ const PastRecordsIFR = ({ navigation }) => {
                                 dispatch({ type: "ENABLE_LOADING" })
                                 if (cameraRef) {
                                     console.warn(cameraRef)
-                                    const options = { quality: 0.4, base64: true };
+                                    const options = { quality: 0.1, base64: true };
                                     const data = await cameraRef?.current?.takePictureAsync(options);
 
                                     // console.log(data?.base64)
-
+                       
 
                                     getGCPUrlImageHandler({
                                         fileName: 'Hello',
@@ -234,7 +234,7 @@ const PastRecordsIFR = ({ navigation }) => {
 
 
                                         console.warn("CID", claim?._id)
-                                        const rssponse = await patchClaimHandler({
+                                        const rssponse = await patchClaimHandlerIFR({
                                             claimId: claim?._id.toString(),
                                             title: docName,
                                             storageUrl: data.response.Location
@@ -387,32 +387,13 @@ const PastRecordsIFR = ({ navigation }) => {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 40, marginTop: 20 }}>
                             <Text style={[styles.headerText]}>{t('Application_Number')}</Text>
-                            <Text style={[styles.headerText, { fontWeight: 'bold' }]}>{claim?.applicationNumber}</Text>
+                            <Text style={[styles.headerText, { fontWeight: 'bold' }]}> &nbsp;{claim?.applicationNumber}</Text>
                         </View>
 
-                        {/* <CustomButton
-                text={t('Track old claim')} 
-                onPress={() => {
-  
-                }}
-                style={styles.otBtnView}
-                button={styles.otBtn}
-              />
-              <CustomButton
-                text={t('File claim')}
-                onPress={() => {
-                  console.log("CLICKET")
-                  navigation.navigate("DownloadPDF")
-                }}
-                style={styles.ntBtnView}
-                button={styles.ntBtn}
-              /> */}
+                      
 
 
-
-
-
-                        <ScrollView>
+                    { !claim?.isGivenForValidation ?    <ScrollView>
 
 
 
@@ -523,45 +504,124 @@ const PastRecordsIFR = ({ navigation }) => {
 
 
 
-<TouchableOpacity onPress={()=>{
+                            <View >
+                                <View style={styles.header}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={[styles.subheaderText, { fontSize: 12, width: '40%' }]}>
+                                            {/* <Image /> */}
+                                            सीमा
+                                        </Text>
+                                        {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
+                                    </View>
+
+                                </View>
+                                <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-evenly',
+                                    
+                                }} >
+                                    <CustomButton
+                                        onPress={() => {
+                            
+                                            if(claim?.boundary?.length === 0){
+                                                navigation.navigate("MarkBoundry")
+                                            }else{
+                                                alert("Map Boundary has been saved")
+                                            }
+                                            // fetch Details on basis of applicato
+                                            // dispatch({type:"ENABLE_LOADING"})
+                                            // alert(claim?.courtDocuments.length)
+                                            // if (!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2')) {
+                                            //     setDocName('SDM_SUMMON_RESULT_2')
+                                            //     setCameraModalVis(true)
+                                            // }
+                                            // else {
+                                            //     setPreviewDocModal(true)
+                                            //     handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
+                                            // }
+                                        }}
+                                        
+                                            style={{ width: '100%', marginLeft: 40  , marginTop: 10}}
+
+                                    >
+                                        {Boolean(claim?.boundary?.length === 0) ? <MaterialIcons name="gps-fixed" color="white" size={20} />
+                                            : <Text style={{ fontSize: 12 }}> MAP SAVED</Text>}
+                                    </CustomButton>
+                                    
+                                    {Boolean(claim?.boundary?.length !== 0 ) && <CustomButton
+                                            onPress={() => {
+                                                
+                                                navigation.navigate("MarkBoundry")
+                                            }}
+                                            style={{ width: '100%' ,  marginRight: 40 , marginTop: 10}}
+                                        >
+                                           <MaterialIcons name="gps-fixed" size={20} /> 
+                                        </CustomButton>
+                                    }
+                                </View>
+
+                            </View>
+
+
+
+{/* <TouchableOpacity onPress={()=>{
     navigation.navigate("MarkBoundry")
 }}>
 
 
 <View  style={{flexDirection:'row',justifyContent:'center', marginVertical:30,marginHorizontal:50,borderWidth:1,borderColor:'#fff',padding:20,borderRadius:20}}>
-    <Text>Mark the boundry </Text>
+    <Text> </Text>
     <MaterialIcons name="gps-fixed" size={20} /> 
 </View>
-</TouchableOpacity>
+</TouchableOpacity> */}
 
 
 
 
                             <View style={{marginVertical:10,marginTop:50}}>
 
-<CustomButton button={{width:'50%'}}>Submit Claim</CustomButton>
+<CustomButton
+onPress={()=>{
+
+    // 
+    patchClaimFieldsIFRHandler({
+        claimId:claim?._id?.toString(),
+        isGivenForValidation:true,
+    }).then(res=>{
+        setRefresh(g=>!g);
+    }).catch(err=>{
+        console.log('err',err)
+    })
+
+}}
+ button={{width:'50%'}}>सत्यापन के लिए दावा सबमिट करें</CustomButton>
 
 
 </View>
 
 
-                        </ScrollView>
+                        </ScrollView>: <ScrollView>
 
+                            <View style={{paddingHorizontal:20,paddingVertical:30}}>
+                            <Text style={{fontSize:20}}> आपका व्यक्तिगत सामुदायिक अधिकार दावा  करने से पहले सत्यापन के लिए जमा कर दिया गया है l</Text>
 
+                            </View>
+                            <View>
+                            <CustomButton
+                        button={{ width: 250, marginBottom: 10 }}
+                        onPress={() => {
+                            navigation.replace("HomeScreenIFR")
+                        }}
+                    >
+                        <Ionicons name="ios-home" size={20} />
+                        &nbsp; 
+                        होम स्क्रीन
+                    </CustomButton>
+                            </View>
+</ScrollView>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 

@@ -10,13 +10,17 @@ import {
   Alert,
   Linking,
   Pressable,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {useFormik} from 'formik';
+import Image from 'react-native-fast-image';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
 import {useSelector, useDispatch} from 'react-redux';
@@ -26,10 +30,15 @@ import CustomError from '../../components/CustomError';
 import {updateUserInfoAction} from '../../redux-store/actions/auth';
 import {fetchClaimDetailsByFRCHandler} from '../../services/claimService';
 import {updateUserHandler} from '../../services/authService';
+import {RNCamera} from 'react-native-camera';
+import {getGCPUrlImageHandler} from '../../services/commonService';
+import {useToast} from 'react-native-toast-notifications';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const RoleScreen = ({navigation}) => {
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+  const toast = useToast();
+  const {language, verificationAadharBackUrl, verificationAadharFrontUrl} =
+    useSelector(state => state.entities.appUtil.appUtil);
 
   const state = {
     member: '',
@@ -39,6 +48,7 @@ const RoleScreen = ({navigation}) => {
 
   const {t, i18n} = useTranslation();
   const dispatch = useDispatch();
+
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const {name, village, postLevel} = useSelector(
     state => state.entities.auth.userInfo.profile,
@@ -58,6 +68,7 @@ const RoleScreen = ({navigation}) => {
     console.log(values);
     formikActions.setSubmitting(false);
 
+    dispatch({type: 'ENABLE_LOADING'});
     dispatch(
       updateUserInfoAction(
         {
@@ -65,16 +76,26 @@ const RoleScreen = ({navigation}) => {
           postLevel: values.role,
           village: village,
           isMember: values.role === t('Member'),
+          activeStatus: values.member !== 'एफआरसी' ? false : true,
         },
         args => {
           console.log('role-args', args);
           if (args) {
+            dispatch({type: 'DISABLE_LOADING'});
+
             // screencode 5 means role set
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
             // navigation.navigate('HomeScreen');
             console.log('yy', postLevel);
-            if (!(values.role === t('Member'))) {
+            if (values.member !== 'एफआरसी') {
+
+              navigation.navigate('HomeScreen', {
+                toBeValidated: true,
+              });
+
+           
+            } else if (!(values.role === t('Member'))) {
               // check if secretyary or president have already filed a claim
               fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
                 if (res?.data?.data[0]?._id?.toString()) {
@@ -93,11 +114,11 @@ const RoleScreen = ({navigation}) => {
                 }
               });
 
-              navigation.navigate('ClaimTypeSelectionScreen', {
-                isMember: false,
-              });
+              // navigation.navigate('ClaimTypeSelectionScreen', {
+              //   isMember: false,
+              // });
 
-              // navigation.navigate('DownloadPDF');
+              navigation.navigate('DownloadPDF');
             } else {
               console.log('ok');
 
@@ -106,6 +127,7 @@ const RoleScreen = ({navigation}) => {
               // navigation.navigate('IdCard');
             }
           } else {
+            dispatch({type: 'DISABLE_LOADING'});
             // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
             //   type: 'success',
             //   animationType: 'zoom-in',
@@ -115,6 +137,7 @@ const RoleScreen = ({navigation}) => {
             // });
             // alert(t('ALREADY_ASSIGNED_ROLE'));
             // this alert button should have a help button which will redirect to the help screen
+
             Alert.alert(t('ALREADY_ASSIGNED_ROLE'), '', [
               {
                 text: 'Ok',
@@ -126,7 +149,7 @@ const RoleScreen = ({navigation}) => {
                 onPress: () => {
                   // link to whatsapp
                   Linking.openURL(
-                    "https://wa.me/918107204259?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
+                    "https://wa.me/9343680029?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
                   );
                 },
               },
@@ -175,17 +198,26 @@ const RoleScreen = ({navigation}) => {
           label: t('Subdivisonal Officer'),
           value: '1',
         },
-        {
-          label: t('Tehsildar'),
-          value: '2',
-        },
+        // {
+        //   label: t('Tehsildar'),
+        //   value: '2',
+        // },
         {
           label: t('Forest Range Officer'),
           value: '3',
         },
+        
         {
           label: t('Member'),
           value: '4',
+        },
+        {
+          label: t('Circle Officer'),
+          value: '5',
+        },
+        {
+          label: t('Range Officer'),
+          value: '6',
         },
       ],
     },
@@ -228,12 +260,196 @@ const RoleScreen = ({navigation}) => {
     // navigation.navigate("HomeScreen")
   };
 
+  const cameraRef = useRef(null);
+  const [cameraModalVis, setCameraModalVis] = useState(false);
+  const [previewDocModalVis, setPreviewDocModal] = useState(false);
+  const [docUrlToPreview, setDocUrlToPreview] = useState('');
+
+  const [uploadStatus, setUploadStatus] = useState({f: false, b: false});
+  const [isFront, setIsFront] = useState(null);
+
+  console.log(verificationAadharBackUrl);
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
+      {cameraModalVis && (
+        <Modal style={{padding: 100, backgroundColor: 'white'}}>
+          <RNCamera
+            ref={cameraRef}
+            onCameraReady={e => {
+              dispatch({type: 'DISABLE_LOADING'});
+            }}
+            // flashMode={'on'}
+            style={styles.rnCamera}
+            captureAudio={false}
+            ratio="16:9"
+            useNativeZoom></RNCamera>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              paddingTop: 'auto',
+              paddingBottom: 'auto',
+              backgroundColor: 'black',
+              flex: 0.2,
+            }}>
+            <TouchableOpacity
+              disabled={false}
+              style={{
+                borderWidth: 1,
+                borderRadius: 50,
+                alignItems: 'center',
+                padding: 20,
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                // alignSelf:'flex-start',
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+              }}
+              onPress={async () => {
+                try {
+                  dispatch({type: 'ENABLE_LOADING'});
+                  if (cameraRef) {
+                    console.warn(cameraRef);
+                    const options = {quality: 0.4, base64: true};
+                    const data = await cameraRef?.current?.takePictureAsync(
+                      options,
+                    );
+
+                    console.log(data?.uri);
+                    // parallelSync(localPath,cb);
+                    dispatch({type: 'DISABLE_LOADING'});
+
+                    getGCPUrlImageHandler({
+                      fileName: 'Hello',
+                      base64Data: data?.base64,
+                      isPdf: false,
+                      isVerificationDoc: true,
+                      isFront: isFront,
+                      isBack: !isFront,
+                      userId: state1?._id,
+                    })
+                      .then(async ({data}) => {
+                        console.log('RESPONSE', data);
+
+                        if (isFront === true) {
+                        
+                          dispatch({
+                            type: 'UPDATE_APPUTIL_KEY',
+                            payload: {
+                              key: 'verificationAadharFrontUrl',
+                              value: data?.response?.Location,
+                            },
+                          });
+                          setUploadStatus({...uploadStatus, f: true});
+                        } else if (isFront === false) {
+                    
+                          dispatch({
+                            type: 'UPDATE_APPUTIL_KEY',
+                            payload: {
+                              key: 'verificationAadharBackUrl',
+                              value: data?.response?.Location,
+                            },
+                          });
+
+                          setUploadStatus({...uploadStatus, b: true});
+                        }
+
+                        // console.warn("CID", claim?._id)
+                        // const rssponse = await patchClaimHandler({
+                        //     claimId: claim?._id.toString(),
+                        //     title: docName,
+                        //     storageUrl: data.response.Location
+                        // })
+
+                        // console.log("WOW", rssponse.data);
+
+                        setCameraModalVis(false);
+
+                        if (data?.response?.Location) {
+                          toast.show(t('FILE_UPLOADED'), {
+                            type: 'success',
+                            animationType: 'zoom-in',
+                            successColor: '#480E09',
+                            placement: 'top',
+                            duration: 5000,
+                          });
+
+                          dispatch({type: 'DISABLE_LOADING'});
+                        } else {
+                          toast.show(t('UPLOAD_FAILED'), {
+                            type: 'failure',
+                            animationType: 'zoom-in',
+                            successColor: '#480E09',
+                            placement: 'top',
+                            duration: 5000,
+                          });
+
+                          dispatch({type: 'DISABLE_LOADING'});
+                        }
+                      })
+
+                      .catch(err => {
+                        console.log(err);
+                      });
+                  }
+                } catch (error) {
+                  console.log('ERROR', error);
+                }
+              }}>
+              <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{color: 'white', paddingHorizontal: 20}}
+              onPress={() => {
+                setCameraModalVis(false);
+              }}>
+              <Text style={{color: 'white'}}>
+                <Ionicons name="close" size={50} />
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
+
+      {previewDocModalVis && (
+        <Modal style={{padding: 100, backgroundColor: 'white'}}>
+          <View style={{flex: 0.8}}>
+            <Image
+              // onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
+              // onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
+              source={{uri: docUrlToPreview}}
+              style={{flex: 1}}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              paddingTop: 'auto',
+              paddingBottom: 'auto',
+              backgroundColor: 'black',
+              flex: 0.2,
+            }}>
+            <TouchableOpacity
+              style={{color: 'white', paddingHorizontal: 20}}
+              onPress={() => setPreviewDocModal(false)}>
+              <Text style={{color: 'white'}}>
+                <Ionicons name="close" size={50} c />
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
+
       {state1.postLevel !== undefined ? (
         <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
           <Pressable onPress={goBack}>
@@ -281,6 +497,100 @@ const RoleScreen = ({navigation}) => {
               formik={formik}
               variable={'role'}
             />
+
+            {Boolean(
+              formik.values.member === t('SDLC') ||
+                formik.values.member === t('DLC'),
+            ) && (
+              <View>
+                <View>
+                  <View style={styles.title}>
+                    <Text style={styles.titleText}>
+                      {t('Upload Aadhar Card')}
+                    </Text>
+                  </View>
+                </View>
+
+                <View
+                  style={[
+                    styles.title,
+                    {
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    },
+                  ]}>
+                  <Pressable
+                    onPress={() => {
+                      setIsFront(true);
+                      setCameraModalVis(true);
+                    }}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 10,
+                        borderStyle: 'dashed',
+                      }}>
+                      FRONT <Ionicons name="camera-sharp" size={22} />
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => {
+                      setIsFront(false);
+                      setCameraModalVis(true);
+                    }}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 10,
+                        borderStyle: 'dashed',
+                      }}>
+                      BACK <Ionicons name="camera-sharp" size={22} />
+                    </Text>
+                  </Pressable>
+                </View>
+
+                {/* Preview */}
+                <View
+                  style={[
+                    styles.title,
+                    {
+                      flexDirection: 'row',
+                      justifyContent: uploadStatus?.f ?  'space-between' : 'flex-end',
+                      marginTop: 5,
+                    },
+                  ]}>
+                  {uploadStatus?.f && (
+                    <Pressable
+                      onPress={() => {
+                        setDocUrlToPreview(verificationAadharFrontUrl);
+                        setPreviewDocModal(true);
+                      }}>
+                      <Text style={{color: 'white', padding: 10}}>
+                        VIEW <Ionicons name="eye" size={22} />
+                      </Text>
+                    </Pressable>
+                  )}
+
+                  {uploadStatus?.b && (
+                    <Pressable
+                      onPress={() => {
+                        setDocUrlToPreview(verificationAadharBackUrl);
+                        setPreviewDocModal(true);
+                      }}>
+                      <Text style={{color: 'white', padding: 10}}>
+                        VIEW <Ionicons name="eye" size={22} />
+                      </Text>
+                    </Pressable>
+                  )}
+                </View>
+              </View>
+            )}
+
             <CustomButton
               text={t('Next')}
               onPress={async () => {
@@ -462,5 +772,12 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: 'red',
     marginTop: '2%',
+  },
+  rnCamera: {
+    flex: 0.9,
+    width: '100%',
+    position: 'relative',
+    zIndex: 10000,
+    alignSelf: 'center',
   },
 });

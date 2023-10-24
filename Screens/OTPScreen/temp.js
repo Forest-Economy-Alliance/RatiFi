@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
   ImageBackground,
   ScrollView,
-  Alert,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -17,96 +16,119 @@ import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
-import {object} from 'yup';
-import {string} from 'yup';
-import {ref} from 'yup';
-import CustomError from '../../components/CustomError';
-import {useToast} from 'react-native-toast-notifications';
-import axios from 'axios';
-import {signInAction} from '../../redux-store/actions/auth';
-import {firebase} from '@react-native-firebase/messaging';
-// import { BASE_URL } from '../../services/APICentral';
+import {selectName} from '../../redux-store/reducers/entities/appUtil';
+import {useRoute} from '@react-navigation/native';
+import {verifyOTPAction} from '../../redux-store/actions/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-const MobilePasswordScreen = ({navigation}) => {
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+const NamePhoneScreen = ({navigation}) => {
+  useEffect(() => {
+    formik.handleReset();
+  }, []);
 
-  const toast = useToast();
   const dispatch = useDispatch();
-  // const {name} = useSelector(state => state.entities.auth.userInfo?.profile);
-
-  const state = {
-    password: '',
-  };
-
+  const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
+  const route = useRoute();
+  console.log(route?.params?.phoneNumber);
   const {t, i18n} = useTranslation();
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
-
+  const [wrongOTP, setWrongOTP] = useState('');
   const changeLanguage = value => {
     i18n
       .changeLanguage(value)
       .then(() => setCurrentLanguage(value))
       .catch(err => console.log(err));
   };
-  const PassSchema = object().shape({
-    password: string().required(t('Password is Required')),
-  });
 
-  const fetchData = async () => {
-    await firebase.messaging().registerDeviceForRemoteMessages();
-    const fcmToken = await firebase.messaging().getToken();
-    console.log('fcm', fcmToken);
-   
-    return fcmToken;
+  const name = useSelector(state => state.entities.appUtil.appUtil.name);
+  const {otp,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
+
+  const forgetPasswordCode = route.params.forgetPasswordCode || '2';
+  const state = {
+    otp: '',
   };
+  console.log(forgetPasswordCode, 'forgetPassword Code');
+  const onVerifyOtp = (values, formikActions) => {
+    formikActions.setSubmitting(false);
+    // navigation.navigate('Password');
+alert(otp)
+    if (formik.values.otp === otp) {
 
-  const LoginByNumber = async () => {
+      let PROFILE_STATUS = "CREATED";
+      if (authLevel && authLevel!=='-1') {
+        PROFILE_STATUS = "AVAILABLE"; // means he has done all resitration steps till last
+      }
+
+     
+      if (forgetPasswordCode == 1) {
+        navigation.navigate('Password', {
+          mobile: route.params.phoneNumber,
+          forgetPasswordCode: '1',
+        });
+      } else if (PROFILE_STATUS === 'AVAILABLE') {
+        navigation.navigate('HomeScreen');
+        // navigation.navigate("DownloadPDF")
+        // updating to screen code to 2 as otp verification is done ,
+        // now two cases ,
+        // in reponse if we get AVAILABLE
+        // else we get created
+        // if available -> Home Screen
+        // if created -> Password
+        // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+        //  navigation.navigate("Login")
+      } else if (PROFILE_STATUS === 'CREATED') {
+        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+        navigation.navigate('Password', {mobile: route.params.phoneNumber});
+      } else {
+        setWrongOTP(t('Wrong OTP'));
+      }
+    } else {
+      setWrongOTP(t('Wrong OTP'));
+    }
+
+    return;
 
     dispatch(
-      signInAction(
+      verifyOTPAction(
         {
-          mobile: formik.values.phoneNumber,
-          password: formik.values.password,
-          fcmToken: 'await fetchData()',
+          mobile: route?.params?.phoneNumber,
+          otp: formik.values.otp,
         },
         args => {
-
-          if (args) {
-         
-            navigation.navigate('ClaimTypeSelectionScreen',{
-              loginMode:true
-            })
-            // navigation.navigate('HomeScreen');
-          } else {
-            toast.show(t('INCORRECT_PASSWORD'), {
-              type: 'success',
-              animationType: 'zoom-in',
-              successColor: '#480E09',
-              placement: 'top',
-              duration: 5000,
+          console.log('ARGS->', args);
+          if (forgetPasswordCode == 1) {
+            navigation.navigate('Password', {
+              mobile: route.params.phoneNumber,
+              forgetPasswordCode: '1',
             });
+          } else if (args === 'AVAILABLE') {
+            navigation.navigate('HomeScreen');
+            // navigation.navigate("DownloadPDF")
+            // updating to screen code to 2 as otp verification is done ,
+            // now two cases ,
+            // in reponse if we get AVAILABLE
+            // else we get created
+            // if available -> Home Screen
+            // if created -> Password
+            // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+            //  navigation.navigate("Login")
+          } else if (args === 'CREATED') {
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
+            navigation.navigate('Password', {mobile: route.params.phoneNumber});
+          } else {
+            setWrongOTP(t('Wrong OTP'));
           }
         },
       ),
     );
   };
 
-  const onLogin = (values, formikActions) => {
-    console.log(values);
-  };
-
-  const buttonText = {
-    password: t('Fill Password'),
-  };
-
   const formik = useFormik({
     initialValues: state,
-    validationSchema: PassSchema,
-    onSubmit: onLogin,
+    // validationSchema: OTPSchema,
+    onSubmit: onVerifyOtp,
   });
-
-  const [errorVisible, setErrorVisible] = useState(false);
 
   useEffect(() => {
     changeLanguage(language);
@@ -122,62 +144,30 @@ const MobilePasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Login')}</Text>
+              <Text style={styles.headerText}>{t('OTP')}</Text>
               <View style={styles.horizontalLine} />
             </View>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
+            <View style={styles.name}>
+              <Text style={styles.nameTxt}>{name}</Text>
             </View>
-            <CustomInput
-              keyboardType={'number-pad'}
-              onChangeText={formik.handleChange('phoneNumber')}
-              onBlur={formik.handleBlur('phoneNumber')}
-              value={formik.values.phoneNumber}
-              error={formik.errors.phoneNumber && formik.touched.phoneNumber}
-            />
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('password')}</Text>
+              <Text style={styles.titleText}>{t('Enter OTP')}</Text>
             </View>
-            <CustomInput
-              keyboardType={'number-pad'}
-              onChangeText={formik.handleChange('password')}
-              onBlur={formik.handleBlur('password')}
-              value={formik.values.password}
-              secureTextEntry={true}
-              error={formik.errors.password && formik.touched.password}
-            />
-            <CustomButton
-              text={t('Login')}
-              onPress={() => {
-                LoginByNumber();
-              }}
-              style={styles.otpBtn}
-            />
 
-            <View style={{marginTop: '10%'}}>
-              <CustomButton
-                style={{marginBottom: 10}}
-                button={{width: 200}}
-                text={t('New') + ' ' + t('Registration')}
-                onPress={() => {
-                  navigation.navigate('NamePhone');
-                }}
-              />
-              <CustomButton
-                text={t('Forgot Password')}
-                onPress={() => {
-                  navigation.navigate('ForgotPassword');
-                }}
-                style={styles.forgPassBtn}
-                button={styles.forgPassWidth}
-              />
-            </View>
-            <CustomError
-              visible={errorVisible}
-              setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
-              errors={formik.errors}
-              buttonText={buttonText}
+            <CustomInput
+              onChangeText={formik.handleChange('otp')}
+              onBlur={formik.handleBlur('otp')}
+              value={formik.values.otp}
+              error={formik.errors.otp && formik.touched.otp}
+              keyboardType="numeric"
+            />
+            <Text style={{alignSelf: 'center', color: 'red', marginTop: 10}}>
+              {wrongOTP}
+            </Text>
+            <CustomButton
+              text={t('Next')}
+              onPress={formik.handleSubmit}
+              style={styles.otpBtn}
             />
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -185,7 +175,8 @@ const MobilePasswordScreen = ({navigation}) => {
     </ImageBackground>
   );
 };
-export default MobilePasswordScreen;
+
+export default NamePhoneScreen;
 
 const styles = StyleSheet.create({
   bg: {
@@ -216,6 +207,7 @@ const styles = StyleSheet.create({
   name: {
     alignItems: 'center',
     marginHorizontal: '10%',
+    margin: '10%',
   },
   nameTxt: {
     fontSize: 25,
@@ -240,13 +232,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   otpBtn: {
-    marginTop: '20%',
-  },
-  forgPassBtn: {
-    // marginTop: '50%',
-  },
-  forgPassWidth: {
-    width: '70%',
+    marginTop: '30%',
   },
   inputName: {
     borderColor: '#CCCCCC',

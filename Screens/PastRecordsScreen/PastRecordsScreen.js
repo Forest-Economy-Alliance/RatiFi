@@ -13,8 +13,11 @@ import {
     Modal,
     TouchableOpacity,
     ActivityIndicator,
-    BackHandler,Pressable
+    BackHandler,Pressable, ProgressBarAndroid
 } from 'react-native';
+import queue from 'react-native-job-queue'
+import {ProgressBar} from '@react-native-community/progress-bar-android';
+
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
 import dayjs from 'dayjs';
@@ -30,6 +33,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { fetchClaimDetailsHandler, patchClaimHandler } from '../../services/claimService';
 import { fetchClaimDetailsByIdAction } from '../../redux-store/actions/claim';
+import RNFS from 'react-native-fs';
 
 
 import { RNCamera } from 'react-native-camera'
@@ -43,7 +47,7 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
 const PastRecordsScreen = ({ navigation }) => {
-    const {language} = useSelector(state => state.entities.appUtil.appUtil);
+    const {language,formUploadSyncStatus} = useSelector(state => state.entities.appUtil.appUtil);
 
     const dispatch = useDispatch();
 
@@ -143,7 +147,7 @@ const PastRecordsScreen = ({ navigation }) => {
             .catch(error => {
                 console.log("ERROR", error);
             })
-    }, [cameraModalVis, previewDocModalVis]);
+    }, [formUploadSyncStatus, previewDocModalVis]);
 
 
 
@@ -177,6 +181,7 @@ const PastRecordsScreen = ({ navigation }) => {
 
             </Pressable>
           </View>
+            
 
             {cameraModalVis && <Modal style={{ padding: 100, backgroundColor: 'white' }}>
                 <RNCamera
@@ -213,13 +218,28 @@ const PastRecordsScreen = ({ navigation }) => {
                         onPress={async () => {
                             try {
 
-                                dispatch({ type: "ENABLE_LOADING" })
                                 if (cameraRef) {
                                     console.warn(cameraRef)
                                     const options = { quality: 0.4, base64: true };
+                                    dispatch({ type: "ENABLE_LOADING" })
                                     const data = await cameraRef?.current?.takePictureAsync(options);
 
-                                    // console.log(data?.base64)
+                                     setCameraModalVis(false);
+                                  
+                                    dispatch({
+                                        type: 'UPDATE_APPUTIL_KEY',
+                                        payload: {
+                                          key: 'formUploadSyncStatus',
+                                          value: true,
+                                        },
+                                      });
+                                    // console.log(data.uri)
+                                    // console.log(await RNFS.readFile(data.uri, 'base64'));
+                                    queue.addJob("testWorker",{localPath: data?.uri,userId:profile?._id,docName:docName,claimId:claim?._id?.toString()})
+                                    dispatch({ type: "DISABLE_LOADING" })
+
+
+                                    return;
 
 
                                     getGCPUrlImageHandler({
@@ -363,9 +383,11 @@ const PastRecordsScreen = ({ navigation }) => {
                 </Modal>
             }
 
+{formUploadSyncStatus &&  <ProgressBar styleAttr="Horizontal" color="#Fff"  style={{height:40}}/>}
 
 
-            <ScrollView style={styles.darkness}>
+            <ScrollView style={styles.darkness}> 
+         
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <KeyboardAvoidingView>
 

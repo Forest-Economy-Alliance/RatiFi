@@ -48,7 +48,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import { BASE_URL } from '../../services/APICentral';
 import { useRoute } from '@react-navigation/native';
-import { postClaimHandler } from '../../services/claimService';
+import { postClaimHandler, postIFRClaimHandler } from '../../services/claimService';
 import { logoutHandler } from '../../services/authService';
 import { firebase } from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
@@ -247,14 +247,14 @@ const IFRDownloadPDF = ({ navigation }) => {
 
         logoutHandler({
           id:profile?._id?.toString(),
-          fcmToken:await fetchData()
+          fcmToken:'await fetchData()'
         }).then(res=>{
     
     
           setVis(false);
           dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
           dispatch({type: 'SAVE_TOKEN', payload: null});
-          navigation.replace("NamePhone")
+          navigation.replace('MobilePassword');
     
     
     
@@ -442,7 +442,7 @@ try{
                       
                         console.log("OK")
                         console.log("owner id",profile._id.toString())
-                        const rsponse = await postClaimHandler({
+                        const rsponse = await postIFRClaimHandler({
                             ownerId: profile._id.toString()
                         })
 

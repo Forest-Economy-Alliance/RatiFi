@@ -21,6 +21,7 @@ import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
 // import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {AllVillages} from '../../constants/Villages';
 import CustomButton from '../../components/CustomButton';
@@ -58,6 +59,7 @@ const HomeScreen = ({navigation}) => {
     postLevel,
     authLevel,
     village,
+    activeStatus
   } = useSelector(state => state.entities.auth.userInfo?.profile);
   // console.log(authLevel=="एसडीएलसी");
   // alert("Hi")
@@ -105,17 +107,17 @@ const HomeScreen = ({navigation}) => {
   const signout = async () => {
     logoutHandler({
       id: profile?._id?.toString(),
-      fcmToken: await fetchData(),
+      fcmToken: 'await fetchData()',
     })
       .then(res => {
         setVis(false);
         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
         dispatch({type: 'SAVE_TOKEN', payload: null});
         // App Breackage Issue - To be discussed later  dispatch({type: 'CLEAR_PROFILE', payload: null});
-        navigation.replace('NamePhone');
+        navigation.replace('MobilePassword');
       })
       .catch(error => {
-        Alert.alert('Something went wrong',error?.toString());
+        Alert.alert('Something went wrong', error?.toString());
       });
     // dispatch({type: 'SAVE_PROFILE', payload: null});
   };
@@ -223,15 +225,19 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
+  useEffect(() => {
+    if (!authLevel || !postLevel) {
+      navigation.navigate('Role');
+    }
+  }, []);
+
   return (
     // flexWrap: 'wrap',
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}
-      
-      >
+      style={styles.bg}>
       <View style={{paddingHorizontal: 20}}>
         {vis && (
           <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />
@@ -304,52 +310,65 @@ const HomeScreen = ({navigation}) => {
           )}
         </View>
 
-        {true && (
+
+{!activeStatus &&
+<View style={[styles.header,{borderWidth:1,paddingTop:0,borderStyle:'dashed',padding:10}]}>
+<Text style={{color:'white',fontSize:20}}>आपके आधार कार्ड विवरण सत्यापित होने के बाद, आपकी प्रोफ़ाइल सक्रिय हो जाएगी</Text>
+<Text style={{color:'white',marginTop:5,fontWeight:'700'}}>VERIFICATION - IN-PROCESS</Text>
+</View>}
+
+
+
+
+
+
+
+
+
+
+
+{Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
-            text={t('Show Profile Details')}
+            text={t('Download Maps')}
             onPress={() => {
-              if (
-                profile?.claims?.length === 0 &&
-                (postLevel === 'अध्यक्ष' || postLevel === 'सचिव')
-              ) {
+             
                 navigation.navigate('DownloadPDF', {code: 'president'});
-              } else
-                navigation.navigate('ShowProfile', {
-                  editProfile: true,
-                });
+             
             }}
           />
         )}
 
-        <CustomButton
-          style={{marginBottom: 20}}
-          button={{width: 300}}
-          text={t('Edit Profile')}
-          onPress={() => {
-            // if (redux vairable ===or){}
-            if (language === 'or') {
-              navigation.navigate('LocationOdisha', {
-                editProfile: true,
-              });
-            } else {
-              navigation.navigate('Location', {
-                editProfile: true,
-                role: authLevel,
-              });
-            }
+        {Boolean(authLevel === 'एफआरसी') && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            text={t('Edit Profile')}
+            onPress={() => {
+              // if (redux vairable ===or){}
+              if (language === 'or') {
+                navigation.navigate('LocationOdisha', {
+                  editProfile: true,
+                });
+              } else {
+                navigation.navigate('Location', {
+                  editProfile: true,
+                  role: authLevel,
+                });
+              }
 
-            // if(authLevel=="एसडीएलसी"){
-            //     navigation.navigate("LocationInformationSDLC")
-            // }
-            // else{
-            //     navigation.navigate("Location", {
-            //         editProfile: true
-            //     })
-            // }
-          }}
-        />
+              // if(authLevel=="एसडीएलसी"){
+              //     navigation.navigate("LocationInformationSDLC")
+              // }
+              // else{
+              //     navigation.navigate("Location", {
+              //         editProfile: true
+              //     })
+              // }
+            }}
+          />
+        )}
         {/* Add a button to change Role */}
         {/* @COMMENTED OUT ON 7 SEPT - 7:39PM <CustomButton
           style={{marginBottom: 20}}
@@ -394,7 +413,7 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )}
-        {authLevel !== 'एफआरसी' && (
+        {(authLevel !== 'एफआरसी' && activeStatus) &&  (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -407,11 +426,26 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
+        {postLevel === 'अध्यक्ष' && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={t('Validate IFR Claim')}
+            onPress={() => {
+              console.log('ifr-claim');
+              // navigation.navigate('LocationSdlc');
+            }}
+          />
+        )}
+
+      
         <View
           style={{
             backgroundColor: 'green',
           }}></View>
-        <CustomButton
+
+       { activeStatus && <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
           onPress={() => {
@@ -434,20 +468,29 @@ const HomeScreen = ({navigation}) => {
               ({notificationCount})
             </Text>
           )}
-        </CustomButton>
+        </CustomButton>}
       </View>
 
-{/* 
+
+      {(authLevel !== 'एफआरसी' && activeStatus) && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={
+              <>
+                <Ionicons name="open-outline" size={20} />
+                &nbsp;
+                {t(' Detailed Dashboard')}
+              </>
+            }
+            onPress={() => {
+              // console.log('ifr-claim');
+              navigation.navigate('WebDashboard');
+            }}
+          />
+        )}
       
-      <CustomButton
-          style={{marginBottom: 20,backgroundColor:'#480E09',paddingVertical:10,textAlign:'center'}}
-          button={{width: 300}}
-          btnText={{textAlign:'center'}}
-          onPress={() => {
-             navigation.navigate("IFRScreen");
-          }}>
-          {t('apply for individual forest right')}
-        </CustomButton> */}
     </ImageBackground>
   );
 };

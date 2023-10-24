@@ -5,9 +5,13 @@ const INIT_STATE = {
   registrationScreenCode: 0,
   typeOfClaim: 'CFR',
   formSaveDir: '',
-  language: 'en', // not used yet
+  language: 'hi', // not used yet
   name: '',
   formData: [],
+  verificationAadharFrontUrl: '',
+  verificationAadharBackUrl: '',
+  formUploadSyncStatus: false,
+  globalSyncStatus:false
 };
 
 const appUtil = (state = INIT_STATE, action) => {
@@ -70,6 +74,11 @@ const appUtil = (state = INIT_STATE, action) => {
         formData: oldFormData,
       };
 
+    case 'UPDATE_APPUTIL_KEY':
+      return {
+        ...state,
+        [action?.payload?.key]: action?.payload?.value,
+      };
     case 'CLEAR_FORMS':
       return {
         ...state,

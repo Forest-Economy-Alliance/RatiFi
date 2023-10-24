@@ -122,7 +122,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Registration')}</Text>
+              <Text style={styles.headerText}>{t('Forgot Password')}</Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>

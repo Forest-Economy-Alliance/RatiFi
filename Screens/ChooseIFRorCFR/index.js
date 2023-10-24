@@ -15,6 +15,19 @@ import {useState} from 'react';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ClaimTypeSelectionScreen = ({navigation}) => {
   const dispatch = useDispatch();
+  const {
+    name,
+    panchayat,
+    tehsil,
+    state,
+    district,
+    village,
+    postLevel,
+    authLevel,
+    claims,
+    IFRclaims,
+  } = useSelector(state => state.entities.auth.userInfo?.profile);
+
   const {token} = useSelector(state => state.entities.auth.userInfo);
   const {t, i18n} = useTranslation();
 
@@ -62,17 +75,32 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
               onPress={() => {
                 //
                 // const isMemeber = route?.params?.isMember;
-
                
+                if (authLevel !== t('FRC')) {
+                  navigation.navigate('HomeScreen');
+                  return ;
+                }
                 const loginMode = route?.params?.loginMode;
                 if (lang?.value === 'ifr') {
                   dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
+
                   navigation.navigate(
-                    loginMode ? 'HomeScreenIFR' : 'IFRDownloadPDF',
+                    loginMode && IFRclaims?.length !== 0
+                      ? 'HomeScreenIFR'
+                      : 'IFRDownloadPDF',
                   );
                 } else {
                   dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
-                  navigation.navigate(loginMode ? 'HomeScreen' : 'Role');
+
+                  // check form download screnerio
+
+                  navigation.navigate(
+                    loginMode
+                      ? claims?.length !== 0
+                        ? 'HomeScreen'
+                        : 'DownloadPDF'
+                      : 'Role',
+                  );
                 }
               }}
               style={styles.button}>

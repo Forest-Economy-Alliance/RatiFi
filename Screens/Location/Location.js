@@ -83,7 +83,7 @@ const LocationScreen = ({ navigation }) => {
         // navigation.navigate('FRCHome');
         // return ;
         
-
+        dispatch({type:'ENABLE_LOADING'})
         dispatch(
             updateUserInfoAction(
                 {
@@ -96,7 +96,7 @@ const LocationScreen = ({ navigation }) => {
             
                 args => {
                     if (args) {
-
+                        dispatch({type:'DISABLE_LOADING'})
                         if(editProfileMode && authLevel==='एसडीएलसी'){
                             navigation.replace('HomeScreen')
                         }
