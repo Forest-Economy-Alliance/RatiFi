@@ -83,7 +83,7 @@ export const MarkBoundry = () => {
 
   },[])
 
-
+ 
   return (
     <ImageBackground
       source={BG_IMG_PATH}

@@ -366,6 +366,12 @@ import {
                       }}
                   /> */}
        
+          <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          text="View Map"
+          onPress={()=>navigation.navigate('viewMap')}
+          />
   
           <View
             style={{

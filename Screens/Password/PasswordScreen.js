@@ -1,4 +1,4 @@
-/* eslint-disable no-alert */
+ /* eslint-disable no-alert */
 import {
   StyleSheet,
   Text,
@@ -50,7 +50,7 @@ const PasswordScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.password,
   );
 
-  const {language,globalSyncStatus} = useSelector(e => e?.entities?.appUtil?.appUtil);
+  const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
 
   const {t, i18n} = useTranslation();
 
@@ -90,17 +90,6 @@ const PasswordScreen = ({navigation}) => {
         });
       }
     } else {
-    
-      dispatch({
-        type: 'UPDATE_APPUTIL_KEY',
-        payload: {
-          key: 'globalSyncStatus',
-          value: true,
-        },
-      });
-
-
-      return;
       dispatch(
         updatePasswordAction(
           {
@@ -108,8 +97,6 @@ const PasswordScreen = ({navigation}) => {
             password: formik.values.password,
           },
           args => {
-
-            
             if (forgetPasswordCode == 1) {
               navigation.navigate('HomeScreen');
             } else if (args) {
