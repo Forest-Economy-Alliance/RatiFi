@@ -481,7 +481,7 @@ const HomeScreen = ({navigation}) => {
               <>
                 <Ionicons name="open-outline" size={20} />
                 &nbsp;
-                {t(' Detailed Dashboard')}
+                {t(' Go to Dashboard')}
               </>
             }
             onPress={() => {

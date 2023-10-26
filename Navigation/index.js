@@ -49,6 +49,7 @@ import {ProgressBar} from '@react-native-community/progress-bar-android';
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
+
   const {loading} = useSelector(state => state.entities.appUtil.appUtil);
 
   const {t, i18n} = useTranslation();

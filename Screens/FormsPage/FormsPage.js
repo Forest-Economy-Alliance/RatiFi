@@ -405,7 +405,7 @@ const FormsPage = ({navigation}) => {
           </Text>
         </TouchableOpacity>
 
-        <View
+        {/* <View
           style={{
             flex: 0.7,
             // backgroundColor:'red',
@@ -442,7 +442,8 @@ const FormsPage = ({navigation}) => {
               <Ionicons name="chevron-forward-circle-sharp" size={50} />
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
+
       </View>
       <View style={{paddingVertical: 20}}>
         {/* 

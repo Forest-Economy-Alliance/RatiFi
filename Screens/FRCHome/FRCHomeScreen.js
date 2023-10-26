@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'flex-start',
-    paddingTop: '15%',
+    paddingTop: '8%',
     marginHorizontal: '10%',
   },
   headerText: {

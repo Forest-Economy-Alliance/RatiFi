@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Image, ImageBackground, Text, View} from 'react-native';
-import MapView, {Marker, PROVIDER_GOOGLE, Polyline} from 'react-native-maps';
+import MapView, {LocalTile, Marker, PROVIDER_GOOGLE, Polyline, UrlTile} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
 import CustomButton from '../../components/CustomButton';
@@ -97,10 +97,14 @@ export const MarkBoundry = () => {
             borderWidth: 7,
             borderColor: isTripStarted ? 'blue' : 'transparent',
           }}>
+         
           <MapView
-          mapType='hybrid'
+
+          // cacheEnabled
+            mapType='hybrid'
             provider={PROVIDER_GOOGLE}
-            maxZoomLevel={14}
+            maxZoomLevel={28}
+            minZoomLevel={12}
             // showsMyLocationButton={true}
             initialRegion={{
               latitude: userLocation?.latitude,
@@ -113,7 +117,18 @@ export const MarkBoundry = () => {
             style={{
               height: '90%',
               width: '100%',
-            }}>
+            }}
+            >
+
+              {/* <LocalTile
+
+              />
+
+              <UrlTile
+    urlTemplate="https://api.mapbox.com/v4/mapbox.satellite/14/8919/5843@2x.jpg90?access_token=API_KEY"
+    zIndex={-1}
+    tileCachePath={'/data/user/0/com.awesomeProject/files/mapTiles'}
+  /> */}
             <Marker coordinate={userLocation}></Marker>
             <Polyline
               strokeWidth={5}

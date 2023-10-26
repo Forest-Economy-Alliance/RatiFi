@@ -7,6 +7,7 @@ import App from './App';
 import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import RNFS from 'react-native-fs';
+import NetInfo from '@react-native-community/netinfo';
 
 import store from './redux-store';
 
@@ -17,7 +18,7 @@ import ignoreWarnings from 'ignore-warnings';
 import {YellowBox} from 'react-native';
 import {getGCPUrlImageHandler} from './services/commonService';
 import {patchClaimHandler} from './services/claimService';
-import { updatePasswordHandler, updateUserHandler } from './services/authService';
+import {updatePasswordHandler, updateUserHandler} from './services/authService';
 
 console.disableYellowBox = true;
 
@@ -42,6 +43,9 @@ queue.configure({
         value: false,
       },
     });
+    queue.getJobs().then(r => {
+      console.warn(r);
+    });
   },
 });
 
@@ -63,6 +67,7 @@ queue.addWorker(
             claimId: payload?.claimId,
             title: payload?.docName,
             storageUrl: rr.data.response.Location,
+            extraImageID:payload?.extraImageID
           });
 
           console.log('rssponse');
@@ -78,7 +83,7 @@ queue.addWorker(
 
 queue.addWorker(
   new Worker('UPDATEPasswordWorker', async payload => {
-    return new Promise(async function(resolve, reject){
+    return new Promise(async function (resolve, reject) {
       updatePasswordHandler({
         mobile: payload?.mobile,
         password: payload?.password,
@@ -86,25 +91,36 @@ queue.addWorker(
         .then(async ({data: response}) => {
           console.log('RES updatepassword action', response);
           const args = response?.success;
-          store.store.dispatch({type: 'SAVE_PROFILE', payload: response.data})
-          store.store.dispatch({type: 'DISABLE_LOADING'})
+          store.store.dispatch({type: 'SAVE_PROFILE', payload: response.data});
+          store.store.dispatch({type: 'DISABLE_LOADING'});
           store.store.dispatch({
-      type: 'UPDATE_APPUTIL_KEY',
-      payload: {
-        key: 'globalSyncStatus',
-        value: true,
-      },
-    });
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: true,
+            },
+          });
 
-    if(args) {
-      // screen code 3 means , password set
-      store.store.dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
-      
-    }
-    resolve();
+          if (args) {
+            // screen code 3 means , password set
+            store.store.dispatch({
+              type: 'UPDATE_REGISTRATION_SCREEN_CODE',
+              payload: 3,
+            });
+          }
+          resolve();
         })
         .catch(err => {
           console.log('NETWOEK', err);
+          // queue.getJobs()
+          // .then(r=>{
+          //  const a= r.filter(item=>item.workerName==='UPDATEPasswordWorker');
+          //  console.log('llll',a.length)
+          // //  if(a.length===0){
+          //   queue.addJob('UPDATEPasswordWorker', payload,{},true);
+          // //  }
+          // })
+
           reject();
         });
     }).catch(err => {
@@ -113,61 +129,58 @@ queue.addWorker(
   }),
 );
 
-
 queue.addWorker(
   new Worker('UPDATELocationWorker', async data => {
-    return new Promise(async function(resolve, reject){
-      
-
-
+    return new Promise(async function (resolve, reject) {
       console.log('DATA--', data);
-  // dispatch({type: 'ENABLE_LOADING'});
+      // dispatch({type: 'ENABLE_LOADING'});
 
-  let updatingRole = false;
-  if (
-    //including data?.isMemeber we have = 4
-    Object.keys(data).length === 4 &&
-    data?.authLevel &&
-    data?.postLevel &&
-    data?.village
-  ) {
-    updatingRole = true;
-  }
-
-  return updateUserHandler(data)
-    .then(async ({ data: response }) => {
-      console.log('RES--', response);
-
-      if (response.success) {
-        store.store.dispatch({ type: 'SAVE_PROFILE', payload: response.data });
-        store.store.dispatch({ type: 'DISABLE_LOADING' });
+      let updatingRole = false;
+      if (
+        //including data?.isMemeber we have = 4
+        Object.keys(data).length === 4 &&
+        data?.authLevel &&
+        data?.postLevel &&
+        data?.village
+      ) {
+        updatingRole = true;
       }
-      console.log(response.success);
-      if (true) {
-        // now checking if authLevel, i.e role Information is update
-        // or location is updated as per code
-        // location -> 4
-        // role-> 5
 
-        // 22 April 2023 Edit - Check if role already exists in village or not
+      return updateUserHandler(data)
+        .then(async ({data: response}) => {
+          console.log('RES--', response);
 
-        store.store.dispatch({
-          type: 'UPDATE_REGISTRATION_SCREEN_CODE',
-          payload: data.authLevel ? 5 : 4,
+          if (response.success) {
+            store.store.dispatch({
+              type: 'SAVE_PROFILE',
+              payload: response.data,
+            });
+            store.store.dispatch({type: 'DISABLE_LOADING'});
+          }
+          console.log(response.success);
+          if (true) {
+            // now checking if authLevel, i.e role Information is update
+            // or location is updated as per code
+            // location -> 4
+            // role-> 5
+
+            // 22 April 2023 Edit - Check if role already exists in village or not
+
+            store.store.dispatch({
+              type: 'UPDATE_REGISTRATION_SCREEN_CODE',
+              payload: data.authLevel ? 5 : 4,
+            });
+            // callback(response.success);
+          }
+          resolve();
+        })
+        .catch(err => {
+          console.log('NETWOEK', err);
+          reject();
         });
-        // callback(response.success);
-
-      }
-      resolve();
-    })
-    .catch(err => {
-      console.log('NETWOEK', err);
-      reject()
     });
-
-  })
-}
-));
+  }),
+);
 
 ignoreWarnings('warn', ['ViewPropTypes', '[react-native-gesture-handler]']);
 

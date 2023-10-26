@@ -155,8 +155,8 @@ android {
         applicationId "com.ratifi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
-        versionName "30.0"
+        versionCode 31
+        versionName "31.0"
 
 
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -296,7 +296,7 @@ android {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
-    implementation project(path: ":@react-native-firebase_auth")
+    // implementation project(path: ":@react-native-firebase_auth")
     implementation fileTree(dir: "libs", include: ["*.jar"])
    
     //noinspection GradleDynamicVersion

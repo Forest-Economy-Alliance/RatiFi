@@ -109,6 +109,9 @@ const PasswordScreen = ({navigation}) => {
       queue.addJob('UPDATEPasswordWorker', {
         mobile,
         password: formik.values.password,
+      },{
+        attempts:2,
+        timeout:5000
       })
 
       if (forgetPasswordCode == 1) {

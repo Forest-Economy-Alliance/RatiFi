@@ -243,6 +243,28 @@ const RoleScreen = ({navigation}) => {
         },
       ],
     },
+    {
+      label: t('DLC'),
+      value: '3',
+      roleData: [
+        {
+          label: 'District Collector',
+          value: '1',
+        },
+        {
+          label: 'District Forest Officer',
+          value: '2',
+        },
+        {
+          label: 'Officer-in-Charge (Tribal Affairs)',
+          value: '3',
+        },
+        {
+          label: 'Member',
+          value: '4',
+        },
+      ],
+    },
   ];
 
   const buttonText = {
