@@ -95,7 +95,7 @@ export default function ValidateIFRScreen() {
             ),
           )}
 
-          {claims?.length===0 && <Text style={{fontSize:18}}>आपके एफआरसी में ऐप का उपयोग करके अभी तक कोई व्यक्तिगत दावा नहीं भरा गया है</Text>}
+          {claims?.length===0 && <Text style={{fontSize:18}}>आपके मौजा में ऐप का उपयोग करके अभी तक कोई व्यक्तिगत दावा नहीं भरा गया है</Text>}
         </View>
       </ScrollView>
     </ImageBackground>

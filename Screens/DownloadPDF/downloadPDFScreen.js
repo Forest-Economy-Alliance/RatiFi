@@ -57,7 +57,7 @@ const data = [
 
 const DownloadPDFScreen = ({ navigation }) => {
   const [loading,setLoading]=useState(false);
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+  const {language,typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
   const [imgUrl,setImgUrl]=useState('x');
   const [vData,setVData]=useState([]);
   const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
@@ -2532,7 +2532,7 @@ console.log(imgUrl)
             </Pressable>
           </View>
 
-        { false ?  <ScrollView style={styles.darkness}>
+        { typeOfClaim==='CFR' ?  <ScrollView style={styles.darkness}>
            
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
@@ -2652,10 +2652,6 @@ console.log(imgUrl)
 :
 <CustomButton  button={{ width: 200,marginTop:20 }}
  onPress={async()=>{
-
-
-
-
   setLoading(true);
   dispatch({type:'ENABLE_LOADING'})
 
@@ -2689,7 +2685,6 @@ console.log(imgUrl)
  }}>
 {t('download application document')}
 </CustomButton>
-
 }
 {
   printDocs?.map(item=><View key={`pd-${item?.path}`} style={{borderBottomWidth:1,flexDirection:'row',justifyContent:'space-between',paddingVertical:20}}>
