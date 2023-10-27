@@ -1,0 +1,28 @@
+{
+  "name": "react-native-job-queue",
+  "version": "0.5.0",
+  "summary": "TODO",
+  "description": "react-native-job-queue",
+  "homepage": "https://github.com/SimonErm/react-native-job-queue",
+  "license": "MIT",
+  "authors": {
+    "Simon": "simon_ermler@web.de"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/SimonErm/react-native-job-queue.git",
+    "tag": "0.5.0"
+  },
+  "swift_versions": "5.0",
+  "source_files": "ios/**/*.{h,m,swift}",
+  "requires_arc": true,
+  "dependencies": {
+    "React": [
+
+    ]
+  },
+  "libraries": "sqlite3",
+  "swift_version": "5.0"
+}

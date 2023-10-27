@@ -23,6 +23,15 @@ import ClaimTypeSelectionScreen from './Screens/ChooseIFRorCFR';
 import {MarkBoundry} from './Screens/MarkBoundry';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://f6df349b4939644ef5fd3693c17e766c@o4505605336662016.ingest.sentry.io/4506120617721856',
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  // We recommend adjusting this value in production.
+  tracesSampleRate: 1.0,
+  debug: true,
+});
 
 ignoreWarnings('warn', ['ViewPropTypes']);
 
@@ -82,19 +91,18 @@ function App() {
     return sp?.toString() + ' Mb/s';
   };
 
-  return (<View style={{flex:1,backgroundColor:'gray'}}>
+  return (
+    <View style={{flex: 1, backgroundColor: 'gray'}}>
+      <ToastProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Navigation />
 
-
-    <ToastProvider>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <Navigation />
-         
-          {/* <MarkBoundry/> */}
-        </PersistGate>
-      </Provider>
-    </ToastProvider>
+            {/* <MarkBoundry/> */}
+          </PersistGate>
+        </Provider>
+      </ToastProvider>
     </View>
   );
 }
-export default App;
+export default Sentry.wrap(App);

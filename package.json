@@ -24,7 +24,7 @@
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
-    "@sentry/react-native": "^4.15.0",
+    "@sentry/react-native": "^5.11.1",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.6",

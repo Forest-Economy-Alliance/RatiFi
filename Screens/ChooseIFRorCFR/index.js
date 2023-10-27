@@ -28,6 +28,8 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
     IFRclaims,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
 
+  const [isUpperLevel, setIsUpperLevel] = useState(false);
+
   const {token} = useSelector(state => state.entities.auth.userInfo);
   const {t, i18n} = useTranslation();
 
@@ -45,6 +47,9 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage('hi');
     console.log('ooooo->', route?.params?.isMember);
+    if (Boolean(authLevel && authLevel !== t('FRC') && authLevel !== '-1')) {
+      setIsUpperLevel(true);
+    }
   }, []);
 
   const claimTypes = [
@@ -69,46 +74,60 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
           <View style={styles.horizontalLine} />
         </View>
         <ScrollView contentContainerStyle={styles.innerContainer}>
-          {claimTypes.map(lang => (
-            <TouchableOpacity
-              key={lang.value}
-              onPress={() => {
-                //
-                // const isMemeber = route?.params?.isMember;
+          {claimTypes.map(lang => {
+            if (isUpperLevel && lang.value === 'ifr') {
+              return null;
+            }
+            return (
+              <TouchableOpacity
+                key={lang.value}
+                onPress={() => {
+                  //
+                  // const isMemeber = route?.params?.isMember;
 
-                // if (authLevel !== t('FRC')) {
-                //   navigation.navigate('HomeScreen');
-                //   return;
-                // }
-                const loginMode = route?.params?.loginMode;
-                if (lang?.value === 'ifr') {
-                  dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
+                  // if (authLevel !== t('FRC')) {
+                  //   navigation.navigate('HomeScreen');
+                  //   return;
+                  // }
+                  const loginMode = route?.params?.loginMode;
+                  if (lang?.value === 'ifr') {
+                    dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
 
-                  navigation.navigate(
-                    loginMode && IFRclaims?.length !== 0
-                      ? 'HomeScreenIFR'
-                      : 'IFRDownloadPDF',
-                  );
-                } else {
-                  dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
-
-                  // check form download screnerio
-
-                  if (loginMode === true) {
-                    if (claims?.length !== 0) {
-                      navigation.navigate('HomeScreen');
-                    } else {
-                      navigation.navigate('DownloadPDF');
+                    if (authLevel !== t('FRC')) {
+                      navigation.replace('HomeScreenIFR');
+                      return;
                     }
+                    navigation.replace(
+                      loginMode && IFRclaims?.length !== 0
+                        ? 'HomeScreenIFR'
+                        : 'HomeScreenIFR',
+                    );
                   } else {
-                    navigation.navigate('Role');
+                    dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
+
+                    // check form download screnerio
+
+                    if (loginMode === true) {
+                      if (authLevel !== t('FRC')) {
+                        navigation.replace('HomeScreen');
+                        return;
+                      }
+
+                      if (claims?.length !== 0) {
+                        navigation.replace('HomeScreen');
+                      } else {
+                        navigation.replace('HomeScreen');
+                      }
+                    } else {
+                      navigation.navigate('Role');
+                    }
                   }
-                }
-              }}
-              style={styles.button}>
-              <Text style={styles.text}>{lang.name}</Text>
-            </TouchableOpacity>
-          ))}
+                }}
+                style={styles.button}>
+                <Text style={styles.text}>{lang.name}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
     </ImageBackground>

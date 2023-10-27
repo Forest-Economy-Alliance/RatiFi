@@ -2547,7 +2547,9 @@ console.log(imgUrl)
         />
 
         <CustomButton onPress={async () => {
+          
           setPressed(true);
+          try{
 
           // fetch image
           // await getDeviceHash();
@@ -2555,7 +2557,8 @@ console.log(imgUrl)
           setLoading(true);
           dispatch({type:'ENABLE_LOADING'})
 
-          const rr= await request(`/get-ifr-documents?vName=${map_name}`)
+          const rr= await request(`/get-documents?vName=${map_name}`)
+        
           console.log(rr.data?.data)
           // alert(JSON.stringify(rr.data))
          
@@ -2565,7 +2568,7 @@ console.log(imgUrl)
           setPrintDocs(rr?.data?.data)
           console.log('owner id', profile._id.toString());
 
-          if (profile?.claims?.length === 0) {  // first download then only
+          if (profile?.IFRclaims?.length === 0) {  // first download then only
             const rsponse = await postClaimHandler({
               ownerId: profile._id.toString(),
             });
@@ -2583,7 +2586,12 @@ console.log(imgUrl)
           dispatch({type:'DISABLE_LOADING'});
           setLoading(false);
           return ;
-
+        }catch(error){
+            console.log(error);
+        }finally{
+          dispatch({type:'DISABLE_LOADING'});
+        }
+        
 
 
          
@@ -2651,7 +2659,7 @@ console.log(imgUrl)
   setLoading(true);
   dispatch({type:'ENABLE_LOADING'})
 
-  const rr= await request(`/get-documents?vName=${'map_name'}`)
+  const rr= await request(`/get-ifr-documents`)
   console.log(rr.data?.data)
   
   setPrintDocs(rr.data?.data)
