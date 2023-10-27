@@ -87,6 +87,14 @@ const HomeScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
+
+  useEffect(() => {
+    if (!authLevel || !postLevel) {
+      navigation.replace('Role');
+    }
+  }, []);
+
+
   useEffect(() => {
     changeLanguage(language);
   }, []);
@@ -162,29 +170,32 @@ const HomeScreen = ({navigation}) => {
     // validationSchema: uidSchema,
     // onSubmit: onNext,
   });
-
+// 
+  // @NOW
   // leave app on back button press on this screen
-  useEffect(() => {
-    const backAction = () => {
-      // current screen is home screen
-      Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {text: 'YES', onPress: () => BackHandler.exitApp()},
-      ]);
-      return true;
-    };
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     // current screen is home screen
+  //     Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
+  //       {
+  //         text: 'Cancel',
+  //         onPress: () => null,
+  //         style: 'cancel',
+  //       },
+  //       {text: 'YES', onPress: () => BackHandler.exitApp()},
+  //     ]);
+  //     return true;
+  //   };
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
 
-    return () => backHandler.remove();
-  }, []);
+  //   return () => backHandler.remove();
+  // }, []);
+
+
   // Make a useEffect run on particular pages
   const getEnglish = param => {
     console.log('OK', HI.translation);
@@ -225,11 +236,7 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-  useEffect(() => {
-    if (!authLevel || !postLevel) {
-      navigation.navigate('Role');
-    }
-  }, []);
+
 
   return (
     // flexWrap: 'wrap',
@@ -244,8 +251,11 @@ const HomeScreen = ({navigation}) => {
         )}
 
         <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
+        <Text style={{fontSize:20,alignSelf:'center',color:'#fff',fontWeight:'700',color:'white',textDecorationLine:'underline'}}>{t('CFR')}</Text>
+  
           <Text style={styles.roleText}>
             {' '}
+            
             <FontAwesome name="user-circle-o" size={30} color="white" />{' '}
           </Text>
         </TouchableOpacity>
@@ -331,7 +341,7 @@ const HomeScreen = ({navigation}) => {
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
-            text={t('Print Documents')}
+            text={<Text style={{fontWeight:'700'}}>अवेदन दस्तावेज़   </Text>}
             onPress={() => {
              
                 navigation.navigate('DownloadPDF', {code: 'president'});
@@ -340,35 +350,7 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-        {Boolean(authLevel === 'एफआरसी') && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            text={t('Edit Profile')}
-            onPress={() => {
-              // if (redux vairable ===or){}
-              if (language === 'or') {
-                navigation.navigate('LocationOdisha', {
-                  editProfile: true,
-                });
-              } else {
-                navigation.navigate('Location', {
-                  editProfile: true,
-                  role: authLevel,
-                });
-              }
-
-              // if(authLevel=="एसडीएलसी"){
-              //     navigation.navigate("LocationInformationSDLC")
-              // }
-              // else{
-              //     navigation.navigate("Location", {
-              //         editProfile: true
-              //     })
-              // }
-            }}
-          />
-        )}
+       
         {/* Add a button to change Role */}
         {/* @COMMENTED OUT ON 7 SEPT - 7:39PM <CustomButton
           style={{marginBottom: 20}}
@@ -386,7 +368,7 @@ const HomeScreen = ({navigation}) => {
             text={t('Track old claim')}
             onPress={() => {
               if (profile?.claims?.length === 0) {
-                alert(t('CLAIM_NOT_APPLIED'));
+                Alert.alert('सूचना',t('CLAIM_NOT_APPLIED'));
               } else navigation.navigate('PastRecordsScreen');
             }}
           />
@@ -401,7 +383,10 @@ const HomeScreen = ({navigation}) => {
                             navigation.navigate('Gender')
                     }}
                 /> */}
-        {postLevel === 'अध्यक्ष' && (
+
+
+{/* REMOVED - ON HOLD TILL CAMPAIGN LAUNCH - 27Oct 12:44PM */}
+        {/* {postLevel === 'अध्यक्ष' && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -412,7 +397,9 @@ const HomeScreen = ({navigation}) => {
               viewFRCMembers(village);
             }}
           />
-        )}
+        )} */}
+
+
         {(authLevel !== 'एफआरसी' && activeStatus) &&  (
           <CustomButton
             style={{marginBottom: 20}}
@@ -426,19 +413,7 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-        {postLevel === 'अध्यक्ष' && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            // dsbled={profile?.claims?.length==0}
-            text={t('Validate IFR Claim')}
-            onPress={() => {
-              console.log('ifr-claim');
-              // navigation.navigate('LocationSdlc');
-            }}
-          />
-        )}
-
+      
       
         <View
           style={{
@@ -471,6 +446,31 @@ const HomeScreen = ({navigation}) => {
         </CustomButton>}
       </View>
 
+      {Boolean(authLevel === 'एफआरसी') && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            text={t('Edit Profile')}
+            onPress={() => {
+             
+                navigation.navigate('Location', {
+                  editProfile: true,
+                  role: authLevel,
+                });
+              
+
+              // if(authLevel=="एसडीएलसी"){
+              //     navigation.navigate("LocationInformationSDLC")
+              // }
+              // else{
+              //     navigation.navigate("Location", {
+              //         editProfile: true
+              //     })
+              // }
+            }}
+          />
+        )}
+
 
       {(authLevel !== 'एफआरसी' && activeStatus) && (
           <CustomButton
@@ -490,21 +490,26 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )}
+
+
+{postLevel === 'अध्यक्ष' && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={t('Validate IFR Claim')}
+            onPress={() => {
+              console.log('ifr-claim');
+              navigation.navigate('ValidateIFRScreen');
+            }}
+          />
+        )}
+
       
     </ImageBackground>
   );
 };
 
-{
-  /* <TouchableOpacity
-                  style={styles.nextButton}
-                  onPress={() => {
-                    navigation.navigate('FormsPage');
-                  }}
-                >
-                  <Text style={styles.nextButtonText}>{t('download')}</Text>
-                </TouchableOpacity> */
-}
 
 export default HomeScreen;
 
@@ -518,11 +523,12 @@ const styles = StyleSheet.create({
   },
   roleContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginTop: '5%',
     marginBottom: '5%',
+    marginLeft:'5%',
     // backgroundColor: '#D3F2D3',
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
     borderRadius: 100,
     // borderWidth: 1,
     borderColor: '#C8CCC8',

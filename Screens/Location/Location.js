@@ -40,6 +40,7 @@ const LocationScreen = ({ navigation }) => {
     React.useEffect(() => {
         console.log(route.params)
         if (route?.params?.editProfile === true) {
+            
             setEditProfileMode(true);
         }
 
@@ -100,7 +101,8 @@ queue.addJob("UPDATELocationWorker", {
 })
 
 
-if(editProfileMode && authLevel==='एसडीएलसी'){
+if(editProfileMode && authLevel!=='एफआरसी'){
+    // ifr cfr check
     navigation.replace('HomeScreen')
 }
 else if (editProfileMode && authLevel==='एफआरसी') {
@@ -114,46 +116,9 @@ else {// navigation.navigate('RoleInformation');
     //screen code 4 , means location information set
     dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
 
-    navigation.navigate("Gender")
+    navigation.replace("Gender")
 }
 return ;
-
-
-
-        dispatch({type:'ENABLE_LOADING'})
-        dispatch(
-            updateUserInfoAction(
-                {
-                    state: formik.values.state,
-                    district: formik.values.district,
-                    tehsil: formik.values.tehsil,
-                    panchayat: formik.values.panchayat,
-                    village: formik.values.village,
-                },
-            
-                args => {
-                    if (args) {
-                        dispatch({type:'DISABLE_LOADING'})
-                        if(editProfileMode && authLevel==='एसडीएलसी'){
-                            navigation.replace('HomeScreen')
-                        }
-                        else if (editProfileMode && authLevel==='एफआरसी') {
-                            if(postLevel==='सदस्य')
-                            navigation.navigate("HomeScreen")
-                            else
-                            navigation.navigate("DownloadPDF")
-                        }
-                        else {// navigation.navigate('RoleInformation');
-
-                            //screen code 4 , means location information set
-                            dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
-
-                            navigation.navigate("Gender")
-                        }
-                    }
-                },
-            ),
-        );
 
 
 
@@ -1703,7 +1668,7 @@ return ;
     // console.log(formik.values);
     const goBack = () =>{
         // Move to RoleScreen
-        navigation.navigate("HomeScreen")
+        navigation.goBack();
     }
     return (
         <ImageBackground

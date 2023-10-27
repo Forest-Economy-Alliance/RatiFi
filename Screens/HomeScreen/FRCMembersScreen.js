@@ -196,27 +196,27 @@ console.log(id)
     });
 
     // leave app on back button press on this screen
-    useEffect(() => {
-        const backAction = () => {
-            // current screen is home screen
-            Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
-                {
-                    text: "Cancel",
-                    onPress: () => null,
-                    style: "cancel"
-                },
-                { text: "YES", onPress: () => BackHandler.exitApp() }
-            ]);
-            return true;
-        };
+    // useEffect(() => {
+    //     const backAction = () => {
+    //         // current screen is home screen
+    //         Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+    //             {
+    //                 text: "Cancel",
+    //                 onPress: () => null,
+    //                 style: "cancel"
+    //             },
+    //             { text: "YES", onPress: () => BackHandler.exitApp() }
+    //         ]);
+    //         return true;
+    //     };
         
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
+    //     const backHandler = BackHandler.addEventListener(
+    //         "hardwareBackPress",
+    //         backAction
+    //     );
         
-        return () => backHandler.remove();
-    }, []);
+    //     return () => backHandler.remove();
+    // }, []);
     // Make a useEffect run on particular pages
     const getEnglish = (param) => {
 

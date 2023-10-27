@@ -61,12 +61,12 @@ const NamePhoneScreen = ({navigation}) => {
 
      
       if (forgetPasswordCode == 1) {
-        navigation.navigate('Password', {
+        navigation.replace('Password', {
           mobile: route.params.phoneNumber,
           forgetPasswordCode: '1',
         });
       } else if (PROFILE_STATUS === 'AVAILABLE') {
-        navigation.navigate('HomeScreen');
+        navigation.replace('HomeScreen');
         // navigation.navigate("DownloadPDF")
         // updating to screen code to 2 as otp verification is done ,
         // now two cases ,
@@ -78,7 +78,7 @@ const NamePhoneScreen = ({navigation}) => {
         //  navigation.navigate("Login")
       } else if (PROFILE_STATUS === 'CREATED') {
         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-        navigation.navigate('Password', {mobile: route.params.phoneNumber});
+        navigation.replace('Password', {mobile: route.params.phoneNumber});
       } else {
         setWrongOTP(t('Wrong OTP'));
       }
@@ -87,40 +87,6 @@ const NamePhoneScreen = ({navigation}) => {
     }
 
     return;
-
-    dispatch(
-      verifyOTPAction(
-        {
-          mobile: route?.params?.phoneNumber,
-          otp: formik.values.otp,
-        },
-        args => {
-          console.log('ARGS->', args);
-          if (forgetPasswordCode == 1) {
-            navigation.navigate('Password', {
-              mobile: route.params.phoneNumber,
-              forgetPasswordCode: '1',
-            });
-          } else if (args === 'AVAILABLE') {
-            navigation.navigate('HomeScreen');
-            // navigation.navigate("DownloadPDF")
-            // updating to screen code to 2 as otp verification is done ,
-            // now two cases ,
-            // in reponse if we get AVAILABLE
-            // else we get created
-            // if available -> Home Screen
-            // if created -> Password
-            // dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-            //  navigation.navigate("Login")
-          } else if (args === 'CREATED') {
-            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
-            navigation.navigate('Password', {mobile: route.params.phoneNumber});
-          } else {
-            setWrongOTP(t('Wrong OTP'));
-          }
-        },
-      ),
-    );
   };
 
   const formik = useFormik({

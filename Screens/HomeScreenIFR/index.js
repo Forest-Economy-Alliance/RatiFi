@@ -14,6 +14,7 @@ import {
     Image,
     KeyboardAvoidingView,
     Alert,
+    Linking,
   } from 'react-native';
   import FastImage from 'react-native-fast-image';
   import {useTranslation} from 'react-i18next';
@@ -162,27 +163,27 @@ import {
     });
   
     // leave app on back button press on this screen
-    useEffect(() => {
-      const backAction = () => {
-        // current screen is home screen
-        Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
-          {
-            text: 'Cancel',
-            onPress: () => null,
-            style: 'cancel',
-          },
-          {text: 'YES', onPress: () => BackHandler.exitApp()},
-        ]);
-        return true;
-      };
+    // useEffect(() => {
+    //   const backAction = () => {
+    //     // current screen is home screen
+    //     Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
+    //       {
+    //         text: 'Cancel',
+    //         onPress: () => null,
+    //         style: 'cancel',
+    //       },
+    //       {text: 'YES', onPress: () => BackHandler.exitApp()},
+    //     ]);
+    //     return true;
+    //   };
   
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction,
-      );
+    //   const backHandler = BackHandler.addEventListener(
+    //     'hardwareBackPress',
+    //     backAction,
+    //   );
   
-      return () => backHandler.remove();
-    }, []);
+    //   return () => backHandler.remove();
+    // }, []);
     // Make a useEffect run on particular pages
     const getEnglish = param => {
       console.log('OK', HI.translation);
@@ -236,8 +237,11 @@ import {
           {vis && (
             <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />
           )}
-  
+ 
           <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
+           
+          <Text style={{fontSize:20,alignSelf:'center',color:'#fff',fontWeight:'700',color:'white',textDecorationLine:'underline'}}>{t('IFR')}</Text>
+  
             <Text style={styles.roleText}>
               {' '}
               <FontAwesome name="user-circle-o" size={30} color="white" />{' '}
@@ -304,8 +308,58 @@ import {
             )}
           </View>
   
-         
-  
+
+
+          
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            text={<Text style={{fontWeight:'700'}}>अवेदन दस्तावेज़   </Text>}
+            onPress={() => {
+             Linking.openURL('/')
+                navigation.navigate('DownloadPDF', {code: 'president'});
+             
+            }}
+          />
+       
+       <CustomButton
+              style={{marginBottom: 20}}
+              button={{width: 300}}
+              // dsbled={profile?.claims?.length==0}
+              text={t('File claim')}
+              onPress={() => {
+                if (profile?.IFRclaims?.length === 0) {
+                  alert(t('CLAIM_NOT_APPLIED'));
+                } else navigation.navigate('PastRecordsIFR');
+              }}
+            />
+
+            
+<CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            onPress={() => {
+              navigation.navigate('ClaimAlertsScreenIFR');
+              // all the alers related to claim
+              // @ TODO
+              // Notii aiotn Badge Icon
+            }}>
+            {t('claim_alerts')}
+            &nbsp;&nbsp;
+            {notificationCount !== 0 && (
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 18,
+                  padding: 5,
+                  zIndex: 199,
+                  borderRadius: 10,
+                }}>
+                ({notificationCount})
+              </Text>
+            )}
+          </CustomButton>
+       
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -342,19 +396,9 @@ import {
               UpdateRole();
             }}
           /> */}
-          {true && (
-            <CustomButton
-              style={{marginBottom: 20}}
-              button={{width: 300}}
-              // dsbled={profile?.claims?.length==0}
-              text={t('File claim')}
-              onPress={() => {
-                if (profile?.IFRclaims?.length === 0) {
-                  alert(t('CLAIM_NOT_APPLIED'));
-                } else navigation.navigate('PastRecordsIFR');
-              }}
-            />
-          )}
+         
+           
+          
           {/* <CustomButton
                       style={{ marginBottom: 20 }}
                       button={{ width: 300 }}
@@ -367,34 +411,7 @@ import {
                   /> */}
        
   
-          <View
-            style={{
-              backgroundColor: 'green',
-            }}></View>
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            onPress={() => {
-              navigation.navigate('ClaimAlertsScreenIFR');
-              // all the alers related to claim
-              // @ TODO
-              // Notii aiotn Badge Icon
-            }}>
-            {t('claim_alerts')}
-            &nbsp;&nbsp;
-            {notificationCount !== 0 && (
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 18,
-                  padding: 5,
-                  zIndex: 199,
-                  borderRadius: 10,
-                }}>
-                ({notificationCount})
-              </Text>
-            )}
-          </CustomButton>
+         
         </View>
   
   
@@ -426,11 +443,12 @@ import {
     },
     roleContainer: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       marginTop: '5%',
       marginBottom: '5%',
+      marginLeft:'5%',
       // backgroundColor: '#D3F2D3',
-      alignSelf: 'flex-end',
+      // alignSelf: 'flex-end',
       borderRadius: 100,
       // borderWidth: 1,
       borderColor: '#C8CCC8',

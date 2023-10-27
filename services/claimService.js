@@ -60,6 +60,19 @@ export const fetchClaimDetailsByFRCHandler = data => {
   );
 };
 
+
+export const IFRfetchClaimDetailsByFRCHandler = data => {
+  return request(
+    '/ifr-claims-by-frc',
+    {
+      method: 'POST',
+      data,
+    },
+    false,
+    false,
+  );
+};
+
 export const postClaimHandler = data => {
   return request(
     '/claims',

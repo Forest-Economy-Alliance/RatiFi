@@ -8,7 +8,7 @@ import {
   Keyboard,
   ImageBackground,
   Image,
-  KeyboardAvoidingView,Pressable,ScrollView
+  KeyboardAvoidingView,Pressable,ScrollView, Linking
 } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,7 @@ import { useFormik } from 'formik';
 import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
-import { BASE_URL } from '../../services/APICentral';
+import { BASE_URL, request } from '../../services/APICentral';
 
 import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
@@ -34,6 +34,8 @@ import { firebase } from '@react-native-firebase/messaging';
 import WebView from 'react-native-webview';
 import Pdf from 'react-native-pdf';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { postClaimHandler, postIFRClaimHandler } from '../../services/claimService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const data = [
@@ -54,6 +56,7 @@ const data = [
 
 
 const DownloadPDFScreen = ({ navigation }) => {
+  const [loading,setLoading]=useState(false);
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
   const [imgUrl,setImgUrl]=useState('x');
   const [vData,setVData]=useState([]);
@@ -61,6 +64,7 @@ const DownloadPDFScreen = ({ navigation }) => {
   const [vis,setVis]=useState(false);
 
   const dispatch = useDispatch();
+  const [printDocs,setPrintDocs]=useState([]);
   const [role, setRole] = useState('FRC');
   const [val5, setVal5] = useState('');
   const [village, setVillage] = useState('');
@@ -81,12 +85,13 @@ const DownloadPDFScreen = ({ navigation }) => {
 
   useEffect(() => {
     changeLanguage(language);
+    
   }, []);
    
   
   const goBack = () =>{
  
-    navigation.navigate("HomeScreen")
+    navigation.goBack()
   
 }
 
@@ -2518,7 +2523,7 @@ console.log(imgUrl)
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={{ paddingHorizontal: 20 }}>
+      <ScrollView style={{ paddingHorizontal: 20 }}>
 
       <View style={{marginTop:10, marginBottom:30,marginLeft:10 }} >
             <Pressable onPress={goBack}>
@@ -2527,10 +2532,11 @@ console.log(imgUrl)
             </Pressable>
           </View>
 
-          <ScrollView style={styles.darkness}>
+        { false ?  <ScrollView style={styles.darkness}>
+           
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
-
+          <Text style={{paddingHorizontal:40,color:'white',fontSize:20}}>कृपया गांव का चयन करें</Text>
          
         <Dropdown
           downloadPDFScreenFix={setVal5}
@@ -2544,41 +2550,51 @@ console.log(imgUrl)
           setPressed(true);
 
           // fetch image
-          await getDeviceHash();
+          // await getDeviceHash();
           const map_name=getEnglish(val5);
-     
+          setLoading(true);
           dispatch({type:'ENABLE_LOADING'})
-          // alert(BASE_URL+`/get-map?name=${map_name}`)
-          axios.get(BASE_URL+`/get-map?name=${map_name}`)
-          .then(res=>{
-            // console.log(res.data);
 
-            if(res.data.success){
-              console.warn("DATA",res?.data?.data?.storageUrl)
-              setImgUrl(res?.data?.data?.storageUrl)
-
-          dispatch({type:'DISABLE_LOADING'});
-            }
-          })
-          .catch(ee=>{
+          const rr= await request(`/get-ifr-documents?vName=${map_name}`)
+          console.log(rr.data?.data)
+          // alert(JSON.stringify(rr.data))
+         
+          if(rr?.data?.isMapAvailable===false){
             setImgUrl('x')
+          }
+          setPrintDocs(rr?.data?.data)
+          console.log('owner id', profile._id.toString());
+
+          if (profile?.claims?.length === 0) {  // first download then only
+            const rsponse = await postClaimHandler({
+              ownerId: profile._id.toString(),
+            });
+
+            console.log('XXXX', rsponse.data.data);
+
+            dispatch({
+              type: 'SAVE_PROFILE',
+              payload: rsponse?.data?.data,
+            });
+          }else{
+            console.log('Already Applied')
+          }
+
           dispatch({type:'DISABLE_LOADING'});
-          })
+          setLoading(false);
+          return ;
+
+
 
          
         }}
           button={{ width: 200,marginTop:20 }}
           dsbled={val5 ? false : true}
         >
-          {t('GET MAP')}
-        </CustomButton>
+          {t('download application document')}
+        </CustomButton >
 
-        
-
-  
-
-
-        {pressed && (
+        {(pressed && !loading ) && (
           <>
             <View style={styles.msgContainer}>
               <Text style={styles.msg}>
@@ -2589,21 +2605,6 @@ console.log(imgUrl)
               
           
 
-              {imgUrl!=='x' && (<>
-             
-               <WebView
-               source={{
-                uri:'https://drive.google.com/viewerng/viewer?embedded=true&url='+imgUrl
-               }}
-               style={{
-                height:200,
-                width:200
-               }}
-
-               />
-
-                </>
-              )}
             </View>
 
             {/* <CustomButton button={{width:'80%',marginTop:20}}>
@@ -2611,9 +2612,12 @@ console.log(imgUrl)
                 <Icon name="camera" size={20}/>
             </CustomButton> */}
         
-            <Text style={styles.subMsg2}>
+        {/* @NOW */}
+            {/* <Text style={styles.subMsg2}>
               {t('download application document')}
-            </Text>
+            </Text> */}
+
+{/*  @NOW
             {pressed && (
               <CustomButton
                 disabled={true}
@@ -2628,16 +2632,73 @@ console.log(imgUrl)
                 }}>
                 {t('download')}
               </CustomButton>
-            )}
-
-
-
+            )} */}
           </>
         )}
+
+
+
   </KeyboardAvoidingView>
 </TouchableWithoutFeedback>
 </ScrollView>
-      </View>
+:
+<CustomButton  button={{ width: 200,marginTop:20 }}
+ onPress={async()=>{
+
+
+
+
+  setLoading(true);
+  dispatch({type:'ENABLE_LOADING'})
+
+  const rr= await request(`/get-documents?vName=${'map_name'}`)
+  console.log(rr.data?.data)
+  
+  setPrintDocs(rr.data?.data)
+  console.log('owner id', profile._id.toString());
+
+  if (profile?.claims?.length === 0) {  // first download then only
+    const rsponse = await postIFRClaimHandler({
+      ownerId: profile._id.toString(),
+    });
+
+    console.log('XXXX', rsponse.data.data);
+
+    dispatch({
+      type: 'SAVE_PROFILE',
+      payload: rsponse?.data?.data,
+    });
+  }else{
+    console.log('Already Applied')
+  }
+
+  dispatch({type:'DISABLE_LOADING'});
+  setLoading(false);
+  return ;
+
+
+
+ }}>
+{t('download application document')}
+</CustomButton>
+
+}
+{
+  printDocs?.map(item=><View key={`pd-${item?.path}`} style={{borderBottomWidth:1,flexDirection:'row',justifyContent:'space-between',paddingVertical:20}}>
+  <View style={{paddingVertical:5}}>
+<Text style={{fontSize:18,color:'#fff',fontWeight:'700'}}>{item?.name}</Text>
+  </View>
+  <View>
+<CustomButton onPress={()=>{
+  Linking.openURL(item?.path)
+}} button={{width:'100%',paddingVertical:10}}>
+   <MaterialCommunityIcons name="download-box" size={28}/>
+</CustomButton>
+  </View>
+
+</View>)
+}
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -2750,7 +2811,7 @@ const styles = StyleSheet.create({
     padding: '5%',
   },
   msg: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#480E09',
     textAlign: 'center',
   },

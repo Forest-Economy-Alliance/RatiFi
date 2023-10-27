@@ -115,9 +115,9 @@ const PasswordScreen = ({navigation}) => {
       })
 
       if (forgetPasswordCode == 1) {
-        navigation.navigate('HomeScreen');
+        navigation.replace('HomeScreen');
       }
-      navigation.navigate('Location');
+      navigation.replace('Location');
 
       return;
     }
@@ -168,7 +168,11 @@ const PasswordScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
+
+<Text style={{color:'#fff',fontSize:18}}>कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें </Text>
+
       <CustomInput
+        maxLength={4}
         style={styles.inputPass}
         placeholder={t('password')}
         placeholderTextColor="#FF6C00"
@@ -183,6 +187,7 @@ const PasswordScreen = ({navigation}) => {
       )}
       {!loginflow && (
         <CustomInput
+        maxLength={4}
           style={styles.inputConfPass}
           placeholder={t('confirm password')}
           placeholderTextColor="#FF6C00"

@@ -90,7 +90,7 @@ const RoleScreen = ({navigation}) => {
             console.log('yy', postLevel);
             if (values.member !== 'एफआरसी') {
 
-              navigation.navigate('HomeScreen', {
+              navigation.replace('HomeScreen', {
                 toBeValidated: true,
               });
 
@@ -104,13 +104,14 @@ const RoleScreen = ({navigation}) => {
                     claims: [res?.data?.data[0]?._id?.toString()],
                   })
                     .then(rr => {
-                      navigation.navigate('HomeScreen');
+                      navigation.replace('HomeScreen');
                     })
                     .catch(e => {
                       Alert.alert(t('info'), 'Something went wrong');
                     });
                 } else {
-                  navigation.navigate('DownloadPDF');
+                  // Changed Folow as on 27Oct 12:23PM
+                  navigation.replace('HomeScreen');
                 }
               });
 
@@ -118,11 +119,15 @@ const RoleScreen = ({navigation}) => {
               //   isMember: false,
               // });
 
-              navigation.navigate('DownloadPDF');
+              // FROM
+              // navigation.navigate('DownloadPDF');
+
+              // TO
+              navigation.replace('HomeScreen');
             } else {
               console.log('ok');
 
-              navigation.navigate('HomeScreen');
+              navigation.replace('HomeScreen');
 
               // navigation.navigate('IdCard');
             }
@@ -138,18 +143,18 @@ const RoleScreen = ({navigation}) => {
             // alert(t('ALREADY_ASSIGNED_ROLE'));
             // this alert button should have a help button which will redirect to the help screen
 
-            Alert.alert(t('ALREADY_ASSIGNED_ROLE'), '', [
+            Alert.alert('सूचना',t('ALREADY_ASSIGNED_ROLE'),  [
               {
                 text: 'Ok',
                 // onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
               {
-                text: 'Help',
+                text: 'सहायता',
                 onPress: () => {
                   // link to whatsapp
                   Linking.openURL(
-                    "https://wa.me/9343680029?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
+                    "https://wa.me/12345?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
                   );
                 },
               },
@@ -243,28 +248,7 @@ const RoleScreen = ({navigation}) => {
         },
       ],
     },
-    {
-      label: t('DLC'),
-      value: '3',
-      roleData: [
-        {
-          label: 'District Collector',
-          value: '1',
-        },
-        {
-          label: 'District Forest Officer',
-          value: '2',
-        },
-        {
-          label: 'Officer-in-Charge (Tribal Affairs)',
-          value: '3',
-        },
-        {
-          label: 'Member',
-          value: '4',
-        },
-      ],
-    },
+  
   ];
 
   const buttonText = {
@@ -529,6 +513,9 @@ const RoleScreen = ({navigation}) => {
                   <View style={styles.title}>
                     <Text style={styles.titleText}>
                       {t('Upload Aadhar Card')}
+                    </Text>
+                    <Text style={styles.titleText}>
+                      (प्रोफ़ाइल सत्यापन हेतु)
                     </Text>
                   </View>
                 </View>

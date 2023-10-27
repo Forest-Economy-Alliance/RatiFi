@@ -45,6 +45,7 @@ import {MarkBoundry} from '../Screens/MarkBoundry';
 import ClaimAlertsScreenIFR from '../Screens/ClaimAlertsIFR/ClaimAlertsScreenIFR';
 import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
+import ValidateIFRScreen from '../Screens/ValidateIFR';
 
 const Stack = createNativeStackNavigator();
 
@@ -265,6 +266,14 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="ValidateIFRScreen"
+          component={ValidateIFRScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+
         <Stack.Screen
           name="MarkBoundry"
           component={MarkBoundry}

@@ -74,16 +74,6 @@ const FormsPage = ({navigation}) => {
     () => store.store.getState().entities.appUtil.appUtil,
   );
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        navigation.goBack();
-        return true;
-      },
-    );
-    return () => backHandler.remove();
-  }, []);
 
   console.log('FORMDATA-->>CHANGED', formData);
 

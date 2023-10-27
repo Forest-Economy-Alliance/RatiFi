@@ -75,11 +75,11 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
               onPress={() => {
                 //
                 // const isMemeber = route?.params?.isMember;
-               
-                if (authLevel !== t('FRC')) {
-                  navigation.navigate('HomeScreen');
-                  return ;
-                }
+
+                // if (authLevel !== t('FRC')) {
+                //   navigation.navigate('HomeScreen');
+                //   return;
+                // }
                 const loginMode = route?.params?.loginMode;
                 if (lang?.value === 'ifr') {
                   dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
@@ -94,13 +94,15 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
 
                   // check form download screnerio
 
-                  navigation.navigate(
-                    loginMode
-                      ? claims?.length !== 0
-                        ? 'HomeScreen'
-                        : 'DownloadPDF'
-                      : 'Role',
-                  );
+                  if (loginMode === true) {
+                    if (claims?.length !== 0) {
+                      navigation.navigate('HomeScreen');
+                    } else {
+                      navigation.navigate('DownloadPDF');
+                    }
+                  } else {
+                    navigation.navigate('Role');
+                  }
                 }
               }}
               style={styles.button}>

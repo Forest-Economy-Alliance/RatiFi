@@ -371,7 +371,7 @@ const PastRecordsScreen = ({navigation}) => {
                     backgroundColor: item == stage ? '#fff' : 'transparent',
                   }}>
                   <Text style={{color: item === stage ? 'green' : '#fff'}}>
-                    Stage {item}
+                  चरण {item}
                   </Text>
                 </TouchableOpacity>
               ))}

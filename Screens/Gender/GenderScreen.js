@@ -107,7 +107,7 @@ import { setGender } from '../../services/authService';
         .then(async (response) => {
             console.log('gender updated', response.data);
 
-            navigation.navigate("ClaimTypeSelectionScreen")
+            navigation.replace("ClaimTypeSelectionScreen")
             
           
             // navigation.navigate('Role')
