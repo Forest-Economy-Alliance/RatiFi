@@ -2568,7 +2568,7 @@ console.log(imgUrl)
           setPrintDocs(rr?.data?.data)
           console.log('owner id', profile._id.toString());
 
-          if (profile?.IFRclaims?.length === 0) {  // first download then only
+          if (profile?.claims?.length === 0) {  // first download then only
             const rsponse = await postClaimHandler({
               ownerId: profile._id.toString(),
             });
@@ -2661,7 +2661,7 @@ console.log(imgUrl)
   setPrintDocs(rr.data?.data)
   console.log('owner id', profile._id.toString());
 
-  if (profile?.claims?.length === 0) {  // first download then only
+  if (profile?.IFRclaims?.length === 0) {  // first download then only
     const rsponse = await postIFRClaimHandler({
       ownerId: profile._id.toString(),
     });
@@ -2706,14 +2706,6 @@ console.log(imgUrl)
   );
 };
 
-{/* <TouchableOpacity
-                style={styles.nextButton}
-                onPress={() => {
-                  navigation.navigate('FormsPage');
-                }}
-              >
-                <Text style={styles.nextButtonText}>{t('download')}</Text>
-              </TouchableOpacity> */}
 
 export default DownloadPDFScreen;
 
