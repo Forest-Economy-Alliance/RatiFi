@@ -37,6 +37,7 @@
     "react-native": "0.68.2",
     "react-native-blob-util": "^0.19.1",
     "react-native-camera": "^4.2.1",
+    "react-native-clarity": "^1.0.1",
     "react-native-crypto-js": "^1.0.0",
     "react-native-device-info": "^9.0.2",
     "react-native-element-dropdown": "^1.8.13",

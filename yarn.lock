@@ -6427,6 +6427,11 @@ react-native-camera@^4.2.1:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-clarity@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-clarity/-/react-native-clarity-1.0.1.tgz#d100926f508517ebbb6a3b9c267acdb6155674e0"
+  integrity sha512-ah7MQDHyde8P0YQ4P1pce/1Z1iyKqm7VfudBMXi35MZ4R9nMOCeaP+grEC4eDrpC9rwuoGa7yxpflV3dHJI/OA==
+
 react-native-codegen@^0.0.17:
   version "0.0.17"
   resolved "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.17.tgz"

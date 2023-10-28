@@ -138,7 +138,7 @@ const ForestFiSplashScreen = ({navigation}) => {
               transform: valueRat.getTranslateTransform(),
             },
           ]}>
-          <Text style={styles.textRat}>RatiFi</Text>
+          <Text style={styles.textRat}>JharFRA</Text>
         </Animated.View>
       </View>
     </TouchableWithoutFeedback>

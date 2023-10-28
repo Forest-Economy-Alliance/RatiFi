@@ -67,7 +67,9 @@ queue.addWorker(
             claimId: payload?.claimId,
             title: payload?.docName,
             storageUrl: rr.data.response.Location,
-            extraImageID:payload?.extraImageID
+            extraImageID: payload?.extraImageID,
+            shouldTriggerJointVerification:
+              payload?.shouldTriggerJointVerification,
           });
 
           console.log('rssponse');

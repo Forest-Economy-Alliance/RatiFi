@@ -120,6 +120,7 @@ const PastRecordsScreen = ({navigation}) => {
 
   const [uploadType, setUploadType] = useState('MAIN_DOC');
   const [focusedExtraImageID, setFocusedExtraImageID] = useState(null);
+  const [shouldTriggerJointVerification,setShouldTriggerJointVerification]=useState(false);
   // console.log("UIF",claim);
 
   // const [name, setName] = useState('Ram Krishna');
@@ -250,12 +251,16 @@ const PastRecordsScreen = ({navigation}) => {
                     // console.log(await RNFS.readFile(data.uri, 'base64'));
 
                     if (uploadType === 'MAIN_DOC') {
+               
                       queue.addJob('testWorker', {
                         localPath: data?.uri,
                         userId: profile?._id,
                         docName: docName,
                         claimId: claim?._id?.toString(),
+                        shouldTriggerJointVerification,
                       });
+
+
                     } else if (uploadType === 'NEW_EXTRA_IMAGE') {
                     
                       queue.addJob('testWorker', {
@@ -277,7 +282,7 @@ const PastRecordsScreen = ({navigation}) => {
                     }
 
                     dispatch({type: 'DISABLE_LOADING'});
-
+                    setShouldTriggerJointVerification(false);
                     return;
                   }
                 } catch (error) {
@@ -2691,6 +2696,8 @@ const PastRecordsScreen = ({navigation}) => {
                         <CustomButton
                           onPress={() => {
                             setDocName('SDM_SUMMON_RESULT_13');
+                            // hit the alert on sccess
+                            setShouldTriggerJointVerification(true);
                             setCameraModalVis(true);
                           }}
                           style={{

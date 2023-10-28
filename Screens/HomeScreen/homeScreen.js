@@ -420,7 +420,7 @@ const HomeScreen = ({navigation}) => {
             backgroundColor: 'green',
           }}></View>
 
-       { activeStatus && <CustomButton
+       { activeStatus  && <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
           onPress={() => {
@@ -497,7 +497,7 @@ const HomeScreen = ({navigation}) => {
             style={{marginBottom: 20}}
             button={{width: 300}}
             // dsbled={profile?.claims?.length==0}
-            text={t('Validate IFR Claim')}
+          text={t('Validate IFR Claim')}
             onPress={() => {
               console.log('ifr-claim');
               navigation.navigate('ValidateIFRScreen');

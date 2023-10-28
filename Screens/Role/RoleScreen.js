@@ -65,6 +65,12 @@ const RoleScreen = ({navigation}) => {
   };
 
   const onNext = (values, formikActions) => {
+
+
+  
+    if( (values?.member===t('FRC')) || (values?.member!==t('FRC') &&  uploadStatus?.f &&  uploadStatus?.b)){
+
+    
     console.log(values);
     formikActions.setSubmitting(false);
 
@@ -89,12 +95,9 @@ const RoleScreen = ({navigation}) => {
             // navigation.navigate('HomeScreen');
             console.log('yy', postLevel);
             if (values.member !== 'एफआरसी') {
-
               navigation.replace('HomeScreen', {
                 toBeValidated: true,
               });
-
-           
             } else if (!(values.role === t('Member'))) {
               // check if secretyary or president have already filed a claim
               fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
@@ -143,7 +146,7 @@ const RoleScreen = ({navigation}) => {
             // alert(t('ALREADY_ASSIGNED_ROLE'));
             // this alert button should have a help button which will redirect to the help screen
 
-            Alert.alert('सूचना',t('ALREADY_ASSIGNED_ROLE'),  [
+            Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
               {
                 text: 'Ok',
                 // onPress: () => console.log('Cancel Pressed'),
@@ -154,7 +157,7 @@ const RoleScreen = ({navigation}) => {
                 onPress: () => {
                   // link to whatsapp
                   Linking.openURL(
-                    "https://wa.me/12345?text=I'm%20having%20issue%20with%20Ratifi%20Registration.",
+                    "https://wa.me/12345?text=I'm%20having%20issue%20with%JharFRA%20Registration.",
                   );
                 },
               },
@@ -163,6 +166,9 @@ const RoleScreen = ({navigation}) => {
         },
       ),
     );
+      }else{
+        Alert.alert('सुचना','कृपया सत्यापन के लिए आईडी अपलोड करें');
+      }
   };
 
   const uidSchema = object().shape({
@@ -211,19 +217,19 @@ const RoleScreen = ({navigation}) => {
           label: t('Forest Range Officer'),
           value: '3',
         },
-        
+
         {
           label: t('Member'),
           value: '4',
         },
-        {
-          label: t('Circle Officer'),
-          value: '5',
-        },
-        {
-          label: t('Range Officer'),
-          value: '6',
-        },
+        // {
+        //   label: t('Circle Officer'),
+        //   value: '5',
+        // },
+        // {
+        //   label: t('Range Officer'),
+        //   value: '6',
+        // },
       ],
     },
     {
@@ -231,24 +237,96 @@ const RoleScreen = ({navigation}) => {
       value: '3',
       roleData: [
         {
-          label: 'District Collector',
+          label: t('District Collector'),
           value: '1',
         },
         {
-          label: 'District Forest Officer',
+          label: t('District Forest Officer')+' (DFO)',
           value: '2',
         },
         {
-          label: 'Officer-in-Charge (Tribal Affairs)',
+          label: t('District Welfare Officer')+' (DWO)',
           value: '3',
         },
         {
-          label: 'Member',
+          label: t('Officer-in-Charge (Tribal Affairs)'),
           value: '4',
+        },
+        {
+          label: t('Member'),
+          value: '5',
         },
       ],
     },
-  
+    {
+      label: t('SLMC'),
+      value: '4',
+      roleData: [
+        {
+          label: 'मुख्य सचिव - अध्यक्ष',
+          value: '1',
+        },
+        {
+          label: 'सचिव - राजस्व विभाग',
+          value: '2',
+        },
+        {
+          label: 'सचिव - जन जाति या समाज कल्याण विभाग',
+          value: '3',
+        },
+        {
+          label: 'सचिव - वन विभाग',
+          value: '4',
+        },
+        {
+          label: 'सचिव - पंचायती राज',
+          value: '5',
+        },
+        {
+          label: 'प्रधान मुख्य वन संरक्षक',
+          value: '6',
+        },
+        {
+          label: 'जनजाति सलाहकार परिषद सदस्य',
+          value: '7',
+        },
+        {
+          label: 'जनजातीय कल्याण आयुक्त',
+          value: '8',
+        },
+      ],
+    },
+    {
+      label: t('Forest_Department'),
+      value: '5',
+      roleData: [
+        {
+          label: 'वन परिक्षेत्र अधिकारी',
+          value: '1',
+        },
+        {
+          label: 'वन रक्षक',
+          value: '2',
+        },
+      ],
+    },
+    {
+      label: t('Revenue_Department'),
+      value: '6',
+      roleData: [
+        {
+          label: 'राजस्व उपनिरक्षक',
+          value: '1',
+        },    {
+          label: 'आंचल निरक्षक',
+          value: '2',
+        },
+        {
+          label: 'आंचल अधिकारी',
+          value: '3',
+        },
+      ],
+    },
   ];
 
   const buttonText = {
@@ -344,7 +422,6 @@ const RoleScreen = ({navigation}) => {
                         console.log('RESPONSE', data);
 
                         if (isFront === true) {
-                        
                           dispatch({
                             type: 'UPDATE_APPUTIL_KEY',
                             payload: {
@@ -354,7 +431,6 @@ const RoleScreen = ({navigation}) => {
                           });
                           setUploadStatus({...uploadStatus, f: true});
                         } else if (isFront === false) {
-                    
                           dispatch({
                             type: 'UPDATE_APPUTIL_KEY',
                             payload: {
@@ -505,8 +581,7 @@ const RoleScreen = ({navigation}) => {
             />
 
             {Boolean(
-              formik.values.member === t('SDLC') ||
-                formik.values.member === t('DLC'),
+              formik.values.member !== t('FRC') && formik.values.member
             ) && (
               <View>
                 <View>
@@ -569,7 +644,9 @@ const RoleScreen = ({navigation}) => {
                     styles.title,
                     {
                       flexDirection: 'row',
-                      justifyContent: uploadStatus?.f ?  'space-between' : 'flex-end',
+                      justifyContent: uploadStatus?.f
+                        ? 'space-between'
+                        : 'flex-end',
                       marginTop: 5,
                     },
                   ]}>

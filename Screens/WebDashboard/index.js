@@ -24,7 +24,7 @@ export default function WebDashboard() {
   return (
     <View style={{height: '100%', width: '100%'}}>
         <View style={{padding:10,backgroundColor:'green'}}>
-            <Text style={{color:'white'}}>RatiFi - Dashboard</Text>
+            <Text style={{color:'white'}}>JharFRA - Dashboard</Text>
         </View>
       <WebView
         onLoadStart={() => {
