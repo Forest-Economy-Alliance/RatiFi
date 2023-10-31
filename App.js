@@ -1,7 +1,7 @@
 import React from 'react';
 import Redux from './redux-store';
 import {Provider, useSelector} from 'react-redux';
-import { initialize } from 'react-native-clarity';
+import {initialize} from 'react-native-clarity';
 import {PersistGate} from 'redux-persist/es/integration/react';
 import {Navigation} from './Navigation';
 const {store, persistor} = Redux;
@@ -34,7 +34,7 @@ Sentry.init({
   debug: true,
 });
 
-initialize("jh0anvjjb2");
+initialize('jh0anvjjb2');
 
 ignoreWarnings('warn', ['ViewPropTypes']);
 

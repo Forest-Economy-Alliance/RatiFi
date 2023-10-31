@@ -1,11 +1,11 @@
 package com.ratifi;
-
 import android.app.Application;
 import android.content.Context;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 
@@ -37,7 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       // Packages that cannot be autolinked yet can be added manually here, for example:
    
-      // packages.add(new GeolocationPackage()); // <== add this line
+      // packages.add(new RNAndroidLocationEnablerPackage()); // <== add this line
 
       return packages;
     }

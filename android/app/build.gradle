@@ -130,6 +130,7 @@ def enableHermes = project.ext.react.get("enableHermes", true);
 /**
  * Architectures to build native code for.
  */
+
 def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
@@ -156,8 +157,8 @@ android {
         applicationId "com.ratifi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 33
-        versionName "33.0"
+        versionCode 36
+        versionName "36.0"
 
 
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -299,7 +300,9 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     // implementation project(path: ":@react-native-firebase_auth")
     implementation fileTree(dir: "libs", include: ["*.jar"])
-   
+    // implementation project(path:':react-native-android-location-enabler')
+
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

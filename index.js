@@ -13,6 +13,7 @@ import store from './redux-store';
 
 import {LogBox} from 'react-native';
 import queue, {Worker} from 'react-native-job-queue';
+import {LogLevel, OneSignal} from 'react-native-onesignal';
 
 import ignoreWarnings from 'ignore-warnings';
 import {YellowBox} from 'react-native';
@@ -21,6 +22,24 @@ import {patchClaimHandler} from './services/claimService';
 import {updatePasswordHandler, updateUserHandler} from './services/authService';
 
 console.disableYellowBox = true;
+
+// Remove this method to stop OneSignal Debugging
+OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+
+// OneSignal Initialization
+OneSignal.initialize('9e814924-ecec-4202-ab31-55552c9d5139');
+
+// requestPermission will show the native iOS or Android notification permission prompt.
+// We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+OneSignal.Notifications.requestPermission(true);
+
+// Method for listening for notification clicks
+OneSignal.Notifications.addEventListener('click', event => {
+  console.log('OneSignal: notification clicked:', event);
+});
+
+
+
 
 if (!__DEV__) {
   console.log = () => {};
