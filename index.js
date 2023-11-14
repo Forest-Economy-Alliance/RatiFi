@@ -38,9 +38,6 @@ OneSignal.Notifications.addEventListener('click', event => {
   console.log('OneSignal: notification clicked:', event);
 });
 
-
-
-
 if (!__DEV__) {
   console.log = () => {};
 }
@@ -89,6 +86,9 @@ queue.addWorker(
             extraImageID: payload?.extraImageID,
             shouldTriggerJointVerification:
               payload?.shouldTriggerJointVerification,
+            IS_IFR_CLAIM: payload?.IS_IFR_CLAIM || false,
+            oneSignalId:
+              OneSignal.User.pushSubscription.getPushSubscriptionId(),
           });
 
           console.log('rssponse');

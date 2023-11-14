@@ -17,7 +17,7 @@ import MapView, {
 } from 'react-native-maps';
 import RNFS from 'react-native-fs';
 import ViewShot from 'react-native-view-shot';
-
+import queue from 'react-native-job-queue';
 import Geolocation from '@react-native-community/geolocation';
 // import {isLocationEnabled, promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {Platform} from 'react-native';
@@ -26,16 +26,23 @@ import {useLinkTo, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   patchClaimFieldsIFRHandler,
+  patchClaimHandlerIFR,
   patchTripArrayIFRHandler,
 } from '../../services/claimService';
 
 import {BackHandler, DeviceEventEmitter} from 'react-native';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import {Queue} from 'react-native-job-queue';
+import { getGCPUrlImageHandler } from '../../services/commonService';
+import { useToast } from 'react-native-toast-notifications';
+import { useTranslation } from 'react-i18next';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 export const MarkBoundry = () => {
-  const {profile} = useSelector(state => state.entities.auth.userInfo);
+  const toast=useToast();
+  const {t}=useTranslation();
+  const {profile, claim} = useSelector(state => state.entities.auth.userInfo);
 
   const dispatch = useDispatch();
   // ask for geolocation
@@ -209,6 +216,55 @@ export const MarkBoundry = () => {
       RNFS.readFile(uri, 'base64').then(res => {
         console.log('BASE64======>', res);
         setBase64ImageString(res);
+        getGCPUrlImageHandler({
+          fileName: 'Hello',
+          base64Data: res,
+          isPdf: false,
+          userId: profile?._id || 'unknown-asset',
+        })
+          .then(async ({data}) => {
+            console.log('RESPONSE', data.response.Key);
+
+            console.warn('CID', claim?._id);
+            
+            const rssponse = await patchClaimHandlerIFR({
+              claimId: profile?.IFRclaims[profile?.IFRclaims.length - 1],
+              title: 'SDM_SUMMON_RESULT_8',
+              storageUrl: data.response.Location,
+            });
+
+            if (data.response.Location) {
+              toast.show(t('FILE_UPLOADED'), {
+                type: 'success',
+                animationType: 'zoom-in',
+                successColor: '#480E09',
+                placement: 'top',
+                duration: 5000,
+              });
+              navigation.goBack();
+
+              dispatch({type: 'DISABLE_LOADING'});
+            } else {
+              toast.show(t('UPLOAD_FAILED'), {
+                type: 'failure',
+                animationType: 'zoom-in',
+                successColor: '#480E09',
+                placement: 'top',
+                duration: 5000,
+              });
+
+              dispatch({type: 'DISABLE_LOADING'});
+            }
+
+            
+          })
+
+          .catch(err => {
+            console.log(err);
+          });
+          
+
+
       });
     } catch (error) {
       console.error('Error converting image to base64:', error);
@@ -225,11 +281,30 @@ export const MarkBoundry = () => {
     if (viewShotRef.current) {
       // setTimeout(()=>{
 
-      viewShotRef?.current?.capture().then(uri => {
+      viewShotRef?.current?.capture().then(async (uri) => {
         setSnapshot(uri);
+
+        // queue.addJob('testWorker', {
+        //   localPath: uri,
+        //   userId: profile?._id,
+        //   docName: 'NEW',
+        //   claimId: claim?._id?.toString(),
+        //   shouldTriggerJointVerification: false,
+        //   IS_IFR_CLAIM: true,
+        // });
+
         convertImageToBase64(uri);
+
+
+
+
+
+
+        // console.log base64
+
       });
 
+      // return <IMG+URL>
       // },1000)
     }
   };
@@ -240,7 +315,7 @@ export const MarkBoundry = () => {
       resizeMode="cover"
       blurRadius={10}
       style={{height: '100%', width: '100%'}}>
-      {base64String && (
+      {/* {base64String && (
         <Image
           source={{
             uri: `data:image/png;base64,${base64String}`,
@@ -250,7 +325,7 @@ export const MarkBoundry = () => {
             width: '100%',
           }}
         />
-      )}
+      )} */}
       {userLocation?.latitude && (
         <View
           style={{
@@ -309,7 +384,7 @@ export const MarkBoundry = () => {
                 strokeWidth={5}
                 lineDashPhase=""
                 strokeColor="red"
-                lineDashPattern={[10]}
+                // lineDashPattern={[10]}
                 coordinates={userPath}
               />
             </MapView>
@@ -324,20 +399,21 @@ export const MarkBoundry = () => {
               </CustomButton>
             ) : (
               <CustomButton
-                onPress={() => {
+                onPress={async () => {
                   console.log(userPath);
-                  captureSnapshot();
+                  const img = await captureSnapshot();
                   dispatch({type: 'ENABLE_LOADING'});
                   setI(false);
 
                   patchClaimFieldsIFRHandler({
                     boundary: userPath,
                     claimId: profile?.IFRclaims[profile?.IFRclaims?.length - 1],
+                    boundaryImageUrl: 'S3 URL',
                   })
                     .then(res => {
                       console.log('SUCCESS', res);
 
-                      // navigation.replace('PastRecordsIFR');
+                      navigation.replace('PastRecordsIFR');
                     })
                     .catch(err => {
                       console.error('error', err);

@@ -2602,47 +2602,7 @@ console.log(imgUrl)
           {t('download application document')}
         </CustomButton >
 
-        {(pressed && !loading ) && (
-          <>
-            <View style={styles.msgContainer}>
-              <Text style={styles.msg}>
-                {imgUrl!='x'
-                  ? t('your forest map is available')
-                  : t('your_forest_map_is_not_available')}
-              </Text>
-              
-          
-
-            </View>
-
-            {/* <CustomButton button={{width:'80%',marginTop:20}}>
-                <Text>Upload Map&nbsp;</Text>
-                <Icon name="camera" size={20}/>
-            </CustomButton> */}
-        
-        {/* @NOW */}
-            {/* <Text style={styles.subMsg2}>
-              {t('download application document')}
-            </Text> */}
-
-{/*  @NOW
-            {pressed && (
-              <CustomButton
-                disabled={true}
-                button={{ marginTop: 20}}
-                onPress={() => {
-                  // alert(JSON.stringify(val5?.label))
-                  // return ;
-                  navigation.navigate('FormsPage',{
-                    url:imgUrl,
-                    vName:val5?.label
-                  });
-                }}>
-                {t('download')}
-              </CustomButton>
-            )} */}
-          </>
-        )}
+      
 
 
 

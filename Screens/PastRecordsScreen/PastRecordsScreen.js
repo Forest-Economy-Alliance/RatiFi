@@ -52,8 +52,6 @@ import FastImage from 'react-native-fast-image';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const handleHTTPtoHTTPS = args => {
-  // http://google.com
-  // https://google.com
   const isSecure = args.includes('https:') !== -1;
   if (isSecure) {
     return args;
@@ -376,7 +374,7 @@ const PastRecordsScreen = ({navigation}) => {
                     backgroundColor: item == stage ? '#fff' : 'transparent',
                   }}>
                   <Text style={{color: item === stage ? 'green' : '#fff'}}>
-                  चरण {item}
+                  {id===5 ? 'प्रपत्र':`चरण ${item}`}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -415,7 +413,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          ग्राम पंचायत द्वार अधिसूचना
+                          ग्राम पंचायत द्वारा अधिसूचना
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -776,7 +774,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          पुनर्गठित एफआरसी के द्वार एसडीएलसी को सूचना 
+                          पुनर्गठित एफआरसी के द्वारा अनुमंडल (SDLC) को सूचना 
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -947,7 +945,7 @@ const PastRecordsScreen = ({navigation}) => {
                 <View style={{padding: 20}}>
                   <Text
                     style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                    सामुदायिक वन और वन संसाधन अधिकार का दावा तयार करना
+                    सामुदायिक वन और वन संसाधन अधिकार का दावा तैयार करना
                   </Text>
                 </View>
               
@@ -973,7 +971,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          दस्तवेज की मांग के लिए एसडीएलसी को पत्र
+                          दस्तावेज़ की मांग के लिए अनुमंडल (SDLC) को पत्र
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -1154,7 +1152,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          दवित वन छेत्र का नक्शा
+                          दावित वन छेत्र का नक्शा
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -1702,7 +1700,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          पारंपरिक एवं अन्य पारंपरिक अधिकारियो का विवरण
+                          पारंपरिक एवं अन्य पारंपरिक अधिकार का विवरण
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -1884,7 +1882,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          दवये दर की सूचि
+                          दावेदार की सूचि
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -2249,7 +2247,7 @@ const PastRecordsScreen = ({navigation}) => {
                 <View style={{padding: 20}}>
                   <Text
                     style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                भौतिक सत्यपन
+                भौतिक सत्यापन
                   </Text>
                 </View>
 
@@ -2271,7 +2269,7 @@ const PastRecordsScreen = ({navigation}) => {
                               textDecorationLine: 'underline',
                             },
                           ]}>
-                            वन छेत्र पदाधिकारी एवं आंचल पदाधिकारी को भौतिक सत्यपान के लिए सुचना
+                            वन छेत्र पदाधिकारी एवं आंचल पदाधिकारी को भौतिक सत्यापन के लिए सुचना
                           {/* <Image /> */}
                           
                         </Text>
@@ -2451,7 +2449,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          भौतिक सत्यपान की कार्यवाई
+                          भौतिक सत्यापन की कार्यवाही
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>
@@ -2828,7 +2826,7 @@ const PastRecordsScreen = ({navigation}) => {
                             },
                           ]}>
                           {/* <Image /> */}
-                          ग्राम सभा की कार्यवाई
+                          ग्राम सभा की कार्यवाही
                         </Text>
                         {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                       </View>

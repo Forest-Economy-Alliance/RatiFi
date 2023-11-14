@@ -187,6 +187,7 @@ const RoleScreen = ({navigation}) => {
       label: t('FRC'),
       value: '1',
       roleData: [
+     
         {
           label: t('President'),
           value: '1',
@@ -214,13 +215,17 @@ const RoleScreen = ({navigation}) => {
         //   value: '2',
         // },
         {
-          label: t('Forest Range Officer'),
+          label: t('ACF'),
           value: '3',
         },
 
         {
           label: t('Member'),
           value: '4',
+        },
+        {
+          label: t('Circle Officer'),
+          value: '5',
         },
         // {
         //   label: t('Circle Officer'),

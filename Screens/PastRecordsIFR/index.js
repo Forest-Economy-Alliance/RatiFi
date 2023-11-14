@@ -45,6 +45,17 @@ import {useToast} from 'react-native-toast-notifications';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
+
+
+const handleHTTPtoHTTPS = args => {
+  const isSecure = args.includes('https:') !== -1;
+  if (isSecure) {
+    return args;
+  } else {
+    return 'https' + args.slice(4);
+  }
+};
+
 const PastRecordsIFR = ({navigation}) => {
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
@@ -287,7 +298,7 @@ const PastRecordsIFR = ({navigation}) => {
             <Image
               onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
-              source={{uri: docUrlToPreview}}
+              source={{uri: handleHTTPtoHTTPS(docUrlToPreview)}}
               style={{flex: 1}}
             />
           </View>
@@ -316,18 +327,7 @@ const PastRecordsIFR = ({navigation}) => {
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
-            {/* <CustomButton
-              text={t('Edit Profile')}
-              onPress={() => {
-                navigation.navigate("Location", {
-                  editProfile: true
-                })
-              }}
-              style={styles.epBtnView}
-              button={styles.epBtn}
-            /> */}
-            {/* <View styl123e={styles.horizontalLine} /> */}
-            {/* <CustomInput /> */}
+           
 
             <View
               style={{
@@ -516,34 +516,34 @@ const PastRecordsIFR = ({navigation}) => {
                         if (
                           !(
                             claim?.courtDocuments.length &&
-                            claim?.courtDocuments[1]?.title ===
-                              'SDM_SUMMON_RESULT_2'
+                            claim?.courtDocuments[2]?.title ===
+                              'SDM_SUMMON_RESULT_3'
                           )
                         ) {
-                          setDocName('SDM_SUMMON_RESULT_2');
+                          setDocName('SDM_SUMMON_RESULT_3');
                           setCameraModalVis(true);
                         } else {
                           setPreviewDocModal(true);
                           handleDocPreview(
-                            claim?.courtDocuments[1]?.storageUrl,
+                            claim?.courtDocuments[2]?.storageUrl,
                           );
                         }
                       }}
                       style={{width: '100%', marginLeft: 40, marginTop: 10}}>
                       {!(
-                        claim?.courtDocuments[1]?.title ===
-                        'SDM_SUMMON_RESULT_2'
+                        claim?.courtDocuments[2]?.title ===
+                        'SDM_SUMMON_RESULT_3'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
                     </CustomButton>
-                    {claim?.courtDocuments[1]?.title ===
-                      'SDM_SUMMON_RESULT_2' && (
+                    {claim?.courtDocuments[2]?.title ===
+                      'SDM_SUMMON_RESULT_3' && (
                       <CustomButton
                         onPress={() => {
-                          setDocName('SDM_SUMMON_RESULT_2');
+                          setDocName('SDM_SUMMON_RESULT_3');
                           setCameraModalVis(true);
                         }}
                         style={{width: '100%', marginRight: 40, marginTop: 10}}>
@@ -797,8 +797,16 @@ const PastRecordsIFR = ({navigation}) => {
                               'SDM_SUMMON_RESULT_7'
                           )
                         ) {
+
+
+
                           setDocName('SDM_SUMMON_RESULT_7');
                           setCameraModalVis(true);
+
+
+
+
+
                         } else {
                           setPreviewDocModal(true);
                           handleDocPreview(
@@ -856,22 +864,31 @@ const PastRecordsIFR = ({navigation}) => {
                     }}>
                     <CustomButton
                       onPress={() => {
-                        if (claim?.boundary?.length === 0) {
+                        if (
+                          !(
+                            claim?.courtDocuments.length &&
+                            claim?.courtDocuments[7]?.title ===
+                              'SDM_SUMMON_RESULT_8'
+                          )
+                        ) {
+
+
+                          setDocName('SDM_SUMMON_RESULT_8');
                           navigation.navigate('MarkBoundry');
-                        } else {
-                          alert('Map Boundary has been saved');
+                      
+
+                        } else {  
+                          
+                          
+                            setPreviewDocModal(true);
+                            handleDocPreview(
+                              claim?.courtDocuments[7]?.storageUrl,
+                            );
+                          
+
+                          // alert('Map Boundary has been saved');
                         }
-                        // fetch Details on basis of applicato
-                        // dispatch({type:"ENABLE_LOADING"})
-                        // alert(claim?.courtDocuments.length)
-                        // if (!(claim?.courtDocuments.length && claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2')) {
-                        //     setDocName('SDM_SUMMON_RESULT_2')
-                        //     setCameraModalVis(true)
-                        // }
-                        // else {
-                        //     setPreviewDocModal(true)
-                        //     handleDocPreview(claim?.courtDocuments[1]?.storageUrl)
-                        // }
+                      
                       }}
                       style={{width: '100%', marginLeft: 40, marginTop: 10}}>
                       {Boolean(claim?.boundary?.length === 0) ? (
@@ -881,7 +898,8 @@ const PastRecordsIFR = ({navigation}) => {
                           size={20}
                         />
                       ) : (
-                        <Text style={{fontSize: 12}}> MAP SAVED</Text>
+                        <Text style={{fontSize: 12}}> सीमा देखें
+                        </Text>
                       )}
                     </CustomButton>
 
@@ -912,7 +930,7 @@ const PastRecordsIFR = ({navigation}) => {
                           {fontSize: 16, width: '100%'},
                         ]}>
                         {/* <Image /> */}
-                        भौतिक सत्यपान की सुचान
+                        भौतिक सत्यापन की सुचान
 
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -982,7 +1000,7 @@ const PastRecordsIFR = ({navigation}) => {
                           {fontSize: 16, width: '100%'},
                         ]}>
                         {/* <Image /> */}
-                        भौतिक सत्यपान का प्रतिवेदन
+                        भौतिक सत्यापन का प्रतिवेदन
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -1360,8 +1378,7 @@ const PastRecordsIFR = ({navigation}) => {
                 <View style={{paddingHorizontal: 20, paddingVertical: 30}}>
                   <Text style={{fontSize: 20}}>
                     {' '}
-                    आपका व्यक्तिगत सामुदायिक अधिकार दावा करने से पहले सत्यापन के
-                    लिए जमा कर दिया गया है l
+                    कृपया अपने गांव के एफआरसी अध्यक्ष/सचिव से संपर्क करें
                   </Text>
                 </View>
                 <View>

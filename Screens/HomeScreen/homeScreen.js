@@ -39,10 +39,13 @@ import {verifYYMember} from '../../redux-store/actions/auth';
 import {
   checkAccount,
   logoutHandler,
+  updatedOneSignalIDHandler,
   verifyyMember,
   viewFRCMember,
 } from '../../services/authService';
 import {firebase} from '@react-native-firebase/messaging';
+import {OneSignal} from 'react-native-onesignal';
+import { err } from 'react-native-svg/lib/typescript/xml';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
@@ -59,7 +62,7 @@ const HomeScreen = ({navigation}) => {
     postLevel,
     authLevel,
     village,
-    activeStatus
+    activeStatus,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
   // console.log(authLevel=="एसडीएलसी");
   // alert("Hi")
@@ -87,13 +90,11 @@ const HomeScreen = ({navigation}) => {
       .catch(err => console.log(err));
   };
 
-
   useEffect(() => {
     if (!authLevel || !postLevel) {
       navigation.replace('Role');
     }
   }, []);
-
 
   useEffect(() => {
     changeLanguage(language);
@@ -170,7 +171,7 @@ const HomeScreen = ({navigation}) => {
     // validationSchema: uidSchema,
     // onSubmit: onNext,
   });
-// 
+  //
   // @NOW
   // leave app on back button press on this screen
   // useEffect(() => {
@@ -194,7 +195,6 @@ const HomeScreen = ({navigation}) => {
 
   //   return () => backHandler.remove();
   // }, []);
-
 
   // Make a useEffect run on particular pages
   const getEnglish = param => {
@@ -237,6 +237,36 @@ const HomeScreen = ({navigation}) => {
   }, []);
 
 
+  async function alpha(){
+    const data =  OneSignal.User.pushSubscription.getPushSubscriptionId();
+    console.log('pid',data)
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'OneSignalSubsToken',
+        value: data,
+      },
+    })
+
+    // patch To server
+    updatedOneSignalIDHandler({
+      userId:profile?._id,
+      oneSignalId:data
+    }).then(res=>{
+
+      console.log("oneSignalId updated in DB")
+    }).catch(f=>{
+      console.log("Failed to update oneSignalID",f)
+    })
+
+  }
+
+  useEffect(() => {
+
+    if (profile?._id) OneSignal.login(profile?._id);;
+    if (profile?.mobile) OneSignal.User.addSms(profile?.mobile);
+     alpha();
+  }, []);
 
   return (
     // flexWrap: 'wrap',
@@ -251,11 +281,20 @@ const HomeScreen = ({navigation}) => {
         )}
 
         <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
-        <Text style={{fontSize:20,alignSelf:'center',color:'#fff',fontWeight:'700',color:'white',textDecorationLine:'underline'}}>{t('CFR')}</Text>
-  
+          <Text
+            style={{
+              fontSize: 20,
+              alignSelf: 'center',
+              color: '#fff',
+              fontWeight: '700',
+              color: 'white',
+              textDecorationLine: 'underline',
+            }}>
+            {t('CFR')}
+          </Text>
+
           <Text style={styles.roleText}>
             {' '}
-            
             <FontAwesome name="user-circle-o" size={30} color="white" />{' '}
           </Text>
         </TouchableOpacity>
@@ -320,37 +359,38 @@ const HomeScreen = ({navigation}) => {
           )}
         </View>
 
+        {!activeStatus && (
+          <View
+            style={[
+              styles.header,
+              {
+                borderWidth: 1,
+                paddingTop: 0,
+                borderStyle: 'dashed',
+                padding: 10,
+              },
+            ]}>
+            <Text style={{color: 'white', fontSize: 20}}>
+              आपके आधार कार्ड विवरण सत्यापित होने के बाद, आपकी प्रोफ़ाइल सक्रिय
+              हो जाएगी
+            </Text>
+            <Text style={{color: 'white', marginTop: 5, fontWeight: '700'}}>
+              VERIFICATION - IN-PROCESS
+            </Text>
+          </View>
+        )}
 
-{!activeStatus &&
-<View style={[styles.header,{borderWidth:1,paddingTop:0,borderStyle:'dashed',padding:10}]}>
-<Text style={{color:'white',fontSize:20}}>आपके आधार कार्ड विवरण सत्यापित होने के बाद, आपकी प्रोफ़ाइल सक्रिय हो जाएगी</Text>
-<Text style={{color:'white',marginTop:5,fontWeight:'700'}}>VERIFICATION - IN-PROCESS</Text>
-</View>}
-
-
-
-
-
-
-
-
-
-
-
-{Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
+        {Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
-            text={<Text style={{fontWeight:'700'}}>अवेदन दस्तावेज़   </Text>}
+            text={<Text style={{fontWeight: '700'}}>अवेदन दस्तावेज़ </Text>}
             onPress={() => {
-             
-                navigation.navigate('DownloadPDF', {code: 'president'});
-             
+              navigation.navigate('DownloadPDF', {code: 'president'});
             }}
           />
         )}
 
-       
         {/* Add a button to change Role */}
         {/* @COMMENTED OUT ON 7 SEPT - 7:39PM <CustomButton
           style={{marginBottom: 20}}
@@ -368,7 +408,7 @@ const HomeScreen = ({navigation}) => {
             text={t('Track old claim')}
             onPress={() => {
               if (profile?.claims?.length === 0) {
-                Alert.alert('सूचना',t('CLAIM_NOT_APPLIED'));
+                Alert.alert('सूचना', t('CLAIM_NOT_APPLIED'));
               } else navigation.navigate('PastRecordsScreen');
             }}
           />
@@ -384,8 +424,7 @@ const HomeScreen = ({navigation}) => {
                     }}
                 /> */}
 
-
-{/* REMOVED - ON HOLD TILL CAMPAIGN LAUNCH - 27Oct 12:44PM */}
+        {/* REMOVED - ON HOLD TILL CAMPAIGN LAUNCH - 27Oct 12:44PM */}
         {/* {postLevel === 'अध्यक्ष' && (
           <CustomButton
             style={{marginBottom: 20}}
@@ -399,8 +438,7 @@ const HomeScreen = ({navigation}) => {
           />
         )} */}
 
-
-        {(authLevel !== 'एफआरसी' && activeStatus) &&  (
+        {authLevel !== 'एफआरसी' && activeStatus && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -413,103 +451,96 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-      
-      
         <View
           style={{
             backgroundColor: 'green',
           }}></View>
 
-       { activeStatus  && <CustomButton
-          style={{marginBottom: 20}}
-          button={{width: 300}}
-          onPress={() => {
-            navigation.navigate('ClaimAlertsScreen');
-            // all the alers related to claim
-            // @ TODO
-            // Notii aiotn Badge Icon
-          }}>
-          {t('claim_alerts')}
-          &nbsp;&nbsp;
-          {notificationCount !== 0 && (
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 18,
-                padding: 5,
-                zIndex: 199,
-                borderRadius: 10,
-              }}>
-              ({notificationCount})
-            </Text>
-          )}
-        </CustomButton>}
+        {activeStatus && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            onPress={() => {
+              navigation.navigate('ClaimAlertsScreen');
+              // all the alers related to claim
+              // @ TODO
+              // Notii aiotn Badge Icon
+            }}>
+            {t('claim_alerts')}
+            &nbsp;&nbsp;
+            {notificationCount !== 0 && (
+              <Text
+                style={{
+                  color: '#fff',
+                  fontSize: 18,
+                  padding: 5,
+                  zIndex: 199,
+                  borderRadius: 10,
+                }}>
+                ({notificationCount})
+              </Text>
+            )}
+          </CustomButton>
+        )}
       </View>
 
       {Boolean(authLevel === 'एफआरसी') && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            text={t('Edit Profile')}
-            onPress={() => {
-             
-                navigation.navigate('Location', {
-                  editProfile: true,
-                  role: authLevel,
-                });
-              
+        <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          text={t('Edit Profile')}
+          onPress={() => {
+            navigation.navigate('Location', {
+              editProfile: true,
+              role: authLevel,
+            });
 
-              // if(authLevel=="एसडीएलसी"){
-              //     navigation.navigate("LocationInformationSDLC")
-              // }
-              // else{
-              //     navigation.navigate("Location", {
-              //         editProfile: true
-              //     })
-              // }
-            }}
-          />
-        )}
+            // if(authLevel=="एसडीएलसी"){
+            //     navigation.navigate("LocationInformationSDLC")
+            // }
+            // else{
+            //     navigation.navigate("Location", {
+            //         editProfile: true
+            //     })
+            // }
+          }}
+        />
+      )}
 
+      {authLevel !== 'एफआरसी' && activeStatus && (
+        <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          // dsbled={profile?.claims?.length==0}
+          text={
+            <>
+              <Ionicons name="open-outline" size={20} />
+              &nbsp;
+              {t(' Go to Dashboard')}
+            </>
+          }
+          onPress={() => {
+            // console.log('ifr-claim');
+            navigation.navigate('WebDashboard');
+          }}
+        />
+      )}
 
-      {(authLevel !== 'एफआरसी' && activeStatus) && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            // dsbled={profile?.claims?.length==0}
-            text={
-              <>
-                <Ionicons name="open-outline" size={20} />
-                &nbsp;
-                {t(' Go to Dashboard')}
-              </>
-            }
-            onPress={() => {
-              // console.log('ifr-claim');
-              navigation.navigate('WebDashboard');
-            }}
-          />
-        )}
-
-
-{postLevel === 'अध्यक्ष' && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            // dsbled={profile?.claims?.length==0}
+      {(postLevel === 'अध्यक्ष' || postLevel === 'सचिव') && (
+        <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          // dsbled={profile?.claims?.length==0}
           text={t('Validate IFR Claim')}
-            onPress={() => {
-              console.log('ifr-claim');
-              navigation.navigate('ValidateIFRScreen');
-            }}
-          />
-        )}
-
-      
+          onPress={() => {
+            console.log('ifr-claim');
+            navigation.navigate('ValidateIFRScreen');
+          }}
+        />
+      )}
     </ImageBackground>
   );
 };
-
 
 export default HomeScreen;
 
@@ -526,7 +557,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: '5%',
     marginBottom: '5%',
-    marginLeft:'5%',
+    marginLeft: '5%',
     // backgroundColor: '#D3F2D3',
     // alignSelf: 'flex-end',
     borderRadius: 100,

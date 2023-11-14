@@ -24,6 +24,18 @@ export const logoutHandler = data => {
   );
 };
 
+export const updatedOneSignalIDHandler = data => {
+  return request(
+    '/updatedOneSignalID',
+    {
+      method: 'POST',
+      data,
+    },
+    false,
+    false,
+  );
+};
+
 export const verifyOTPHandler = data => {
   return request(
     '/verify-otp',

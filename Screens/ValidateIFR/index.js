@@ -15,7 +15,7 @@ import {
 } from '../../services/claimService';
 import {useTranslation} from 'react-i18next';
 import CustomButton from '../../components/CustomButton';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -34,15 +34,24 @@ export default function ValidateIFRScreen() {
   const {t} = useTranslation();
   const [claims, setClaims] = useState([]);
 
+  const dispatch=useDispatch();
   useEffect(() => {
-    IFRfetchClaimDetailsByFRCHandler()
+    console.log(village)
+    dispatch({type:'ENABLE_LOADING'})
+    IFRfetchClaimDetailsByFRCHandler({village})
       .then(res => {
-        console.log(res.data);
+        console.log('ok',res.data);
         if (res?.data?.success) {
           setClaims(res?.data?.data);
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        console.log('error',err)
+      })
+      .finally(f=>{
+        dispatch({type:'DISABLE_LOADING'})
+
+      })
 
     // fetch ifr claims handler by frc
     // fetch selected fields, application Number - , boundray JPEG, name ,phone Number, applied Date and time
@@ -68,6 +77,7 @@ export default function ValidateIFRScreen() {
           {claims?.map(
             item => (
               <View
+              key={`to-be-validated-${item?.mobile}`}
                 style={{
                   marginVertical: 5,
                   flexDirection: 'row',
@@ -77,14 +87,16 @@ export default function ValidateIFRScreen() {
                   paddingHorizontal: 5,
                 }}>
                 <View style={{padding: 10}}>
-                  <Text style={{fontSize: 18}}>{item?.applicationNumber}</Text>
+                  <Text style={{fontSize: 18}}>{item?.IFRclaims[0]?.applicationNumber}</Text>
+                  <Text style={{fontSize: 18}}>{item?.name}</Text>
+                  <Text style={{fontSize: 18}}>{item?.mobile}</Text>
                 </View>
 
-                {Boolean(item?.boundaryImageUrl) && (
+                {Boolean(item?.IFRclaims[0]?.boundary?.length!==0) && (
                   <View>
                     <CustomButton
                       onPress={() => {
-                        Linking.openURL(item?.boundaryImageUrl);
+                        Linking.openURL(item?.IFRclaims[0]?.courtDocuments[7]?.storageUrl);
                       }}
                       button={{width: '100%', marginTop: 5}}>
                       <Text>नक्शा देखे</Text>
@@ -95,7 +107,7 @@ export default function ValidateIFRScreen() {
             ),
           )}
 
-          {claims?.length===0 && <Text style={{fontSize:18}}>आपके मौजा में ऐप का उपयोग करके अभी तक कोई व्यक्तिगत दावा नहीं भरा गया है</Text>}
+          {claims?.length===0 && <Text style={{fontSize:18}}>आपके {t('village')} में ऐप का उपयोग करके अभी तक कोई व्यक्तिगत दावा नहीं भरा गया है</Text>}
         </View>
       </ScrollView>
     </ImageBackground>
