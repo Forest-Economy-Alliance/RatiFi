@@ -6467,6 +6467,11 @@ react-native-codegen@^0.0.17:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-compressor@^1.8.22:
+  version "1.8.22"
+  resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.8.22.tgz#c789d3f65e91a46e6ee1942e03cbc52f2e039b51"
+  integrity sha512-v+upvTvNFy85WpaV349cAg/eOiM1UsjGDT5ABlKbYCqSB7bFMV7y7YKb/UjbsDvZTWf/GJ2i1T5EbDLutcY4bA==
+
 react-native-country-picker-modal@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/react-native-country-picker-modal/-/react-native-country-picker-modal-2.0.0.tgz"

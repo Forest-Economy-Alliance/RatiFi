@@ -12,6 +12,7 @@ const INIT_STATE = {
   verificationAadharBackUrl: '',
   formUploadSyncStatus: false,
   globalSyncStatus: false,
+  OneSignalSubsToken:''
 };
 
 const appUtil = (state = INIT_STATE, action) => {

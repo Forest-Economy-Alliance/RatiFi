@@ -78,6 +78,13 @@ const ForestFiSplashScreen = ({navigation}) => {
 
   useEffect(() => {
     dispatch({type: 'DISABLE_LOADING'});
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: false,
+      },
+    });
     setTimeout(() => {
       //assuiming if created user, then he will finish regiration completely
       //  without application break, more cases can be handled

@@ -13,13 +13,14 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
+import RNFS from 'react-native-fs';
+
 import {useTranslation} from 'react-i18next';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useRef, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {useFormik} from 'formik';
-import Image from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
@@ -33,8 +34,22 @@ import {updateUserHandler} from '../../services/authService';
 import {RNCamera} from 'react-native-camera';
 import {getGCPUrlImageHandler} from '../../services/commonService';
 import {useToast} from 'react-native-toast-notifications';
+import FastImage from 'react-native-fast-image';
+import { Image } from 'react-native-compressor';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
+
+
+const handleHTTPtoHTTPS = args => {
+  if (args.includes('https:')) {
+    return args;
+  } else {
+    return args.replace(/^http:/, 'https:')
+  }
+};
+
+
+
 const RoleScreen = ({navigation}) => {
   const toast = useToast();
   const {language, verificationAadharBackUrl, verificationAadharFrontUrl} =
@@ -405,18 +420,21 @@ const RoleScreen = ({navigation}) => {
                   dispatch({type: 'ENABLE_LOADING'});
                   if (cameraRef) {
                     console.warn(cameraRef);
-                    const options = {quality: 0.4, base64: true};
+                    const options = {quality: 0.4};
                     const data = await cameraRef?.current?.takePictureAsync(
                       options,
                     );
 
-                    console.log(data?.uri);
-                    // parallelSync(localPath,cb);
-                    dispatch({type: 'DISABLE_LOADING'});
+                    
+                    const compressedURI=await Image.compress(data?.uri);
+                    
+                    const r = await RNFS.readFile(compressedURI, 'base64');
+                      
+                    dispatch({type: 'ENABLE_LOADING'});
 
                     getGCPUrlImageHandler({
                       fileName: 'Hello',
-                      base64Data: data?.base64,
+                      base64Data: r,
                       isPdf: false,
                       isVerificationDoc: true,
                       isFront: isFront,
@@ -425,7 +443,7 @@ const RoleScreen = ({navigation}) => {
                     })
                       .then(async ({data}) => {
                         console.log('RESPONSE', data);
-
+                        console.log("HERE REACHED ")
                         if (isFront === true) {
                           dispatch({
                             type: 'UPDATE_APPUTIL_KEY',
@@ -467,7 +485,7 @@ const RoleScreen = ({navigation}) => {
                             duration: 5000,
                           });
 
-                          dispatch({type: 'DISABLE_LOADING'});
+                          // dispatch({type: 'DISABLE_LOADING'});
                         } else {
                           toast.show(t('UPLOAD_FAILED'), {
                             type: 'failure',
@@ -477,7 +495,7 @@ const RoleScreen = ({navigation}) => {
                             duration: 5000,
                           });
 
-                          dispatch({type: 'DISABLE_LOADING'});
+                          // dispatch({type: 'DISABLE_LOADING'});
                         }
                       })
 
@@ -487,6 +505,8 @@ const RoleScreen = ({navigation}) => {
                   }
                 } catch (error) {
                   console.log('ERROR', error);
+                } finally {
+                  dispatch({type: 'DISABLE_LOADING'});
                 }
               }}>
               <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
@@ -508,10 +528,10 @@ const RoleScreen = ({navigation}) => {
       {previewDocModalVis && (
         <Modal style={{padding: 100, backgroundColor: 'white'}}>
           <View style={{flex: 0.8}}>
-            <Image
+            <FastImage
               // onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               // onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
-              source={{uri: docUrlToPreview}}
+              source={{uri: handleHTTPtoHTTPS(docUrlToPreview)}}
               style={{flex: 1}}
             />
           </View>

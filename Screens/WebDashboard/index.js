@@ -34,7 +34,7 @@ export default function WebDashboard() {
           }, 1000);
         }}
         source={{
-          uri: 'https://ratifi.forestgovernance.in',
+          uri: 'https://isb-dev.d2dkcdyh37wuqz.amplifyapp.com',
         }}
       />
     </View>

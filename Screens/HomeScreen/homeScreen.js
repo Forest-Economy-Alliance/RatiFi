@@ -484,7 +484,8 @@ const HomeScreen = ({navigation}) => {
         )}
       </View>
 
-      {Boolean(authLevel === 'एफआरसी') && (
+                {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}
+      {/* {Boolean(authLevel === 'एफआरसी') && (
         <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
@@ -505,7 +506,7 @@ const HomeScreen = ({navigation}) => {
             // }
           }}
         />
-      )}
+      )} */}
 
       {authLevel !== 'एफआरसी' && activeStatus && (
         <CustomButton
@@ -516,7 +517,7 @@ const HomeScreen = ({navigation}) => {
             <>
               <Ionicons name="open-outline" size={20} />
               &nbsp;
-              {t(' Go to Dashboard')}
+              {t('Go to Dashboard')}
             </>
           }
           onPress={() => {
