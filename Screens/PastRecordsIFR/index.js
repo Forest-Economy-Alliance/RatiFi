@@ -219,17 +219,18 @@ const PastRecordsIFR = ({navigation}) => {
                   dispatch({type: 'ENABLE_LOADING'});
                   if (cameraRef) {
                     console.warn(cameraRef);
-                    const options = {quality: 0.1, base64: true};
+                    const options = {quality: 0.9, base64: false};
                     const data = await cameraRef?.current?.takePictureAsync(
                       options,
                     );
-
 
                     const compressedURI=await Image.compress(data?.uri);
                     console.log('compressed-compressedURI',compressedURI)
 
                     const base64data = await RNFS.readFile(compressedURI, 'base64');
                     // console.log(data?.base64)
+                    RNFS.unlink(compressedURI)
+                    RNFS.unlink(data?.uri)
 
                     getGCPUrlImageHandler({
                       fileName: 'Hello',
