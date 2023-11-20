@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   ImageBackground,
   ScrollView,
-  Image,
   Button,
   Modal,
   TouchableOpacity,
@@ -19,10 +18,12 @@ import {
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import dayjs from 'dayjs';
+import RNFS from 'react-native-fs';
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 import {object, ref, string} from 'yup';
+import FastImage from 'react-native-fast-image';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
@@ -42,17 +43,17 @@ import {fetchClaimDetailsByIdAction} from '../../redux-store/actions/claim';
 import {RNCamera} from 'react-native-camera';
 import {getGCPUrlImageHandler} from '../../services/commonService';
 import {useToast} from 'react-native-toast-notifications';
+import { Image } from 'react-native-compressor';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 
 
 const handleHTTPtoHTTPS = args => {
-  const isSecure = args.includes('https:') !== -1;
-  if (isSecure) {
+  if (args.includes('https:')) {
     return args;
   } else {
-    return 'https' + args.slice(4);
+    return args.replace(/^http:/, 'https:');
   }
 };
 
@@ -223,11 +224,16 @@ const PastRecordsIFR = ({navigation}) => {
                       options,
                     );
 
+
+                    const compressedURI=await Image.compress(data?.uri);
+                    console.log('compressed-compressedURI',compressedURI)
+
+                    const base64data = await RNFS.readFile(compressedURI, 'base64');
                     // console.log(data?.base64)
 
                     getGCPUrlImageHandler({
                       fileName: 'Hello',
-                      base64Data: data?.base64,
+                      base64Data:base64data,
                       isPdf: false,
                       userId: profile?._id || 'unknown-asset',
                     })
