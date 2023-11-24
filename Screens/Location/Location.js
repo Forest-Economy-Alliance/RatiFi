@@ -30,6 +30,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {G} from 'react-native-svg';
 import axios from 'axios';
+import {ProgressBar} from '@react-native-community/progress-bar-android';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LocationScreen = ({navigation}) => {
   const [editProfileMode, setEditProfileMode] = useState(false);
@@ -75,7 +76,6 @@ const LocationScreen = ({navigation}) => {
   const onNext = (values, formikActions) => {
     setPanchayatInfoShow(false);
 
-  
     // alert(JSON.stringify(formik.values))
     formikActions.setSubmitting(false);
     // navigation.navigate('FRCHome');
@@ -1877,14 +1877,12 @@ const LocationScreen = ({navigation}) => {
     navigation.goBack();
   };
 
-  const [DISTRICT,setDistrict]=useState('');
+  const [DISTRICT, setDistrict] = useState('');
   const [districtData, setDistrictData] = useState([]);
   const [subDivisonData, setSubDivisionData] = useState([]);
   const [tehsilData, setTehsilData] = useState([]);
   const [panchayatData, setPanchanyatData] = useState([]);
   const [villageData, setVillageData] = useState([]);
-
-  // const []
 
   useEffect(() => {
     console.log('CALL_BEGIN');
@@ -1894,13 +1892,13 @@ const LocationScreen = ({navigation}) => {
     // setPanchanyatData([]);
     // setVillageData([]);
 
-    dispatch({
-      type: 'UPDATE_APPUTIL_KEY',
-      payload: {
-        key: 'globalSyncStatus',
-        value: true,
-      },
-    });
+    // dispatch({
+    //   type: 'UPDATE_APPUTIL_KEY',
+    //   payload: {
+    //     key: 'globalSyncStatus',
+    //     value: true,
+    //   },
+    // });
     const LAMBDA_URL =
       'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
 
@@ -1938,10 +1936,6 @@ const LocationScreen = ({navigation}) => {
           },
         });
       });
-  }, []);
-
-  useEffect(() => {
-   
   }, []);
 
   return (
@@ -1982,296 +1976,334 @@ const LocationScreen = ({navigation}) => {
                         /> */}
 
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('District')} from API</Text>
+              <Text style={styles.titleText}>{t('District')}</Text>
             </View>
-            <Dropdown
-              visible={true}
-              data={districtData}
-              formik={formik}
-              variable={'district'}
-              exec={(val)=>{
+            {districtData?.length !== 0 ? (
+              <Dropdown
+                visible={true}
+                data={districtData}
+                formik={formik}
+                variable={'district'}
+                exec={val => {
+              
+                  setSubDivisionData([])
+                  formik?.setFieldValue('subdivison','')
+                  setTehsilData([]);
+                  formik?.setFieldValue('tehsil','')
+                  setPanchanyatData([]);
+                  formik?.setFieldValue('panchayat','')
+                  setVillageData([]);
+                  formik?.setFieldValue('village','')
 
-                // alert(formik?.values?.district)
-                // setDistrict(formik?.values?.district)
-                // formik?.setFieldValue('district',null);
-                dispatch({
-                    type: 'UPDATE_APPUTIL_KEY',
-                    payload: {
-                      key: 'globalSyncStatus',
-                      value: true,
-                    },
-                  });
+                  const LAMBDA_URL =
+                    'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                  const query2 = `SELECT distinct "subdivison" FROM jharfratable WHERE "district name" = '${val}'`;
+                  const url2 = LAMBDA_URL + encodeURIComponent(query2);
+                  console.warn('URL2', url2);
 
-                const LAMBDA_URL =
-                'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-              const query2 = `SELECT distinct "subdivison" FROM jharfratable WHERE "district name" = '${val}'`;
-              const url2 = LAMBDA_URL + encodeURIComponent(query2);
-              console.warn('URL2', url2);
-          
-              axios
-                .get(url2)
-                .then(rr => {
-                  console.log('res->SUBDIVSION', rr?.data);
-                  const d = [];
-          
-                  rr?.data?.forEach(cell => {
-                    d?.push({
-                      label: cell['subdivison'],
-                      value: cell['subdivison'],
+                  axios
+                    .get(url2)
+                    .then(rr => {
+                      console.log('res->SUBDIVSION', rr?.data);
+                      const d = [];
+
+                      rr?.data?.forEach(cell => {
+                        d?.push({
+                          label: cell['subdivison'],
+                          value: cell['subdivison'],
+                        });
+                      });
+                      console.warn('subdivison', d);
+                      setSubDivisionData(d);
+
+                      // [ {label:'',value:''},{label:'',value:''},]
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    })
+                    .finally(f => {
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: false,
+                      //   },
+                      // });
                     });
-                  });
-                  console.warn('subdivison', d);
-                  setSubDivisionData(d);
-          
-                  // [ {label:'',value:''},{label:'',value:''},]
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-                .finally(f => {
-                  dispatch({
-                    type: 'UPDATE_APPUTIL_KEY',
-                    payload: {
-                      key: 'globalSyncStatus',
-                      value: false,
-                    },
-                  });
-                });
-
-
-              }}
-            />
-            <Text>{formik?.values?.district}</Text>
+                }}
+              />
+            ) : (
+              <ProgressBar
+                indeterminate
+                styleAttr="Horizontal"
+                color="white"
+                style={{height: 30, width: 100, alignSelf: 'center'}}
+              />
+            )}
+     
 
             {Boolean(formik?.values?.district !== '') && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>Subdivision from API</Text>
+                  <Text style={styles.titleText}>{t('Subdivision')}</Text>
                 </View>
-                <Dropdown
-                  visible={true}
-                  data={subDivisonData}
-                  formik={formik}
-                  variable={'subdivison'}
-                  exec={(val)=>{
-                    // formik?.setFieldValue('district',null);
-                    dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: true,
-                        },
-                      });
-    
-                    const LAMBDA_URL =
-                    'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                  const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
-                  console.warn(query3)
-                  const url3 = LAMBDA_URL + encodeURIComponent(query3);
-                  console.warn('URL3', url3);
-              
-                  axios
-                    .get(url3)
-                    .then(rr => {
-                      console.log('res->BLOCK', rr?.data);
-                      const d = [];
-              
-                      rr?.data?.forEach(cell => {
-                        d?.push({
-                          label: cell['block name'],
-                          value: cell['block name'],
+                {subDivisonData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={subDivisonData}
+                    formik={formik}
+                    variable={'subdivison'}
+                    exec={val => {
+                      // formik?.setFieldValue('district',null);
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: true,
+                      //   },
+                      // });
+
+
+
+
+                      setTehsilData([]);
+                      formik?.setFieldValue('tehsil','')
+                      setPanchanyatData([]);
+                      formik?.setFieldValue('panchayat','')
+                      setVillageData([]);
+                      formik?.setFieldValue('village','')
+
+
+                      const LAMBDA_URL =
+                        'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                      const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      console.warn(query3);
+                      const url3 = LAMBDA_URL + encodeURIComponent(query3);
+                      console.warn('URL3', url3);
+
+                      axios
+                        .get(url3)
+                        .then(rr => {
+                          console.log('res->BLOCK', rr?.data);
+                          const d = [];
+
+                          rr?.data?.forEach(cell => {
+                            d?.push({
+                              label: cell['block name'],
+                              value: cell['block name'],
+                            });
+                          });
+                          console.warn('DR-BLOCKS', d);
+                          setTehsilData(d);
+
+                          // [ {label:'',value:''},{label:'',value:''},]
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+                        .finally(f => {
+                          dispatch({
+                            type: 'UPDATE_APPUTIL_KEY',
+                            payload: {
+                              key: 'globalSyncStatus',
+                              value: false,
+                            },
+                          });
                         });
-                      });
-                      console.warn('DR-BLOCKS', d);
-                      setTehsilData(d);
-              
-                      // [ {label:'',value:''},{label:'',value:''},]
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    })
-                    .finally(f => {
-                      dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: false,
-                        },
-                      });
-                    });
-    
-    
-                  }}
-                />
+                    }}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
               </>
             )}
-            <Text>{formik?.values?.subdivison}</Text>
+           
 
             {Boolean(formik?.values?.subdivison !== '') && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>Block/Tehsil from API</Text>
+                  <Text style={styles.titleText}>{t('Tehsil')}</Text>
                 </View>
-                <Dropdown
-                  visible={true}
-                  data={tehsilData}
-                  formik={formik}
-                  variable={'tehsil'}
-                  exec={(val)=>{
-                    // formik?.setFieldValue('district',null);
-                    dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: true,
-                        },
-                      });
-    
-                    const LAMBDA_URL =
-                    'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                  const query2 = `SELECT distinct "local body name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${formik?.values?.subdivison}' AND "block name" ='${val}'  `;
-                  const url2 = LAMBDA_URL + encodeURIComponent(query2);
-                  console.warn('URL2', url2);
-                  console.warn('PANCHAYAT', query2);
-              
-                  axios
-                    .get(url2)
-                    .then(rr => {
-                      console.log('res->LOCAL_BODY', rr?.data);
-                      const d = [];
-              
-                      rr?.data?.forEach(cell => {
-                        d?.push({
-                          label: cell['local body name'],
-                          value: cell['local body name'],
+                {tehsilData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={tehsilData}
+                    formik={formik}
+                    variable={'tehsil'}
+                    exec={val => {
+                      // formik?.setFieldValue('district',null);
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: true,
+                      //   },
+                      // });
+
+                     
+                      setPanchanyatData([]);
+                      formik?.setFieldValue('panchayat','')
+                      setVillageData([]);
+                      formik?.setFieldValue('village','')
+
+
+
+                      const LAMBDA_URL =
+                        'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                      const query2 = `SELECT distinct "local body name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${formik?.values?.subdivison}' AND "block name" ='${val}'  `;
+                      const url2 = LAMBDA_URL + encodeURIComponent(query2);
+                      console.warn('URL2', url2);
+                      console.warn('PANCHAYAT', query2);
+
+                      axios
+                        .get(url2)
+                        .then(rr => {
+                          console.log('res->LOCAL_BODY', rr?.data);
+                          const d = [];
+
+                          rr?.data?.forEach(cell => {
+                            d?.push({
+                              label: cell['local body name'],
+                              value: cell['local body name'],
+                            });
+                          });
+                          console.warn('DR-Panchayat', d);
+                          setPanchanyatData(d);
+
+                          // [ {label:'',value:''},{label:'',value:''},]
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+                        .finally(f => {
+                          dispatch({
+                            type: 'UPDATE_APPUTIL_KEY',
+                            payload: {
+                              key: 'globalSyncStatus',
+                              value: false,
+                            },
+                          });
                         });
-                      });
-                      console.warn('DR-Panchayat', d);
-                      setPanchanyatData(d);
-              
-                      // [ {label:'',value:''},{label:'',value:''},]
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    })
-                    .finally(f => {
-                      dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: false,
-                        },
-                      });
-                    });
-    
-    
-                  }}
-                />
+                    }}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
               </>
             )}
 
-           <Text>{formik?.values?.tehsil}</Text>
-           
+            
 
-
-
-           {Boolean(formik?.values?.tehsil !== '') && (
+            {Boolean(formik?.values?.tehsil !== '') && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>Panchayat from API</Text>
+                  <Text style={styles.titleText}>{t('panchayat')}</Text>
                 </View>
-                <Dropdown
-                  visible={true}
-                  data={panchayatData}
-                  formik={formik}
-                  variable={'panchayat'}
-                  exec={(val)=>{
-                    // formik?.setFieldValue('district',null);
-                    dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: true,
-                        },
-                      });
-    
-                    const LAMBDA_URL =
-                    'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                  const query2 = `SELECT distinct "village name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${formik?.values?.subdivison}' AND "block name" ='${formik?.values?.tehsil}' AND "local body name"='${val}'`;
-                  const url2 = LAMBDA_URL + encodeURIComponent(query2);
-                  console.warn('URL2', url2);
-                  console.warn('Q2', query2);
-              
-                  axios
-                    .get(url2)
-                    .then(rr => {
-                      console.log('res->village', rr?.data);
-                      const d = [];
-              
-                      rr?.data?.forEach(cell => {
-                        d?.push({
-                          label: cell['village name'],
-                          value: cell['village name'],
+                {panchayatData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={panchayatData}
+                    formik={formik}
+                    variable={'panchayat'}
+                    exec={val => {
+                      // formik?.setFieldValue('district',null);
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: true,
+                      //   },
+                      // });
+
+               
+                      setVillageData([]);
+                      formik?.setFieldValue('village','')
+
+                      const LAMBDA_URL =
+                        'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                      const query2 = `SELECT distinct "village name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${formik?.values?.subdivison}' AND "block name" ='${formik?.values?.tehsil}' AND "local body name"='${val}'`;
+                      const url2 = LAMBDA_URL + encodeURIComponent(query2);
+                      console.warn('URL2', url2);
+                      console.warn('Q2', query2);
+
+                      axios
+                        .get(url2)
+                        .then(rr => {
+                          console.log('res->village', rr?.data);
+                          const d = [];
+
+                          rr?.data?.forEach(cell => {
+                            d?.push({
+                              label: cell['village name'],
+                              value: cell['village name'],
+                            });
+                          });
+                          console.warn('DR-VillGE', d);
+                          setVillageData(d);
+
+                          // [ {label:'',value:''},{label:'',value:''},]
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        })
+                        .finally(f => {
+                          dispatch({
+                            type: 'UPDATE_APPUTIL_KEY',
+                            payload: {
+                              key: 'globalSyncStatus',
+                              value: false,
+                            },
+                          });
                         });
-                      });
-                      console.warn('DR-VillGE', d);
-                      setVillageData(d);
-              
-                      // [ {label:'',value:''},{label:'',value:''},]
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    })
-                    .finally(f => {
-                      dispatch({
-                        type: 'UPDATE_APPUTIL_KEY',
-                        payload: {
-                          key: 'globalSyncStatus',
-                          value: false,
-                        },
-                      });
-                    });
-    
-    
-                  }}
-                />
+                    }}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
               </>
             )}
 
-           <Text>{formik?.values?.panchayat}</Text>
-           
+         
 
-
-
-
-
-           {Boolean(formik?.values?.panchayat !== '') && (
+            {Boolean(formik?.values?.panchayat !== '') && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>Village from API</Text>
+                  <Text style={styles.titleText}>{t('village')}</Text>
                 </View>
-                <Dropdown
-                  visible={true}
-                  data={villageData}
-                  formik={formik}
-                  variable={'village'}
-                
-                />
+                {villageData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={villageData}
+                    formik={formik}
+                    variable={'village'}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
               </>
             )}
 
-           <Text>{formik?.values?.village}</Text>
            
-
-
-
-
-
-
-
-
-
-
 
             {/* { Boolean(formik?.values?.state !== '') && (
               <>
@@ -2408,7 +2440,7 @@ const LocationScreen = ({navigation}) => {
                 />
               </>
             )} */}
-            <CustomButton
+          { Boolean(formik?.values?.village!=='') &&  <CustomButton
               text={t('Next')}
               onPress={() => {
                 if (formik.errors.state || formik.errors.district) {
@@ -2422,7 +2454,7 @@ const LocationScreen = ({navigation}) => {
                 ...styles.otpBtn,
                 marginTop: 20,
               }}
-            />
+            />}
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}

@@ -46,6 +46,7 @@ import ClaimAlertsScreenIFR from '../Screens/ClaimAlertsIFR/ClaimAlertsScreenIFR
 import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 import ValidateIFRScreen from '../Screens/ValidateIFR';
+import GovernmentOfficialCheck from '../Screens/GovernmentOfficialCheck';
 
 const Stack = createNativeStackNavigator();
 
@@ -231,6 +232,17 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+
+       <Stack.Screen
+          name="GovernmentOfficialCheck"
+          component={GovernmentOfficialCheck}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+
+
         <Stack.Screen
           name="Location"
           component={LocationScreen}

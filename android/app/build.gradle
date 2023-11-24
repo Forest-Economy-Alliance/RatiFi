@@ -157,8 +157,8 @@ android {
         applicationId "com.ratifi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 41
-        versionName "41.0"
+        versionCode 45
+        versionName "45.0"
 
 
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
