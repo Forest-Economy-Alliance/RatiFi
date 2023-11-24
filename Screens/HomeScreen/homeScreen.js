@@ -508,6 +508,23 @@ const HomeScreen = ({navigation}) => {
         />
       )} */}
 
+{/* <CustomButton
+          style={{marginBottom: 20}}
+          button={{width: 300}}
+          // dsbled={profile?.claims?.length==0}
+          text={
+            <>
+              <Ionicons name="open-outline" size={20} />
+              &nbsp;
+              LOCATION
+            </>
+          }
+          onPress={() => {
+            // console.log('ifr-claim');
+            navigation.navigate('Location');
+          }}
+        /> */}
+
       {authLevel !== 'एफआरसी' && activeStatus && (
         <CustomButton
           style={{marginBottom: 20}}

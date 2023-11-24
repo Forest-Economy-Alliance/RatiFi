@@ -229,19 +229,16 @@ const RoleScreen = ({navigation}) => {
         //   label: t('Tehsildar'),
         //   value: '2',
         // },
-        {
-          label: t('ACF'),
-          value: '3',
-        },
+        // {
+        //   label: t('ACF'),
+        //   value: '3',
+        // },
 
         {
           label: t('Member'),
           value: '4',
         },
-        {
-          label: t('Circle Officer'),
-          value: '5',
-        },
+      
         // {
         //   label: t('Circle Officer'),
         //   value: '5',
@@ -261,11 +258,11 @@ const RoleScreen = ({navigation}) => {
           value: '1',
         },
         {
-          label: t('District Forest Officer')+' (DFO)',
+          label: t('District Forest Officer'),
           value: '2',
         },
         {
-          label: t('District Welfare Officer')+' (DWO)',
+          label: t('District Welfare Officer'),
           value: '3',
         },
         {
@@ -337,13 +334,13 @@ const RoleScreen = ({navigation}) => {
         {
           label: 'राजस्व उपनिरक्षक',
           value: '1',
-        },    {
+        },{
           label: 'आंचल निरक्षक',
           value: '2',
         },
         {
-          label: 'आंचल अधिकारी',
-          value: '3',
+          label: t('Circle Officer'),
+          value: '5',
         },
       ],
     },

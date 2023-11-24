@@ -359,7 +359,7 @@ import {
               </Text>
             )}
           </CustomButton>
-       
+{/*      @COMMENTED OUT - AS ON 20/11/2023 Not REQUIRED  
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -386,7 +386,7 @@ import {
               //     })
               // }
             }}
-          />
+          /> */}
           {/* Add a button to change Role */}
           {/* @COMMENTED OUT ON 7 SEPT - 7:39PM <CustomButton
             style={{marginBottom: 20}}

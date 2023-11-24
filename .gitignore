@@ -103,3 +103,4 @@ package-lock.json
 
 # RatiFiKeystoreFile
 *.aab
+*.apk

@@ -2536,15 +2536,16 @@ console.log(imgUrl)
            
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
-          <Text style={{paddingHorizontal:40,color:'white',fontSize:20}}>कृपया गांव का चयन करें</Text>
+          <Text style={{paddingHorizontal:40,color:'white',fontSize:20,textAlign:'center'}}> गांव - {vil}</Text>
          
-        <Dropdown
+        {/* <Dropdown
           downloadPDFScreenFix={setVal5}
           visible={true}
           data={vData}
           formik={formik} 
           variable={'type'}
         />
+        <Text>{vil}</Text> */}
 
         <CustomButton onPress={async () => {
           
@@ -2553,11 +2554,11 @@ console.log(imgUrl)
 
           // fetch image
           // await getDeviceHash();
-          const map_name=getEnglish(val5);
+          // const map_name=getEnglish(val5);
           setLoading(true);
           dispatch({type:'ENABLE_LOADING'})
 
-          const rr= await request(`/get-documents?vName=${map_name}`)
+          const rr= await request(`/get-documents?vName=${vil}`)
         
           console.log(rr.data?.data)
           // alert(JSON.stringify(rr.data))
@@ -2597,7 +2598,7 @@ console.log(imgUrl)
          
         }}
           button={{ width: 200,marginTop:20 }}
-          dsbled={val5 ? false : true}
+          dsbled={vil ? false : true}
         >
           {t('download application document')}
         </CustomButton >
