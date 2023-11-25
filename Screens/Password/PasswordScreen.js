@@ -117,7 +117,10 @@ const PasswordScreen = ({navigation}) => {
       if (forgetPasswordCode == 1) {
         navigation.replace('HomeScreen');
       }
-      navigation.replace('Location');
+      
+      navigation?.replace('ClaimTypeSelectionScreen')
+      // navigation?.replace('GovernmentOfficialCheck')
+      // navigation.replace('Location');
 
       return;
     }
@@ -156,7 +159,7 @@ const PasswordScreen = ({navigation}) => {
       // odish screen if oritya
       if (language === 'or') {
         navigation.navigate('LocationOdisha');
-      } else navigation.navigate('Location');
+      } else navigation.navigate('ClaimTypeSelectionScreen');
     }
   }
 

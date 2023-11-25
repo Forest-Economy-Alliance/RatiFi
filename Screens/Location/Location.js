@@ -32,7 +32,9 @@ import {G} from 'react-native-svg';
 import axios from 'axios';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 const BG_IMG_PATH = require('../../assets/images/background.png');
+
 const LocationScreen = ({navigation}) => {
+  const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
   const [editProfileMode, setEditProfileMode] = useState(false);
   const {name, panchayat, tehsil, statet, district, postLevel, authLevel} =
     useSelector(state => state.entities.auth.userInfo?.profile);
@@ -92,6 +94,7 @@ const LocationScreen = ({navigation}) => {
     queue.addJob('UPDATELocationWorker', {
       state: 'झारखंड',
       district: formik.values.district,
+      subdivison: formik.values.subdivison,
       tehsil: formik.values.tehsil,
       panchayat: formik.values.panchayat,
       village: formik.values.village,
@@ -109,22 +112,31 @@ const LocationScreen = ({navigation}) => {
       //screen code 4 , means location information set
       dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
 
-      navigation.replace('Gender');
+      if (typeOfClaim === 'CFR') {
+        // LET'S SEE
+        // navigation.replace('HomeScreen', {
+        //   toBeValidated: true,
+        // });
+
+        navigation.replace('HomeScreen');
+      } else {
+        navigation.navigate('HomeScreenIFR');
+      }
     }
     return;
   };
 
-  const locSchema = object().shape({
-    // state: string().required(t('State is Required')),
-    district: string().required(t('District is Required')),
-    tehsil: string().required(t('Tehsil is Required')),
-    panchayat: string().required(t('Panchayat is Required')),
-    village: string().required(t('Village is Required')),
-  });
+  // const locSchema = object().shape({
+  //   // state: string().required(t('State is Required')),
+  //   district: string().required(t('District is Required')),
+  //   tehsil: string().required(t('Tehsil is Required')),
+  //   panchayat: string().required(t('Panchayat is Required')),
+  //   village: string().required(t('Village is Required')),
+  // });
 
   const formik = useFormik({
     initialValues: state,
-    validationSchema: locSchema,
+    // validationSchema: locSchema,
     onSubmit: onNext,
   });
   console.log(panchayat);
@@ -1925,7 +1937,7 @@ const LocationScreen = ({navigation}) => {
         // [ {label:'',value:''},{label:'',value:''},]
       })
       .catch(err => {
-        console.log(err);
+        console.log('DERROR', err);
       })
       .finally(f => {
         dispatch({
@@ -1938,6 +1950,58 @@ const LocationScreen = ({navigation}) => {
       });
   }, []);
 
+  const handleShowDropdownOrNot = field => {
+    if (authLevel === t('SDLC')) {
+      if (field === t('district') || field === t('subdivison')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (authLevel === t('DLC')) {
+      if (field === t('district')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (authLevel === t('FRC')) {
+      return true;
+    } else if (authLevel === t('SLMC')) {
+      return false;
+    } else if (authLevel === t('Forest_Department')) {
+      if (field === t('district') || field === t('subdivison')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (authLevel === t('Revenue_Department')) {
+      if (
+        field === t('district') ||
+        field === t('subdivison')||
+        field === t('tehsil')
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+
+  const handleShowNextButton = () => {
+    if (authLevel === t('SDLC')) {
+      return Boolean(formik?.values?.subdivison !== '');
+    } else if (authLevel === t('DLC')) {
+      return Boolean(formik?.values?.district !== '');
+    } else if (authLevel === t('FRC')) {
+      return Boolean(formik?.values?.village !== '');
+    } else if (authLevel === t('SLMC')) {
+      return Boolean(formik?.values?.district !== '');
+    } else if (authLevel === t('Forest_Department')) {
+      return Boolean(formik?.values?.subdivison !== '');
+    } else if (authLevel === t('Revenue_Department')) {
+      return Boolean(formik?.values?.tehsil !== '');
+    }
+  };
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -1962,6 +2026,7 @@ const LocationScreen = ({navigation}) => {
               <View style={styles.name}>
                 <Text style={styles.nameTxt}>{t('Select your location')}</Text>
               </View>
+              <Text>{authLevel}</Text>
               <View style={styles.horizontalLine} />
             </View>
             {/* <View style={styles.title}>
@@ -1985,15 +2050,14 @@ const LocationScreen = ({navigation}) => {
                 formik={formik}
                 variable={'district'}
                 exec={val => {
-              
-                  setSubDivisionData([])
-                  formik?.setFieldValue('subdivison','')
+                  setSubDivisionData([]);
+                  formik?.setFieldValue('subdivison', '');
                   setTehsilData([]);
-                  formik?.setFieldValue('tehsil','')
+                  formik?.setFieldValue('tehsil', '');
                   setPanchanyatData([]);
-                  formik?.setFieldValue('panchayat','')
+                  formik?.setFieldValue('panchayat', '');
                   setVillageData([]);
-                  formik?.setFieldValue('village','')
+                  formik?.setFieldValue('village', '');
 
                   const LAMBDA_URL =
                     'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
@@ -2040,9 +2104,8 @@ const LocationScreen = ({navigation}) => {
                 style={{height: 30, width: 100, alignSelf: 'center'}}
               />
             )}
-     
 
-            {Boolean(formik?.values?.district !== '') && (
+            {Boolean(formik?.values?.district !== '' && handleShowDropdownOrNot(t('subdivison'))) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('Subdivision')}</Text>
@@ -2063,16 +2126,12 @@ const LocationScreen = ({navigation}) => {
                       //   },
                       // });
 
-
-
-
                       setTehsilData([]);
-                      formik?.setFieldValue('tehsil','')
+                      formik?.setFieldValue('tehsil', '');
                       setPanchanyatData([]);
-                      formik?.setFieldValue('panchayat','')
+                      formik?.setFieldValue('panchayat', '');
                       setVillageData([]);
-                      formik?.setFieldValue('village','')
-
+                      formik?.setFieldValue('village', '');
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
@@ -2122,9 +2181,8 @@ const LocationScreen = ({navigation}) => {
                 )}
               </>
             )}
-           
 
-            {Boolean(formik?.values?.subdivison !== '') && (
+            {Boolean(formik?.values?.subdivison !== '' && handleShowDropdownOrNot(t('tehsil'))) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('Tehsil')}</Text>
@@ -2145,13 +2203,10 @@ const LocationScreen = ({navigation}) => {
                       //   },
                       // });
 
-                     
                       setPanchanyatData([]);
-                      formik?.setFieldValue('panchayat','')
+                      formik?.setFieldValue('panchayat', '');
                       setVillageData([]);
-                      formik?.setFieldValue('village','')
-
-
+                      formik?.setFieldValue('village', '');
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
@@ -2202,9 +2257,7 @@ const LocationScreen = ({navigation}) => {
               </>
             )}
 
-            
-
-            {Boolean(formik?.values?.tehsil !== '') && (
+            {Boolean(formik?.values?.tehsil !== '' && handleShowDropdownOrNot(t('panchayat'))) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('panchayat')}</Text>
@@ -2225,9 +2278,8 @@ const LocationScreen = ({navigation}) => {
                       //   },
                       // });
 
-               
                       setVillageData([]);
-                      formik?.setFieldValue('village','')
+                      formik?.setFieldValue('village', '');
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
@@ -2278,9 +2330,7 @@ const LocationScreen = ({navigation}) => {
               </>
             )}
 
-         
-
-            {Boolean(formik?.values?.panchayat !== '') && (
+            {Boolean(formik?.values?.panchayat !== '' && handleShowDropdownOrNot(t('village'))) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('village')}</Text>
@@ -2302,8 +2352,6 @@ const LocationScreen = ({navigation}) => {
                 )}
               </>
             )}
-
-           
 
             {/* { Boolean(formik?.values?.state !== '') && (
               <>
@@ -2440,21 +2488,23 @@ const LocationScreen = ({navigation}) => {
                 />
               </>
             )} */}
-          { Boolean(formik?.values?.village!=='') &&  <CustomButton
-              text={t('Next')}
-              onPress={() => {
-                if (formik.errors.state || formik.errors.district) {
-                  console.log(formik.errors);
-                  setErrorVisible(true);
-                }
-                formik.handleSubmit();
-                // Send Data to next screen
-              }}
-              style={{
-                ...styles.otpBtn,
-                marginTop: 20,
-              }}
-            />}
+            {Boolean(handleShowNextButton()) && (
+              <CustomButton
+                text={t('Next')}
+                onPress={() => {
+                  if (formik.errors.state || formik.errors.district) {
+                    console.log(formik.errors);
+                    setErrorVisible(true);
+                  }
+                  formik.handleSubmit();
+                  // Send Data to next screen
+                }}
+                style={{
+                  ...styles.otpBtn,
+                  marginTop: 20,
+                }}
+              />
+            )}
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}

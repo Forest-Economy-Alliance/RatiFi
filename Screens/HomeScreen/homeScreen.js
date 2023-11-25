@@ -46,6 +46,7 @@ import {
 import {firebase} from '@react-native-firebase/messaging';
 import {OneSignal} from 'react-native-onesignal';
 import { err } from 'react-native-svg/lib/typescript/xml';
+import auth from '../../redux-store/reducers/entities/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
@@ -196,19 +197,6 @@ const HomeScreen = ({navigation}) => {
   //   return () => backHandler.remove();
   // }, []);
 
-  // Make a useEffect run on particular pages
-  const getEnglish = param => {
-    console.log('OK', HI.translation);
-
-    const left = Object.keys(HI.translation);
-    const right = Object.values(HI.translation);
-    const len = left.length;
-    for (let i = 0; i < len; i++) {
-      if (right[i] === val5.label) {
-        return left[i].toLowerCase();
-      }
-    }
-  };
 
   const UpdateRole = () => {
     // Move to RoleScreen
@@ -334,8 +322,19 @@ const HomeScreen = ({navigation}) => {
    */}
 
         <View style={styles.header}>
-          {village === '-1' ? (
-            <Text>कृपया अपनी जानकरी अपडेट करें</Text>
+          {village === '-1' ? ( <Text style={styles.headerText}>
+                {name}
+                {', '}
+                {postLevel}
+                {', '}
+                {authLevel}
+                {'\n '}
+                {t(district)!=='-1' && district+', '}
+                {tehsil!=='-1' && tehsil+', '}
+                {panchayat!=='-1' && panchayat+', '}
+                {t(state)}
+              </Text>
+           
           ) : (
             <>
               <Text style={styles.headerText}>
@@ -456,7 +455,7 @@ const HomeScreen = ({navigation}) => {
             backgroundColor: 'green',
           }}></View>
 
-        {activeStatus && (
+        {activeStatus && Boolean(authLevel!==t('SLMC')) && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}

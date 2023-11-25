@@ -92,16 +92,12 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                   const loginMode = route?.params?.loginMode;
                   if (lang?.value === 'ifr') {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
-
-                    if (authLevel !== t('FRC')) {
-                      navigation.replace('HomeScreenIFR');
-                      return;
+                    if(!village){
+                      navigation.replace('Location')
+                    }else{
+                      navigation.replace('HomeScreenIFR')
                     }
-                    navigation.replace(
-                      loginMode && IFRclaims?.length !== 0
-                        ? 'HomeScreenIFR'
-                        : 'HomeScreenIFR',
-                    );
+                    
                   } else {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
 
@@ -119,7 +115,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                         navigation.replace('HomeScreen');
                       }
                     } else {
-                      navigation.navigate('Role');
+                      navigation.navigate('GovernmentOfficialCheck');
                     }
                   }
                 }}
@@ -129,6 +125,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
             );
           })}
         </ScrollView>
+          <Text>Note - Govt. Official Please choose CFR</Text>
       </View>
     </ImageBackground>
   );
