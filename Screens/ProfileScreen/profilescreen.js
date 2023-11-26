@@ -99,7 +99,7 @@ console.log('prf',profile)
     }, []);
     const goBack = () =>{
         // Move to RoleScreen
-        navigation.navigate("HomeScreen")
+        navigation.replace("HomeScreen")
     }
     
     return (

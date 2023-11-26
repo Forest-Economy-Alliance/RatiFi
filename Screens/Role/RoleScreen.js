@@ -335,7 +335,7 @@ const RoleScreen = ({navigation}) => {
           label: 'राजस्व उपनिरक्षक',
           value: '1',
         },{
-          label: 'आंचल निरक्षक',
+          label: 'अंचल निरक्षक',
           value: '2',
         },
         {

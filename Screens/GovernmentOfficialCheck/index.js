@@ -376,7 +376,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <Text>Government Official Check</Text>
+     
 
       {cameraModalVis && (
         <Modal style={{padding: 100, backgroundColor: 'white'}}>

@@ -206,7 +206,9 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     // dispatch user profile
     checkAccount({mobile: profile?.mobile}).then(data => {
+      console.log(data?.data)
       dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
+      dispatch({type: 'SAVE_GOVT_OFFICIALS', payload: data?.data?.govtOfficials });
     });
 
     request(

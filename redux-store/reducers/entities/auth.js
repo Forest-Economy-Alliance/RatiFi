@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 
 const INIT_STATE = {
   profile: null,
+  govtOfficials:{},
   DD: '-1',
   token: null,
 };
@@ -13,6 +14,11 @@ const userInfo = (state = INIT_STATE, action) => {
       return {
         ...state,
         profile: action.payload,
+      };
+    case 'SAVE_GOVT_OFFICIALS':
+      return {
+        ...state,
+        govtOfficials: action?.payload,
       };
     case 'CLEAR_PROFILE':
       console.log('TALK IS CHEAP SHOW ME THE PAYLOAD', action.payload);

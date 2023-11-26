@@ -125,7 +125,10 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
             );
           })}
         </ScrollView>
-          <Text>Note - Govt. Official Please choose CFR</Text>
+         <View style={{padding:10}}>
+         <Text style={{textAlign:'center',fontSize:18}}>सूचना - सरकारी अधिकारी कृपया {t('CFR')} विकल्प पर क्लिक करें</Text>
+         {/* <Text style={{textAlign:'center'}}>Note - Govt. Official Please choose CFR</Text> */}
+         </View>
       </View>
     </ImageBackground>
   );
