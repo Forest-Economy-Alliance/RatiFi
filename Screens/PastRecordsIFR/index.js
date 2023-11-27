@@ -302,7 +302,7 @@ const PastRecordsIFR = ({navigation}) => {
       {previewDocModalVis && (
         <Modal style={{padding: 100, backgroundColor: 'white'}}>
           <View style={{flex: 0.8}}>
-            <Image
+            <FastImage
               onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
               source={{uri: handleHTTPtoHTTPS(docUrlToPreview)}}
@@ -881,7 +881,9 @@ const PastRecordsIFR = ({navigation}) => {
 
 
                           setDocName('SDM_SUMMON_RESULT_8');
-                          navigation.navigate('MarkBoundry');
+                          navigation.navigate('MarkBoundry',{
+                            setRefresh:setRefresh
+                          });
                       
 
                         } else {  
@@ -898,7 +900,8 @@ const PastRecordsIFR = ({navigation}) => {
                       
                       }}
                       style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                      {Boolean(claim?.boundary?.length === 0) ? (
+                      {Boolean(!(claim?.courtDocuments[7]?.title ===
+                              'SDM_SUMMON_RESULT_8')) ? (
                         <MaterialIcons
                           name="gps-fixed"
                           color="white"
@@ -910,7 +913,7 @@ const PastRecordsIFR = ({navigation}) => {
                       )}
                     </CustomButton>
 
-                    {Boolean(claim?.boundary?.length !== 0) && (
+                    {Boolean(true) && (
                       <CustomButton
                         onPress={() => {
                           navigation.navigate('MarkBoundry');

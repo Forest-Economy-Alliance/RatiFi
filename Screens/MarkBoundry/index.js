@@ -36,6 +36,7 @@ import {Queue} from 'react-native-job-queue';
 import { getGCPUrlImageHandler } from '../../services/commonService';
 import { useToast } from 'react-native-toast-notifications';
 import { useTranslation } from 'react-i18next';
+import { err } from 'react-native-svg/lib/typescript/xml';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -214,7 +215,7 @@ export const MarkBoundry = () => {
     try {
       console.log('converting base64 ....');
       RNFS.readFile(uri, 'base64').then(res => {
-        console.log('BASE64======>', res);
+        // console.log('BASE64======>', res);
         setBase64ImageString(res);
         getGCPUrlImageHandler({
           fileName: 'Hello',
@@ -233,7 +234,7 @@ export const MarkBoundry = () => {
               storageUrl: data.response.Location,
             });
 
-            if (data.response.Location) {
+            if (data.response.Location && rssponse) {
               toast.show(t('FILE_UPLOADED'), {
                 type: 'success',
                 animationType: 'zoom-in',
@@ -241,9 +242,13 @@ export const MarkBoundry = () => {
                 placement: 'top',
                 duration: 5000,
               });
+              // navigation.goBack();
+
+              // dispatch({type: 'DISABLE_LOADING'});
+              dispatch({type: 'DISABLE_LOADING'});
+
               navigation.goBack();
 
-              dispatch({type: 'DISABLE_LOADING'});
             } else {
               toast.show(t('UPLOAD_FAILED'), {
                 type: 'failure',
@@ -253,12 +258,11 @@ export const MarkBoundry = () => {
                 duration: 5000,
               });
 
-              dispatch({type: 'DISABLE_LOADING'});
+              // dispatch({type: 'DISABLE_LOADING'});
             }
 
             
           })
-
           .catch(err => {
             console.log(err);
           });
@@ -293,7 +297,7 @@ export const MarkBoundry = () => {
         //   IS_IFR_CLAIM: true,
         // });
 
-        convertImageToBase64(uri);
+        await convertImageToBase64(uri);
 
 
 
@@ -401,7 +405,8 @@ export const MarkBoundry = () => {
               <CustomButton
                 onPress={async () => {
                   console.log(userPath);
-                  const img = await captureSnapshot();
+                  try{
+                
                   dispatch({type: 'ENABLE_LOADING'});
                   setI(false);
 
@@ -410,21 +415,24 @@ export const MarkBoundry = () => {
                     claimId: profile?.IFRclaims[profile?.IFRclaims?.length - 1],
                     boundaryImageUrl: 'S3 URL',
                   })
-                    .then(res => {
-                      console.log('SUCCESS', res);
-
-                      navigation.replace('PastRecordsIFR');
+                    .then(async(res) => {
+                      setI(false);
+                      const img = await captureSnapshot();
+                      console.log('SUCCESS');
+           
                     })
                     .catch(err => {
                       console.error('error', err);
                     })
                     .finally(f => {
-                      dispatch({type: 'DISABLE_LOADING'});
                     });
                   // mark trip as complete
                   // update the data to server
                   // navigate to back screen with a button approval
                   // send the recipt
+                  }catch(error){
+                    console.error('error',error)
+                  }
                 }}>
                 <Text>सीमा पूर्ण</Text>
               </CustomButton>

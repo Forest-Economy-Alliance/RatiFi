@@ -31,6 +31,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {G} from 'react-native-svg';
 import axios from 'axios';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
+import { BASE_URL } from '../../services/APICentral';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const LocationScreen = ({navigation}) => {
@@ -1918,13 +1919,14 @@ const LocationScreen = ({navigation}) => {
     const url = LAMBDA_URL + encodeURIComponent(query);
     console.warn('URL', url);
     // alert(JSON.stringify(url))
+    console.log('FFF',BASE_URL+'/lgd?q='+url)
     axios
-      .get(url)
+      .get(BASE_URL+'/lgd?q='+url)
       .then(res => {
         console.log('res', res?.data);
         const dropdownData = [];
 
-        res?.data?.forEach(cell => {
+        res?.data?.data?.forEach(cell => {
           dropdownData?.push({
             label: cell['district name'],
             value: cell['district name'],
@@ -2066,12 +2068,12 @@ const LocationScreen = ({navigation}) => {
                   console.warn('URL2', url2);
 
                   axios
-                    .get(url2)
+                    .get(BASE_URL+'/lgd?q='+url2)
                     .then(rr => {
                       console.log('res->SUBDIVSION', rr?.data);
                       const d = [];
 
-                      rr?.data?.forEach(cell => {
+                      rr?.data?.data?.forEach(cell => {
                         d?.push({
                           label: cell['subdivison'],
                           value: cell['subdivison'],
@@ -2141,12 +2143,12 @@ const LocationScreen = ({navigation}) => {
                       console.warn('URL3', url3);
 
                       axios
-                        .get(url3)
+                        .get(BASE_URL+'/lgd?q='+url3)
                         .then(rr => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
 
-                          rr?.data?.forEach(cell => {
+                          rr?.data?.data?.forEach(cell => {
                             d?.push({
                               label: cell['block name'],
                               value: cell['block name'],
@@ -2216,12 +2218,12 @@ const LocationScreen = ({navigation}) => {
                       console.warn('PANCHAYAT', query2);
 
                       axios
-                        .get(url2)
+                        .get(BASE_URL+'/lgd?q='+url2)
                         .then(rr => {
                           console.log('res->LOCAL_BODY', rr?.data);
                           const d = [];
 
-                          rr?.data?.forEach(cell => {
+                          rr?.data?.data?.forEach(cell => {
                             d?.push({
                               label: cell['local body name'],
                               value: cell['local body name'],
@@ -2289,12 +2291,12 @@ const LocationScreen = ({navigation}) => {
                       console.warn('Q2', query2);
 
                       axios
-                        .get(url2)
+                        .get(BASE_URL+'/lgd?q='+url2)
                         .then(rr => {
                           console.log('res->village', rr?.data);
                           const d = [];
 
-                          rr?.data?.forEach(cell => {
+                          rr?.data?.data?.forEach(cell => {
                             d?.push({
                               label: cell['village name'],
                               value: cell['village name'],
