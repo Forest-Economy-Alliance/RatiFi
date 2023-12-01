@@ -11,8 +11,8 @@
       "type": "UNIVERSAL",
       "filters": [],
       "attributes": [],
-      "versionCode": 45,
-      "versionName": "45.0",
+      "versionCode": 48,
+      "versionName": "48.0",
       "outputFile": "app-universal-release.apk"
     },
     {
@@ -20,13 +20,13 @@
       "filters": [
         {
           "filterType": "ABI",
-          "value": "arm64-v8a"
+          "value": "armeabi-v7a"
         }
       ],
       "attributes": [],
-      "versionCode": 45003,
-      "versionName": "45.0",
-      "outputFile": "app-arm64-v8a-release.apk"
+      "versionCode": 48001,
+      "versionName": "48.0",
+      "outputFile": "app-armeabi-v7a-release.apk"
     },
     {
       "type": "ONE_OF_MANY",
@@ -37,8 +37,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 45004,
-      "versionName": "45.0",
+      "versionCode": 48004,
+      "versionName": "48.0",
       "outputFile": "app-x86_64-release.apk"
     },
     {
@@ -50,8 +50,8 @@
         }
       ],
       "attributes": [],
-      "versionCode": 45002,
-      "versionName": "45.0",
+      "versionCode": 48002,
+      "versionName": "48.0",
       "outputFile": "app-x86-release.apk"
     },
     {
@@ -59,13 +59,13 @@
       "filters": [
         {
           "filterType": "ABI",
-          "value": "armeabi-v7a"
+          "value": "arm64-v8a"
         }
       ],
       "attributes": [],
-      "versionCode": 45001,
-      "versionName": "45.0",
-      "outputFile": "app-armeabi-v7a-release.apk"
+      "versionCode": 48003,
+      "versionName": "48.0",
+      "outputFile": "app-arm64-v8a-release.apk"
     }
   ],
   "elementType": "File"

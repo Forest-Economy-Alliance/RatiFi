@@ -264,10 +264,10 @@ const GovernmentOfficialCheck = ({navigation}) => {
           label: t('District Welfare Officer'),
           value: '3',
         },
-        {
-          label: t('Officer-in-Charge (Tribal Affairs)'),
-          value: '4',
-        },
+        // {
+        //   label: t('Officer-in-Charge (Tribal Affairs)'),
+        //   value: '4',
+        // },
         {
           label: t('Member'),
           value: '5',
@@ -313,7 +313,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
       ],
     },
     {
-      label: t('Forest_Department'),
+      label: 'भारसाधक  - ' + t('Forest_Department') + ' (SDLC)',
       value: '5',
       roleData: [
         {
@@ -327,7 +327,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
       ],
     },
     {
-      label: t('Revenue_Department'),
+      label: 'भारसाधक  - ' + t('Revenue_Department') + ' (SDLC)',
       value: '6',
       roleData: [
         {
@@ -369,6 +369,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
   const [uploadStatus, setUploadStatus] = useState({f: false, b: false});
   const [isFront, setIsFront] = useState(null);
 
+  const [roleData, setRoleData] = useState([]);
+
   console.log(verificationAadharBackUrl);
   return (
     <ImageBackground
@@ -376,8 +378,6 @@ const GovernmentOfficialCheck = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-     
-
       {cameraModalVis && (
         <Modal style={{padding: 100, backgroundColor: 'white'}}>
           <RNCamera
@@ -417,6 +417,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
               onPress={async () => {
                 try {
                   dispatch({type: 'ENABLE_LOADING'});
+
                   if (cameraRef) {
                     console.warn(cameraRef);
                     const options = {quality: 0.4};
@@ -472,8 +473,6 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
                         // console.log("WOW", rssponse.data);
 
-                        setCameraModalVis(false);
-
                         if (data?.response?.Location) {
                           toast.show(t('FILE_UPLOADED'), {
                             type: 'success',
@@ -482,8 +481,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
                             placement: 'top',
                             duration: 5000,
                           });
-
-                          // dispatch({type: 'DISABLE_LOADING'});
+                          setCameraModalVis(false);
+                          dispatch({type: 'DISABLE_LOADING'});
                         } else {
                           toast.show(t('UPLOAD_FAILED'), {
                             type: 'failure',
@@ -496,16 +495,16 @@ const GovernmentOfficialCheck = ({navigation}) => {
                           // dispatch({type: 'DISABLE_LOADING'});
                         }
                       })
-
                       .catch(err => {
                         console.log(err);
                       });
                   }
                 } catch (error) {
                   console.log('ERROR', error);
-                } finally {
-                  dispatch({type: 'DISABLE_LOADING'});
                 }
+                //  finally {
+                //   dispatch({type: 'DISABLE_LOADING'});
+                // }
               }}>
               <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
             </TouchableOpacity>
@@ -606,22 +605,32 @@ const GovernmentOfficialCheck = ({navigation}) => {
               data={data1}
               formik={formik}
               variable={'member'}
-            />
-            <View style={styles.title}>
-              <Text style={styles.titleText}>{t('specify your role')}</Text>
-            </View>
-            <Dropdown
-              visible={true}
-              data={
-                data1
-                  .filter(item => item.label === formik.values.member)
+              exec={val => {
+                setRoleData([]);
+                formik?.setFieldValue('role', '');
+                const arr = data1
+                  .filter(item => item.label === val)
                   .map(item => {
                     return item.roleData;
-                  })[0]
-              }
-              formik={formik}
-              variable={'role'}
+                  })[0];
+                setTimeout(() => {
+                  setRoleData(arr);
+                }, 500);
+              }}
             />
+            {Boolean(roleData?.length !== 0) && (
+              <>
+                <View style={styles.title}>
+                  <Text style={styles.titleText}>{t('specify your role')}</Text>
+                </View>
+                <Dropdown
+                  visible={true}
+                  data={roleData}
+                  formik={formik}
+                  variable={'role'}
+                />
+              </>
+            )}
 
             {Boolean(
               formik.values.member !== t('FRC') && formik.values.member,

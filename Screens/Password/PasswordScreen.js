@@ -8,6 +8,7 @@ import {
   Keyboard,
   ImageBackground,
   KeyboardAvoidingView,
+  View,
 } from 'react-native';
 import queue, { Worker } from 'react-native-job-queue';
 
@@ -171,6 +172,9 @@ const PasswordScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
+        {/* <View>
+          <Text>Choose Password</Text>
+        </View> */}
 
 <Text style={{color:'#fff',fontSize:18}}>कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें </Text>
 

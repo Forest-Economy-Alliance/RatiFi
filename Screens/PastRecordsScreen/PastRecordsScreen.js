@@ -17,7 +17,7 @@ import {
   ProgressBarAndroid,
   SafeAreaView,
 } from 'react-native';
-import { Image } from 'react-native-compressor';
+import {Image} from 'react-native-compressor';
 import PagerView from 'react-native-pager-view';
 
 import queue from 'react-native-job-queue';
@@ -148,8 +148,6 @@ const PastRecordsScreen = ({navigation}) => {
     // get-image-for-previev
   };
 
-
-
   useEffect(() => {
     if (ok === false) dispatch({type: 'ENABLE_LOADING'});
     // changeLanguage(language);
@@ -245,8 +243,8 @@ const PastRecordsScreen = ({navigation}) => {
                       options,
                     );
 
-                    const compressedURI=await Image.compress(data?.uri);
-                    console.log('compressed-compressedURI',compressedURI)
+                    const compressedURI = await Image.compress(data?.uri);
+                    console.log('compressed-compressedURI', compressedURI);
 
                     setCameraModalVis(false);
 
@@ -391,7 +389,11 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  एफआरसी पुनर्गठन
+                  वन अधिकार समिति का गठन / पुनर्गठन
+                </Text>
+                <Text style={{fontSize: 18, color: '#fff', fontWeight: '600'}}>
+                  (कार्यरत वन अधिकार समिति के पहले से उपस्थित होने पर चरण १ को
+                  वैकल्पिक माना जाये)
                 </Text>
               </View>
 
@@ -410,11 +412,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      ग्राम पंचायत द्वारा अधिसूचना
+                      कार्यवाही रजिस्टर की छाया प्रति (1.1 या 1.2)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -556,6 +558,19 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
+            </ScrollView>
+          </>
+        )}
+
+        {/* STAGE 2 (FORM 4-9*/}
+        {stage === 2 && (
+          <>
+            <ScrollView>
+              <View style={{padding: 20}}>
+                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+                  सामुदायिक वन अधिकारों का दावा तैयार करना
+                </Text>
+              </View>
 
               {/* FORM 2 */}
 
@@ -572,12 +587,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      पुनर्गठित एफआरसी के सदस्यो के नाम (एफआरसी रजिस्टर से फोटो
-                      खींचे)
+                      दावा प्रक्रिया आरम्भ करने और दस्तावेजों की मांग के लिए
+                      SDLC को पत्र (2 . 1) (संलग्न 4)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -723,7 +738,7 @@ const PastRecordsScreen = ({navigation}) => {
               </View>
 
               {/* FORM 3  */}
-              {/*  पुनर्गठित एफआरसी के द्वार एसडीएलसी को सूचना */}
+
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
                 <View style={{...styles.header, marginTop: -20}}>
                   <View
@@ -737,11 +752,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      पुनर्गठित एफआरसी के द्वारा अनुमंडल (SDLC) को सूचना
+                      दावित वन क्षेत्र का नक़्शा (संलग्न 4)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -885,19 +900,6 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
-            </ScrollView>
-          </>
-        )}
-
-        {/* STAGE 2 (FORM 4-9*/}
-        {stage === 2 && (
-          <>
-            <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  सामुदायिक वन और वन संसाधन अधिकार का दावा तैयार करना
-                </Text>
-              </View>
 
               {/* FORM 4 */}
 
@@ -914,11 +916,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      दस्तावेज़ की मांग के लिए अनुमंडल (SDLC) को पत्र
+                      नियम 13 (झ) के अंतर्गत बुजुर्गों का शपथ पत्र (2.5) (संलग्न
+                      3)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1076,11 +1079,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावित वन छेत्र का नक्शा
+                      नियम 13 (झ) के अंतर्गत एक दस्तावेज़ - खतियान भाग 2 / पंजी 2
+                      इत्यादि (संलग्न 3)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1239,11 +1243,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      बुज़ुर्गो का शपथ पत्र
+                      नियम 13 (झ) के अंतर्गत सरना / श्मशान / देवस्थल इत्यादि का
+                      फ़ोटो (संलग्न 3) (वैकल्पिक)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1402,11 +1407,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      जंगल का विवरण
+                      दावेदारों के नाम और हस्ताक्षर (2. 4) (संलग्न 1)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1550,6 +1555,19 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
+            </ScrollView>
+          </>
+        )}
+
+        {/* STAGE 3 (FORM 10-10)*/}
+        {stage === 3 && (
+          <>
+            <ScrollView>
+              <View style={{padding: 20}}>
+                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+                  वन क्षेत्र का सीमांकन
+                </Text>
+              </View>
 
               {/* FORM 8  */}
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
@@ -1565,11 +1583,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      पारंपरिक एवं अन्य पारंपरिक अधिकार का विवरण
+                      सीमांकन के लिए पडोसी गांव को सूचना की पावती (2.7) (संलग्न
+                      6)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1728,11 +1747,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          //   textDecorationLine: 'underline',
+                          //   // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावेदार की सूचि
+                      सीमांकन की कार्यवाही (2.9) (संलग्न 8)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1880,14 +1899,13 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 3 (FORM 10-10)*/}
-        {stage === 3 && (
+        {/* STAGE 4 (FORM 11-12)*/}
+        {stage === 4 && (
           <>
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  पडोसी गांव के वन अधिकार समिति की संयुक्त बैठक (केवल तभी जब
-                  पडोसी गांव के साथ जंगल उपयोग करते हैं)
+                  भौतिक सत्यापन
                 </Text>
               </View>
 
@@ -1906,11 +1924,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      वन अधिकार समिति की संयुक्त बैठक की कार्यवाही
+                      भौतिक सत्यापन के लिए वन और राजस्व विभाग के अधिकारियों को
+                      सूचना की पावती (2.6) (संलग्न 5)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2052,19 +2071,6 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
-            </ScrollView>
-          </>
-        )}
-
-        {/* STAGE 4 (FORM 11-12)*/}
-        {stage === 4 && (
-          <>
-            <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  भौतिक सत्यापन
-                </Text>
-              </View>
 
               {/* FORM 11 */}
 
@@ -2081,11 +2087,10 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
-                      वन छेत्र पदाधिकारी एवं आंचल पदाधिकारी को भौतिक सत्यापन के
-                      लिए सुचना
+                      भौतिक सत्यापन प्रतिवेदन (2.8) (संलग्न 7)
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -2100,7 +2105,6 @@ const PastRecordsScreen = ({navigation}) => {
                   }}>
                   <CustomButton
                     onPress={() => {
-            
                       if (
                         !(
                           claim?.courtDocuments.length &&
@@ -2228,6 +2232,19 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
+            </ScrollView>
+          </>
+        )}
+
+        {/* STAGE 5 (FORM 13-14)*/}
+        {stage === 5 && (
+          <>
+            <ScrollView>
+              <View style={{padding: 20}}>
+                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+                  सामुदायिक अधिकारों की अनुशंसा के लिए ग्राम सभा
+                </Text>
+              </View>
 
               {/* FORM 12 */}
 
@@ -2244,11 +2261,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      भौतिक सत्यापन की कार्यवाही
+                      ग्राम सभा की कार्यवाही (2.10) (संलग्न 9)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2377,7 +2394,8 @@ const PastRecordsScreen = ({navigation}) => {
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[11]?.title === 'SDM_SUMMON_RESULT_12' && (
+                {claim?.courtDocuments[11]?.title ===
+                  'SDM_SUMMON_RESULT_12' && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_12');
@@ -2395,13 +2413,13 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 5 (FORM 13-14)*/}
-        {stage === 5 && (
+        {/* STAGE 6 (FORM 15-17)*/}
+        {stage === 6 && (
           <>
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  दावा अनुमोदित करने हेतु ग्राम सभा की बैठक
+                  दावा विवरण
                 </Text>
               </View>
 
@@ -2420,10 +2438,10 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
-                      ग्राम सभा की सूचना
+                      दावा अभिलेख (2.11)
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -2586,11 +2604,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      ग्राम सभा की कार्यवाही
+                      प्रारूप - ख (2.2)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2734,19 +2752,6 @@ const PastRecordsScreen = ({navigation}) => {
                   </CustomButton>
                 )}
               </View>
-            </ScrollView>
-          </>
-        )}
-
-        {/* STAGE 6 (FORM 15-17)*/}
-        {stage === 6 && (
-          <>
-            <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  दावा विवरण
-                </Text>
-              </View>
 
               {/* FORM 15 */}
 
@@ -2763,10 +2768,10 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
-                      दावा अभिलेख
+                      प्रारूप - ग (2.3)
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -2927,11 +2932,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      प्रारूप - ख
+                      अनुमंडल (SDLC) से प्राप्त पावती
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3030,7 +3035,8 @@ const PastRecordsScreen = ({navigation}) => {
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
                     </CustomButton>
-                    {claim?.courtDocuments[15]?.title ===
+                    {
+                    claim?.courtDocuments[15]?.title ===
                       'SDM_SUMMON_RESULT_16' && (
                       <CustomButton
                         onPress={() => {
@@ -3047,12 +3053,13 @@ const PastRecordsScreen = ({navigation}) => {
                         }}>
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
-                    )}
+                    )
+                    }
                   </View>
                 ))}
               </View>
 
-              <View
+              {/* + Not Required <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -3074,7 +3081,7 @@ const PastRecordsScreen = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 17 */}
 
@@ -3091,11 +3098,11 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      प्रारूप - ग
+                      भौतिक सत्यापन के लिए द्वितीय सूचना (2.12)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3216,7 +3223,7 @@ const PastRecordsScreen = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* + Not Required <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -3238,10 +3245,9 @@ const PastRecordsScreen = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
-
-            {/* FORM 18 SDLC ke pawati */}
+              {/* FORM 18 SDLC ke pawati */}
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
                 <View style={{...styles.header, marginTop: -20}}>
                   <View
@@ -3255,12 +3261,12 @@ const PastRecordsScreen = ({navigation}) => {
                         {
                           fontSize: 18,
                           width: '100%',
-                          textDecorationLine: 'underline',
+                          // textDecorationLine: 'underline',
                         },
                       ]}>
                       {/* <Image /> */}
-                      अनुमंडल (SDLC) से प्राप्त पावती
-
+                      दावों के दुबारा भौतिक सत्यापन और SDLC की अनुशंसा के लिए
+                      पत्र (2.13)
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3381,7 +3387,7 @@ const PastRecordsScreen = ({navigation}) => {
                 ))}
               </View>
 
-              {/* + Not Required <View
+              <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -3403,7 +3409,7 @@ const PastRecordsScreen = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View> */}
+              </View>
             </ScrollView>
           </>
         )}

@@ -16,12 +16,16 @@ import CustomButton from './CustomButton';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 export default function CustomSignOutPopup(props) {
+  const {t} = useTranslation();
   if (!props.vis) {
     return null;
   }
-  const {govtOfficials} = useSelector(state => state.entities.auth.userInfo);
+  const {govtOfficials, profile} = useSelector(
+    state => state.entities.auth.userInfo,
+  );
   return (
     <Modal transparent>
       <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
@@ -39,51 +43,64 @@ export default function CustomSignOutPopup(props) {
             <MaterialCommunityIcons name="face-agent" size={30} color="black" />
             <Text style={{color: 'black', fontSize: 18}}>
               {' '}
-              सहायता केंद्र - {govtOfficials?.helpline} {' '}
+              सहायता केंद्र - {govtOfficials?.helpline}{' '}
             </Text>
-           
           </View>
 
-          <View>
-            <View style={{marginVertical: 10}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginVertical: 5,
-                }}>
-                <Text style={{color: 'black', marginRight: 5}}>
-                  {t('Subdivisonal Officer')}
-                  {/* {JSON.stringify(govtOfficials)} */}
-                </Text>
-                <Text style={{color: 'green'}}>{ govtOfficials?.sdlcChairman ? govtOfficials?.sdlcChairman?.name :  "पंजीकृत नहीं है"}</Text>
-              </View>
+          {Boolean(profile?.authLevel === t('FRC') || profile?.authLevel===t('SDLC')) && (
+            <View>
+              <View style={{marginVertical: 10}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginVertical: 5,
+                  }}>
+                  <Text style={{color: 'black', marginRight: 5}}>
+                    {t('Subdivisonal Officer')}
+                    {/* {JSON.stringify(govtOfficials)} */}
+                  </Text>
+                  <Text style={{color: 'green'}}>
+                    {govtOfficials?.sdlcChairman
+                      ? govtOfficials?.sdlcChairman?.name
+                      : 'पंजीकृत नहीं है'}
+                  </Text>
+                </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginVertical: 5,
-                }}>
-                <Text style={{color: 'black', marginRight: 5}}>
-                  {t('Forest Range Officer')}
-                </Text>
-                <Text style={{color: 'green'}}>{ govtOfficials?.rangeOfficer ? govtOfficials?.rangeOfficer?.name :  "पंजीकृत नहीं है"}</Text>
-              </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginVertical: 5,
+                  }}>
+                  <Text style={{color: 'black', marginRight: 5}}>
+                    {t('Forest Range Officer')}
+                  </Text>
+                  <Text style={{color: 'green'}}>
+                    {govtOfficials?.rangeOfficer
+                      ? govtOfficials?.rangeOfficer?.name
+                      : 'पंजीकृत नहीं है'}
+                  </Text>
+                </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginVertical: 5,
-                }}>
-                <Text style={{color: 'black', marginRight: 5}}>
-                  {t('Circle Officer')}
-                </Text>
-                <Text style={{color: 'green'}}>{ govtOfficials?.circleOfficer ? govtOfficials?.circleOfficer?.name :  "पंजीकृत नहीं है"}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginVertical: 5,
+                  }}>
+                  <Text style={{color: 'black', marginRight: 5}}>
+                    {t('Circle Officer')}
+                  </Text>
+                  <Text style={{color: 'green'}}>
+                    {govtOfficials?.circleOfficer
+                      ? govtOfficials?.circleOfficer?.name
+                      : 'पंजीकृत नहीं है'}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
+          )}
 
           <View
             style={{height: 1, backgroundColor: 'black', marginVertical: 5}}

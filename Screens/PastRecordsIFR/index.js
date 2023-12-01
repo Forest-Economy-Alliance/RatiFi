@@ -367,7 +367,7 @@ const PastRecordsIFR = ({navigation}) => {
                           {fontSize: 16, width: '40%'},
                         ]}>
                         {/* <Image /> */}
-                        प्रपत्र क
+                        दावा पत्र क (3.1)
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -433,10 +433,10 @@ const PastRecordsIFR = ({navigation}) => {
                       <Text
                         style={[
                           styles.subheaderText,
-                          {fontSize: 16, width: '40%'},
+                          {fontSize: 16, width: '100%'},
                         ]}>
                         {/* <Image /> */}
-                        नज़री नक्शा
+                        नियम 13.1(ग) के अंतर्गत दावित वन भूमि पर सुधारों की शपथपत्र (3.3)
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -505,7 +505,7 @@ const PastRecordsIFR = ({navigation}) => {
                           {fontSize: 16, width: '100%'},
                         ]}>
                         {/* <Image /> */}
-                        बुज़ुर्गो का शपथ पत्र
+                        नियम 13.1(झ) के अंतर्गत बुजुर्गों के शपथपत्र (3.4)
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -571,11 +571,10 @@ const PastRecordsIFR = ({navigation}) => {
                       <Text
                         style={[
                           styles.subheaderText,
-                          {fontSize: 16, width: '40%'},
+                          {fontSize: 16, width: '100%'},
                         ]}>
                         {/* <Image /> */}
-                        वंशावली
-
+                        दावा अभिलेख (3.6)
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -631,221 +630,6 @@ const PastRecordsIFR = ({navigation}) => {
                 </View>
 
  {/* FORM 5*/}
- <View>
-                  <View style={styles.header}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text
-                        style={[
-                          styles.subheaderText,
-                          {fontSize: 16, width: '100%'},
-                        ]}>
-                        {/* <Image /> */}
-                        एफआरसी से प्राप्त दावा की पावती
-                      </Text>
-                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                    }}>
-                    <CustomButton
-                      onPress={() => {
-                        // fetch Details on basis of applicato
-                        // dispatch({type:"ENABLE_LOADING"})
-                        // alert(claim?.courtDocuments.length)
-                        if (
-                          !(
-                            claim?.courtDocuments.length &&
-                            claim?.courtDocuments[4]?.title ===
-                              'SDM_SUMMON_RESULT_5'
-                          )
-                        ) {
-                          setDocName('SDM_SUMMON_RESULT_5');
-                          setCameraModalVis(true);
-                        } else {
-                          setPreviewDocModal(true);
-                          handleDocPreview(
-                            claim?.courtDocuments[4]?.storageUrl,
-                          );
-                        }
-                      }}
-                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                      {!(
-                        claim?.courtDocuments[4]?.title ===
-                        'SDM_SUMMON_RESULT_5'
-                      ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
-                      ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
-                      )}
-                    </CustomButton>
-                    {claim?.courtDocuments[4]?.title ===
-                      'SDM_SUMMON_RESULT_5' && (
-                      <CustomButton
-                        onPress={() => {
-                          setDocName('SDM_SUMMON_RESULT_5');
-                          setCameraModalVis(true);
-                        }}
-                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
-                        {<Ionicons name="camera" color="white" size={20} />}
-                      </CustomButton>
-                    )}
-                  </View>
-</View>
-
- {/* FORM 6*/}
- <View>
-                  <View style={styles.header}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text
-                        style={[
-                          styles.subheaderText,
-                          {fontSize: 16, width: '40%'},
-                        ]}>
-                        {/* <Image /> */}
-                        जाति प्रमाणपत्र/ 
-                      </Text>
-                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                    }}>
-                    <CustomButton
-                      onPress={() => {
-                        // fetch Details on basis of applicato
-                        // dispatch({type:"ENABLE_LOADING"})
-                        // alert(claim?.courtDocuments.length)
-                        if (
-                          !(
-                            claim?.courtDocuments.length &&
-                            claim?.courtDocuments[5]?.title ===
-                              'SDM_SUMMON_RESULT_6'
-                          )
-                        ) {
-                          setDocName('SDM_SUMMON_RESULT_6');
-                          setCameraModalVis(true);
-                        } else {
-                          setPreviewDocModal(true);
-                          handleDocPreview(
-                            claim?.courtDocuments[5]?.storageUrl,
-                          );
-                        }
-                      }}
-                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                      {!(
-                        claim?.courtDocuments[5]?.title ===
-                        'SDM_SUMMON_RESULT_6'
-                      ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
-                      ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
-                      )}
-                    </CustomButton>
-                    {claim?.courtDocuments[5]?.title ===
-                      'SDM_SUMMON_RESULT_6' && (
-                      <CustomButton
-                        onPress={() => {
-                          setDocName('SDM_SUMMON_RESULT_6');
-                          setCameraModalVis(true);
-                        }}
-                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
-                        {<Ionicons name="camera" color="white" size={20} />}
-                      </CustomButton>
-                    )}
-                  </View>
-</View>
-
- {/* FORM 7*/}
- <View>
-                  <View style={styles.header}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text
-                        style={[
-                          styles.subheaderText,
-                          {fontSize: 16, width: '40%'},
-                        ]}>
-                        {/* <Image /> */}
-                        परिचय प्रमाणपत्र
-                      </Text>
-                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                    }}>
-                    <CustomButton
-                      onPress={() => {
-                        // fetch Details on basis of applicato
-                        // dispatch({type:"ENABLE_LOADING"})
-                        // alert(claim?.courtDocuments.length)
-                        if (
-                          !(
-                            claim?.courtDocuments.length &&
-                            claim?.courtDocuments[6]?.title ===
-                              'SDM_SUMMON_RESULT_7'
-                          )
-                        ) {
-
-
-
-                          setDocName('SDM_SUMMON_RESULT_7');
-                          setCameraModalVis(true);
-
-
-
-
-
-                        } else {
-                          setPreviewDocModal(true);
-                          handleDocPreview(
-                            claim?.courtDocuments[6]?.storageUrl,
-                          );
-                        }
-                      }}
-                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                      {!(
-                        claim?.courtDocuments[6]?.title ===
-                        'SDM_SUMMON_RESULT_7'
-                      ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
-                      ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
-                      )}
-                    </CustomButton>
-                    {claim?.courtDocuments[6]?.title ===
-                      'SDM_SUMMON_RESULT_7' && (
-                      <CustomButton
-                        onPress={() => {
-                          setDocName('SDM_SUMMON_RESULT_7');
-                          setCameraModalVis(true);
-                        }}
-                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
-                        {<Ionicons name="camera" color="white" size={20} />}
-                      </CustomButton>
-                    )}
-                  </View>
-</View>
-
- {/* FORM 8*/}
  <View style={{borderWidth:1,marginVertical:10,paddingBottom:10,borderColor:'#fff'}}>
                   <View style={{...styles.header}}>
                     <View
@@ -859,7 +643,7 @@ const PastRecordsIFR = ({navigation}) => {
                           {fontSize: 16, width: '40%'},
                         ]}>
                         {/* <Image /> */}
-                        सीमा
+                        सीमांकन
                       </Text>
                       {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                     </View>
@@ -925,6 +709,222 @@ const PastRecordsIFR = ({navigation}) => {
                   </View>
                 </View>
 
+
+ {/* FORM 6*/}
+ <View>
+                  <View style={styles.header}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={[
+                          styles.subheaderText,
+                          {fontSize: 16, width: '100%'},
+                        ]}>
+                        {/* <Image /> */}
+                        वन और राजस्व विभाग को भौतिक सत्यापन के लिए सूचना पत्र (3.7)
+                      </Text>
+                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <CustomButton
+                      onPress={() => {
+                        // fetch Details on basis of applicato
+                        // dispatch({type:"ENABLE_LOADING"})
+                        // alert(claim?.courtDocuments.length)
+                        if (
+                          !(
+                            claim?.courtDocuments.length &&
+                            claim?.courtDocuments[5]?.title ===
+                              'SDM_SUMMON_RESULT_6'
+                          )
+                        ) {
+                          setDocName('SDM_SUMMON_RESULT_6');
+                          setCameraModalVis(true);
+                        } else {
+                          setPreviewDocModal(true);
+                          handleDocPreview(
+                            claim?.courtDocuments[5]?.storageUrl,
+                          );
+                        }
+                      }}
+                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                      {!(
+                        claim?.courtDocuments[5]?.title ===
+                        'SDM_SUMMON_RESULT_6'
+                      ) ? (
+                        <Ionicons name="camera" color="white" size={20} />
+                      ) : (
+                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      )}
+                    </CustomButton>
+                    {claim?.courtDocuments[5]?.title ===
+                      'SDM_SUMMON_RESULT_6' && (
+                      <CustomButton
+                        onPress={() => {
+                          setDocName('SDM_SUMMON_RESULT_6');
+                          setCameraModalVis(true);
+                        }}
+                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
+                        {<Ionicons name="camera" color="white" size={20} />}
+                      </CustomButton>
+                    )}
+                  </View>
+</View>
+
+ {/* FORM 7*/}
+ <View>
+                  <View style={styles.header}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={[
+                          styles.subheaderText,
+                          {fontSize: 16, width: '100%'},
+                        ]}>
+                        {/* <Image /> */}
+                        भैतिक सत्यापन प्रतिवेदन (3.8)
+                      </Text>
+                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <CustomButton
+                      onPress={() => {
+                        // fetch Details on basis of applicato
+                        // dispatch({type:"ENABLE_LOADING"})
+                        // alert(claim?.courtDocuments.length)
+                        if (
+                          !(
+                            claim?.courtDocuments.length &&
+                            claim?.courtDocuments[6]?.title ===
+                              'SDM_SUMMON_RESULT_7'
+                          )
+                        ) {
+
+
+
+                          setDocName('SDM_SUMMON_RESULT_7');
+                          setCameraModalVis(true);
+
+
+
+
+
+                        } else {
+                          setPreviewDocModal(true);
+                          handleDocPreview(
+                            claim?.courtDocuments[6]?.storageUrl,
+                          );
+                        }
+                      }}
+                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                      {!(
+                        claim?.courtDocuments[6]?.title ===
+                        'SDM_SUMMON_RESULT_7'
+                      ) ? (
+                        <Ionicons name="camera" color="white" size={20} />
+                      ) : (
+                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      )}
+                    </CustomButton>
+                    {claim?.courtDocuments[6]?.title ===
+                      'SDM_SUMMON_RESULT_7' && (
+                      <CustomButton
+                        onPress={() => {
+                          setDocName('SDM_SUMMON_RESULT_7');
+                          setCameraModalVis(true);
+                        }}
+                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
+                        {<Ionicons name="camera" color="white" size={20} />}
+                      </CustomButton>
+                    )}
+                  </View>
+</View>
+
+ {/* FORM 8*/}
+
+<View>
+                  <View style={styles.header}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={[
+                          styles.subheaderText,
+                          {fontSize: 16, width: '100%'},
+                        ]}>
+                        {/* <Image /> */}
+                        सीमांकन
+                      </Text>
+                      {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <CustomButton
+                      onPress={() => {
+                        // fetch Details on basis of applicato
+                        // dispatch({type:"ENABLE_LOADING"})
+                        // alert(claim?.courtDocuments.length)
+                        if (
+                          !(
+                            claim?.courtDocuments.length &&
+                            claim?.courtDocuments[4]?.title ===
+                              'SDM_SUMMON_RESULT_5'
+                          )
+                        ) {
+                          setDocName('SDM_SUMMON_RESULT_5');
+                          setCameraModalVis(true);
+                        } else {
+                          setPreviewDocModal(true);
+                          handleDocPreview(
+                            claim?.courtDocuments[4]?.storageUrl,
+                          );
+                        }
+                      }}
+                      style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                      {!(
+                        claim?.courtDocuments[4]?.title ===
+                        'SDM_SUMMON_RESULT_5'
+                      ) ? (
+                        <Ionicons name="camera" color="white" size={20} />
+                      ) : (
+                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      )}
+                    </CustomButton>
+                    {claim?.courtDocuments[4]?.title ===
+                      'SDM_SUMMON_RESULT_5' && (
+                      <CustomButton
+                        onPress={() => {
+                          setDocName('SDM_SUMMON_RESULT_5');
+                          setCameraModalVis(true);
+                        }}
+                        style={{width: '100%', marginRight: 40, marginTop: 10}}>
+                        {<Ionicons name="camera" color="white" size={20} />}
+                      </CustomButton>
+                    )}
+                  </View>
+</View>
 
  {/* FORM 9*/}
  <View>

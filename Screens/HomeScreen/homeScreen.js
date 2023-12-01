@@ -45,7 +45,7 @@ import {
 } from '../../services/authService';
 import {firebase} from '@react-native-firebase/messaging';
 import {OneSignal} from 'react-native-onesignal';
-import { err } from 'react-native-svg/lib/typescript/xml';
+import {err} from 'react-native-svg/lib/typescript/xml';
 import auth from '../../redux-store/reducers/entities/auth';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -64,7 +64,12 @@ const HomeScreen = ({navigation}) => {
     authLevel,
     village,
     activeStatus,
+    password,
+    subdivison,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
+
+  const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
+
   // console.log(authLevel=="एसडीएलसी");
   // alert("Hi")
   const vil = useSelector(
@@ -92,8 +97,12 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (!authLevel || !postLevel) {
-      navigation.replace('Role');
+    if (!password) {
+      navigation.replace('Password');
+    } else if (!typeOfClaim) {
+      navigation.replace('ClaimTypeSelectionScreen');
+    } else if (!authLevel || !postLevel) {
+      navigation.replace('GovernmentOfficialCheck');
     }
   }, []);
 
@@ -197,7 +206,6 @@ const HomeScreen = ({navigation}) => {
   //   return () => backHandler.remove();
   // }, []);
 
-
   const UpdateRole = () => {
     // Move to RoleScreen
     navigation.navigate('Role');
@@ -206,9 +214,12 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     // dispatch user profile
     checkAccount({mobile: profile?.mobile}).then(data => {
-      console.log(data?.data)
+      console.log(data?.data);
       dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
-      dispatch({type: 'SAVE_GOVT_OFFICIALS', payload: data?.data?.govtOfficials });
+      dispatch({
+        type: 'SAVE_GOVT_OFFICIALS',
+        payload: data?.data?.govtOfficials,
+      });
     });
 
     request(
@@ -226,40 +237,53 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-
-  async function alpha(){
-    const data =  OneSignal.User.pushSubscription.getPushSubscriptionId();
-    console.log('pid',data)
+  async function alpha() {
+    const data = OneSignal.User.pushSubscription.getPushSubscriptionId();
+    console.log('pid', data);
     dispatch({
       type: 'UPDATE_APPUTIL_KEY',
       payload: {
         key: 'OneSignalSubsToken',
         value: data,
       },
-    })
+    });
 
     // patch To server
     updatedOneSignalIDHandler({
-      userId:profile?._id,
-      oneSignalId:data
-    }).then(res=>{
-
-      console.log("oneSignalId updated in DB")
-    }).catch(f=>{
-      console.log("Failed to update oneSignalID",f)
+      userId: profile?._id,
+      oneSignalId: data,
     })
-
+      .then(res => {
+        console.log('oneSignalId updated in DB');
+      })
+      .catch(f => {
+        console.log('Failed to update oneSignalID', f);
+      });
   }
 
   useEffect(() => {
-
-    if (profile?._id) OneSignal.login(profile?._id);;
+    if (profile?._id) OneSignal.login(profile?._id);
     if (profile?.mobile) OneSignal.User.addSms(profile?.mobile);
-     alpha();
+    alpha();
   }, []);
 
+  const handleDisplayLocation = () => {
+    if (authLevel === t('FRC')) {
+      return [district, subdivison, tehsil, panchayat, village];
+    } else if (authLevel === t('SDLC')) {
+      return [district, subdivison];
+    } else if (authLevel === t('DLC')) {
+      return [district];
+    } else if (authLevel === t(t('SLMC'))) {
+      return [t('Jharkhand')];
+    } else if (authLevel === t('Forest_Department')) {
+      return [district, subdivison];
+    } else if (authLevel === t('Revenue_Department')) {
+      return [district, subdivison, tehsil];
+    }
+  };
+
   return (
-    // flexWrap: 'wrap',
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
@@ -289,54 +313,20 @@ const HomeScreen = ({navigation}) => {
           </Text>
         </TouchableOpacity>
 
-        {/* <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={villages}
-            search={false}
-            maxHeight={300}
-            labelField="Village"
-            valueField="value"
-            placeholder={t('gram sabha')}
-            searchPlaceholder="Search..."
-            value={val5}
-            onChange={item => {
-              console.log(item);
-              setVal5(item.value);
-              setVillage(item.Village);
-            }}
-            dropdownPosition="bottom"
-          /> */}
-
-        {/*   
-          <Dropdown
-            
-            downloadPDFScreenFix={setVal5}
-            visible={true}
-            data={vData}
-            formik={formik}
-            variable={'type'}
-          />
-  
-   */}
-
         <View style={styles.header}>
-          {village === '-1' ? ( <Text style={styles.headerText}>
-                {name}
-                {', '}
-                {postLevel}
-                {', '}
-                {authLevel}
-                {'\n '}
-                {t(district)!=='-1' && district+', '}
-                {tehsil!=='-1' && tehsil+', '}
-                {panchayat!=='-1' && panchayat+', '}
-                {t(state)}
-              </Text>
-           
+          {village === '-1' ? (
+            <Text style={styles.headerText}>
+              {name}
+              {', '}
+              {postLevel}
+              {', '}
+              {authLevel}
+              {'\n '}
+              {t(district) !== '-1' && district + ', '}
+              {tehsil !== '-1' && tehsil + ', '}
+              {panchayat !== '-1' && panchayat + ', '}
+              {t(state)}
+            </Text>
           ) : (
             <>
               <Text style={styles.headerText}>
@@ -347,14 +337,18 @@ const HomeScreen = ({navigation}) => {
                 {authLevel}
               </Text>
               <Text style={styles.subheaderText}>
-                {/* {t(village)} */}
+                {/* {t(village)}{', '}
                 {t(panchayat)}
                 {', '}
                 {t(tehsil)}
                 {', '}
                 {t(district)}
                 {', '}
-                {t(state)}
+                {t(state)} */}
+                {handleDisplayLocation().map((item, i, a) => {
+                  if (i === a.length - 1) return `${t(item)}`;
+                  else return `${t(item)}, `;
+                })}
               </Text>
             </>
           )}
@@ -452,12 +446,14 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
+       
+
         <View
           style={{
             backgroundColor: 'green',
           }}></View>
 
-        {activeStatus && Boolean(authLevel!==t('SLMC')) && (
+        {activeStatus && Boolean(authLevel !== t('SLMC')) && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -483,9 +479,10 @@ const HomeScreen = ({navigation}) => {
             )}
           </CustomButton>
         )}
+        
       </View>
 
-                {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}
+      {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}
       {/* {Boolean(authLevel === 'एफआरसी') && (
         <CustomButton
           style={{marginBottom: 20}}
@@ -509,7 +506,7 @@ const HomeScreen = ({navigation}) => {
         />
       )} */}
 
-{/* <CustomButton
+      {/* <CustomButton
           style={{marginBottom: 20}}
           button={{width: 300}}
           // dsbled={profile?.claims?.length==0}
