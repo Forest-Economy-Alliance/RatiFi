@@ -87,9 +87,9 @@ export default function ValidateIFRScreen() {
                   paddingHorizontal: 5,
                 }}>
                 <View style={{padding: 10}}>
-                  <Text style={{fontSize: 18}}>{item?.IFRclaims[0]?.applicationNumber}</Text>
-                  <Text style={{fontSize: 18}}>{item?.name}</Text>
-                  <Text style={{fontSize: 18}}>{item?.mobile}</Text>
+                  <Text style={{fontSize: 18}}>दावा दावा : {item?.IFRclaims[0]?.applicationNumber}</Text>
+                  <Text style={{fontSize: 18}}>नाम : {item?.name}</Text>
+                  <Text style={{fontSize: 18}}>फ़ोन : {item?.mobile}</Text>
                 </View>
 
                 {Boolean(item?.IFRclaims[0]?.boundary?.length!==0) && (

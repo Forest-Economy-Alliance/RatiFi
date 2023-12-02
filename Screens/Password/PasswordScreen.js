@@ -9,8 +9,9 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   View,
+  Pressable,
 } from 'react-native';
-import queue, { Worker } from 'react-native-job-queue';
+import queue, {Worker} from 'react-native-job-queue';
 
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -24,6 +25,7 @@ import {useToast} from 'react-native-toast-notifications';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
 import {updatePasswordHandler} from '../../services/authService';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -33,15 +35,18 @@ const PasswordScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginflow, setLoginFlow] = useState(false);
+
   React.useEffect(() => {
     if (route?.params?.login === true) {
       setLoginFlow(true);
     }
   }, [route?.params]);
+
   const route = useRoute();
   console.log('P', route.params);
   const forgetPasswordCode = route.params.forgetPasswordCode || '2';
   console.log(forgetPasswordCode);
+
   const state = {
     password: '',
     confirmPassword: '',
@@ -79,9 +84,6 @@ const PasswordScreen = ({navigation}) => {
   });
   console.log('loginflow--', loginflow);
 
-
-
-
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
     // dispatch({type: 'ENABLE_LOADING'});
@@ -107,19 +109,23 @@ const PasswordScreen = ({navigation}) => {
         },
       });
 
-      queue.addJob('UPDATEPasswordWorker', {
-        mobile,
-        password: formik.values.password,
-      },{
-        attempts:2,
-        timeout:5000
-      })
+      queue.addJob(
+        'UPDATEPasswordWorker',
+        {
+          mobile,
+          password: formik.values.password,
+        },
+        {
+          attempts: 2,
+          timeout: 5000,
+        },
+      );
 
       if (forgetPasswordCode == 1) {
         navigation.replace('HomeScreen');
       }
-      
-      navigation?.replace('ClaimTypeSelectionScreen')
+
+      navigation?.replace('ClaimTypeSelectionScreen');
       // navigation?.replace('GovernmentOfficialCheck')
       // navigation.replace('Location');
 
@@ -164,7 +170,9 @@ const PasswordScreen = ({navigation}) => {
     }
   }
 
-
+  const goBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <ImageBackground
@@ -172,13 +180,30 @@ const PasswordScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-        {/* <View>
-          <Text>Choose Password</Text>
-        </View> */}
+      <View
+        style={{
+          marginLeft: 20,
+          marginTop: 10,
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          width: '100%',
+          right: 0,
+          left: 0,
+          paddingVertical: 5,
+          paddingLeft: 10,
+        }}>
+        <Pressable>
+          <Text style={{fontSize: 18, color: '#480E09', marginBottom: 10}}>
+            पास वर्ड दर्ज करें
+          </Text>
+        </Pressable>
+      </View>
 
-<Text style={{color:'#fff',fontSize:18}}>कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें </Text>
+      <Text style={{color: '#fff', fontSize: 18, marginTop: 30}}>
+        कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें{' '}
+      </Text>
 
-      <CustomInput
+      <TextInput
         maxLength={4}
         style={styles.inputPass}
         placeholder={t('password')}
@@ -189,12 +214,24 @@ const PasswordScreen = ({navigation}) => {
         value={formik.values.password}
         keyboardType="number-pad"
       />
+      {/* <CustomInput
+        maxLength={4}
+        style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#FF6C00"
+        onChangeText={formik.handleChange('password')}
+        secureTextEntry={true}
+        onBlur={formik.handleBlur('password')}
+        value={formik.values.password}
+        keyboardType="number-pad"
+      /> */}
+     
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.error}>{formik.errors.password}</Text>
       )}
       {!loginflow && (
-        <CustomInput
-        maxLength={4}
+        <TextInput
+          maxLength={4}
           style={styles.inputConfPass}
           placeholder={t('confirm password')}
           placeholderTextColor="#FF6C00"
@@ -205,6 +242,7 @@ const PasswordScreen = ({navigation}) => {
           value={formik.values.confirmPassword}
         />
       )}
+     
       {formik.touched.confirmPassword && formik.errors.confirmPassword && (
         <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
       )}
@@ -229,6 +267,15 @@ const styles = StyleSheet.create({
     // padding: '15%',
   },
   inputPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
     borderColor: '#CCCCCC',
     borderBottomWidth: 1,
     width: '100%',
@@ -236,10 +283,20 @@ const styles = StyleSheet.create({
     // color: '#480E09',
   },
   inputConfPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
     borderColor: '#CCCCCC',
     borderBottomWidth: 1,
     width: '100%',
     fontSize: 25,
+
     // color: '#480E09',
   },
   nextButton: {

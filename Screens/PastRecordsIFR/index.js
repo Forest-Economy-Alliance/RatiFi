@@ -160,7 +160,6 @@ const PastRecordsIFR = ({navigation}) => {
   }, [refresh, cameraModalVis]);
 
   const goBack = () => {
-    // Move to RoleScreen
     navigation.goBack();
   };
 
@@ -1363,7 +1362,7 @@ const PastRecordsIFR = ({navigation}) => {
 </View>
 </TouchableOpacity> */}
 
-                <View style={{marginVertical: 10, marginTop: 50}}>
+                {/* <View style={{marginVertical: 10, marginTop: 50}}>
                   <CustomButton
                     onPress={() => {
                       //
@@ -1381,7 +1380,10 @@ const PastRecordsIFR = ({navigation}) => {
                     button={{width: '50%'}}>
                     सत्यापन के लिए दावा सबमिट करें
                   </CustomButton>
-                </View>
+                </View> */}
+
+
+
               </ScrollView>
             ) : (
               <ScrollView>

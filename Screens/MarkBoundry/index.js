@@ -385,8 +385,8 @@ export const MarkBoundry = () => {
   /> */}
 
               <Polyline
-                strokeWidth={5}
-                lineDashPhase=""
+                strokeWidth={2}
+                lineDashPhase={"round"}
                 strokeColor="red"
                 // lineDashPattern={[10]}
                 coordinates={userPath}
@@ -411,7 +411,7 @@ export const MarkBoundry = () => {
                   setI(false);
 
                   patchClaimFieldsIFRHandler({
-                    boundary: userPath,
+                    boundary: `userPath`,
                     claimId: profile?.IFRclaims[profile?.IFRclaims?.length - 1],
                     boundaryImageUrl: 'S3 URL',
                   })
