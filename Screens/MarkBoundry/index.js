@@ -33,16 +33,16 @@ import {
 import {BackHandler, DeviceEventEmitter} from 'react-native';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {Queue} from 'react-native-job-queue';
-import { getGCPUrlImageHandler } from '../../services/commonService';
-import { useToast } from 'react-native-toast-notifications';
-import { useTranslation } from 'react-i18next';
-import { err } from 'react-native-svg/lib/typescript/xml';
+import {getGCPUrlImageHandler} from '../../services/commonService';
+import {useToast} from 'react-native-toast-notifications';
+import {useTranslation} from 'react-i18next';
+import {err} from 'react-native-svg/lib/typescript/xml';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 export const MarkBoundry = () => {
-  const toast=useToast();
-  const {t}=useTranslation();
+  const toast = useToast();
+  const {t} = useTranslation();
   const {profile, claim} = useSelector(state => state.entities.auth.userInfo);
 
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ export const MarkBoundry = () => {
   const navigation = useNavigation();
   const [isTripStarted, setI] = useState(false);
   const [bit, setBit] = React.useState(false);
-
+  const [locationAccuracy, setLocationAccuracy] = useState(null);
   const [snappshot, setSnapshot] = useState(null);
   const [base64String, setBase64ImageString] = useState(null);
   const [finalState, setFinalState] = useState([]);
@@ -227,7 +227,7 @@ export const MarkBoundry = () => {
             console.log('RESPONSE', data.response.Key);
 
             console.warn('CID', claim?._id);
-            
+
             const rssponse = await patchClaimHandlerIFR({
               claimId: profile?.IFRclaims[profile?.IFRclaims.length - 1],
               title: 'SDM_SUMMON_RESULT_8',
@@ -248,7 +248,6 @@ export const MarkBoundry = () => {
               dispatch({type: 'DISABLE_LOADING'});
 
               navigation.goBack();
-
             } else {
               toast.show(t('UPLOAD_FAILED'), {
                 type: 'failure',
@@ -260,15 +259,10 @@ export const MarkBoundry = () => {
 
               // dispatch({type: 'DISABLE_LOADING'});
             }
-
-            
           })
           .catch(err => {
             console.log(err);
           });
-          
-
-
       });
     } catch (error) {
       console.error('Error converting image to base64:', error);
@@ -285,7 +279,7 @@ export const MarkBoundry = () => {
     if (viewShotRef.current) {
       // setTimeout(()=>{
 
-      viewShotRef?.current?.capture().then(async (uri) => {
+      viewShotRef?.current?.capture().then(async uri => {
         setSnapshot(uri);
 
         // queue.addJob('testWorker', {
@@ -299,13 +293,7 @@ export const MarkBoundry = () => {
 
         await convertImageToBase64(uri);
 
-
-
-
-
-
         // console.log base64
-
       });
 
       // return <IMG+URL>
@@ -341,7 +329,11 @@ export const MarkBoundry = () => {
             <MapView
               ref={mapRef}
               onUserLocationChange={event => {
-                console.log('x', event.nativeEvent.coordinate);
+                console.log(
+                  'Accuracy----->>>>>>>',
+                  event.nativeEvent.coordinate.accuracy,
+                );
+                setLocationAccuracy(event.nativeEvent.coordinate.accuracy);
                 setUserLocation({
                   latitude: event.nativeEvent.coordinate.latitude,
                   longitude: event.nativeEvent.coordinate.longitude,
@@ -386,7 +378,7 @@ export const MarkBoundry = () => {
 
               <Polyline
                 strokeWidth={2}
-                lineDashPhase={"round"}
+                lineDashPhase={'round'}
                 strokeColor="red"
                 // lineDashPattern={[10]}
                 coordinates={userPath}
@@ -395,48 +387,58 @@ export const MarkBoundry = () => {
           </ViewShot>
           <View style={{marginTop: '5%'}}>
             {!isTripStarted ? (
-              <CustomButton
-                onPress={() => {
-                  setI(true);
-                }}>
-                <Text>प्रारंभ करें</Text>
-              </CustomButton>
+              <>
+                <CustomButton
+                  onPress={() => {
+                    setI(true);
+                  }}>
+                  <Text>प्रारंभ करें</Text>
+                </CustomButton>
+              </>
             ) : (
               <CustomButton
                 onPress={async () => {
                   console.log(userPath);
-                  try{
-                
-                  dispatch({type: 'ENABLE_LOADING'});
-                  setI(false);
+                  try {
+                    dispatch({type: 'ENABLE_LOADING'});
+                    setI(false);
 
-                  patchClaimFieldsIFRHandler({
-                    boundary: `userPath`,
-                    claimId: profile?.IFRclaims[profile?.IFRclaims?.length - 1],
-                    boundaryImageUrl: 'S3 URL',
-                  })
-                    .then(async(res) => {
-                      setI(false);
-                      const img = await captureSnapshot();
-                      console.log('SUCCESS');
-           
+                    patchClaimFieldsIFRHandler({
+                      boundary: `userPath`,
+                      claimId:
+                        profile?.IFRclaims[profile?.IFRclaims?.length - 1],
+                      boundaryImageUrl: 'S3 URL',
                     })
-                    .catch(err => {
-                      console.error('error', err);
-                    })
-                    .finally(f => {
-                    });
-                  // mark trip as complete
-                  // update the data to server
-                  // navigate to back screen with a button approval
-                  // send the recipt
-                  }catch(error){
-                    console.error('error',error)
+                      .then(async res => {
+                        setI(false);
+                        const img = await captureSnapshot();
+                        console.log('SUCCESS');
+                      })
+                      .catch(err => {
+                        console.error('error', err);
+                      })
+                      .finally(f => {});
+                    // mark trip as complete
+                    // update the data to server
+                    // navigate to back screen with a button approval
+                    // send the recipt
+                  } catch (error) {
+                    console.error('error', error);
                   }
                 }}>
                 <Text>सीमा पूर्ण</Text>
               </CustomButton>
             )}
+            <Text
+              style={{
+                color: 'white',
+                position: 'absolute',
+                bottom: 60,
+                left: '20%',
+                right: '20 %',
+              }}>
+              स्थान की सटीकता लगभग {Math.trunc(locationAccuracy)} मीटर है।
+            </Text>
           </View>
         </View>
       )}
