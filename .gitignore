@@ -36,6 +36,8 @@ local.properties
 /android/build
 /android/app/build/
 /android/.gradle/
+*.apk
+
 
 # Node
 node_modules
@@ -101,3 +103,4 @@ package-lock.json
 
 # RatiFiKeystoreFile
 *.aab
+*.apk

@@ -25,11 +25,12 @@ import {string} from 'yup';
 import {ref} from 'yup';
 import CustomError from '../../components/CustomError';
 import {useToast} from 'react-native-toast-notifications';
+import { updatePasswordAction } from '../../redux-store/actions/auth';
 
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const LoginPasswordScreen = ({navigation}) => {
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+  const {language,typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
 
   const toast=useToast();
   const dispatch = useDispatch();
@@ -65,7 +66,8 @@ const LoginPasswordScreen = ({navigation}) => {
     if (loginflow) {
       console.log("PTV",pwdToVerify)
       if (pwdToVerify === formik.values.password) {
-        navigation.replace('HomeScreen');
+
+        navigation.replace(typeOfClaim==='CFR'?'HomeScreen':'HomeScreenIFR');
       } else {
         toast.show(t('INCORRECT_PASSWORD'), {
           type: 'success',

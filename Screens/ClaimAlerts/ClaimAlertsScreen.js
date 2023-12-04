@@ -83,7 +83,13 @@ const ClaimAlertsScreen = ({navigation}) => {
 
   useEffect(() => {
     changeLanguage(language);
-
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: true,
+      },
+    });
     console.log(_id);
     request(`/fetch-notifications?id=${_id}`, {method: 'GET'}, true, false)
       .then(({data}) => {
@@ -92,27 +98,74 @@ const ClaimAlertsScreen = ({navigation}) => {
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally(f => {
+        dispatch({
+          type: 'UPDATE_APPUTIL_KEY',
+          payload: {
+            key: 'globalSyncStatus',
+            value: false,
+          },
+        });
       });
   }, []);
 
-return (
+  return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
       <ScrollView style={styles.darkness}>
-        <Text style={{fontSize:20,marginVertical:10,marginHorizontal:10}} numberOfLines={2}>{t('claim_alerts')}</Text>
+        <Text
+          style={{fontSize: 20, marginVertical: 10, marginHorizontal: 10}}
+          numberOfLines={2}>
+          {t('claim_alerts')}
+        </Text>
         <FlatList
+          ListEmptyComponent={() => {
+            return (
+              <View
+                style={{
+                  margin: 10,
+                  padding: 10,
+                }}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontWeight: '600',
+                    textDecorationLine: 'underline',
+                  }}>
+                  {t('No Alerts')}
+                </Text>
+                <Text style={{color: '#fff', marginTop: 10}}>
+                  {t('Alerts regarding claim will appear here')}
+                </Text>
+              </View>
+            );
+          }}
           data={alerts}
           renderItem={({item, index}) => (
-            <View style={{marginHorizontal:10,marginVertical:5,borderWidth:1,padding:10,borderRadius:10,borderColor:'#fff'}}>
-          <Text style={{color:"#fff",marginVertical:5}}>{item?.message}</Text>
-          <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-          <Text style={{color:'#fff'}}>{item?.senderName}</Text>
-              <Text  style={{color:'#fff'}}> {item?.senderMobile}</Text>
-          </View>
-          <Text style={{color:'#fff'}}>{dayjs(item?.createdAt).format('DD/MM/YYYY HH:MM A')}</Text>
+            <View
+              style={{
+                marginHorizontal: 10,
+                marginVertical: 5,
+                borderWidth: 1,
+                padding: 10,
+                borderRadius: 10,
+                borderColor: '#fff',
+              }}>
+              <Text style={{color: '#fff', marginVertical: 5}}>
+                {item?.message}
+              </Text>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={{color: '#fff'}}>{item?.senderName}</Text>
+                <Text style={{color: '#fff'}}> {item?.senderMobile}</Text>
+              </View>
+              <Text style={{color: '#fff'}}>
+                {dayjs(item?.createdAt).format('DD/MM/YYYY HH:MM A')}
+              </Text>
             </View>
           )}
         />

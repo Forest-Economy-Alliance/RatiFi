@@ -54,14 +54,15 @@ const RoleInformationScreen = ({navigation}) => {
   ];
   const POS2 = [
     {label: t('Subdivisonal Officer'), value: '1'},
-    {label: t('Tehsildar'), value: '2'},
-    {label: t('Forest Range Officer'), value: '3'},
+    {label: t('ACF'), value: '2'},
     {label: t('Member'), value: '3'},
+    {label: t('Officer-in-Charge (Tribal Affairs)'), value: '4'}
+    // {label: t('Circle Officer'), value: '4'},
   ];
   const POS3 = [
     {label: t('District Collector'), value: '1'},
     {label: t('District Forest Officer'), value: '2'},
-    {label: t('Officer-in-Charge (Tribal Affairs)'), value: '3'},
+    {label: t('District Welfare Officer'), value: '3'},
     {label: t('Member'), value: '4'},
   ];
 

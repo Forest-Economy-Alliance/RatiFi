@@ -1,6 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+// apply plugin: 'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -130,11 +130,13 @@ def enableHermes = project.ext.react.get("enableHermes", true);
 /**
  * Architectures to build native code for.
  */
+
 def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
+apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -153,10 +155,11 @@ android {
      
     defaultConfig {
         applicationId "com.ratifi"
+
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
-        versionName "21.0"
+        versionCode 60
+        versionName "60.0"
 
 
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -270,10 +273,10 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
-            }
+            // firebaseCrashlytics {
+            //     nativeSymbolUploadEnabled true
+            //     unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
+            // }
         }
     }
 
@@ -296,14 +299,16 @@ android {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
-    implementation project(path: ":@react-native-firebase_auth")
+    // implementation project(path: ":@react-native-firebase_auth")
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    // implementation project(path:':react-native-android-location-enabler')
+
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation 'com.google.firebase:firebase-crashlytics'
+    // implementation 'com.google.firebase:firebase-crashlytics'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

@@ -11,10 +11,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 const languages = [
-  // {
-  //   name: 'English',
-  //   value: 'en',
-  // },
+  {
+    name: 'English',
+    value: 'en',
+  },
   {
     name: 'हिन्दी',
     value: 'hi',
@@ -23,10 +23,10 @@ const languages = [
   //   name: 'ગુજરાતી',
   //   value: 'gu',
   // },
-  {
-    name: 'ଓଡ଼ିଆ',
-    value: 'or',
-  },
+  // {
+  //   name: 'ଓଡ଼ିଆ',
+  //   value: 'or',
+  // },
   // {
   //   name: 'ಕನ್ನಡ',
   //   value: 'kn',

@@ -8,7 +8,7 @@ import {
     KeyboardAvoidingView,
     ImageBackground,
     ScrollView,
-    Modal,Pressable
+    Modal,Pressable, Alert
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -21,7 +21,7 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import CustomError from '../../components/CustomError';
-import { fetchClaimDetailsHandler } from '../../services/claimService';
+import { fetchClaimDetailsByFRCHandler, fetchClaimDetailsHandler } from '../../services/claimService';
 import { BackHandler  } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
@@ -69,8 +69,15 @@ const ProfileScreen = ({ navigation }) => {
 
         dispatch({ type: "ENABLE_LOADING" })
 
-        console.warn("BEFORE_GOING", profile?.claims[profile?.claims.length - 1]);
-        fetchClaimDetailsHandler({ claimId: profile?.claims[profile?.claims.length - 1] })
+        // console.warn("BEFORE_GOING", profile?.claims[profile?.claims.length - 1]);
+
+
+
+
+        // fetch claim first of either president or secretary
+console.log('prf',profile)
+       
+        fetchClaimDetailsByFRCHandler({ frc: profile?.village })
             .then(response => {
                 console.warn(response.data.data);
                 setClaim(response.data.data);
@@ -92,7 +99,7 @@ const ProfileScreen = ({ navigation }) => {
     }, []);
     const goBack = () =>{
         // Move to RoleScreen
-        navigation.navigate("HomeScreen")
+        navigation.replace("HomeScreen")
     }
     
     return (
@@ -132,57 +139,69 @@ const ProfileScreen = ({ navigation }) => {
 
                             </Text>
                         </View>
+
+                        <View style={{marginTop:20}}>
+                            <Text style={{fontSize:22,textAlign:'center',justifyContent:'center',paddingHorizontal:20,paddingVertical:20,color:'#fff',fontWeight:'700'}}>{claim && claim[0]?.applicationNumber}</Text>
+                        </View>
+
                         <View style={styles.marginview}>
                             <Text style={styles.subheaderTextnew}>
                                 {t('Check your upoad documents here')}
                             </Text>
                         </View>
-                        <View>
+                        <View style={{ borderRadius: 15, borderWidth: 1,borderColor:'#fff',marginTop:10,marginHorizontal:20 }}>
       <Picker
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{
+        color:'#fff',
+        // marginTop:10,
+        
+      }}
         selectedValue={selectedValue}
         onValueChange={(itemValue, itemIndex) =>
           setSelectedValue(itemValue)
         }>
-        <Picker.Item label="Form 0" value="form0" />
-        <Picker.Item label="Form 1" value="form1" />
-        <Picker.Item label="Form 2" value="form2" />
-        <Picker.Item label="Form 3" value="form3" />
-        <Picker.Item label="Form 4" value="form4" />
-        <Picker.Item label="Form 5" value="form5" />
-        <Picker.Item label="Form 6" value="form6" />
-        <Picker.Item label="Form 7" value="form7" />
-        <Picker.Item label="Form 8" value="form8" />
-        <Picker.Item label="Form 9" value="form9" />
-        <Picker.Item label="Form 10" value="form10" />
-        <Picker.Item label="Form 11" value="form11" />
-        <Picker.Item label="Form 12" value="form12" />
-        <Picker.Item label="Form 13" value="form13" />
-        <Picker.Item label="Form 14" value="form14" />
-        <Picker.Item label="Form 15" value="form15" />
-        <Picker.Item label="Form 16" value="form16" />
-        <Picker.Item label="Form 17" value="form17" />
-        <Picker.Item label="Form 18" value="form18" />
+        <Picker.Item label="फ़ार्म 0" value="form0" />
+        <Picker.Item label="फ़ार्म 1" value="form1" />
+        <Picker.Item label="फ़ार्म 2" value="form2" />
+        <Picker.Item label="फ़ार्म 3" value="form3" />
+        <Picker.Item label="फ़ार्म 4" value="form4" />
+        <Picker.Item label="फ़ार्म 5" value="form5" />
+        <Picker.Item label="फ़ार्म 6" value="form6" />
+        <Picker.Item label="फ़ार्म 7" value="form7" />
+        <Picker.Item label="फ़ार्म 8" value="form8" />
+        <Picker.Item label="फ़ार्म 9" value="form9" />
+        <Picker.Item label="फ़ार्म 10" value="form10" />
+        <Picker.Item label="फ़ार्म 11" value="form11" />
+        <Picker.Item label="फ़ार्म 12" value="form12" />
+        <Picker.Item label="फ़ार्म 13" value="form13" />
+        <Picker.Item label="फ़ार्म 14" value="form14" />
+        <Picker.Item label="फ़ार्म 15" value="form15" />
+        <Picker.Item label="फ़ार्म 16" value="form16" />
+        <Picker.Item label="फ़ार्म 17" value="form17" />
+        <Picker.Item label="फ़ार्म 18" value="form18" />
       </Picker>
-      <CustomButton
+   
+    </View>
+    <CustomButton
                                         onPress={() => {
 
                                             let ind = selectedValue.slice(4); 
+                                            // console.log(selectedValue)
                                             ind = parseInt(ind);
-
-                                            if (claim?.courtDocuments[ind]?.storageUrl) {
+       
+                                            if (claim[0]?.courtDocuments[ind]?.storageUrl) {
                                                     navigation.navigate("PDFPreviewScreen", {
-                                                    url: claim?.courtDocuments[ind]?.storageUrl
+                                                    url: claim[0]?.courtDocuments[ind]?.storageUrl
                                                 })
                                             }
                                             else {
-                                                alert("No document found")
+                                                Alert.alert(t('info'),t("No document found"))
                                             }
                                         }}
-                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 }}>
+                                        button={{ width: 200, fontWeight: '800', marginLeft: 10 ,marginTop:20}}>
                                         {t('View Document')}
                                     </CustomButton>
-    </View>
-
 
 
 
@@ -808,7 +827,7 @@ const styles = StyleSheet.create({
 
     },
     marginview: {
-        marginTop: "20%",
+        marginTop: "10%",
         paddingHorizontal: '10%',
         alignSelf: 'center'
     },

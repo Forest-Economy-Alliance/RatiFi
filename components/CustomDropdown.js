@@ -30,10 +30,14 @@ const Dropdown = props => {
 
     console.log(item)
     setSelectedValue(item.label);
+   
+    
       if(props.downloadPDFScreenFix){
    props.downloadPDFScreenFix(item);}else{
     props.formik.setFieldValue(props.variable, item.label);
    }
+   if(props?.exec)
+   props?.exec(item?.label);
 
   };
 

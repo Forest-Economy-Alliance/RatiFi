@@ -8,7 +8,11 @@ import {
   Keyboard,
   ImageBackground,
   KeyboardAvoidingView,
+  View,
+  Pressable,
 } from 'react-native';
+import queue, {Worker} from 'react-native-job-queue';
+
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
@@ -20,6 +24,8 @@ import {useRoute} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
+import {updatePasswordHandler} from '../../services/authService';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -29,15 +35,18 @@ const PasswordScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginflow, setLoginFlow] = useState(false);
+
   React.useEffect(() => {
     if (route?.params?.login === true) {
       setLoginFlow(true);
     }
   }, [route?.params]);
+
   const route = useRoute();
   console.log('P', route.params);
   const forgetPasswordCode = route.params.forgetPasswordCode || '2';
   console.log(forgetPasswordCode);
+
   const state = {
     password: '',
     confirmPassword: '',
@@ -50,7 +59,9 @@ const PasswordScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.password,
   );
 
-  const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
+  const {language, globalSyncStatus} = useSelector(
+    e => e?.entities?.appUtil?.appUtil,
+  );
 
   const {t, i18n} = useTranslation();
 
@@ -90,28 +101,35 @@ const PasswordScreen = ({navigation}) => {
         });
       }
     } else {
-      dispatch(
-        updatePasswordAction(
-          {
-            mobile: mobile,
-            password: formik.values.password,
-          },
-          args => {
-            if (forgetPasswordCode == 1) {
-              navigation.navigate('HomeScreen');
-            } else if (args) {
-              // screen code 3 means , password set
-              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+      dispatch({
+        type: 'UPDATE_APPUTIL_KEY',
+        payload: {
+          key: 'globalSyncStatus',
+          value: true,
+        },
+      });
 
-              // odish screen if oritya
-              if(language==='or'){
-                navigation.navigate("LocationOdisha")
-              }else
-              navigation.navigate('Location');
-            }
-          },
-        ),
+      queue.addJob(
+        'UPDATEPasswordWorker',
+        {
+          mobile,
+          password: formik.values.password,
+        },
+        {
+          attempts: 2,
+          timeout: 5000,
+        },
       );
+
+      if (forgetPasswordCode == 1) {
+        navigation.replace('HomeScreen');
+      }
+
+      navigation?.replace('ClaimTypeSelectionScreen');
+      // navigation?.replace('GovernmentOfficialCheck')
+      // navigation.replace('Location');
+
+      return;
     }
     // dispatch({type: 'DISABLE_LOADING'});
   };
@@ -126,30 +144,97 @@ const PasswordScreen = ({navigation}) => {
     changeLanguage(language);
   }, []);
 
+  function cb(response) {
+    const args = response?.success;
+    dispatch({type: 'SAVE_PROFILE', payload: response.data});
+
+    dispatch({type: 'DISABLE_LOADING'});
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: true,
+      },
+    });
+
+    if (forgetPasswordCode == 1) {
+      navigation.navigate('HomeScreen');
+    } else if (args) {
+      // screen code 3 means , password set
+      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+
+      // odish screen if oritya
+      if (language === 'or') {
+        navigation.navigate('LocationOdisha');
+      } else navigation.navigate('ClaimTypeSelectionScreen');
+    }
+  }
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <CustomInput
+      <View
+        style={{
+          marginLeft: 20,
+          marginTop: 10,
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          width: '100%',
+          right: 0,
+          left: 0,
+          paddingVertical: 5,
+          paddingLeft: 10,
+        }}>
+        <Pressable>
+          <Text style={{fontSize: 18, color: '#480E09', marginBottom: 10}}>
+            पास वर्ड दर्ज करें
+          </Text>
+        </Pressable>
+      </View>
+
+      <Text style={{color: '#fff', fontSize: 18, marginTop: 30}}>
+        कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें{' '}
+      </Text>
+
+      <TextInput
+        maxLength={4}
         style={styles.inputPass}
         placeholder={t('password')}
-        placeholderTextColor="#480E09"
+        placeholderTextColor="#FF6C00"
         onChangeText={formik.handleChange('password')}
         secureTextEntry={true}
         onBlur={formik.handleBlur('password')}
         value={formik.values.password}
         keyboardType="number-pad"
       />
+      {/* <CustomInput
+        maxLength={4}
+        style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#FF6C00"
+        onChangeText={formik.handleChange('password')}
+        secureTextEntry={true}
+        onBlur={formik.handleBlur('password')}
+        value={formik.values.password}
+        keyboardType="number-pad"
+      /> */}
+     
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.error}>{formik.errors.password}</Text>
       )}
       {!loginflow && (
-        <CustomInput
+        <TextInput
+          maxLength={4}
           style={styles.inputConfPass}
           placeholder={t('confirm password')}
-          placeholderTextColor="#480E09"
+          placeholderTextColor="#FF6C00"
           onChangeText={formik.handleChange('confirmPassword')}
           secureTextEntry={true}
           keyboardType="number-pad"
@@ -157,6 +242,7 @@ const PasswordScreen = ({navigation}) => {
           value={formik.values.confirmPassword}
         />
       )}
+     
       {formik.touched.confirmPassword && formik.errors.confirmPassword && (
         <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
       )}
@@ -181,6 +267,15 @@ const styles = StyleSheet.create({
     // padding: '15%',
   },
   inputPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
     borderColor: '#CCCCCC',
     borderBottomWidth: 1,
     width: '100%',
@@ -188,10 +283,20 @@ const styles = StyleSheet.create({
     // color: '#480E09',
   },
   inputConfPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
     borderColor: '#CCCCCC',
     borderBottomWidth: 1,
     width: '100%',
     fontSize: 25,
+
     // color: '#480E09',
   },
   nextButton: {

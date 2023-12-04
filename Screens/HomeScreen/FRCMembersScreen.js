@@ -40,6 +40,8 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 const HomeScreen = ({ navigation,route  }) => {
     // const {state} = this.props.navigation;
 // console.log(route.params.members,"FRC Members");
+const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
+
     const [imgUrl, setImgUrl] = useState('x');
     const [vData, setVData] = useState([]);
     const [members,setMembers] = useState(route.params.members)
@@ -74,7 +76,11 @@ const HomeScreen = ({ navigation,route  }) => {
     }, []);
 
 
-
+    useEffect(()=>{
+        if(!authLevel || !postLevel){
+          navigation.navigate("Role")
+        }
+        },[])
 
 
     const { profile } = useSelector(state => state.entities.auth.userInfo);
@@ -98,14 +104,14 @@ const HomeScreen = ({ navigation,route  }) => {
 
         logoutHandler({
           id:profile?._id?.toString(),
-          fcmToken:await fetchData()
+          fcmToken:'await fetchData()'
         }).then(res=>{
     
     
           setVis(false);
           dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
           dispatch({type: 'SAVE_TOKEN', payload: null});
-          navigation.replace("NamePhone")
+          navigation.replace('MobilePassword');
     
     
     
@@ -128,6 +134,9 @@ console.log(id)
     return viewFRCMember({village:village,authLevel:authLevel,postLevel:"सदस्य"}) 
     .then(async (res) => {
         setMembers(res.data);
+        if(res.data.length===0){
+            setEmptyMemberMessage('आपके FRC में किसी भी सदस्य ने अभी तक पंजीकरण नहीं कराया है')
+        }
         dispatch({ type: 'DISABLE_LOADING' });
     })
         // console.log('Verify Member', response);
@@ -187,27 +196,27 @@ console.log(id)
     });
 
     // leave app on back button press on this screen
-    useEffect(() => {
-        const backAction = () => {
-            // current screen is home screen
-            Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
-                {
-                    text: "Cancel",
-                    onPress: () => null,
-                    style: "cancel"
-                },
-                { text: "YES", onPress: () => BackHandler.exitApp() }
-            ]);
-            return true;
-        };
+    // useEffect(() => {
+    //     const backAction = () => {
+    //         // current screen is home screen
+    //         Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+    //             {
+    //                 text: "Cancel",
+    //                 onPress: () => null,
+    //                 style: "cancel"
+    //             },
+    //             { text: "YES", onPress: () => BackHandler.exitApp() }
+    //         ]);
+    //         return true;
+    //     };
         
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
+    //     const backHandler = BackHandler.addEventListener(
+    //         "hardwareBackPress",
+    //         backAction
+    //     );
         
-        return () => backHandler.remove();
-    }, []);
+    //     return () => backHandler.remove();
+    // }, []);
     // Make a useEffect run on particular pages
     const getEnglish = (param) => {
 
@@ -247,7 +256,7 @@ console.log(id)
             <View>
 
             <View style={{height:50,width:windowWidth}} >
-            <Pressable onPress={goBack}>
+            <Pressable onPress={()=>goBack()}>
             <Text style={{fontSize:18,marginLeft:10,marginTop:10,color:'white',marginBottom:10}}><FontAwesome name="arrow-left" size={18} /> {t('Go Back')}</Text>
 
             </Pressable>
@@ -291,12 +300,12 @@ console.log(id)
                 </View>
              
              {
-          members.map((data)=>{
-                console.log(data.name)
+         Boolean(members?.length!==0) ? members.map((data)=>{
+               
                 return(
                 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center', marginBottom:35,marginLeft:20}}>
                     <Text style={{color:'white'}}>
-                        {data.name}
+                        {data?.name}
                     {/* {' '} */}
                     </Text>
                   {
@@ -337,6 +346,11 @@ console.log(id)
                 </View>
                 )
               })
+              :<View style={{paddingHorizontal:20}}>
+                  <Text style={{fontSize:20,color:"#FF6C00"}}>आपके FRC में किसी भी सदस्य ने अभी तक पंजीकरण नहीं कराया है </Text>
+              </View>
+                
+         
                 }
                 
            

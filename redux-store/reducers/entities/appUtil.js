@@ -3,14 +3,25 @@ import {combineReducers} from 'redux';
 const INIT_STATE = {
   loading: false,
   registrationScreenCode: 0,
+  typeOfClaim: 'CFR',
   formSaveDir: '',
-  language: 'en', // not used yet
+  language: 'hi', // not used yet
   name: '',
   formData: [],
+  verificationAadharFrontUrl: '',
+  verificationAadharBackUrl: '',
+  formUploadSyncStatus: false,
+  globalSyncStatus: false,
+  OneSignalSubsToken:''
 };
 
 const appUtil = (state = INIT_STATE, action) => {
   switch (action.type) {
+    case 'UPDATE_TYPE_OF_CLAIM':
+      return {
+        ...state,
+        typeOfClaim: action.payload,
+      };
     case 'SAVE_APP_LANGUAGE':
       return {
         ...state,
@@ -51,7 +62,7 @@ const appUtil = (state = INIT_STATE, action) => {
     case 'UPDATE_FORMDATA':
       // console.log("ITS COMING");
       var oldFormData = state.formData || [];
-      console.log("OO",oldFormData)
+      console.log('OO', oldFormData);
       if (oldFormData?.length === 2) {
         oldFormData = [];
         oldFormData.push(action.payload);
@@ -64,6 +75,11 @@ const appUtil = (state = INIT_STATE, action) => {
         formData: oldFormData,
       };
 
+    case 'UPDATE_APPUTIL_KEY':
+      return {
+        ...state,
+        [action?.payload?.key]: action?.payload?.value,
+      };
     case 'CLEAR_FORMS':
       return {
         ...state,

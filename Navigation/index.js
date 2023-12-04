@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {StyleSheet, View} from 'react-native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LangSelectionScreen from '../Screens/LanguageSelection/LangSelectionScreen';
 import NamePhoneScreen from '../Screens/NamePhone/NamePhoneScreen';
@@ -12,7 +12,7 @@ import LocationInformationScreenSdlc from '../Screens/LocationInformation/Locati
 // import RoleInformationScreen from '../Screens/RoleInformation/RoleInformationScreen';
 import downloadPDFScreen from '../Screens/DownloadPDF/downloadPDFScreen';
 import ForestFiSplashScreen from '../Screens/ForestFiSplash/ForestFiSplashScreen';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../components/Loader';
 import FormsPage from '../Screens/FormsPage/FormsPage';
 import OTPScreen from '../Screens/OTPScreen/OTPScreen';
@@ -25,25 +25,33 @@ import RoleScreen from '../Screens/Role/RoleScreen';
 import LocationScreen from '../Screens/Location/Location';
 import FRCHomeScreen from '../Screens/FRCHome/FRCHomeScreen';
 import FRCInitialScreen from '../Screens/FRCInitial/FRCInitialScreen';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 // import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
-import GenderScreen from '../Screens/Gender/GenderScreen'
+import GenderScreen from '../Screens/Gender/GenderScreen';
 
 import PastRecordsScreen from '../Screens/PastRecordsScreen/PastRecordsScreen';
 import HomeScreen from '../Screens/HomeScreen/homeScreen';
 import FRCMembersScreen from '../Screens/HomeScreen/FRCMembersScreen';
 import ProfileScreen from '../Screens/ProfileScreen/profilescreen';
-import { PDFPreviewScreen } from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
+import {PDFPreviewScreen} from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 import LocationScreenOdisha from '../Screens/Location/LocationOdisha';
 import ClaimAlertsScreen from '../Screens/ClaimAlerts/ClaimAlertsScreen';
-
-
-
-
+import ClaimTypeSelectionScreen from '../Screens/ChooseIFRorCFR';
+import IFRScreen from '../Screens/PastRecordsIFR';
+import IFRDownloadPDF from '../Screens/FormsPageIFR';
+import HomeScreenIFR from '../Screens/HomeScreenIFR';
+import PastRecordsIFR from '../Screens/PastRecordsIFR';
+import {MarkBoundry} from '../Screens/MarkBoundry';
+import ClaimAlertsScreenIFR from '../Screens/ClaimAlertsIFR/ClaimAlertsScreenIFR';
+import WebDashboard from '../Screens/WebDashboard';
+import {ProgressBar} from '@react-native-community/progress-bar-android';
+import ValidateIFRScreen from '../Screens/ValidateIFR';
+import GovernmentOfficialCheck from '../Screens/GovernmentOfficialCheck';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
+
   const {loading} = useSelector(state => state.entities.appUtil.appUtil);
 
   const {t, i18n} = useTranslation();
@@ -56,15 +64,38 @@ export const Navigation = () => {
     changeLanguage(language);
   }, []);
 
+  const {globalSyncStatus} = useSelector(
+    state => state.entities.appUtil.appUtil,
+  );
+ 
+  
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: 'transparent',
+    },
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       {loading && <Loader />}
-      <Stack.Navigator initialRouteName="ForestFiSplash"
       
-      screenOptions={{
-        animation:'none'
-      }}
-      >
+        <View style={{backgroundColor: 'rgba(52, 52, 52, alpha)'}}>
+          {globalSyncStatus && (
+            <ProgressBar
+              indeterminate
+              styleAttr="Horizontal"
+              color="white"
+              style={{height: 30}}
+            />
+          )}
+        </View>
+
+      <Stack.Navigator
+        initialRouteName="ForestFiSplash"
+        screenOptions={{
+          animation: 'none',
+        }}>
         <Stack.Screen
           name="ForestFiSplash"
           component={ForestFiSplashScreen}
@@ -80,19 +111,47 @@ export const Navigation = () => {
           }}
         />
         <Stack.Screen
+          name="ClaimTypeSelectionScreen"
+          component={ClaimTypeSelectionScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="IFRDownloadPDF"
+          component={IFRDownloadPDF}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="WebDashboard"
+          component={WebDashboard}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="PastRecordsIFR"
+          component={PastRecordsIFR}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
             headerShown: false,
           }}
-        />  
-          <Stack.Screen
-            name="LoginPassword"
-            component={LoginPasswordScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
+        />
+        <Stack.Screen
+          name="LoginPassword"
+          component={LoginPasswordScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="MobilePassword"
           component={MobilePasswordScreen}
@@ -100,19 +159,18 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-           <Stack.Screen
-        name="ShowProfile"
-        component={ProfileScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+        <Stack.Screen
+          name="ShowProfile"
+          component={ProfileScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
           options={{
             headerShown: false,
-
           }}
         />
         <Stack.Screen
@@ -157,7 +215,7 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-         {/* <CheckStatus>
+        {/* <CheckStatus>
 
          </CheckStatus> */}
         <Stack.Screen
@@ -174,6 +232,17 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
+
+       <Stack.Screen
+          name="GovernmentOfficialCheck"
+          component={GovernmentOfficialCheck}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+
+
         <Stack.Screen
           name="Location"
           component={LocationScreen}
@@ -181,7 +250,7 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="LocationOdisha"
           component={LocationScreenOdisha}
           options={{
@@ -195,34 +264,52 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-<Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="FRCMembers"
-        component={FRCMembersScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+        <Stack.Screen
+          name="HomeScreenIFR"
+          component={HomeScreenIFR}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ValidateIFRScreen"
+          component={ValidateIFRScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
 
-    <Stack.Screen
-        name="PDFPreviewScreen"
-        component={PDFPreviewScreen}
-        options={{
-          // headerShown: false,
-          headerTransparent:true,
-          headerTitle:'दस्तावेज़'
-        }}
-      />
+        <Stack.Screen
+          name="MarkBoundry"
+          component={MarkBoundry}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="FRCMembers"
+          component={FRCMembersScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
 
-
-
-
+        <Stack.Screen
+          name="PDFPreviewScreen"
+          component={PDFPreviewScreen}
+          options={{
+            // headerShown: false,
+            headerTransparent: true,
+            headerTitle: 'दस्तावेज़',
+          }}
+        />
 
         <Stack.Screen
           name="FRCInitial"
@@ -231,8 +318,7 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-      
-    
+
         {/* <Stack.Screen
           name="RoleInformation"
           component={RoleInformationScreen}
@@ -243,11 +329,9 @@ export const Navigation = () => {
         <Stack.Screen
           name="DownloadPDF"
           component={downloadPDFScreen}
-          options={
-            {
-              headerShown: false,
-            }
-          }
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="FormsPage"
@@ -258,25 +342,28 @@ export const Navigation = () => {
           }}
         />
 
-<Stack.Screen
-      name="PastRecordsScreen"
-      component={PastRecordsScreen}
-      options={{
-        headerShown:false
-      }}
+        <Stack.Screen
+          name="PastRecordsScreen"
+          component={PastRecordsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      />
-      
-      <Stack.Screen
-      name="ClaimAlertsScreen"
-      component={ClaimAlertsScreen}
-      options={{
-        headerShown:false
-      }}
-
-      />
-
-      
+        <Stack.Screen
+          name="ClaimAlertsScreen"
+          component={ClaimAlertsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ClaimAlertsScreenIFR"
+          component={ClaimAlertsScreenIFR}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

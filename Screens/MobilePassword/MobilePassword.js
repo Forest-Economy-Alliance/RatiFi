@@ -68,11 +68,16 @@ const MobilePasswordScreen = ({navigation}) => {
         {
           mobile: formik.values.phoneNumber,
           password: formik.values.password,
-          fcmToken: await fetchData(),
+          fcmToken: 'await fetchData()',
         },
         args => {
+
           if (args) {
-            navigation.navigate('HomeScreen');
+         
+            navigation.navigate('ClaimTypeSelectionScreen',{
+              loginMode:true
+            })
+            // navigation.navigate('HomeScreen');
           } else {
             toast.show(t('INCORRECT_PASSWORD'), {
               type: 'success',

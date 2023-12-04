@@ -66,7 +66,7 @@ const NamePhoneScreen = ({navigation}) => {
         },
         args => {
           // sending phone number in OTP Screen, as we need their to send in API Call
-          navigation.navigate('OTP',{
+          navigation.replace('OTP',{
             phoneNumber:formik.values.phoneNumber
           });        
         },

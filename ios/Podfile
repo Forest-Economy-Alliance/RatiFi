@@ -32,6 +32,10 @@ target 'RatiFi' do
 
   pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+  pod 'react-native-view-shot', :path => '../node_modules/react-native-view-shot'
+
   target 'RatiFiTests' do
     inherit! :complete
     # Pods for testing
