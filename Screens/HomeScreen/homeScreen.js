@@ -408,6 +408,20 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )}
+
+{Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={'समुदायिक आवेदन स्थिति'}
+            onPress={() => {
+              if (profile?.claims?.length === 0) {
+                Alert.alert('सूचना', t('CLAIM_NOT_APPLIED'));
+              } else navigation.navigate('ViewForms');
+            }}
+          />
+        )}
         {/* <CustomButton
                     style={{ marginBottom: 20 }}
                     button={{ width: 300 }}
