@@ -404,7 +404,7 @@ export const MarkBoundry = () => {
                     setI(false);
 
                     patchClaimFieldsIFRHandler({
-                      boundary: `userPath`,
+                      boundary: userPath,
                       claimId:
                         profile?.IFRclaims[profile?.IFRclaims?.length - 1],
                       boundaryImageUrl: 'S3 URL',

@@ -4,9 +4,9 @@
 
 import axios from 'axios';
 import store from '../redux-store/index';
-// export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://localhost:4000';
 // ISB DEV
-export const BASE_URL = 'https://4kmtkz4pcv.us-east-1.awsapprunner.com';
+// export const BASE_URL = 'https://4kmtkz4pcv.us-east-1.awsapprunner.com';
 // export const BASE_URL='https://6cqpau3hwt.us-east-1.awsapprunner.com'
 // export const BASE_URL = 'https://ratifiserver.onrender.com';
 // export const BASE_URL = 'https://ratifi-backend-v2.herokuapp.com';
