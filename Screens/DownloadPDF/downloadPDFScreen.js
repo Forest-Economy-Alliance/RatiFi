@@ -12,6 +12,7 @@ import {
   Pressable,
   ScrollView,
   Linking,
+  Button,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
@@ -2822,6 +2823,7 @@ const DownloadPDFScreen = ({navigation}) => {
                       if (rr?.data?.isMapAvailable === false) {
                         setImgUrl('x');
                       }
+                      console.log(rr?.data?.data);
                       setPrintDocs(rr?.data?.data);
                       console.log('owner id', profile._id.toString());
 
@@ -2893,31 +2895,69 @@ const DownloadPDFScreen = ({navigation}) => {
             {t('download application document')}
           </CustomButton>
         )}
-        {printDocs?.map(item => (
-          <View
-            key={`pd-${item?.path}`}
-            style={{
-              borderBottomWidth: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingVertical: 20,
-            }}>
-            <View style={{paddingVertical: 5}}>
-              <Text style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
-                {item?.name}
-              </Text>
-            </View>
-            <View>
-              <CustomButton
-                onPress={() => {
-                  Linking.openURL(item?.path);
-                }}
-                button={{width: '100%', paddingVertical: 10}}>
-                <MaterialCommunityIcons name="download-box" size={28} />
-              </CustomButton>
-            </View>
-          </View>
-        ))}
+        {printDocs?.map(item => {
+          const id = "खतियान भाग दो";
+          if (item?.name === id) {
+            return (
+              <View
+                key={`pd-${item?.path}`}
+                style={{
+                  borderBottomWidth: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingVertical: 20,
+                }}>
+                <View style={{paddingVertical: 5}}>
+                  <Text
+                    style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
+                    {item?.name}
+                  </Text>
+                </View>
+                <View>
+                  <CustomButton
+                    onPress={() => {
+                      navigation.navigate('RORWebView');
+                     
+                    }}
+                    button={{width: '100%', paddingVertical: 10}}>
+                    <MaterialCommunityIcons name="cloud-search" size={28} />
+                  </CustomButton>
+                </View>
+              </View>
+            );
+          } else {
+            return (
+              <View
+                key={`pd-${item?.path}`}
+                style={{
+                  borderBottomWidth: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingVertical: 20,
+                }}>
+                <View style={{paddingVertical: 5}}>
+                  <Text
+                    style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
+                    {item?.name}
+                  </Text>
+                </View>
+                <View>
+                  <CustomButton
+                    onPress={() => {
+                      Linking.openURL(item?.path);
+                    }}
+                    button={{width: '100%', paddingVertical: 10}}>
+                    <MaterialCommunityIcons name="download-box" size={28} />
+                  </CustomButton>
+                </View>
+              </View>
+            );
+          }
+        })}
+
+        {/* <Button title='ROR' onPress={()=>{
+          navigation.navigate("RORWebView")
+        }} /> */}
       </ScrollView>
     </ImageBackground>
   );

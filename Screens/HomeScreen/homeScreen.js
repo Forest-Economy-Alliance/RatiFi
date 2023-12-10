@@ -409,7 +409,7 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-{Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
+{/* {Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -421,7 +421,7 @@ const HomeScreen = ({navigation}) => {
               } else navigation.navigate('ViewForms');
             }}
           />
-        )}
+        )} */}
         {/* <CustomButton
                     style={{ marginBottom: 20 }}
                     button={{ width: 300 }}

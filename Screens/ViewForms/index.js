@@ -179,6 +179,7 @@ const ViewForms = ({navigation}) => {
     navigation.navigate('HomeScreen');
   };
 
+
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -502,28 +503,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              {/* + Not Required <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  paddingVertical: 20,
-                  borderBottomWidth: 1,
-                  borderColor: '#fff',
-                }}>
-                {claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' && (
-                  <CustomButton
-                    onPress={() => {
-                      setDocName('SDM_SUMMON_RESULT_1');
-                      setCameraModalVis(true);
-
-                      setUploadType('NEW_EXTRA_IMAGE');
-                      // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
-                    }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} />
-                  </CustomButton>
-                )}
-              </View> */}
+             
             </ScrollView>
           </>
         )}
@@ -579,7 +559,7 @@ const ViewForms = ({navigation}) => {
                         !(
                           claim?.courtDocuments.length &&
                           claim?.courtDocuments[1]?.title ===
-                            'SDM_SUMMON_RESULT_3'
+                            'SDM_SUMMON_RESULT_2'
                         )
                       ) {
                         Alert.alert("सूचना","दस्तावेज़ अभी तक अपलोड नहीं किया गया है")
@@ -594,7 +574,7 @@ const ViewForms = ({navigation}) => {
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
                     {!(
                       claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2'
-                    ) ?   <Ionicons name="camera" color="white" size={20} /> : (
+                    ) ?   null : (
                       <Text style={{fontSize: 12}}>फोटो देखें</Text>
                     )}
                   </CustomButton>
@@ -636,9 +616,7 @@ const ViewForms = ({navigation}) => {
                       {!(
                         claim?.courtDocuments[1]?.title ===
                         'SDM_SUMMON_RESULT_2'
-                      ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
-                      ) : (
+                      ) ? null : (
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
                     </CustomButton>
@@ -657,14 +635,14 @@ const ViewForms = ({navigation}) => {
                           marginRight: 40,
                           marginTop: 10,
                         }}>
-                        {<Ionicons name="camera" color="white" size={20} />}
+                       {null}
                       </CustomButton>
                     )}
                   </View>
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -685,7 +663,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 3  */}
 
@@ -741,28 +719,11 @@ const ViewForms = ({navigation}) => {
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
                     {!(
                       claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3'
-                    ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
-                    ) : (
+                    ) ? null : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[2]?.title ===
-                    'SDM_SUMMON_RESULT_3' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_3');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[2]?.extraImages?.map((item, indd) => (
@@ -828,7 +789,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -849,7 +810,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 4 */}
 
@@ -911,7 +872,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[3]?.title ===
+                  {/* {claim?.courtDocuments[3]?.title ===
                     'SDM_SUMMON_RESULT_4' && (
                     <CustomButton
                       onPress={() => {
@@ -925,7 +886,7 @@ const ViewForms = ({navigation}) => {
                       }}>
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
-                  )}
+                  )} */}
                 </View>
 
                 {claim?.courtDocuments[3]?.extraImages?.map((item, indd) => (
@@ -991,7 +952,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1012,7 +973,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 5 */}
 
@@ -1075,22 +1036,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[4]?.title ===
-                    'SDM_SUMMON_RESULT_5' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_5');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[4]?.extraImages?.map((item, indd) => (
@@ -1156,7 +1102,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1177,7 +1123,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 6  */}
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
@@ -1239,22 +1185,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[5]?.title ===
-                    'SDM_SUMMON_RESULT_6' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_6');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[5]?.extraImages?.map((item, indd) => (
@@ -1320,7 +1251,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1341,7 +1272,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 7  */}
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
@@ -1402,22 +1333,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[6]?.title ===
-                    'SDM_SUMMON_RESULT_7' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_7');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[6]?.extraImages?.map((item, indd) => (
@@ -1483,7 +1399,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1504,7 +1420,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
             </ScrollView>
           </>
         )}
@@ -1579,22 +1495,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[7]?.title ===
-                    'SDM_SUMMON_RESULT_8' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_8');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[7]?.extraImages?.map((item, indd) => (
@@ -1660,7 +1561,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1681,7 +1582,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 9  */}
               <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
@@ -1742,22 +1643,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[8]?.title ===
-                    'SDM_SUMMON_RESULT_9' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_9');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[8]?.extraImages?.map((item, indd) => (
@@ -1823,7 +1709,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -1844,7 +1730,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
             </ScrollView>
           </>
         )}
@@ -1919,21 +1805,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[9]?.title ===
-                    'SDM_SUMMON_RESULT_10' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_10');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[9]?.extraImages?.map((item, indd) => (
@@ -1999,7 +1871,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2020,7 +1892,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 11 */}
 
@@ -2079,7 +1951,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[10]?.title ===
+                  {/* {claim?.courtDocuments[10]?.title ===
                     'SDM_SUMMON_RESULT_11' && (
                     <CustomButton
                       onPress={() => {
@@ -2093,7 +1965,7 @@ const ViewForms = ({navigation}) => {
                       }}>
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
-                  )}
+                  )} */}
                 </View>
 
                 {claim?.courtDocuments[10]?.extraImages?.map((item, indd) => (
@@ -2159,7 +2031,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2181,7 +2053,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
             </ScrollView>
           </>
         )}
@@ -2256,7 +2128,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[11]?.title ===
+                  {/* {claim?.courtDocuments[11]?.title ===
                     'SDM_SUMMON_RESULT_12' && (
                     <CustomButton
                       onPress={() => {
@@ -2270,7 +2142,7 @@ const ViewForms = ({navigation}) => {
                       }}>
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
-                  )}
+                  )} */}
                 </View>
 
                 {claim?.courtDocuments[11]?.extraImages?.map((item, indd) => (
@@ -2336,7 +2208,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2358,7 +2230,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
             </ScrollView>
           </>
         )}
@@ -2433,23 +2305,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[12]?.title ===
-                    'SDM_SUMMON_RESULT_13' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_13');
-                        // hit the alert on sccess
-                        setShouldTriggerJointVerification(true);
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                
                 </View>
 
                 {claim?.courtDocuments[12]?.extraImages?.map((item, indd) => (
@@ -2515,7 +2371,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2537,7 +2393,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 14 */}
 
@@ -2599,21 +2455,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[13]?.title ===
-                    'SDM_SUMMON_RESULT_14' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_14');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[13]?.extraImages?.map((item, indd) => (
@@ -2679,7 +2521,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2701,7 +2543,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 15 */}
 
@@ -2763,21 +2605,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[14]?.title ===
-                    'SDM_SUMMON_RESULT_15' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_15');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[14]?.extraImages?.map((item, indd) => (
@@ -2843,7 +2671,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -2865,7 +2693,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
 
               {/* FORM 16 */}
 
@@ -2927,21 +2755,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[15]?.title ===
-                    'SDM_SUMMON_RESULT_16' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_16');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[15]?.extraImages?.map((item, indd) => (
@@ -3093,21 +2907,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[16]?.title ===
-                    'SDM_SUMMON_RESULT_17' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_17');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                  
                 </View>
 
                 {claim?.courtDocuments[16]?.extraImages?.map((item, indd) => (
@@ -3257,21 +3057,7 @@ const ViewForms = ({navigation}) => {
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[17]?.title ===
-                    'SDM_SUMMON_RESULT_18' && (
-                    <CustomButton
-                      onPress={() => {
-                        setDocName('SDM_SUMMON_RESULT_18');
-                        setCameraModalVis(true);
-                      }}
-                      style={{
-                        width: '100%',
-                        marginRight: 40,
-                        marginTop: 10,
-                      }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
-                    </CustomButton>
-                  )}
+                 
                 </View>
 
                 {claim?.courtDocuments[17]?.extraImages?.map((item, indd) => (
@@ -3337,7 +3123,7 @@ const ViewForms = ({navigation}) => {
                 ))}
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -3359,7 +3145,7 @@ const ViewForms = ({navigation}) => {
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
-              </View>
+              </View> */}
             </ScrollView>
           </>
         )}
