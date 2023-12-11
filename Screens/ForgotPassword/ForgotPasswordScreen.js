@@ -58,7 +58,7 @@ const ForgotPasswordScreen = ({navigation}) => {
     formikActions.setSubmitting(false);
     console.log('values', values);
 
-    // dispatch({ type: 'ENABLE_LOADING' });
+    dispatch({ type: 'ENABLE_LOADING' });
     console.log(values.phoneNumber);
 
     return checkAccount({mobile: values.phoneNumber}).then(async response => {
@@ -144,7 +144,8 @@ const ForgotPasswordScreen = ({navigation}) => {
               </Text>
             </View>
             <CustomButton
-              text={t('Get OTP')}
+             dsbled={true}
+              text={t('Get OTP')+'(4)'}
               onPress={() => {
                 if (formik.errors.phoneNumber) {
                   setErrorVisible(true);
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
   },
   otpBtn: {
     marginTop: '30%',
+    width: '100%'
   },
   inputName: {
     borderColor: '#CCCCCC',
