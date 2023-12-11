@@ -9,8 +9,10 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Linking,
 } from 'react-native';
 import {BackHandler} from 'react-native';
+import Hyperlink from 'react-native-hyperlink'
 
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -155,9 +157,22 @@ const ClaimAlertsScreen = ({navigation}) => {
                 borderRadius: 10,
                 borderColor: '#fff',
               }}>
+                  <Hyperlink    
+                      linkText={ url => '  Click here' }
+
+                    linkStyle={ { color: 'orange' } }
+ onPress={ (url, text) => {
+                    Linking.openURL(url);
+                  } }>
+
               <Text style={{color: '#fff', marginVertical: 5}}>
                 {item?.message}
               </Text>
+
+              </Hyperlink>
+
+
+
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{color: '#fff'}}>{item?.senderName}</Text>

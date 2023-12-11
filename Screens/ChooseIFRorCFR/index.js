@@ -90,6 +90,10 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                   //   return;
                   // }
                   const loginMode = route?.params?.loginMode;
+
+                    
+
+                  
                   if (lang?.value === 'ifr') {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
                     if(!village){
@@ -101,6 +105,8 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                   } else {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
 
+
+                    // 
                     // check form download screnerio
 
                     if (loginMode === true) {

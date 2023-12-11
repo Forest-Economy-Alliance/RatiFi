@@ -58,6 +58,7 @@ const LocationScreen = ({navigation}) => {
     // state: '',
     district: '',
     subdivison: '',
+    range:'',
     tehsil: '',
     panchayat: '',
     village: '',
@@ -99,6 +100,7 @@ const LocationScreen = ({navigation}) => {
       tehsil: formik.values.tehsil,
       panchayat: formik.values.panchayat,
       village: formik.values.village,
+      range:formik.values.range
     });
 
     if (editProfileMode && authLevel !== 'एफआरसी') {
@@ -1969,13 +1971,13 @@ const LocationScreen = ({navigation}) => {
       return true;
     } else if (authLevel === t('SLMC')) {
       return false;
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === "भारसाधक  - वन विभाग (SDLC)") {
       if (field === t('district') || field === t('subdivison')) {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === "भारसाधक  - राजस्व विभाग (SDLC)") {
       if (
         field === t('district') ||
         field === t('subdivison')||
@@ -1998,9 +2000,9 @@ const LocationScreen = ({navigation}) => {
       return Boolean(formik?.values?.village !== '');
     } else if (authLevel === t('SLMC')) {
       return Boolean(formik?.values?.district !== '');
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === "भारसाधक  - वन विभाग (SDLC)") {
       return Boolean(formik?.values?.subdivison !== '');
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === "भारसाधक  - राजस्व विभाग (SDLC)") {
       return Boolean(formik?.values?.tehsil !== '');
     }
   };
@@ -2183,6 +2185,88 @@ const LocationScreen = ({navigation}) => {
                 )}
               </>
             )}
+
+            
+           {Boolean(formik?.values?.subdivison !== '' && authLevel==='भारसाधक  - वन विभाग (SDLC)') && (
+              <>
+                <View style={styles.title}>
+                  <Text style={styles.titleText}>{t('वन क्षेत्र')}</Text>
+                </View>
+                {true ? (
+                  <Dropdown
+                    visible={true}
+                    data={[{label:formik?.values?.subdivison+'Test Range',value:formik?.values?.subdivison+'Test Range'}]}
+                    formik={formik}
+                    variable={'range'}
+                    exec={val => {
+                      // formik?.setFieldValue('district',null);
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: true,
+                      //   },
+                      // });
+
+                      // setTehsilData([]);
+                      // formik?.setFieldValue('tehsil', '');
+                      // setPanchanyatData([]);
+                      // formik?.setFieldValue('panchayat', '');
+                      // setVillageData([]);
+                      // formik?.setFieldValue('village', '');
+
+                      // const LAMBDA_URL =
+                      //   'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                      // const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      // console.warn(query3);
+                      // const url3 = LAMBDA_URL + encodeURIComponent(query3);
+                      // console.warn('URL3', url3);
+
+                      // axios
+                      //   .get(BASE_URL+'/lgd?q='+url3)
+                      //   .then(rr => {
+                      //     console.log('res->BLOCK', rr?.data);
+                      //     const d = [];
+
+                      //     rr?.data?.data?.forEach(cell => {
+                      //       d?.push({
+                      //         label: cell['block name'],
+                      //         value: cell['block name'],
+                      //       });
+                      //     });
+                      //     console.warn('DR-BLOCKS', d);
+                      //     setTehsilData(d);
+
+                      //     // [ {label:'',value:''},{label:'',value:''},]
+                      //   })
+                      //   .catch(err => {
+                      //     console.log(err);
+                      //   })
+                      //   .finally(f => {
+                      //     dispatch({
+                      //       type: 'UPDATE_APPUTIL_KEY',
+                      //       payload: {
+                      //         key: 'globalSyncStatus',
+                      //         value: false,
+                      //       },
+                      //     });
+                      //   });
+                    }}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
+              </>
+            )}
+
+
+
+
 
             {Boolean(formik?.values?.subdivison !== '' && handleShowDropdownOrNot(t('tehsil'))) && (
               <>

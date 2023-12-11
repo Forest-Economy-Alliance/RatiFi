@@ -1974,6 +1974,8 @@ const PastRecordsScreen = ({navigation}) => {
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_10');
+                        setShouldTriggerJointVerification(true);
+
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2489,7 +2491,6 @@ const PastRecordsScreen = ({navigation}) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_13');
                         // hit the alert on sccess
-                        setShouldTriggerJointVerification(true);
                         setCameraModalVis(true);
                       }}
                       style={{

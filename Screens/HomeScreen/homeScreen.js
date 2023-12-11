@@ -276,11 +276,12 @@ const HomeScreen = ({navigation}) => {
       return [district];
     } else if (authLevel === t(t('SLMC'))) {
       return [t('Jharkhand')];
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === "भारसाधक  - वन विभाग (SDLC)") {
       return [district, subdivison];
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === "भारसाधक  - राजस्व विभाग (SDLC)") {
       return [district, subdivison, tehsil];
     }
+    return []
   };
 
   return (
