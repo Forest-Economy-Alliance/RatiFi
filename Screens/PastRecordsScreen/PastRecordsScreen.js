@@ -184,12 +184,19 @@ const PastRecordsScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop: 10, marginBottom: 10, marginLeft: 10}}>
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
             <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
           </Text>
         </Pressable>
+
+        {/* <Pressable disabled onPress={goBack}>
+          <Text style={{fontSize: 18}}>
+              SYNC {' '}
+          </Text>
+        </Pressable> */}
+        
       </View>
 
       {cameraModalVis && (
@@ -315,7 +322,7 @@ const PastRecordsScreen = ({navigation}) => {
               onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
               source={{
-                uri: docUrlToPreview,
+                uri:  || docUrlToPreview,
                 cache: FastImage.cacheControl.immutable,
               }}
               style={{flex: 1}}
