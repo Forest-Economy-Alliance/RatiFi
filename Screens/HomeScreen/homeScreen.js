@@ -222,8 +222,14 @@ const HomeScreen = ({navigation}) => {
       });
     });
 
+    let URL = `/fetch-notifications?id=${profile?._id}`;
+    if ( authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */){
+     URL = `/fetch-notifications-by-village?village=${village}`
+    }
+   
+
     request(
-      `/fetch-notifications?id=${profile?._id}`,
+      URL,
       {method: 'GET'},
       true,
       false,
