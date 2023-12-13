@@ -187,13 +187,13 @@ const HomeScreen = ({navigation}) => {
   // useEffect(() => {
   //   const backAction = () => {
   //     // current screen is home screen
-  //     Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
+  //     Alert.alert('JharFRA - सूचना', 'क्या आप ऐप से बाहर निकलना चाहते हैं?', [
   //       {
-  //         text: 'Cancel',
+  //         text: 'नहीं',
   //         onPress: () => null,
   //         style: 'cancel',
   //       },
-  //       {text: 'YES', onPress: () => BackHandler.exitApp()},
+  //       {text: 'हाँ', onPress: () => BackHandler.exitApp()},
   //     ]);
   //     return true;
   //   };
@@ -238,6 +238,8 @@ const HomeScreen = ({navigation}) => {
   }, []);
 
   async function alpha() {
+
+   OneSignal.Notifications.requestPermission(true);
     const data = OneSignal.User.pushSubscription.getPushSubscriptionId();
     console.log('pid', data);
     dispatch({

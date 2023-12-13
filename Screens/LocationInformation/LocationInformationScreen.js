@@ -439,6 +439,11 @@ const LocationInformationScreen = ({navigation}) => {
 export default LocationInformationScreen;
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
