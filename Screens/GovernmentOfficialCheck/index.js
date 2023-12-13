@@ -82,10 +82,18 @@ const GovernmentOfficialCheck = ({navigation}) => {
       values?.member === t('FRC') ||
       (values?.member !== t('FRC') && uploadStatus?.f && uploadStatus?.b)
     ) {
+
+
+
+
       console.log(values);
       formikActions.setSubmitting(false);
 
       dispatch({type: 'ENABLE_LOADING'});
+
+
+      
+
       dispatch(
         updateUserInfoAction(
           {
@@ -109,28 +117,28 @@ const GovernmentOfficialCheck = ({navigation}) => {
                 return;
               }
               // navigation.navigate('HomeScreen');
-              console.log('yy', postLevel);
+              // console.log('yy', postLevel);
               if (values.member !== 'एफआरसी') {
                 navigation.replace('Location');
               } else if (!(values.role === t('Member'))) {
                 // check if secretyary or president have already filed a claim
-                fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
-                  if (res?.data?.data[0]?._id?.toString()) {
-                    // secretary ke claim me wahi id patch
-                    updateUserHandler({
-                      claims: [res?.data?.data[0]?._id?.toString()],
-                    })
-                      .then(rr => {
-                        navigation.replace('HomeScreen');
-                      })
-                      .catch(e => {
-                        Alert.alert(t('info'), 'Something went wrong');
-                      });
-                  } else {
-                    // Changed Folow as on 27Oct 12:23PM
-                    navigation.replace('Location');
-                  }
-                });
+                // fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
+                //   if (res?.data?.data[0]?._id?.toString()) {
+                //     // secretary ke claim me wahi id patch
+                //     updateUserHandler({
+                //       claims: [res?.data?.data[0]?._id?.toString()],
+                //     })
+                //       .then(rr => {
+                //         navigation.replace('HomeScreen');
+                //       })
+                //       .catch(e => {
+                //         Alert.alert(t('info'), 'Something went wrong');
+                //       });
+                //   } else {
+                //     // Changed Folow as on 27Oct 12:23PM
+                //     navigation.replace('Location');
+                //   }
+                // });
 
                 // navigation.navigate('ClaimTypeSelectionScreen', {
                 //   isMember: false,
@@ -160,26 +168,29 @@ const GovernmentOfficialCheck = ({navigation}) => {
               // alert(t('ALREADY_ASSIGNED_ROLE'));
               // this alert button should have a help button which will redirect to the help screen
 
-              Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
-                {
-                  text: 'Ok',
-                  // onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'सहायता',
-                  onPress: () => {
-                    // link to whatsapp
-                    Linking.openURL(
-                      "https://wa.me/12345?text=I'm%20having%20issue%20with%JharFRA%20Registration.",
-                    );
-                  },
-                },
-              ]);
+              // Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
+              //   {
+              //     text: 'Ok',
+              //     // onPress: () => console.log('Cancel Pressed'),
+              //     style: 'cancel',
+              //   },
+              //   {
+              //     text: 'सहायता',
+              //     onPress: () => {
+              //       // link to whatsapp
+              //       Linking.openURL(
+              //         "https://wa.me/12345?text=I'm%20having%20issue%20with%JharFRA%20Registration.",
+              //       );
+              //     },
+              //   },
+              // ]);
             }
           },
         ),
       );
+
+
+
     } else {
       Alert.alert('सुचना', 'कृपया सत्यापन के लिए आईडी अपलोड करें');
     }

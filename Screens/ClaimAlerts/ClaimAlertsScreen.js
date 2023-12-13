@@ -38,7 +38,7 @@ const ClaimAlertsScreen = ({navigation}) => {
   console.log(authLevel);
   // console.log(authLevel=="एसडीएलसी");
   const route = useRoute();
-  const {_id} = useSelector(state => state.entities.auth.userInfo?.profile);
+  const {_id,village} = useSelector(state => state.entities.auth.userInfo?.profile);
 
   const language = 'hi';
   const dispatch = useDispatch();
@@ -92,8 +92,21 @@ const ClaimAlertsScreen = ({navigation}) => {
         value: true,
       },
     });
-    console.log(_id);
-    request(`/fetch-notifications?id=${_id}`, {method: 'GET'}, true, false)
+
+    // if memeber -> Show claim attached notificaiton
+    // if president -> 
+    // if secretary -> 
+    // if sdlc -> sdlc specific to that userId
+    // if forestRang,revenue -> sdlc specific to that userId
+    // if dlc -> specific to that userId
+
+
+    let URL = `/fetch-notifications?id=${_id}`;
+    if ( authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */){
+     URL = `/fetch-notifications-by-village?village=${village}`
+    }
+   
+    request(URL, {method: 'GET'}, true, false)
       .then(({data}) => {
         console.log(data);
         setAlerts(data?.data);

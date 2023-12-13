@@ -322,7 +322,7 @@ const PastRecordsScreen = ({navigation}) => {
               onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
               source={{
-                uri:  || docUrlToPreview,
+                uri: docUrlToPreview,
                 cache: FastImage.cacheControl.immutable,
               }}
               style={{flex: 1}}
