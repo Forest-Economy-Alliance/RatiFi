@@ -148,6 +148,14 @@ const LocationScreen = ({navigation}) => {
               },
             },
           ]);
+        }).finally(f=>{
+          dispatch({
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: true,
+            },
+          });
         });
     } else {
       queue.addJob('UPDATELocationWorker', {
