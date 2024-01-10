@@ -229,6 +229,7 @@ const LocationScreen = ({navigation}) => {
   const [tehsilData, setTehsilData] = useState([]);
   const [panchayatData, setPanchanyatData] = useState([]);
   const [villageData, setVillageData] = useState([]);
+  const [rangeData,setRangeData]=useState([]);
 
   useEffect(() => {
     console.log('CALL_BEGIN');
@@ -449,7 +450,7 @@ const LocationScreen = ({navigation}) => {
                       //     value: true,
                       //   },
                       // });
-
+                      setRangeData([])
                       setTehsilData([]);
                       formik?.setFieldValue('tehsil', '');
                       setPanchanyatData([]);
@@ -459,7 +460,7 @@ const LocationScreen = ({navigation}) => {
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                      const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      const query3 = `SELECT distinct "block name","range" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
                       console.warn(query3);
                       const url3 = LAMBDA_URL + encodeURIComponent(query3);
                       console.warn('URL3', url3);
@@ -469,15 +470,20 @@ const LocationScreen = ({navigation}) => {
                         .then(rr => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
-
+                          const rangeTempArray=[];
                           rr?.data?.data?.forEach(cell => {
                             d?.push({
                               label: cell['block name'],
                               value: cell['block name'],
                             });
+                            rangeTempArray.push({
+                              label: cell['range'],
+                              value: cell['range']
+                            })
                           });
                           console.warn('DR-BLOCKS', d);
                           setTehsilData(d);
+                          setRangeData(rangeTempArray)
 
                           // [ {label:'',value:''},{label:'',value:''},]
                         })
@@ -514,15 +520,10 @@ const LocationScreen = ({navigation}) => {
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('वन क्षेत्र')}</Text>
                 </View>
-                {true ? (
+                {rangeData?.length!==0 ? (
                   <Dropdown
                     visible={true}
-                    data={[
-                      {
-                        label: formik?.values?.subdivison + 'Test Range',
-                        value: formik?.values?.subdivison + 'Test Range',
-                      },
-                    ]}
+                    data={rangeData}
                     formik={formik}
                     variable={'range'}
                     exec={val => {
