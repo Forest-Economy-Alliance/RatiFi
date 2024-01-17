@@ -483,7 +483,13 @@ const LocationScreen = ({navigation}) => {
                           });
                           console.warn('DR-BLOCKS', d);
                           setTehsilData(d);
-                          setRangeData(rangeTempArray)
+
+                          function removeDuplicates(arr) {
+                            return [...new Set(arr)];
+                           }
+                          const finalEnteries=removeDuplicates(rangeTempArray);
+
+                          setRangeData(finalEnteries);
 
                           // [ {label:'',value:''},{label:'',value:''},]
                         })
