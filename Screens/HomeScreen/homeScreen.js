@@ -212,9 +212,32 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: false,
+      },
+    });
     // dispatch user profile
     checkAccount({mobile: profile?.mobile}).then(data => {
       console.log(data?.data);
+
+      const {authLevel,district,village,panchayat,range,subdivison,tehsil}=data?.data?.data;
+      const associatedFields=[...checkFromServer(authLevel,district,subdivison,tehsil,range,panchayat,village)]
+     
+      
+      console.warn('associatedFields', associatedFields);
+      console.log(associatedFields.includes('-1'));
+      if (associatedFields.includes('-1') === true) {
+        navigation.replace('Location');
+      }else{
+        console.log("Gelocation Fine")
+      }
+
+
+
+
       dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
       dispatch({
         type: 'SAVE_GOVT_OFFICIALS',
@@ -237,21 +260,7 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const associatedFields = [...handleDisplayLocation()];
-      console.log('authLevel & postLevel',authLevel,postLevel)
-      console.warn('associatedFields', associatedFields);
-      console.log(associatedFields.includes('-1'));
-      if (associatedFields.includes('-1') !== false) {
-        navigation.replace('Location');
-      }else{
-        console.log("Gelocation Fine")
-      }
-    }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
   async function alpha() {
     OneSignal.Notifications.requestPermission(true);
     const data = OneSignal.User.pushSubscription.getPushSubscriptionId();
@@ -296,6 +305,24 @@ const HomeScreen = ({navigation}) => {
       return [district, subdivison];
     } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       return [district, subdivison, tehsil];
+    }
+    return [];
+  };
+
+
+  const checkFromServer = (A,B, C, D,range, E, F) => {
+    if (A === t('FRC')) {
+      return [B, C, D, E, F];
+    } else if (A === t('SDLC')) {
+      return [B, C];
+    } else if (A === t('DLC')) {
+      return [B];
+    } else if (A === t(t('SLMC'))) {
+      return [t('Jharkhand')];
+    } else if (A === 'भारसाधक  - वन विभाग (SDLC)') {
+      return [B, C];
+    } else if (A === 'भारसाधक  - राजस्व विभाग (SDLC)') {
+      return [B, C, D];
     }
     return [];
   };

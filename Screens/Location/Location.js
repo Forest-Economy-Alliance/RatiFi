@@ -121,13 +121,28 @@ const LocationScreen = ({navigation}) => {
 
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
             if (typeOfClaim === 'CFR') {
-              navigation.replace('HomeScreen');
+          
+              const timer=setTimeout(()=>{
+                navigation.replace('HomeScreen');
+                return ()=>{
+                  clearTimeout(timer);
+                }
+
+              },2000);
+
             } else {
               navigation.navigate('HomeScreenIFR');
             }
           }
         })
         .catch(error => {
+          dispatch({
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: false,
+            },
+          });
           // role already exists
 
           console.log('avail-error', error);
@@ -149,13 +164,13 @@ const LocationScreen = ({navigation}) => {
             },
           ]);
         }).finally(f=>{
-          dispatch({
-            type: 'UPDATE_APPUTIL_KEY',
-            payload: {
-              key: 'globalSyncStatus',
-              value: false,
-            },
-          });
+          // dispatch({
+          //   type: 'UPDATE_APPUTIL_KEY',
+          //   payload: {
+          //     key: 'globalSyncStatus',
+          //     value: false,
+          //   },
+          // });
         });
     } else {
       queue.addJob('UPDATELocationWorker', {
