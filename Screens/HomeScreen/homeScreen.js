@@ -223,17 +223,11 @@ const HomeScreen = ({navigation}) => {
     });
 
     let URL = `/fetch-notifications?id=${profile?._id}`;
-    if ( authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */){
-     URL = `/fetch-notifications-by-village?village=${village}`
+    if (authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */) {
+      URL = `/fetch-notifications-by-village?village=${village}`;
     }
-   
 
-    request(
-      URL,
-      {method: 'GET'},
-      true,
-      false,
-    )
+    request(URL, {method: 'GET'}, true, false)
       .then(({data}) => {
         console.log('x', data?.data?.length);
         setNC(data?.data?.length);
@@ -243,9 +237,23 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-  async function alpha() {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const associatedFields = [...handleDisplayLocation()];
+      console.log('authLevel & postLevel',authLevel,postLevel)
+      console.warn('associatedFields', associatedFields);
+      console.log(associatedFields.includes('-1'));
+      if (associatedFields.includes('-1') !== false) {
+        navigation.replace('Location');
+      }else{
+        console.log("Gelocation Fine")
+      }
+    }, 3000);
 
-   OneSignal.Notifications.requestPermission(true);
+    return () => clearTimeout(timer);
+  }, []);
+  async function alpha() {
+    OneSignal.Notifications.requestPermission(true);
     const data = OneSignal.User.pushSubscription.getPushSubscriptionId();
     console.log('pid', data);
     dispatch({
@@ -284,12 +292,12 @@ const HomeScreen = ({navigation}) => {
       return [district];
     } else if (authLevel === t(t('SLMC'))) {
       return [t('Jharkhand')];
-    } else if (authLevel === "भारसाधक  - वन विभाग (SDLC)") {
+    } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return [district, subdivison];
-    } else if (authLevel === "भारसाधक  - राजस्व विभाग (SDLC)") {
+    } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       return [district, subdivison, tehsil];
     }
-    return []
+    return [];
   };
 
   return (
@@ -418,7 +426,7 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-{/* {Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
+        {/* {Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
           <CustomButton
             style={{marginBottom: 20}}
             button={{width: 300}}
@@ -469,8 +477,6 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-       
-
         <View
           style={{
             backgroundColor: 'green',
@@ -497,12 +503,11 @@ const HomeScreen = ({navigation}) => {
                   zIndex: 199,
                   borderRadius: 10,
                 }}>
-                ({notificationCount})
+             {notificationCount !==undefined && `(`}{notificationCount}{notificationCount !=undefined  && `)`}
               </Text>
             )}
           </CustomButton>
         )}
-        
       </View>
 
       {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}

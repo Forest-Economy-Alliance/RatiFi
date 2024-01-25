@@ -153,7 +153,7 @@ const LocationScreen = ({navigation}) => {
             type: 'UPDATE_APPUTIL_KEY',
             payload: {
               key: 'globalSyncStatus',
-              value: true,
+              value: false,
             },
           });
         });
@@ -471,25 +471,28 @@ const LocationScreen = ({navigation}) => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
                           const rangeTempArray=[];
+                          const occured=new Map();
+
+
                           rr?.data?.data?.forEach(cell => {
                             d?.push({
                               label: cell['block name'],
                               value: cell['block name'],
                             });
-                            rangeTempArray.push({
-                              label: cell['range'],
-                              value: cell['range']
-                            })
+                           
+                            if(!occured.get(cell['range'])){
+                              rangeTempArray.push({
+                                label: cell['range'],
+                                value: cell['range']
+                              })
+                              occured.set(cell['range'],true);
+                            }
+                           
                           });
                           console.warn('DR-BLOCKS', d);
                           setTehsilData(d);
 
-                          function removeDuplicates(arr) {
-                            return [...new Set(arr)];
-                           }
-                          const finalEnteries=removeDuplicates(rangeTempArray);
-
-                          setRangeData(finalEnteries);
+                          setRangeData(rangeTempArray);
 
                           // [ {label:'',value:''},{label:'',value:''},]
                         })
