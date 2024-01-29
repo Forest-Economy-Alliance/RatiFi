@@ -10,6 +10,8 @@ import {
   ScrollView,
   Pressable,
   Modal,
+  Linking,
+  Alert,
 } from 'react-native';
 import {BackHandler} from 'react-native';
 import queue from 'react-native-job-queue';
@@ -31,23 +33,24 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {G} from 'react-native-svg';
 import axios from 'axios';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
-import { BASE_URL } from '../../services/APICentral';
+import {BASE_URL, request} from '../../services/APICentral';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const LocationScreen = ({navigation}) => {
   const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
   const [editProfileMode, setEditProfileMode] = useState(false);
-  const {name, panchayat, tehsil, statet, district, postLevel, authLevel} =
-    useSelector(state => state.entities.auth.userInfo?.profile);
+  const {
+    name,
+    panchayat,
+    tehsil,
+    statet,
+    district,
+    postLevel,
+    authLevel,
+    mobile,
+  } = useSelector(state => state.entities.auth.userInfo?.profile);
   // console.log(authLevel=="एसडीएलसी");
   const route = useRoute();
-
-  React.useEffect(() => {
-    console.log(route.params);
-    if (route?.params?.editProfile === true) {
-      setEditProfileMode(true);
-    }
-  }, [route?.params?.editProfile]);
 
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
@@ -58,6 +61,7 @@ const LocationScreen = ({navigation}) => {
     // state: '',
     district: '',
     subdivison: '',
+    range: '',
     tehsil: '',
     panchayat: '',
     village: '',
@@ -92,38 +96,117 @@ const LocationScreen = ({navigation}) => {
       },
     });
 
-    queue.addJob('UPDATELocationWorker', {
-      state: 'झारखंड',
-      district: formik.values.district,
-      subdivison: formik.values.subdivison,
-      tehsil: formik.values.tehsil,
-      panchayat: formik.values.panchayat,
-      village: formik.values.village,
-    });
+    // check first if using those there are available or not
 
-    if (editProfileMode && authLevel !== 'एफआरसी') {
-      // ifr cfr check
-      navigation.replace('HomeScreen');
-    } else if (editProfileMode && authLevel === 'एफआरसी') {
-      if (postLevel === 'सदस्य') navigation.navigate('HomeScreen');
-      else navigation.navigate('DownloadPDF');
+    if (typeOfClaim === 'CFR') {
+      // check for role already exists
+      request(`/check-avail?mobile=${mobile}`, {
+        method: 'POST',
+        data: {
+          district: formik.values.district,
+          subdivison: formik.values.subdivison,
+          tehsil: formik.values.tehsil,
+          panchayat: formik.values.panchayat,
+          village: formik.values.village,
+          range: formik.values.range,
+          authLevel,
+          postLevel,
+        },
+      })
+        .then(res => {
+          console.log('avail-response');
+
+          if (res.data.success === true) {
+            queue.addJob('UPDATELocationWorker', {
+              state: 'झारखंड',
+              district: formik.values.district,
+              subdivison: formik.values.subdivison,
+              tehsil: formik.values.tehsil,
+              panchayat: formik.values.panchayat,
+              village: formik.values.village,
+              range: formik.values.range,
+            });
+
+            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
+            if (typeOfClaim === 'CFR') {
+              const timer = setTimeout(() => {
+                navigation.replace('HomeScreen');
+                return () => {
+                  clearTimeout(timer);
+                };
+              }, 2000);
+            } else {
+              navigation.navigate('HomeScreenIFR');
+            }
+          }
+        })
+        .catch(error => {
+          dispatch({
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: false,
+            },
+          });
+          // role already exists
+
+          console.log('avail-error', error);
+
+          Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
+            {
+              text: 'Ok',
+              // onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {
+              text: 'सहायता',
+              onPress: () => {
+                // link to whatsapp
+                const HttpURL = `https://wa.me/7209680888?text=${encodeURIComponent(
+                  `JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${
+                    formik.values.district
+                  } | Subdivison - ${formik.values.subdivison} | ${
+                    formik?.values?.range ? `${formik?.values?.range} | ` : ''
+                  }  Block - ${formik?.values?.tehsil} | Panchayat - ${
+                    formik?.values?.panchayat
+                  } | Village - ${
+                    formik?.values?.village
+                  } | Level - ${authLevel} | Role - ${postLevel}`,
+                )}`;
+                console.log(HttpURL);
+                Linking.openURL(HttpURL);
+              },
+            },
+          ]);
+        })
+        .finally(f => {
+          // dispatch({
+          //   type: 'UPDATE_APPUTIL_KEY',
+          //   payload: {
+          //     key: 'globalSyncStatus',
+          //     value: false,
+          //   },
+          // });
+        });
     } else {
-      // navigation.navigate('RoleInformation');
+      queue.addJob('UPDATELocationWorker', {
+        state: 'झारखंड',
+        district: formik.values.district,
+        subdivison: formik.values.subdivison,
+        tehsil: formik.values.tehsil,
+        panchayat: formik.values.panchayat,
+        village: formik.values.village,
+        range: formik.values.range,
+      });
 
-      //screen code 4 , means location information set
       dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
-
       if (typeOfClaim === 'CFR') {
-        // LET'S SEE
-        // navigation.replace('HomeScreen', {
-        //   toBeValidated: true,
-        // });
-
         navigation.replace('HomeScreen');
       } else {
         navigation.navigate('HomeScreenIFR');
       }
     }
+
     return;
   };
 
@@ -140,1725 +223,6 @@ const LocationScreen = ({navigation}) => {
     // validationSchema: locSchema,
     onSubmit: onNext,
   });
-  console.log(panchayat);
-
-  const states = [
-    {
-      label: t('Jharkhand'),
-      value: '1',
-      Districts: [
-        {
-          label: t('Samdega'),
-          value: '1',
-          Tehsils: [
-            {
-              label: t('Bano'),
-              value: '1',
-              Panchayats: [
-                {
-                  label: t('Bano'),
-                  value: '1',
-                },
-                {
-                  label: t('Simhatu'),
-                  value: '2',
-                },
-                {
-                  label: t('Konsode'),
-                  value: '3',
-                },
-                {
-                  label: t('Bintuka'),
-                  value: '4',
-                },
-                {
-                  label: t('Kanarowan'),
-                  value: '5',
-                },
-                {
-                  label: t('Pabura'),
-                  value: '6',
-                },
-                {
-                  label: t('Soy'),
-                  value: '7',
-                },
-                {
-                  label: t('Beraergi'),
-                  value: '9',
-                },
-                {
-                  label: t('Banki'),
-                  value: '10',
-                },
-                {
-                  label: t('Barkaduel'),
-                  value: '11',
-                },
-                {
-                  label: t('Ukauli'),
-                  value: '12',
-                },
-                {
-                  label: t('Dumariya'),
-                  value: '13',
-                },
-                {
-                  label: t('Sahubera'),
-                  value: '14',
-                },
-                {
-                  label: t('Jamtai'),
-                  value: '15',
-                },
-                {
-                  label: t('Raikera'),
-                  value: '16',
-                },
-                {
-                  label: t('Genmer'),
-                  value: '17',
-                },
-              ],
-              Villages: [
-                {
-                  label: t('Bano'),
-                  value: '1',
-                },
-                {
-                  label: t('Samdega'),
-                  value: '1',
-                },
-                {
-                  label: t('Karkatta'),
-                  value: '4',
-                },
-                {
-                  label: t('Bintuka'),
-                  value: '4',
-                },
-                {
-                  label: t('Jamursoya'),
-                  value: '4',
-                },
-                {
-                  label: t('Kewetang'),
-                  value: '4',
-                },
-                {
-                  label: t('Turyu'),
-                  value: '4',
-                },
-                {
-                  label: t('Pangur'),
-                  value: '4',
-                },
-                {
-                  label: t('Jarakel'),
-                  value: '5',
-                },
-                {
-                  label: t('Baromda'),
-                  value: '5',
-                },
-                {
-                  label: t('Jambera'),
-                  value: '5',
-                },
-                {
-                  label: t('Barbera'),
-                  value: '5',
-                },
-                {
-                  label: t('Bumbalda'),
-                  value: '6',
-                },
-                {
-                  label: t('Jamang'),
-                  value: '6',
-                },
-                {
-                  label: t('Pabura'),
-                  value: '6',
-                },
-                {
-                  label: t('Soy'),
-                  value: '7',
-                },
-                {
-                  label: t('Barbera'),
-                  value: '7',
-                },
-                {
-                  label: t('Ella'),
-                  value: '7',
-                },
-                {
-                  label: t('Kauwajor'),
-                  value: '7',
-                },
-                {
-                  label: t('Mahabuang'),
-                  value: '7',
-                },
-                {
-                  label: t('Sijang'),
-                  value: '7',
-                },
-                {
-                  label: t('Unikel'),
-                  value: '7',
-                },
-                {
-                  label: t('Bujaga'),
-                  value: '3',
-                },
-                {
-                  label: t('Kuruchdega'),
-                  value: '3',
-                },
-                {
-                  label: t('Chhotketunga'),
-                  value: '3',
-                },
-                {
-                  label: t('Jaldega'),
-                  value: '3',
-                },
-                {
-                  label: t('Virta'),
-                  value: '3',
-                },
-                {
-                  label: t('Bandu'),
-                  value: '2',
-                },
-                {
-                  label: t('Boroseta'),
-                  value: '2',
-                },
-                {
-                  label: t('Jamtoli'),
-                  value: '2',
-                },
-                {
-                  label: t('Ketka'),
-                  value: '2',
-                },
-                {
-                  label: t('Simhatu'),
-                  value: '2',
-                },
-                {
-                  label: t('Beraergi'),
-                  value: '9',
-                },
-                {
-                  label: t('Buruergi'),
-                  value: '9',
-                },
-                {
-                  label: t('Olhan'),
-                  value: '9',
-                },
-                {
-                  label: t('Sumingbera'),
-                  value: '9',
-                },
-                {
-                  label: t('Vinjhamarcha'),
-                  value: '9',
-                },
-                {
-                  label: t('Rabbai'),
-                  value: '9',
-                },
-                {
-                  label: t('Sutriuli'),
-                  value: '9',
-                },
-                {
-                  label: t('Helgara'),
-                  value: '10',
-                },
-                {
-                  label: t('Banki'),
-                  value: '10',
-                },
-                {
-                  label: t('Kanaroya'),
-                  value: '10',
-                },
-                {
-                  label: t('Pado'),
-                  value: '10',
-                },
-                {
-                  label: t('Badkaduel'),
-                  value: '11',
-                },
-                {
-                  label: t('Barerpa'),
-                  value: '11',
-                },
-                {
-                  label: t('Chhotkaduel'),
-                  value: '11',
-                },
-                {
-                  label: t('Kudrum'),
-                  value: '11',
-                },
-                {
-                  label: t('Lamgarh'),
-                  value: '11',
-                },
-                {
-                  label: t('Maimsora'),
-                  value: '11',
-                },
-                {
-                  label: t('Navagaon'),
-                  value: '11',
-                },
-                {
-                  label: t('Chaklabasa'),
-                  value: '12',
-                },
-                ,
-                {
-                  label: t('Chaklabasa'),
-                  value: '12',
-                },
-                {
-                  label: t('Sora'),
-                  value: '12',
-                },
-                {
-                  label: t('Buruhonjar'),
-                  value: '12',
-                },
-                {
-                  label: t('Chorbandu'),
-                  value: '12',
-                },
-                {
-                  label: t('Sotasoya'),
-                  value: '13',
-                },
-                {
-                  label: t('Sahubera'),
-                  value: '14',
-                },
-                {
-                  label: t('Jamtai'),
-                  value: '15',
-                },
-                {
-                  label: t('Bokamara'),
-                  value: '14',
-                },
-                {
-                  label: t('Hurda'),
-                  value: '15',
-                },
-                {
-                  label: t('Kohipath'),
-                  value: '15',
-                },
-                {
-                  label: t('Kewengutu'),
-                  value: '15',
-                },
-                {
-                  label: t('Jorobari'),
-                  value: '15',
-                },
-                {
-                  label: t('Jorponda'),
-                  value: '15',
-                },
-                {
-                  label: t('Birhuli'),
-                  value: '16',
-                },
-                {
-                  label: t('Kanta'),
-                  value: '16',
-                },
-                {
-                  label: t('Marani'),
-                  value: '16',
-                },
-                {
-                  label: t('Raikera'),
-                  value: '16',
-                },
-                {
-                  label: t('Tembro'),
-                  value: '16',
-                },
-
-                {
-                  label: t('Genmer'),
-                  value: '17',
-                },
-
-                {
-                  label: t('Chandsai'),
-                  value: '17',
-                },
-                {
-                  label: t('Gerda'),
-                  value: '17',
-                },
-                {
-                  label: t('Khijurbahar'),
-                  value: '17',
-                },
-                {
-                  label: t('Toniya'),
-                  value: '17',
-                },
-              ],
-            },
-            {
-              label: t('Jaldega'),
-              value: '2',
-              Panchayats: [
-                {
-                  label: t('Jaldega'),
-                  value: '18',
-                },
-                {
-                  label: t('Kutungiya'),
-                  value: '19',
-                },
-                // {
-                //     label: t('Kharwagarha'),
-                //     value: '20'
-                // },
-                {
-                  label: t('Konmerla'),
-                  value: '21',
-                },
-                ,
-                //  {
-                //     label: t('Lamboi'),
-                //     value: '22'
-                // }
-                {
-                  label: t('Lamdega'),
-                  value: '23',
-                },
-                {
-                  label: t('Tingina'),
-                  value: '24',
-                },
-                {
-                  label: t('Orga'),
-                  value: '25',
-                },
-                {
-                  label: t('Parba'),
-                  value: '26',
-                },
-                {
-                  label: t('Tati'),
-                  value: '27',
-                },
-              ],
-              Villages: [
-                {
-                  label: t('Jamtoli'),
-                  value: '18',
-                },
-                {
-                  label: t('Pahantoli'),
-                  value: '18',
-                },
-                {
-                  label: t('Mahomdega'),
-                  value: '18',
-                },
-                {
-                  label: t('Sawanjara'),
-                  value: '18',
-                },
-                {
-                  label: t('Ramjari'),
-                  value: '19',
-                },
-                {
-                  label: t('Minjurgarha'),
-                  value: '19',
-                },
-                {
-                  label: t('Minjurgarha'),
-                  value: '19',
-                },
-                {
-                  label: t('Kharwagarha'),
-                  value: '20',
-                },
-                {
-                  label: t('Gattigarha'),
-                  value: '20',
-                },
-                {
-                  label: t('Kinirkela'),
-                  value: '20',
-                },
-                {
-                  label: t('Patiamba'),
-                  value: '20',
-                },
-                {
-                  label: t('Dumarbera'),
-                  value: '21',
-                },
-                {
-                  label: t('Gangutoli'),
-                  value: '21',
-                },
-                {
-                  label: t('Badkitanger'),
-                  value: '21',
-                },
-                {
-                  label: t('Konmerla'),
-                  value: '21',
-                },
-                {
-                  label: t('Kolomdega'),
-                  value: '21',
-                },
-                {
-                  label: t('Tilaijara'),
-                  value: '22',
-                },
-                {
-                  label: t('Harrapnai'),
-                  value: '22',
-                },
-                {
-                  label: t('Karmapani'),
-                  value: '22',
-                },
-                {
-                  label: t('Bendojara'),
-                  value: '22',
-                },
-                {
-                  label: t('Lomboi Mahua Toli'),
-                  value: '22',
-                },
-                {
-                  label: t('Basaer'),
-                  value: '22',
-                },
-                {
-                  label: t('Mama Bhagina'),
-                  value: '22',
-                },
-                {
-                  label: t('Bhitbuna'),
-                  value: '23',
-                },
-                {
-                  label: t('Baraibera'),
-                  value: '23',
-                },
-                {
-                  label: t('Hututuwa'),
-                  value: '23',
-                },
-                {
-                  label: t('Lamdega'),
-                  value: '23',
-                },
-                {
-                  label: t('Parba lamdega'),
-                  value: '23',
-                },
-                {
-                  label: t('Dhorhibahar'),
-                  value: '24',
-                },
-                {
-                  label: t('Tikra'),
-                  value: '24',
-                },
-                {
-                  label: t('Silinga'),
-                  value: '24',
-                },
-                {
-                  label: t('Dhelsera'),
-                  value: '25',
-                },
-                {
-                  label: t('Dhelsera'),
-                  value: '25',
-                },
-                {
-                  label: t('Orga'),
-                  value: '25',
-                },
-                {
-                  label: t('Sarubahar'),
-                  value: '25',
-                },
-                {
-                  label: t('Parba'),
-                  value: '26',
-                },
-                {
-                  label: t('Dhingurpani'),
-                  value: '26',
-                },
-                {
-                  label: t('Dhouranhan'),
-                  value: '26',
-                },
-                {
-                  label: t('Kouwadarha'),
-                  value: '26',
-                },
-                {
-                  label: t('Lachhanpur'),
-                  value: '26',
-                },
-                {
-                  label: t('Siharmunda'),
-                  value: '26',
-                },
-                {
-                  label: t('Sukhajhariya'),
-                  value: '26',
-                },
-                {
-                  label: t('Mangaspur'),
-                  value: '26',
-                },
-                {
-                  label: t('Bendosera'),
-                  value: '26',
-                },
-                {
-                  label: t('Janoda'),
-                  value: '26',
-                },
-                {
-                  label: t('Jundih'),
-                  value: '26',
-                },
-                {
-                  label: t('Bhanvarchawa'),
-                  value: '26',
-                },
-                {
-                  label: t('Tati'),
-                  value: '27',
-                },
-                {
-                  label: t('Hutubada'),
-                  value: '27',
-                },
-                {
-                  label: t('Turupdega'),
-                  value: '27',
-                },
-                {
-                  label: t('Barbera'),
-                  value: '27',
-                },
-                {
-                  value: t('Toniya'),
-                  value: '27',
-                },
-              ],
-            },
-            {
-              label: t('Kolebira'),
-              value: '3',
-              Panchayats: [
-                {
-                  label: t('Ransiya'),
-                  value: '28',
-                },
-                {
-                  label: t('Shapur'),
-                  value: '29',
-                },
-                {
-                  label: t('Agharma'),
-                  value: '30',
-                },
-                {
-                  label: t('Kolebira'),
-                  value: '31',
-                },
-                {
-                  label: t('Nawatoli'),
-                  value: '32',
-                },
-                {
-                  label: t('Domtoli'),
-                  value: '33',
-                },
-                {
-                  label: t('Bandarchuan'),
-                  value: '34',
-                },
-                {
-                  label: t('Tutikel'),
-                  value: '35',
-                },
-                {
-                  label: t('Eidega'),
-                  value: '36',
-                },
-                {
-                  label: t('Barsloya'),
-                  value: '37',
-                },
-                {
-                  label: t('Lachragarh'),
-                  value: '38',
-                },
-              ],
-              Villages: [
-                {
-                  label: t('Bokba'),
-                  value: '28',
-                },
-                {
-                  label: t('Bongram'),
-                  value: '28',
-                },
-                {
-                  label: t('Keyondpani'),
-                  value: '28',
-                },
-                {
-                  label: t('Kinbira'),
-                  value: '28',
-                },
-                {
-                  label: t('Sirikonde Kera'),
-                  value: '28',
-                },
-                {
-                  label: t('Takba'),
-                  value: '28',
-                },
-                {
-                  label: t('Shapur'),
-                  value: '29',
-                },
-                {
-                  label: t('Kombakera'),
-                  value: '29',
-                },
-                {
-                  label: t('Konjoba'),
-                  value: '29',
-                },
-                {
-                  label: t('Dumardih'),
-                  value: '30',
-                },
-                {
-                  label: t('Jurkela'),
-                  value: '30',
-                },
-                {
-                  label: t('Karamtoli'),
-                  value: '30',
-                },
-                {
-                  label: t('Larba'),
-                  value: '30',
-                },
-                {
-                  label: t('Shivnathpur'),
-                  value: '30',
-                },
-                {
-                  label: t('Tangertoli'),
-                  value: '30',
-                },
-                {
-                  label: t('Jamtoli'),
-                  value: '31',
-                },
-                {
-                  label: t('Kunderdega'),
-                  value: '31',
-                },
-                {
-                  label: t('Bhanwarpahari'),
-                  value: '32',
-                },
-                {
-                  label: t('Bhanwarpahari'),
-                  value: '32',
-                },
-                {
-                  label: t('Nawatoli'),
-                  value: '32',
-                },
-                {
-                  label: t('Saraipani'),
-                  value: '32',
-                },
-                {
-                  label: t('Sarangapani'),
-                  value: '32',
-                },
-                {
-                  label: t('Machka'),
-                  value: '32',
-                },
-                {
-                  label: t('Sundratoli'),
-                  value: '32',
-                },
-                {
-                  label: t('Barwadih'),
-                  value: '33',
-                },
-                {
-                  label: t('Ghansilari'),
-                  value: '33',
-                },
-                {
-                  label: t('Tainsera'),
-                  value: '33',
-                },
-                {
-                  label: t('Bandarchuwan'),
-                  value: '34',
-                },
-                {
-                  label: t('Besrajara'),
-                  label: '34',
-                },
-                {
-                  label: t('Selsoya'),
-                  label: '34',
-                },
-                {
-                  label: t('Setasoya'),
-                  value: '34',
-                },
-                {
-                  label: t('Sardhatoli'),
-                  value: '35',
-                },
-                {
-                  label: t('Jhapla'),
-                  value: '35',
-                },
-                {
-                  label: t('Sokorla'),
-                  value: '35',
-                },
-                {
-                  label: t('Tutikel'),
-                  value: '35',
-                },
-                ,
-                {
-                  label: t('Eidega'),
-                  value: '36',
-                },
-                {
-                  label: t('Kudabera'),
-                  value: '36',
-                },
-                {
-                  label: t('Kalhatoli'),
-                  value: '36',
-                },
-                {
-                  label: t('Pogloya'),
-                  value: '36',
-                },
-                {
-                  label: t('Ramjari'),
-                  value: '36',
-                },
-                {
-                  label: t('Barasloya'),
-                  value: '37',
-                },
-                {
-                  label: t('Barketunga'),
-                  value: '37',
-                },
-                {
-                  label: t('Kulasoya'),
-                  value: '37',
-                },
-                {
-                  label: t('Sijang'),
-                  value: '37',
-                },
-                {
-                  label: t('Kombakra'),
-                  value: '38',
-                },
-                {
-                  label: t('Lachragarh'),
-                  value: '38',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  const panchayatToVillageMapping = {
-    [t('Bano')]: [
-      {
-        label: t('Bano'),
-        value: '1',
-      },
-      {
-        label: t('Samdega'),
-        value: '1',
-      },
-    ],
-    [t('Bintuka')]: [
-      {
-        label: t('Karkatta'),
-        value: '4',
-      },
-      {
-        label: t('Bintuka'),
-        value: '4',
-      },
-      {
-        label: t('Jamursoya'),
-        value: '4',
-      },
-      {
-        label: t('Kewetang'),
-        value: '4',
-      },
-      {
-        label: t('Turyu'),
-        value: '4',
-      },
-      {
-        label: t('Pangur'),
-        value: '4',
-      },
-    ],
-    [t('Kanarowan')]: [
-      {
-        label: t('Jarakel'),
-        value: '5',
-      },
-      {
-        label: t('Baromda'),
-        value: '5',
-      },
-      {
-        label: t('Jambera'),
-        value: '5',
-      },
-      {
-        label: t('Barbera'),
-        value: '5',
-      },
-      {
-        label: t('Kanarowan'),
-        value: '6',
-      },
-    ],
-    [t('Pabura')]: [
-      {
-        label: t('Bamulda'),
-        value: '6',
-      },
-
-      {
-        label: t('Nitmur'),
-        value: '6',
-      },
-      {
-        label: t('Jamang'),
-        value: '6',
-      },
-      {
-        label: t('Pabura'),
-        value: '7',
-      },
-      {
-        label: t('Kenduda'),
-        value: '7',
-      },
-      {
-        label: t('Chodordah'),
-        value: '7',
-      },
-    ],
-
-    [t('Soy')]: [
-      {
-        label: t('Soy'),
-        value: '7',
-      },
-      {
-        label: t('Barbera'),
-        value: '7',
-      },
-      {
-        label: t('Ela'),
-        value: '7',
-      },
-      {
-        label: t('Kauwajor'),
-        value: '7',
-      },
-      {
-        label: t('Mahabuang'),
-        value: '7',
-      },
-      {
-        label: t('Sijang'),
-        value: '7',
-      },
-      {
-        label: t('Unikel'),
-        value: '7',
-      },
-    ],
-    [t('Konsode')]: [
-      {
-        label: t('Bujaga'),
-        value: '8',
-      },
-      {
-        label: t('Kuruchdega'),
-        value: '8',
-      },
-      {
-        label: t('Chhotketunga'),
-        value: '8',
-      },
-      {
-        label: t('Jaldega'),
-        value: '8',
-      },
-      {
-        label: t('Virta'),
-        value: '8',
-      },
-    ],
-
-    [t('Semhatu')]: [
-      {
-        label: t('Bandu'),
-        value: '2',
-      },
-      {
-        label: t('Boroseta'),
-        value: '2',
-      },
-      {
-        label: t('Jamtoli'),
-        value: '2',
-      },
-      {
-        label: t('Ketka'),
-        value: '2',
-      },
-      {
-        label: t('Simhatu'),
-        value: '2',
-      },
-    ],
-    [t('Simhatu')]: [
-      {
-        label: t('Bandu'),
-        value: '2',
-      },
-      {
-        label: t('Boroseta'),
-        value: '2',
-      },
-      {
-        label: t('Jamtoli'),
-        value: '2',
-      },
-      {
-        label: t('Ketka'),
-        value: '2',
-      },
-      {
-        label: t('Simhatu'),
-        value: '2',
-      },
-    ],
-    [t('Beraergi')]: [
-      {
-        label: t('Beraergi'),
-        value: '9',
-      },
-      {
-        label: t('Buruergi'),
-        value: '9',
-      },
-      {
-        label: t('Olhan'),
-        value: '9',
-      },
-      {
-        label: t('Sumingbera'),
-        value: '9',
-      },
-      {
-        label: t('Vinjhamarcha'),
-        value: '9',
-      },
-      {
-        label: t('Rabbai'),
-        value: '9',
-      },
-      {
-        label: t('Sutriuli'),
-        value: '9',
-      },
-    ],
-    [t('Banki')]: [
-      {
-        label: t('Helgara'),
-        value: '10',
-      },
-      {
-        label: t('Banki'),
-        value: '10',
-      },
-      {
-        label: t('Kanaroya'),
-        value: '10',
-      },
-      {
-        label: t('Pado'),
-        value: '10',
-      },
-    ],
-
-    [t('Ukauli')]: [
-      ,
-      {
-        label: t('Chaklabasa'),
-        value: '12',
-      },
-      {
-        label: t('Sora'),
-        value: '12',
-      },
-      {
-        label: t('Buruhonjar'),
-        value: '12',
-      },
-      {
-        label: t('Chorbandu'),
-        value: '12',
-      },
-    ],
-    [t('Dumariya')]: [
-      {
-        label: t('Sotasoya'),
-        value: '13',
-      },
-    ],
-    [t('Sahubera')]: [
-      {
-        label: t('Sahubera'),
-        value: '14',
-      },
-      {
-        label: t('Bokamara'),
-        value: '14',
-      },
-    ],
-    [t('Jamtai')]: [
-      {
-        label: t('Jamtai'),
-        value: '15',
-      },
-      {
-        label: t('Hurda'),
-        value: '15',
-      },
-      {
-        label: t('Kohipath'),
-        value: '15',
-      },
-      {
-        label: t('Kewengutu'),
-        value: '15',
-      },
-      {
-        label: t('Jorobari'),
-        value: '15',
-      },
-      {
-        label: t('Jorponda'),
-        value: '15',
-      },
-    ],
-    [t('Raikera')]: [
-      {
-        label: t('Birhuli'),
-        value: '16',
-      },
-      {
-        label: t('Kanta'),
-        value: '16',
-      },
-      {
-        label: t('Marani'),
-        value: '16',
-      },
-      {
-        label: t('Raikera'),
-        value: '16',
-      },
-      {
-        label: t('Tembro'),
-        value: '16',
-      },
-    ],
-    [t('Genmer')]: [
-      {
-        label: t('Chandsai'),
-        value: '17',
-      },
-      {
-        label: t('Genmer'),
-        value: '17',
-      },
-
-      {
-        label: t('Gerda'),
-        value: '17',
-      },
-      {
-        label: t('Khijurbahar'),
-        value: '17',
-      },
-      {
-        label: t('Toniya'),
-        value: '17',
-      },
-    ],
-    [t('Badkaduel')]: [
-      {
-        label: t('Badkaduel'),
-        value: '1',
-      },
-      {
-        label: t('Barerpa'),
-        value: '2',
-      },
-      {
-        label: t('Chhotkaduel'),
-        value: '3',
-      },
-      {
-        label: t('Kudrum'),
-        value: '4',
-      },
-      {
-        label: t('Lamgarh'),
-        value: '5',
-      },
-      {
-        label: t('Maimsora'),
-        value: '6',
-      },
-      {
-        label: t('Navagaon'),
-        value: '7',
-      },
-    ],
-
-    // KOLIBERA
-
-    [t('Ransiya')]: [
-      {
-        label: t('Bokba'),
-        value: '28',
-      },
-      {
-        label: t('Bongram'),
-        value: '28',
-      },
-      {
-        label: t('Keyondpani'),
-        value: '28',
-      },
-      {
-        label: t('Kinbira'),
-        value: '28',
-      },
-      {
-        label: t('Sirikonde Kera'),
-        value: '28',
-      },
-      {
-        label: t('Takba'),
-        value: '28',
-      },
-    ],
-
-    [t('Shapur')]: [
-      {
-        label: t('Kombakera'),
-        value: '29',
-      },
-      {
-        label: t('Konjoba'),
-        value: '29',
-      },
-      {
-        label: t('Shahpur Kondekera'),
-        value: '20',
-      },
-    ],
-
-    [t('Agharma')]: [
-      {
-        label: t('Dumardih'),
-        value: '30',
-      },
-      {
-        label: t('Jurkela'),
-        value: '30',
-      },
-      {
-        label: t('Karamtoli'),
-        value: '30',
-      },
-      {
-        label: t('Larba'),
-        value: '30',
-      },
-      {
-        label: t('Shivnathpur'),
-        value: '30',
-      },
-      {
-        label: t('Tangertoli'),
-        value: '30',
-      },
-    ],
-
-    [t('Kolebira')]: [
-      {
-        label: t('Jamtoli'),
-        value: '31',
-      },
-      {
-        label: t('Kunderdega'),
-        value: '31',
-      },
-    ],
-
-    [t('Nawatoli')]: [
-      {
-        label: t('Bhanwarpahari'),
-        value: '32',
-      },
-      {
-        label: t('Bhanwarpahari'),
-        value: '32',
-      },
-      {
-        label: t('Saraipani'),
-        value: '32',
-      },
-      {
-        label: t('Sarangapani'),
-        value: '32',
-      },
-      {
-        label: t('Machka'),
-        value: '32',
-      },
-      {
-        label: t('Sundratoli'),
-        value: '32',
-      },
-    ],
-
-    [t('Domtoli')]: [
-      {
-        label: t('Barwadih'),
-        value: '33',
-      },
-      {
-        label: t('Ghansilari'),
-        value: '33',
-      },
-      {
-        label: t('Tainsera'),
-        value: '33',
-      },
-    ],
-
-    [t('Bandarchuwan')]: [
-      {
-        label: t('Bandarchuwan'),
-        value: '34',
-      },
-      {
-        label: t('Besrajara'),
-        value: '34',
-      },
-      {
-        label: t('Selsoya'),
-        value: '34',
-      },
-      {
-        label: t('Setasoya'),
-        value: '34',
-      },
-    ],
-
-    [t('Tutikel')]: [
-      {
-        label: t('Sardhatoli'),
-        value: '35',
-      },
-      {
-        label: t('Jhapla'),
-        value: '35',
-      },
-      {
-        label: t('Sokorla'),
-        value: '35',
-      },
-      {
-        label: t('Tutikel'),
-        value: '35',
-      },
-    ],
-
-    [t('Eidega')]: [
-      ,
-      {
-        label: t('Eidega'),
-        value: '36',
-      },
-      {
-        label: t('Kudabera'),
-        value: '36',
-      },
-      {
-        label: t('Kalhatoli'),
-        value: '36',
-      },
-      {
-        label: t('Pogloya'),
-        value: '36',
-      },
-      {
-        label: t('Ramjari'),
-        value: '36',
-      },
-    ],
-
-    [t('Barasloya')]: [
-      {
-        label: t('Barasloya'),
-        value: '37',
-      },
-      {
-        label: t('Barketunga'),
-        value: '37',
-      },
-      {
-        label: t('Kulasoya'),
-        value: '37',
-      },
-      {
-        label: t('Sijang'),
-        value: '37',
-      },
-    ],
-
-    [t('Lachragarh')]: [
-      ,
-      {
-        label: t('Kombakra'),
-        value: '38',
-      },
-      {
-        label: t('Lachragarh'),
-        value: '38',
-      },
-    ],
-
-    // JALDEGA
-
-    [t('Jaldega')]: [
-      {
-        label: t('Jamtoli'),
-        value: '18',
-      },
-      {
-        label: t('Pahantoli'),
-        value: '18',
-      },
-      {
-        label: t('Mahomdega'),
-        value: '18',
-      },
-      {
-        label: t('Sawanjara'),
-        value: '18',
-      },
-    ],
-
-    [t('Kutungiya')]: [
-      {
-        label: t('Menjurgara'),
-        value: '20',
-      },
-      {
-        label: t('Ramjari'),
-        value: '19',
-      },
-      {
-        label: t('Dumarmunda'),
-        value: '20',
-      },
-    ],
-
-    [t('Patiamba')]: [
-      {
-        label: t('Kharwagarha'),
-        value: '12',
-      },
-
-      {
-        label: t('Gattigarha'),
-        value: '20',
-      },
-      {
-        label: t('Kinirkela'),
-        value: '20',
-      },
-      {
-        label: t('Patiamba'),
-        value: '20',
-      },
-    ],
-
-    [t('Konmerla')]: [
-      {
-        label: t('Dumarbera'),
-        value: '21',
-      },
-      {
-        label: t('Gangutoli'),
-        value: '21',
-      },
-      {
-        label: t('Badkitanger'),
-        value: '21',
-      },
-      {
-        label: t('Konmerla'),
-        value: '21',
-      },
-      {
-        label: t('Kolomdega'),
-        value: '21',
-      },
-      {
-        label: t('Baldega'),
-        value: '23',
-      },
-    ],
-
-    [t('Lamdega')]: [
-      {
-        label: t('Baraibera'),
-        value: '23',
-      },
-
-      {
-        label: t('Bhitbuna'),
-        value: '23',
-      },
-
-      {
-        label: t('Hututuwa'),
-        value: '23',
-      },
-      {
-        label: t('Lamdega'),
-        value: '23',
-      },
-      {
-        label: t('Parba lamdega'),
-        value: '23',
-      },
-    ],
-
-    [t('Tingina')]: [
-      {
-        label: t('Dhorhibahar'),
-        value: '24',
-      },
-      {
-        label: t('Tikra'),
-        value: '24',
-      },
-
-      {
-        label: t('Tingina'),
-        value: '23',
-      },
-      {
-        label: t('Silinga'),
-        value: '24',
-      },
-    ],
-
-    [t('Orga')]: [
-      {
-        label: t('Dhelsera'),
-        value: '25',
-      },
-      {
-        label: t('Orga'),
-        value: '25',
-      },
-      {
-        label: t('Sarubahar'),
-        value: '25',
-      },
-    ],
-
-    [t('Parba')]: [
-      {
-        label: t('Dhingurpani'),
-        value: '26',
-      },
-      {
-        label: t('Dhouranjan'),
-        value: '28',
-      },
-      {
-        label: t('Kouwadarha'),
-        value: '26',
-      },
-      {
-        label: t('Lachhanpur'),
-        value: '26',
-      },
-      {
-        label: t('Siharmunda'),
-        value: '26',
-      },
-      {
-        label: t('Sukhajhariya'),
-        value: '26',
-      },
-      {
-        label: t('Mangaspur'),
-        value: '26',
-      },
-      {
-        label: t('Bendosera'),
-        value: '26',
-      },
-      {
-        label: t('Janoda'),
-        value: '26',
-      },
-    ],
-
-    [t('Tati')]: [
-      {
-        label: t('Hutubda'),
-        value: '29',
-      },
-      {
-        label: t('Turupdega'),
-        value: '27',
-      },
-      {
-        label: t('Barbera'),
-        value: '27',
-      },
-      {
-        label: t('Phirka'),
-        value: '27',
-      },
-      {
-        label: t('Tati'),
-        value: '28',
-      },
-      {
-        label: t('Torian'),
-        value: '29',
-      },
-
-      // {
-      //     value: t('Toniya'),
-      //     value: '27'
-      // },
-
-      // {
-      //     label: t('Tilaijara'),
-      //     value: '22'
-      // }, {
-      //     label: t('Harrapnai'),
-      //     value: '22'
-      // }, {
-      //     label: t('Karmapani'),
-      //     value: '22'
-      // }, {
-      //     label: t('Bendojara'),
-      //     value: '22'
-      // }, {
-      //     label: t('Lomboi Mahua Toli'),
-      //     value: '22'
-      // },
-      // {
-      //     label: t('Basaer'),
-      //     value: '22'
-      // }, {
-      //     label: t('Mama Bhagina'),
-      //     value: '22'
-      // },
-      // {
-      //     label: t('Jundih'),
-      //     value: '26'
-      // }, {
-      //     label: t('Hutubada'),
-      //     value: '27'
-      // },
-
-      // {
-      //     label: t('Bhanvarchawa'),
-      //     value: '26'
-      // },
-    ],
-  };
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -1896,22 +260,10 @@ const LocationScreen = ({navigation}) => {
   const [tehsilData, setTehsilData] = useState([]);
   const [panchayatData, setPanchanyatData] = useState([]);
   const [villageData, setVillageData] = useState([]);
+  const [rangeData, setRangeData] = useState([]);
 
   useEffect(() => {
     console.log('CALL_BEGIN');
-
-    // setSubDivisionData([]);
-    // setBlockData([]);
-    // setPanchanyatData([]);
-    // setVillageData([]);
-
-    // dispatch({
-    //   type: 'UPDATE_APPUTIL_KEY',
-    //   payload: {
-    //     key: 'globalSyncStatus',
-    //     value: true,
-    //   },
-    // });
     const LAMBDA_URL =
       'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
 
@@ -1919,9 +271,9 @@ const LocationScreen = ({navigation}) => {
     const url = LAMBDA_URL + encodeURIComponent(query);
     console.warn('URL', url);
     // alert(JSON.stringify(url))
-    console.log('FFF',BASE_URL+'/lgd?q='+url)
+    console.log('FFF', BASE_URL + '/lgd?q=' + url);
     axios
-      .get(BASE_URL+'/lgd?q='+url)
+      .get(BASE_URL + '/lgd?q=' + url)
       .then(res => {
         console.log('res', res?.data);
         const dropdownData = [];
@@ -1969,16 +321,16 @@ const LocationScreen = ({navigation}) => {
       return true;
     } else if (authLevel === t('SLMC')) {
       return false;
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       if (field === t('district') || field === t('subdivison')) {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       if (
         field === t('district') ||
-        field === t('subdivison')||
+        field === t('subdivison') ||
         field === t('tehsil')
       ) {
         return true;
@@ -1987,7 +339,6 @@ const LocationScreen = ({navigation}) => {
       }
     }
   };
-
 
   const handleShowNextButton = () => {
     if (authLevel === t('SDLC')) {
@@ -1998,9 +349,9 @@ const LocationScreen = ({navigation}) => {
       return Boolean(formik?.values?.village !== '');
     } else if (authLevel === t('SLMC')) {
       return Boolean(formik?.values?.district !== '');
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return Boolean(formik?.values?.subdivison !== '');
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       return Boolean(formik?.values?.tehsil !== '');
     }
   };
@@ -2068,7 +419,7 @@ const LocationScreen = ({navigation}) => {
                   console.warn('URL2', url2);
 
                   axios
-                    .get(BASE_URL+'/lgd?q='+url2)
+                    .get(BASE_URL + '/lgd?q=' + url2)
                     .then(rr => {
                       console.log('res->SUBDIVSION', rr?.data);
                       const d = [];
@@ -2107,7 +458,10 @@ const LocationScreen = ({navigation}) => {
               />
             )}
 
-            {Boolean(formik?.values?.district !== '' && handleShowDropdownOrNot(t('subdivison'))) && (
+            {Boolean(
+              formik?.values?.district !== '' &&
+                handleShowDropdownOrNot(t('subdivison')),
+            ) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('Subdivision')}</Text>
@@ -2127,7 +481,7 @@ const LocationScreen = ({navigation}) => {
                       //     value: true,
                       //   },
                       // });
-
+                      setRangeData([]);
                       setTehsilData([]);
                       formik?.setFieldValue('tehsil', '');
                       setPanchanyatData([]);
@@ -2137,25 +491,45 @@ const LocationScreen = ({navigation}) => {
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                      const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      const query3 = `SELECT distinct "${
+                        authLevel === 'भारसाधक  - वन विभाग (SDLC)'
+                          ? 'range'
+                          : 'block name'
+                      }" FROM jharfratable WHERE "district name" = '${
+                        formik?.values?.district
+                      }' AND "subdivison" = '${val}'  `;
                       console.warn(query3);
                       const url3 = LAMBDA_URL + encodeURIComponent(query3);
                       console.warn('URL3', url3);
 
                       axios
-                        .get(BASE_URL+'/lgd?q='+url3)
+                        .get(BASE_URL + '/lgd?q=' + url3)
                         .then(rr => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
+                          const rangeTempArray = [];
+                          const occured = new Map();
 
                           rr?.data?.data?.forEach(cell => {
-                            d?.push({
-                              label: cell['block name'],
-                              value: cell['block name'],
-                            });
+                            if (cell['block name']) {
+                              d?.push({
+                                label: cell['block name'],
+                                value: cell['block name'],
+                              });
+                            }
+
+                            if (cell['range'] && !occured.get(cell['range'])) {
+                              rangeTempArray.push({
+                                label: cell['range'],
+                                value: cell['range'],
+                              });
+                              occured.set(cell['range'], true);
+                            }
                           });
                           console.warn('DR-BLOCKS', d);
                           setTehsilData(d);
+
+                          setRangeData(rangeTempArray);
 
                           // [ {label:'',value:''},{label:'',value:''},]
                         })
@@ -2184,7 +558,85 @@ const LocationScreen = ({navigation}) => {
               </>
             )}
 
-            {Boolean(formik?.values?.subdivison !== '' && handleShowDropdownOrNot(t('tehsil'))) && (
+            {Boolean(
+              formik?.values?.subdivison !== '' &&
+                authLevel === 'भारसाधक  - वन विभाग (SDLC)',
+            ) && (
+              <>
+                <View style={styles.title}>
+                  <Text style={styles.titleText}>{t('वन क्षेत्र')}</Text>
+                </View>
+                {rangeData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={rangeData}
+                    formik={formik}
+                    variable={'range'}
+                    exec={val => {
+                      // formik?.setFieldValue('district',null);
+                      // dispatch({
+                      //   type: 'UPDATE_APPUTIL_KEY',
+                      //   payload: {
+                      //     key: 'globalSyncStatus',
+                      //     value: true,
+                      //   },
+                      // });
+                      // setTehsilData([]);
+                      // formik?.setFieldValue('tehsil', '');
+                      // setPanchanyatData([]);
+                      // formik?.setFieldValue('panchayat', '');
+                      // setVillageData([]);
+                      // formik?.setFieldValue('village', '');
+                      // const LAMBDA_URL =
+                      //   'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
+                      // const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      // console.warn(query3);
+                      // const url3 = LAMBDA_URL + encodeURIComponent(query3);
+                      // console.warn('URL3', url3);
+                      // axios
+                      //   .get(BASE_URL+'/lgd?q='+url3)
+                      //   .then(rr => {
+                      //     console.log('res->BLOCK', rr?.data);
+                      //     const d = [];
+                      //     rr?.data?.data?.forEach(cell => {
+                      //       d?.push({
+                      //         label: cell['block name'],
+                      //         value: cell['block name'],
+                      //       });
+                      //     });
+                      //     console.warn('DR-BLOCKS', d);
+                      //     setTehsilData(d);
+                      //     // [ {label:'',value:''},{label:'',value:''},]
+                      //   })
+                      //   .catch(err => {
+                      //     console.log(err);
+                      //   })
+                      //   .finally(f => {
+                      //     dispatch({
+                      //       type: 'UPDATE_APPUTIL_KEY',
+                      //       payload: {
+                      //         key: 'globalSyncStatus',
+                      //         value: false,
+                      //       },
+                      //     });
+                      //   });
+                    }}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                  />
+                )}
+              </>
+            )}
+
+            {Boolean(
+              formik?.values?.subdivison !== '' &&
+                handleShowDropdownOrNot(t('tehsil')),
+            ) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('Tehsil')}</Text>
@@ -2218,7 +670,7 @@ const LocationScreen = ({navigation}) => {
                       console.warn('PANCHAYAT', query2);
 
                       axios
-                        .get(BASE_URL+'/lgd?q='+url2)
+                        .get(BASE_URL + '/lgd?q=' + url2)
                         .then(rr => {
                           console.log('res->LOCAL_BODY', rr?.data);
                           const d = [];
@@ -2259,7 +711,10 @@ const LocationScreen = ({navigation}) => {
               </>
             )}
 
-            {Boolean(formik?.values?.tehsil !== '' && handleShowDropdownOrNot(t('panchayat'))) && (
+            {Boolean(
+              formik?.values?.tehsil !== '' &&
+                handleShowDropdownOrNot(t('panchayat')),
+            ) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('panchayat')}</Text>
@@ -2291,7 +746,7 @@ const LocationScreen = ({navigation}) => {
                       console.warn('Q2', query2);
 
                       axios
-                        .get(BASE_URL+'/lgd?q='+url2)
+                        .get(BASE_URL + '/lgd?q=' + url2)
                         .then(rr => {
                           console.log('res->village', rr?.data);
                           const d = [];
@@ -2332,7 +787,10 @@ const LocationScreen = ({navigation}) => {
               </>
             )}
 
-            {Boolean(formik?.values?.panchayat !== '' && handleShowDropdownOrNot(t('village'))) && (
+            {Boolean(
+              formik?.values?.panchayat !== '' &&
+                handleShowDropdownOrNot(t('village')),
+            ) && (
               <>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('village')}</Text>

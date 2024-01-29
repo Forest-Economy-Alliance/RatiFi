@@ -28,6 +28,11 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
     IFRclaims,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
 
+
+  
+  const {forgotFeature} = useSelector(state => state.entities.appUtil.appUtil);
+
+
   const [isUpperLevel, setIsUpperLevel] = useState(false);
 
   const {token} = useSelector(state => state.entities.auth.userInfo);
@@ -36,6 +41,8 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
   const [userType, setUserType] = useState('');
 
   const route = useRoute();
+
+
 
   const changeLanguage = value => {
     i18n
@@ -47,6 +54,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
   useEffect(() => {
     changeLanguage('hi');
     console.log('ooooo->', route?.params?.isMember);
+    console.log('params->', route?.params);
     if (Boolean(authLevel && authLevel !== t('FRC') && authLevel !== '-1')) {
       setIsUpperLevel(true);
     }
@@ -62,6 +70,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
       value: 'ifr',
     },
   ];
+  
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -82,14 +91,12 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
               <TouchableOpacity
                 key={lang.value}
                 onPress={() => {
-                  //
-                  // const isMemeber = route?.params?.isMember;
-
-                  // if (authLevel !== t('FRC')) {
-                  //   navigation.navigate('HomeScreen');
-                  //   return;
-                  // }
+            
                   const loginMode = route?.params?.loginMode;
+
+                    
+
+                  
                   if (lang?.value === 'ifr') {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
                     if(!village){
@@ -101,9 +108,14 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                   } else {
                     dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
 
+
+                    // 
                     // check form download screnerio
 
-                    if (loginMode === true) {
+                    if(forgotFeature){
+                      navigation.replace('HomeScreen');
+                    }
+                   else if (loginMode === true) {
                       if (authLevel !== t('FRC')) {
                         navigation.replace('HomeScreen');
                         return;
@@ -114,8 +126,11 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                       } else {
                         navigation.replace('HomeScreen');
                       }
+
+
+
                     } else {
-                      navigation.navigate('GovernmentOfficialCheck');
+                      navigation.replace('GovernmentOfficialCheck');
                     }
                   }
                 }}

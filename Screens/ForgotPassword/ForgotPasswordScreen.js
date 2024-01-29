@@ -23,12 +23,15 @@ import CustomError from '../../components/CustomError';
 import {postOTPAction} from '../../redux-store/actions/auth';
 import {getDeviceHash} from '../../utils/DeviceUtil';
 import {checkAccount} from '../../services/authService';
+import CountdownTimer from './CountdownTimer';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const ForgotPasswordScreen = ({navigation}) => {
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
   const dispatch = useDispatch();
+
+  const [timer, setTimer] = useState(0);
 
   // const [name, setName] = useState('Ram Krishna');
 
@@ -58,7 +61,7 @@ const ForgotPasswordScreen = ({navigation}) => {
     formikActions.setSubmitting(false);
     console.log('values', values);
 
-    // dispatch({ type: 'ENABLE_LOADING' });
+    dispatch({type: 'ENABLE_LOADING'});
     console.log(values.phoneNumber);
 
     return checkAccount({mobile: values.phoneNumber}).then(async response => {
@@ -67,6 +70,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         console.log(response.data, 'forget paasword data');
         const DD = await getDeviceHash();
         console.log('sending otp...');
+        setTimer(60)
         dispatch(
           postOTPAction(
             {
@@ -77,6 +81,14 @@ const ForgotPasswordScreen = ({navigation}) => {
               dd: DD || '-1',
             },
             args => {
+              
+              dispatch({
+                type: 'UPDATE_APPUTIL_KEY',
+                payload: {
+                  key: 'forgotFeature',
+                  value: true,
+                },
+              });
               // sending phone number in OTP Screen, as we need their to send in API Call
               navigation.navigate('OTP', {
                 phoneNumber: formik.values.phoneNumber,
@@ -107,6 +119,14 @@ const ForgotPasswordScreen = ({navigation}) => {
     validationSchema: NPSchema,
     onSubmit: onGetOtp,
   });
+
+  useEffect(() => {
+    if (timer === 0) return;
+    const interval = setInterval(() => setTimer(e => e - 1), 1000);
+    return () => clearInterval(interval);
+  }, [timer]);
+
+
 
   useEffect(() => {
     changeLanguage(language);
@@ -143,16 +163,20 @@ const ForgotPasswordScreen = ({navigation}) => {
                 {t('You will receive otp on this number')}
               </Text>
             </View>
+
             <CustomButton
-              text={t('Get OTP')}
+              dsbled={timer!==0}
+              // text={t('Get OTP') + `(${1})`}
               onPress={() => {
                 if (formik.errors.phoneNumber) {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
               }}
-              style={styles.otpBtn}
-            />
+              style={styles.otpBtn}>
+              {t('Get OTP')} {(timer!==0) && `(${timer})`}
+            </CustomButton>
+
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
@@ -240,6 +264,7 @@ const styles = StyleSheet.create({
   },
   otpBtn: {
     marginTop: '30%',
+    width: '100%',
   },
   inputName: {
     borderColor: '#CCCCCC',

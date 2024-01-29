@@ -184,12 +184,19 @@ const PastRecordsScreen = ({navigation}) => {
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop: 10, marginBottom: 10, marginLeft: 10}}>
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
             <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
           </Text>
         </Pressable>
+
+        {/* <Pressable disabled onPress={goBack}>
+          <Text style={{fontSize: 18}}>
+              SYNC {' '}
+          </Text>
+        </Pressable> */}
+        
       </View>
 
       {cameraModalVis && (
@@ -383,7 +390,7 @@ const PastRecordsScreen = ({navigation}) => {
           ))}
         </ScrollView>
 
-        {/* STAGE 1 (FORM 1-3)*/}
+        {/* STAGE 1 (FORM 1-1)*/}
         {stage === 1 && (
           <>
             <ScrollView>
@@ -562,7 +569,7 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 2 (FORM 4-9*/}
+        {/* STAGE 2 (FORM 2-7*/}
         {stage === 2 && (
           <>
             <ScrollView>
@@ -1559,7 +1566,7 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 3 (FORM 10-10)*/}
+        {/* STAGE 3 (FORM 8-9)*/}
         {stage === 3 && (
           <>
             <ScrollView>
@@ -1899,7 +1906,7 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 4 (FORM 11-12)*/}
+        {/* STAGE 4 (FORM 10-11)*/}
         {stage === 4 && (
           <>
             <ScrollView>
@@ -1974,6 +1981,8 @@ const PastRecordsScreen = ({navigation}) => {
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_10');
+                        setShouldTriggerJointVerification(true);
+
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2236,7 +2245,7 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 5 (FORM 13-14)*/}
+        {/* STAGE 5 (FORM 12-12)*/}
         {stage === 5 && (
           <>
             <ScrollView>
@@ -2413,7 +2422,7 @@ const PastRecordsScreen = ({navigation}) => {
           </>
         )}
 
-        {/* STAGE 6 (FORM 15-17)*/}
+        {/* STAGE 6 (FORM 13-18)*/}
         {stage === 6 && (
           <>
             <ScrollView>
@@ -2489,7 +2498,6 @@ const PastRecordsScreen = ({navigation}) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_13');
                         // hit the alert on sccess
-                        setShouldTriggerJointVerification(true);
                         setCameraModalVis(true);
                       }}
                       style={{

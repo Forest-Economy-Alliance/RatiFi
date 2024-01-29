@@ -101,6 +101,8 @@ const PasswordScreen = ({navigation}) => {
         });
       }
     } else {
+
+
       dispatch({
         type: 'UPDATE_APPUTIL_KEY',
         payload: {
@@ -157,16 +159,17 @@ const PasswordScreen = ({navigation}) => {
       },
     });
 
-    if (forgetPasswordCode == 1) {
-      navigation.navigate('HomeScreen');
-    } else if (args) {
+   if (args) {
       // screen code 3 means , password set
       dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
 
       // odish screen if oritya
       if (language === 'or') {
         navigation.navigate('LocationOdisha');
-      } else navigation.navigate('ClaimTypeSelectionScreen');
+      } else {
+        navigation.navigate('ClaimTypeSelectionScreen');
+    }
+
     }
   }
 

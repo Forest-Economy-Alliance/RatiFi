@@ -85,6 +85,13 @@ const ForestFiSplashScreen = ({navigation}) => {
         value: false,
       },
     });
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'forgotFeature',
+        value: false,
+      },
+    });
     setTimeout(() => {
       //assuiming if created user, then he will finish regiration completely
       //  without application break, more cases can be handled

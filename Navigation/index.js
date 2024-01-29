@@ -47,6 +47,8 @@ import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 import ValidateIFRScreen from '../Screens/ValidateIFR';
 import GovernmentOfficialCheck from '../Screens/GovernmentOfficialCheck';
+import ViewForms from '../Screens/ViewForms';
+import RORWebView from '../Screens/RORWebView/RORWebView';
 
 const Stack = createNativeStackNavigator();
 
@@ -246,6 +248,20 @@ export const Navigation = () => {
         <Stack.Screen
           name="Location"
           component={LocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="RORWebView"
+          component={RORWebView}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ViewForms"
+          component={ViewForms}
           options={{
             headerShown: false,
           }}

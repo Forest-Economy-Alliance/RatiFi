@@ -187,13 +187,13 @@ const HomeScreen = ({navigation}) => {
   // useEffect(() => {
   //   const backAction = () => {
   //     // current screen is home screen
-  //     Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
+  //     Alert.alert('JharFRA - सूचना', 'क्या आप ऐप से बाहर निकलना चाहते हैं?', [
   //       {
-  //         text: 'Cancel',
+  //         text: 'नहीं',
   //         onPress: () => null,
   //         style: 'cancel',
   //       },
-  //       {text: 'YES', onPress: () => BackHandler.exitApp()},
+  //       {text: 'हाँ', onPress: () => BackHandler.exitApp()},
   //     ]);
   //     return true;
   //   };
@@ -212,9 +212,32 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: false,
+      },
+    });
     // dispatch user profile
     checkAccount({mobile: profile?.mobile}).then(data => {
       console.log(data?.data);
+
+      const {authLevel,district,village,panchayat,range,subdivison,tehsil}=data?.data?.data;
+      const associatedFields=[...checkFromServer(authLevel,district,subdivison,tehsil,range,panchayat,village)]
+     
+      
+      console.warn('associatedFields', associatedFields);
+      console.log(associatedFields.includes('-1'));
+      if (associatedFields.includes('-1') === true) {
+        navigation.replace('Location');
+      }else{
+        console.log("Gelocation Fine")
+      }
+
+
+
+
       dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
       dispatch({
         type: 'SAVE_GOVT_OFFICIALS',
@@ -222,12 +245,12 @@ const HomeScreen = ({navigation}) => {
       });
     });
 
-    request(
-      `/fetch-notifications?id=${profile?._id}`,
-      {method: 'GET'},
-      true,
-      false,
-    )
+    let URL = `/fetch-notifications?id=${profile?._id}`;
+    if (authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */) {
+      URL = `/fetch-notifications-by-village?village=${village}`;
+    }
+
+    request(URL, {method: 'GET'}, true, false)
       .then(({data}) => {
         console.log('x', data?.data?.length);
         setNC(data?.data?.length);
@@ -237,7 +260,9 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
+
   async function alpha() {
+    OneSignal.Notifications.requestPermission(true);
     const data = OneSignal.User.pushSubscription.getPushSubscriptionId();
     console.log('pid', data);
     dispatch({
@@ -276,11 +301,30 @@ const HomeScreen = ({navigation}) => {
       return [district];
     } else if (authLevel === t(t('SLMC'))) {
       return [t('Jharkhand')];
-    } else if (authLevel === t('Forest_Department')) {
+    } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return [district, subdivison];
-    } else if (authLevel === t('Revenue_Department')) {
+    } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       return [district, subdivison, tehsil];
     }
+    return [];
+  };
+
+
+  const checkFromServer = (A,B, C, D,range, E, F) => {
+    if (A === t('FRC')) {
+      return [B, C, D, E, F];
+    } else if (A === t('SDLC')) {
+      return [B, C];
+    } else if (A === t('DLC')) {
+      return [B];
+    } else if (A === t(t('SLMC'))) {
+      return [t('Jharkhand')];
+    } else if (A === 'भारसाधक  - वन विभाग (SDLC)') {
+      return [B, C];
+    } else if (A === 'भारसाधक  - राजस्व विभाग (SDLC)') {
+      return [B, C, D];
+    }
+    return [];
   };
 
   return (
@@ -408,6 +452,20 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )}
+
+        {/* {Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
+          <CustomButton
+            style={{marginBottom: 20}}
+            button={{width: 300}}
+            // dsbled={profile?.claims?.length==0}
+            text={'समुदायिक आवेदन स्थिति'}
+            onPress={() => {
+              if (profile?.claims?.length === 0) {
+                Alert.alert('सूचना', t('CLAIM_NOT_APPLIED'));
+              } else navigation.navigate('ViewForms');
+            }}
+          />
+        )} */}
         {/* <CustomButton
                     style={{ marginBottom: 20 }}
                     button={{ width: 300 }}
@@ -446,8 +504,6 @@ const HomeScreen = ({navigation}) => {
           />
         )}
 
-       
-
         <View
           style={{
             backgroundColor: 'green',
@@ -474,12 +530,11 @@ const HomeScreen = ({navigation}) => {
                   zIndex: 199,
                   borderRadius: 10,
                 }}>
-                ({notificationCount})
+             {notificationCount !==undefined && `(`}{notificationCount}{notificationCount !=undefined  && `)`}
               </Text>
             )}
           </CustomButton>
         )}
-        
       </View>
 
       {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}

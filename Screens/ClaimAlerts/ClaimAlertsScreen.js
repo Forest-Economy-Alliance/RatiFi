@@ -9,8 +9,10 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Linking,
 } from 'react-native';
 import {BackHandler} from 'react-native';
+import Hyperlink from 'react-native-hyperlink'
 
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
@@ -36,7 +38,7 @@ const ClaimAlertsScreen = ({navigation}) => {
   console.log(authLevel);
   // console.log(authLevel=="एसडीएलसी");
   const route = useRoute();
-  const {_id} = useSelector(state => state.entities.auth.userInfo?.profile);
+  const {_id,village} = useSelector(state => state.entities.auth.userInfo?.profile);
 
   const language = 'hi';
   const dispatch = useDispatch();
@@ -90,8 +92,21 @@ const ClaimAlertsScreen = ({navigation}) => {
         value: true,
       },
     });
-    console.log(_id);
-    request(`/fetch-notifications?id=${_id}`, {method: 'GET'}, true, false)
+
+    // if memeber -> Show claim attached notificaiton
+    // if president -> 
+    // if secretary -> 
+    // if sdlc -> sdlc specific to that userId
+    // if forestRang,revenue -> sdlc specific to that userId
+    // if dlc -> specific to that userId
+
+
+    let URL = `/fetch-notifications?id=${_id}`;
+    if ( authLevel === 'एफआरसी' /* && postLevel === 'सदस्य' */){
+     URL = `/fetch-notifications-by-village?village=${village}`
+    }
+   
+    request(URL, {method: 'GET'}, true, false)
       .then(({data}) => {
         console.log(data);
         setAlerts(data?.data);
@@ -155,9 +170,22 @@ const ClaimAlertsScreen = ({navigation}) => {
                 borderRadius: 10,
                 borderColor: '#fff',
               }}>
+                  <Hyperlink    
+                      linkText={ url => '  Click here' }
+
+                    linkStyle={ { color: 'orange' } }
+ onPress={ (url, text) => {
+                    Linking.openURL(url);
+                  } }>
+
               <Text style={{color: '#fff', marginVertical: 5}}>
                 {item?.message}
               </Text>
+
+              </Hyperlink>
+
+
+
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{color: '#fff'}}>{item?.senderName}</Text>

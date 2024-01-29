@@ -82,6 +82,7 @@ queue.addWorker(
           const rssponse = await patchClaimHandler({
             claimId: payload?.claimId,
             title: payload?.docName,
+            userId: payload?.userId,
             storageUrl: rr.data.response.Location,
             extraImageID: payload?.extraImageID,
             shouldTriggerJointVerification:
