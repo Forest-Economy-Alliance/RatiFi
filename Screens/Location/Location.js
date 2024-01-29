@@ -39,8 +39,16 @@ const BG_IMG_PATH = require('../../assets/images/background.png');
 const LocationScreen = ({navigation}) => {
   const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
   const [editProfileMode, setEditProfileMode] = useState(false);
-  const {name, panchayat, tehsil, statet, district, postLevel, authLevel,mobile} =
-    useSelector(state => state.entities.auth.userInfo?.profile);
+  const {
+    name,
+    panchayat,
+    tehsil,
+    statet,
+    district,
+    postLevel,
+    authLevel,
+    mobile,
+  } = useSelector(state => state.entities.auth.userInfo?.profile);
   // console.log(authLevel=="एसडीएलसी");
   const route = useRoute();
 
@@ -121,15 +129,12 @@ const LocationScreen = ({navigation}) => {
 
             dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
             if (typeOfClaim === 'CFR') {
-          
-              const timer=setTimeout(()=>{
+              const timer = setTimeout(() => {
                 navigation.replace('HomeScreen');
-                return ()=>{
+                return () => {
                   clearTimeout(timer);
-                }
-
-              },2000);
-
+                };
+              }, 2000);
             } else {
               navigation.navigate('HomeScreenIFR');
             }
@@ -157,13 +162,24 @@ const LocationScreen = ({navigation}) => {
               text: 'सहायता',
               onPress: () => {
                 // link to whatsapp
-                const HttpURL= `https://wa.me/7209680888?text=${encodeURIComponent(`JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${formik.values.district} | Subdivison - ${formik.values.subdivison} | ${formik?.values?.range ? `${formik?.values?.range} | ` : '' }  Block - ${formik?.values?.tehsil} | Panchayat - ${formik?.values?.panchayat} | Village - ${formik?.values?.village} | Level - ${authLevel} | Role - ${postLevel}`)}`
-                console.log(HttpURL)
+                const HttpURL = `https://wa.me/7209680888?text=${encodeURIComponent(
+                  `JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${
+                    formik.values.district
+                  } | Subdivison - ${formik.values.subdivison} | ${
+                    formik?.values?.range ? `${formik?.values?.range} | ` : ''
+                  }  Block - ${formik?.values?.tehsil} | Panchayat - ${
+                    formik?.values?.panchayat
+                  } | Village - ${
+                    formik?.values?.village
+                  } | Level - ${authLevel} | Role - ${postLevel}`,
+                )}`;
+                console.log(HttpURL);
                 Linking.openURL(HttpURL);
               },
             },
           ]);
-        }).finally(f=>{
+        })
+        .finally(f => {
           // dispatch({
           //   type: 'UPDATE_APPUTIL_KEY',
           //   payload: {
@@ -244,7 +260,7 @@ const LocationScreen = ({navigation}) => {
   const [tehsilData, setTehsilData] = useState([]);
   const [panchayatData, setPanchanyatData] = useState([]);
   const [villageData, setVillageData] = useState([]);
-  const [rangeData,setRangeData]=useState([]);
+  const [rangeData, setRangeData] = useState([]);
 
   useEffect(() => {
     console.log('CALL_BEGIN');
@@ -465,7 +481,7 @@ const LocationScreen = ({navigation}) => {
                       //     value: true,
                       //   },
                       // });
-                      setRangeData([])
+                      setRangeData([]);
                       setTehsilData([]);
                       formik?.setFieldValue('tehsil', '');
                       setPanchanyatData([]);
@@ -475,7 +491,13 @@ const LocationScreen = ({navigation}) => {
 
                       const LAMBDA_URL =
                         'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                      const query3 = `SELECT distinct "block name","range" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
+                      const query3 = `SELECT distinct "${
+                        authLevel === 'भारसाधक  - वन विभाग (SDLC)'
+                          ? 'range'
+                          : 'block name'
+                      }" FROM jharfratable WHERE "district name" = '${
+                        formik?.values?.district
+                      }' AND "subdivison" = '${val}'  `;
                       console.warn(query3);
                       const url3 = LAMBDA_URL + encodeURIComponent(query3);
                       console.warn('URL3', url3);
@@ -485,24 +507,24 @@ const LocationScreen = ({navigation}) => {
                         .then(rr => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
-                          const rangeTempArray=[];
-                          const occured=new Map();
-
+                          const rangeTempArray = [];
+                          const occured = new Map();
 
                           rr?.data?.data?.forEach(cell => {
-                            d?.push({
-                              label: cell['block name'],
-                              value: cell['block name'],
-                            });
-                           
-                            if(!occured.get(cell['range'])){
+                            if (cell['block name']) {
+                              d?.push({
+                                label: cell['block name'],
+                                value: cell['block name'],
+                              });
+                            }
+
+                            if (cell['range'] && !occured.get(cell['range'])) {
                               rangeTempArray.push({
                                 label: cell['range'],
-                                value: cell['range']
-                              })
-                              occured.set(cell['range'],true);
+                                value: cell['range'],
+                              });
+                              occured.set(cell['range'], true);
                             }
-                           
                           });
                           console.warn('DR-BLOCKS', d);
                           setTehsilData(d);
@@ -544,7 +566,7 @@ const LocationScreen = ({navigation}) => {
                 <View style={styles.title}>
                   <Text style={styles.titleText}>{t('वन क्षेत्र')}</Text>
                 </View>
-                {rangeData?.length!==0 ? (
+                {rangeData?.length !== 0 ? (
                   <Dropdown
                     visible={true}
                     data={rangeData}
