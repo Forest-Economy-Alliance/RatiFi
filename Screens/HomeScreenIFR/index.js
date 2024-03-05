@@ -15,7 +15,10 @@ import {
     KeyboardAvoidingView,
     Alert,
     Linking,
+    Pressable,
   } from 'react-native';
+  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
   import FastImage from 'react-native-fast-image';
   import {useTranslation} from 'react-i18next';
   import '../../assets/i18n/i18n';
@@ -43,11 +46,20 @@ import {
     viewFRCMember,
   } from '../../services/authService';
   import {firebase} from '@react-native-firebase/messaging';
+import { useFocusEffect } from '@react-navigation/native';
+import { getGCPUrlImageHandler } from '../../services/commonService';
+import { patchClaimHandler, patchClaimHandlerIFR } from '../../services/claimService';
+import { OneSignal } from 'react-native-onesignal';
+import NetworkSpeed from 'react-native-network-speed';
+import { VasernDB } from '../../vasern';
   const BG_IMG_PATH = require('../../assets/images/background.png');
   
   const HomeScreenIFR = ({navigation}) => {
+    const {ClaimImagesIFR,IFRBoundaries} = VasernDB;
+    // const [refresh,setRefresh]=useState(false);
+
     const [notificationCount, setNC] = useState(0);
-  
+    const [pendingCount, setPendingCount] = useState(0);
     const [imgUrl, setImgUrl] = useState('x');
     const [vData, setVData] = useState([]);
     const {
@@ -65,6 +77,7 @@ import {
     const vil = useSelector(
       state => state.entities.auth.userInfo.profile.village,
     );
+    const [canSync,setCanSync]=useState(true);
     const [vis, setVis] = useState(false);
     const language = 'hi';
     const dispatch = useDispatch();
@@ -224,6 +237,126 @@ import {
         });
     }, []);
   
+
+
+
+
+    useFocusEffect(
+      React.useCallback(() => {
+        console.log('syncer called');
+  
+        async function syncer() {
+          console.log('syncer called');
+          setCanSync(false);
+          const da = await ClaimImagesIFR.data();
+          const bdry=await IFRBoundaries.data();
+          console.warn('bdry',bdry)
+          // console.log()
+          console.log('len', da?.length);
+          setPendingCount(da?.length);
+          for await (let key of da) {
+            try {
+            
+      
+              // dispatch({
+              //   type: 'UPDATE_APPUTIL_KEY',
+              //   payload: {
+              //     key: key?.name,
+              //     value: true,
+              //   },
+              // });
+      
+      
+      
+      
+              console.log(key?.name+'->initiated')
+              const response = await getGCPUrlImageHandler({
+                fileName: 'Hello',
+                base64Data: key?.base64Data,
+                isPdf: false,
+                userId: key?.userId || 'unknown-asset',
+              });
+              console.warn(response?.data.response.Location);
+          
+               const rssponse = await patchClaimHandlerIFR({
+                                claimId: claim?._id.toString(),
+                                title: docName,
+                                storageUrl: response?.data?.response.Location,
+                              });
+                
+              /**
+               * 
+              
+              const rssponse = await patchClaimHandlerIFR({
+                claimId: key?.claimId,
+                title: key?.name,
+                userId: key?.userId,
+                storageUrl: response?.data.response.Location,
+                extraImageID: key?.extraImageID || undefined,
+                shouldTriggerJointVerification:
+                  key?.shouldTriggerJointVerification,
+                IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
+                oneSignalId:
+                  OneSignal.User.pushSubscription.getPushSubscriptionId(),
+              });
+               */
+      
+              console.log('updated-claim')
+      
+              // const rmv = await ClaimImages.remove(key?.id);
+              // console.warn('rmv',rmv);
+              console.log(response?.data.response.Location);
+      
+              setPendingCount(e => e - 1);
+              
+              await ClaimImagesIFR.remove(key);
+               
+        
+      
+            } catch (itemError) {
+              console.warn('ierr', itemError);
+            }finally {
+              setCanSync(true);
+              break;
+              return ;
+            }
+          }
+      
+          // setRefresh(!refresh);
+        }
+      
+  
+        // if(isConnected)
+        syncer();
+        let t = 0;
+        NetworkSpeed.startListenNetworkSpeed(
+          ({
+            downLoadSpeed,
+            downLoadSpeedCurrent,
+            upLoadSpeed,
+            upLoadSpeedCurrent,
+          }) => {
+            console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app 当前app的上传速度(currently can only be used on Android)
+            // setSpeed(upLoadSpeed);
+            t += 1;
+            console.log(t);
+            if (t % 5 === 0 && canSync) syncer();
+          },
+        );
+  
+        // return () => NetworkSpeed.stopListenNetworkSpeed();
+      }, []),
+    );
+
+
+
+
+
+
+
+
+
+
     return (
       // flexWrap: 'wrap',
       <ImageBackground
@@ -425,6 +558,36 @@ import {
             }}>
             {t('apply for individual forest right')}
           </CustomButton> */}
+
+<Pressable
+        onPress={() => alert('OK')}
+        style={{
+          flexDirection: 'row',
+          marginRight: 10,
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Text style={{fontSize: 22}}>
+          <MaterialCommunityIcons
+            name="web-sync"
+            size={22}
+            color={pendingCount === 0 ? 'white' : 'yellow'}
+          />
+          <MaterialCommunityIcons
+           
+            name="map-marker-radius-outline"
+            size={22}
+            color={pendingCount === 0 ? 'white' : 'yellow'}
+          />
+        </Text>
+        <Text
+          style={{
+            color: pendingCount === 0 ? 'white' : 'yellow',
+            fontSize: 16,
+          }}>{` ${
+          pendingCount === 0 ? '' : '(' + pendingCount + ')'
+        }`}</Text>
+      </Pressable>
       </ImageBackground>
     );
   };

@@ -40,7 +40,9 @@ export const postOTPAction = (data, callback) => dispatch => {
       }
     })
     .catch(err => {
+      ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
       console.log('NETWOEK', err);
+      dispatch({ type: 'DISABLE_LOADING' });
     });
 };
 
@@ -62,7 +64,8 @@ export const verifyOTPAction = (data, callback) => dispatch => {
     })
     .catch(err => {
       console.log('NETWOEK', err);
-       
+      ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+
       dispatch({ type: 'DISABLE_LOADING' });
     });
 };
@@ -104,6 +107,8 @@ export const updatePasswordAction = (data, callback) => dispatch => {
       }
     })
     .catch(err => {
+      ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+      dispatch({ type: 'DISABLE_LOADING' });
       console.log('NETWOEK', err);
     });
 };
@@ -148,6 +153,7 @@ export const updateUserInfoAction = (data, callback) => dispatch => {
       }
     })
     .catch(err => {
+      
       console.log('NETWOEK', err);
     });
 };
@@ -167,7 +173,10 @@ export const signInAction = (data, callback) => dispatch => {
       }
       callback(response.success);
     })
-    .catch(err => { })
+    .catch(err => {
+      dispatch({ type: 'DISABLE_LOADING' });
+        ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+     })
     .finally(f => {
       dispatch({ type: 'DISABLE_LOADING' });
     });

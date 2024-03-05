@@ -36,6 +36,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   fetchClaimDetailsHandler,
@@ -48,6 +49,11 @@ import {RNCamera} from 'react-native-camera';
 import {getGCPUrlImageHandler} from '../../services/commonService';
 import {useToast} from 'react-native-toast-notifications';
 import FastImage from 'react-native-fast-image';
+import { useFocusEffect } from '@react-navigation/native';
+import NetworkSpeed from 'react-native-network-speed';
+
+import { VasernDB } from '../../vasern';
+import { OneSignal } from 'react-native-onesignal';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -62,6 +68,7 @@ const handleHTTPtoHTTPS = args => {
 var ok = false;
 
 const PastRecordsScreen = ({navigation}) => {
+  const {ClaimImages} = VasernDB;
   const {language, formUploadSyncStatus, globalSyncStatus} = useSelector(
     state => state.entities.appUtil.appUtil,
   );
@@ -112,11 +119,13 @@ const PastRecordsScreen = ({navigation}) => {
   }, []);
 
   const {profile} = useSelector(state => state.entities.auth.userInfo);
-
+  const TOSYNC_COUNTER=useSelector(state=>state.entities.appUtil);
+// alert(JSON.stringify(TOSYNC_COUNTER))
+console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
   // const {claim}=useSelector(state=>state?.entities?.claimUtil?.claimInfo)
 
   const [claim, setClaim] = useState(null);
-
+  const [canSync,setCanSync]=useState(true);
   const [uploadType, setUploadType] = useState('MAIN_DOC');
   const [focusedExtraImageID, setFocusedExtraImageID] = useState(null);
   const [shouldTriggerJointVerification, setShouldTriggerJointVerification] =
@@ -126,13 +135,13 @@ const PastRecordsScreen = ({navigation}) => {
   // const [name, setName] = useState('Ram Krishna');
   const [member, setMember] = useState('FRC');
   const [role, setRole] = useState('Secretary');
-
+  const [refresh,setRefresh]=useState(false);
   const [cameraModalVis, setCameraModalVis] = useState(false);
   const [previewDocModalVis, setPreviewDocModal] = useState(false);
   const [docUrlToPreview, setDocUrlToPreview] = useState('');
-
+  const [speed,setSpeed]=useState('');
   const [docName, setDocName] = useState('SDM_SUMMON');
-
+  const [pendingCount, setPendingCount] = useState(0);
   // const [state, setState] = useState('Himachal Pradesh');
   // const [district, setDistrict] = useState('Kagda');
   // const [tehsil, setTehsil] = useState('Palampur');
@@ -147,8 +156,10 @@ const PastRecordsScreen = ({navigation}) => {
     setDocUrlToPreview(finalUrl);
     // get-image-for-previev
   };
+  
 
   useEffect(() => {
+
     if (ok === false) dispatch({type: 'ENABLE_LOADING'});
     // changeLanguage(language);
     // fetch Details on basis of applicaton
@@ -171,12 +182,83 @@ const PastRecordsScreen = ({navigation}) => {
         dispatch({type: 'DISABLE_LOADING'});
       });
     ok = true;
-  }, [globalSyncStatus]);
+  }, [globalSyncStatus,refresh]);
 
   const goBack = () => {
     // Move to RoleScreen
     navigation.navigate('HomeScreen');
   };
+
+
+
+  async function syncer() {
+    console.log('syncer called');
+    setCanSync(false);
+    const da = await ClaimImages.data();
+    console.log('len', da?.length);
+    setPendingCount(da?.length);
+    for await (let key of da) {
+      try {
+      
+
+        // dispatch({
+        //   type: 'UPDATE_APPUTIL_KEY',
+        //   payload: {
+        //     key: key?.name,
+        //     value: true,
+        //   },
+        // });
+
+
+
+
+        console.log(key?.name+'->initiated')
+        const response = await getGCPUrlImageHandler({
+          fileName: 'Hello',
+          base64Data: key?.base64Data,
+          isPdf: false,
+          userId: key?.userId || 'unknown-asset',
+        });
+        console.warn(response?.data.response.Location);
+    
+        const rssponse = await patchClaimHandler({
+          claimId: key?.claimId,
+          title: key?.name,
+          userId: key?.userId,
+          storageUrl: response?.data.response.Location,
+          extraImageID: key?.extraImageID || undefined,
+          shouldTriggerJointVerification:
+            key?.shouldTriggerJointVerification,
+          IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
+          oneSignalId:
+            OneSignal.User.pushSubscription.getPushSubscriptionId(),
+        });
+
+        console.log('updated-claim')
+
+        // const rmv = await ClaimImages.remove(key?.id);
+        // console.warn('rmv',rmv);
+        console.log(response?.data.response.Location);
+
+        setPendingCount(e => e - 1);
+        
+        await ClaimImages.remove(key);
+         
+  
+
+      } catch (itemError) {
+        console.warn('ierr', itemError);
+      }finally {
+        setCanSync(true);
+        break;
+        return ;
+      }
+    }
+
+    setRefresh(!refresh);
+  }
+
+  
 
   return (
     <ImageBackground
@@ -188,14 +270,25 @@ const PastRecordsScreen = ({navigation}) => {
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
             <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
-          </Text>
+                </Text>
         </Pressable>
 
-        {/* <Pressable disabled onPress={goBack}>
-          <Text style={{fontSize: 18}}>
-              SYNC {' '}
-          </Text>
-        </Pressable> */}
+
+        <Pressable
+        onPress={() => null}
+        style={{
+          flexDirection: 'row',
+          marginRight: 10,
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Text style={{fontSize: 22}}>
+          <MaterialCommunityIcons name="web-sync" size={22} color={pendingCount===0?'white':'yellow'} />
+        </Text>
+        <Text style={{color: pendingCount===0?'white': 'yellow', fontSize: 16}}>{`  ${
+          pendingCount === 0 ? '' : '(' + pendingCount + ')' 
+        }`}</Text>
+      </Pressable>
         
       </View>
 
@@ -274,6 +367,8 @@ const PastRecordsScreen = ({navigation}) => {
                         shouldTriggerJointVerification,
                       });
                     } else if (uploadType === 'NEW_EXTRA_IMAGE') {
+
+
                       queue.addJob('testWorker', {
                         localPath: compressedURI,
                         userId: profile?._id,
@@ -281,6 +376,9 @@ const PastRecordsScreen = ({navigation}) => {
                         claimId: claim?._id?.toString(),
                         extraImageID: 'NEW',
                       });
+
+
+
                     } else if (uploadType === 'UPDATE_EXTRA_IMAGE') {
                       queue.addJob('testWorker', {
                         localPath: compressedURI,
@@ -293,6 +391,10 @@ const PastRecordsScreen = ({navigation}) => {
 
                     dispatch({type: 'DISABLE_LOADING'});
                     setShouldTriggerJointVerification(false);
+                   setTimeout(()=>{
+                    // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
+                    syncer();
+                   },1500)
                     return;
                   }
                 } catch (error) {
@@ -343,7 +445,7 @@ const PastRecordsScreen = ({navigation}) => {
               style={{color: 'white', paddingHorizontal: 20}}
               onPress={() => setPreviewDocModal(false)}>
               <Text style={{color: 'white'}}>
-                <Ionicons name="close" size={50} c />
+                <Ionicons name="close" size={50}  />
               </Text>
             </TouchableOpacity>
           </View>
@@ -456,7 +558,7 @@ const PastRecordsScreen = ({navigation}) => {
                     }}
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
                     {!(
-                      claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1'
+                      claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' 
                     ) ? (
                       <Ionicons name="camera" color="white" size={20} />
                     ) : (
@@ -556,12 +658,11 @@ const PastRecordsScreen = ({navigation}) => {
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_1');
                       setCameraModalVis(true);
-
-                      setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} />
+                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
+                    {TOSYNC_COUNTER && TOSYNC_COUNTER['SDM_SUMMON_RESULT_1']}
                   </CustomButton>
                 )}
               </View>
@@ -1558,7 +1659,7 @@ const PastRecordsScreen = ({navigation}) => {
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} />
+                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
                   </CustomButton>
                 )}
               </View>
@@ -3403,8 +3504,8 @@ const PastRecordsScreen = ({navigation}) => {
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[17]?.title ===
-                  'SDM_SUMMON_RESULT_18' && (
+                {( (claim?.courtDocuments[17]?.title ===
+                  'SDM_SUMMON_RESULT_18') || (true /*vasren DB if yes then show count */) )&& (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_18');
@@ -3414,7 +3515,7 @@ const PastRecordsScreen = ({navigation}) => {
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} />
+                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
                   </CustomButton>
                 )}
               </View>

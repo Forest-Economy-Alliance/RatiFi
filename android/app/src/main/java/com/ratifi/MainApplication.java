@@ -5,6 +5,8 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.xh.networkspeed.RNNetworkSpeedPackage;
+import com.reactlibrary.RNVasernPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;

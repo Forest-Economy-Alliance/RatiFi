@@ -36,6 +36,10 @@ target 'RatiFi' do
 
   pod 'react-native-view-shot', :path => '../node_modules/react-native-view-shot'
 
+  pod 'vasern', :path => '../node_modules/vasern'
+
+  pod 'RNNetworkSpeed', :path => '../node_modules/react-native-network-speed'
+
   target 'RatiFiTests' do
     inherit! :complete
     # Pods for testing

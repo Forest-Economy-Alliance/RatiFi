@@ -6,7 +6,7 @@ import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
-import RNFS from 'react-native-fs';
+import RNFS, {PicturesDirectoryPath} from 'react-native-fs';
 import NetInfo from '@react-native-community/netinfo';
 
 import store from './redux-store';
@@ -20,6 +20,8 @@ import {YellowBox} from 'react-native';
 import {getGCPUrlImageHandler} from './services/commonService';
 import {patchClaimHandler} from './services/claimService';
 import {updatePasswordHandler, updateUserHandler} from './services/authService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {VasernDB} from './vasern';
 
 console.disableYellowBox = true;
 
@@ -67,8 +69,60 @@ queue.configure({
 
 queue.addWorker(
   new Worker('testWorker', async payload => {
-    return new Promise(async resolve => {
-      const r = await RNFS.readFile(payload.localPath, 'base64');
+    return new Promise(async (resolve, reject) => {
+      console.log('ifr-payload', payload);
+
+      try {
+        const r = await RNFS.readFile(payload.localPath, 'base64');
+
+        console.warn('path->', payload?.localPath);
+
+        const {ClaimImages, ClaimImagesIFR} = VasernDB;
+        console.log('vdb', payload);
+
+        if (payload?.IS_IFR_CLAIM) {
+          const Bob = VasernDB.ClaimImagesIFR.insert({
+            base64Data: r,
+            claimId: payload?.claimId,
+            name: payload?.docName,
+            userId: payload?.userId,
+            // storageUrl: rr.data.response.Location,
+            extraImageID: payload?.extraImageID,
+            shouldTriggerJointVerification:
+              payload?.shouldTriggerJointVerification,
+            IS_IFR_CLAIM: true,
+            // oneSignalId:
+            //   OneSignal.User.pushSubscription.getPushSubscriptionId(),
+          });
+        } else {
+          const Peter = VasernDB.ClaimImages.insert({
+            base64Data: r,
+            claimId: payload?.claimId,
+            name: payload?.docName,
+            userId: payload?.userId,
+            // storageUrl: rr.data.response.Location,
+            extraImageID: payload?.extraImageID,
+            shouldTriggerJointVerification:
+              payload?.shouldTriggerJointVerification,
+            IS_IFR_CLAIM: payload?.IS_IFR_CLAIM || false,
+            // oneSignalId:
+            //   OneSignal.User.pushSubscription.getPushSubscriptionId(),
+          });
+        }
+
+        store.store.dispatch({
+          type: 'UPDATE_APPUTIL_KEY',
+          payload: {
+            key: 'globalSyncStatus',
+            value: false,
+          },
+        });
+        resolve();
+        return;
+      } catch (err) {
+        reject(err);
+      }
+
       getGCPUrlImageHandler({
         fileName: 'Hello',
         base64Data: r,

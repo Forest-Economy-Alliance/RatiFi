@@ -37,10 +37,12 @@ import {getGCPUrlImageHandler} from '../../services/commonService';
 import {useToast} from 'react-native-toast-notifications';
 import {useTranslation} from 'react-i18next';
 import {err} from 'react-native-svg/lib/typescript/xml';
+import {VasernDB} from '../../vasern';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 export const MarkBoundry = () => {
+  const {IFRBoundaries} = VasernDB;
   const toast = useToast();
   const {t} = useTranslation();
   const {profile, claim} = useSelector(state => state.entities.auth.userInfo);
@@ -334,10 +336,20 @@ export const MarkBoundry = () => {
                   event.nativeEvent.coordinate.accuracy,
                 );
                 setLocationAccuracy(event.nativeEvent.coordinate.accuracy);
+
                 setUserLocation({
                   latitude: event.nativeEvent.coordinate.latitude,
                   longitude: event.nativeEvent.coordinate.longitude,
                 });
+
+                // @update in varsen db
+                if (isTripStarted) {
+                  const tt = IFRBoundaries.insert({
+                    userPath: userPath,
+                    claimId: profile?.IFRclaims[profile?.IFRclaims?.length - 1],
+                  });
+                  console.warn(tt);
+                }
               }}
               // onMapReady={() => {
               //   PermissionsAndroid.request(
@@ -389,7 +401,9 @@ export const MarkBoundry = () => {
             {!isTripStarted ? (
               <>
                 <CustomButton
-                  onPress={() => {
+                  onPress={async () => {
+                    const rs = await IFRBoundaries.removeAllRecords();
+                    console.warn('rs', rs);
                     setI(true);
                   }}>
                   <Text>प्रारंभ करें</Text>
@@ -404,7 +418,7 @@ export const MarkBoundry = () => {
                     setI(false);
 
                     patchClaimFieldsIFRHandler({
-                      boundary: `userPath`,
+                      boundary: userPath,
                       claimId:
                         profile?.IFRclaims[profile?.IFRclaims?.length - 1],
                       boundaryImageUrl: 'S3 URL',
