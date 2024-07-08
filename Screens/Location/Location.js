@@ -271,17 +271,17 @@ const LocationScreen = ({navigation}) => {
     const url = LAMBDA_URL + encodeURIComponent(query);
     console.warn('URL', url);
     // alert(JSON.stringify(url))
-    // console.log('FFF', BASE_URL + '/lgd?q=' + url);
+    console.log('FFF', BASE_URL + '/lgd?q=' + url);
     axios
-      .get(BASE_URL + '/location-json?mapping=' + encodeURIComponent('Districts'))
+      .get(BASE_URL + '/lgd?q=' + url)
       .then(res => {
         console.log('res', res?.data);
         const dropdownData = [];
 
         res?.data?.data?.forEach(cell => {
           dropdownData?.push({
-            label: cell,
-            value: cell,
+            label: cell['district name'],
+            value: cell['district name'],
           });
         });
         console.warn(dropdownData);
@@ -417,21 +417,17 @@ const LocationScreen = ({navigation}) => {
                   const query2 = `SELECT distinct "subdivison" FROM jharfratable WHERE "district name" = '${val}'`;
                   const url2 = LAMBDA_URL + encodeURIComponent(query2);
                   console.warn('URL2', url2);
-                  BASE_URL + '/lgd?q=' + url2;
+
                   axios
-                    .get(
-                      BASE_URL +
-                        '/location-json?mapping=' +
-                        encodeURIComponent(`DistrictToSubdivison-${val}`),
-                    )
+                    .get(BASE_URL + '/lgd?q=' + url2)
                     .then(rr => {
                       console.log('res->SUBDIVSION', rr?.data);
                       const d = [];
 
                       rr?.data?.data?.forEach(cell => {
                         d?.push({
-                          label: cell,
-                          value: cell
+                          label: cell['subdivison'],
+                          value: cell['subdivison'],
                         });
                       });
                       console.warn('subdivison', d);
@@ -507,17 +503,7 @@ const LocationScreen = ({navigation}) => {
                       console.warn('URL3', url3);
 
                       axios
-                        .get(
-                          BASE_URL +
-                            '/location-json?mapping=' +
-                            encodeURIComponent(
-                              `${
-                                authLevel === 'भारसाधक  - वन विभाग (SDLC)'
-                                  ? 'SubdivisonToRange'
-                                  : 'SubdivisonToBlock'
-                              }-${val}`,
-                            ),
-                        )
+                        .get(BASE_URL + '/lgd?q=' + url3)
                         .then(rr => {
                           console.log('res->BLOCK', rr?.data);
                           const d = [];
@@ -525,19 +511,19 @@ const LocationScreen = ({navigation}) => {
                           const occured = new Map();
 
                           rr?.data?.data?.forEach(cell => {
-                            if (authLevel!=='भारसाधक  - वन विभाग (SDLC)') {
+                            if (cell['block name']) {
                               d?.push({
-                                label: cell,
-                                value: cell,
+                                label: cell['block name'],
+                                value: cell['block name'],
                               });
                             }
 
-                            if (authLevel==='भारसाधक  - वन विभाग (SDLC)') {
+                            if (cell['range'] && !occured.get(cell['range'])) {
                               rangeTempArray.push({
-                                label: cell,
-                                value: cell
+                                label: cell['range'],
+                                value: cell['range'],
                               });
-                              // occured.set(cell['range'], true);
+                              occured.set(cell['range'], true);
                             }
                           });
                           console.warn('DR-BLOCKS', d);
@@ -684,19 +670,15 @@ const LocationScreen = ({navigation}) => {
                       console.warn('PANCHAYAT', query2);
 
                       axios
-                      .get(
-                        BASE_URL +
-                          '/location-json?mapping=' +
-                          encodeURIComponent(`BlockToPanchayat-${val}`),
-                      )
+                        .get(BASE_URL + '/lgd?q=' + url2)
                         .then(rr => {
                           console.log('res->LOCAL_BODY', rr?.data);
                           const d = [];
 
                           rr?.data?.data?.forEach(cell => {
                             d?.push({
-                              label: cell,
-                              value: cell
+                              label: cell['local body name'],
+                              value: cell['local body name'],
                             });
                           });
                           console.warn('DR-Panchayat', d);
@@ -764,19 +746,15 @@ const LocationScreen = ({navigation}) => {
                       console.warn('Q2', query2);
 
                       axios
-                      .get(
-                        BASE_URL +
-                          '/location-json?mapping=' +
-                          encodeURIComponent(`PanchayatToVillage-${val}`),
-                      )
+                        .get(BASE_URL + '/lgd?q=' + url2)
                         .then(rr => {
                           console.log('res->village', rr?.data);
                           const d = [];
 
                           rr?.data?.data?.forEach(cell => {
                             d?.push({
-                              label: cell,
-                              value: cell
+                              label: cell['village name'],
+                              value: cell['village name'],
                             });
                           });
                           console.warn('DR-VillGE', d);

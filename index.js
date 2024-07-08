@@ -70,15 +70,12 @@ queue.configure({
 queue.addWorker(
   new Worker('testWorker', async payload => {
     return new Promise(async (resolve, reject) => {
-      console.log('ifr-payload', payload);
-
+   
       try {
         const r = await RNFS.readFile(payload.localPath, 'base64');
 
-        console.warn('path->', payload?.localPath);
-
         const {ClaimImages, ClaimImagesIFR} = VasernDB;
-        console.log('vdb', payload);
+   
 
         if (payload?.IS_IFR_CLAIM) {
           const Bob = VasernDB.ClaimImagesIFR.insert({
@@ -95,6 +92,9 @@ queue.addWorker(
             //   OneSignal.User.pushSubscription.getPushSubscriptionId(),
           });
         } else {
+
+
+
           const Peter = VasernDB.ClaimImages.insert({
             base64Data: r,
             claimId: payload?.claimId,
@@ -117,11 +117,10 @@ queue.addWorker(
             value: false,
           },
         });
-        resolve();
-        return;
-      } catch (err) {
-        reject(err);
-      }
+
+
+
+
 
       getGCPUrlImageHandler({
         fileName: 'Hello',
@@ -130,8 +129,7 @@ queue.addWorker(
         userId: payload?.userId || 'unknown-asset',
       })
         .then(async rr => {
-          console.log('OK', rr.data.response.Location);
-          console.log('DONE');
+   
           await RNFS.unlink(payload?.localPath);
           const rssponse = await patchClaimHandler({
             claimId: payload?.claimId,
@@ -152,7 +150,33 @@ queue.addWorker(
         })
         .catch(err => {
           console.log(`ERR--->${payload?.docName}`, err);
-        });
+        })
+        .finally(f=>{
+          store.store.dispatch({
+            type: 'UPDATE_APPUTIL_KEY',
+            payload: {
+              key: 'globalSyncStatus',
+              value: false,
+            },
+          });
+  
+        })
+
+
+
+
+
+        resolve();
+        return;
+      } catch (err) {
+        reject(err);
+      }
+
+      
+
+
+
+
     });
   }),
 );

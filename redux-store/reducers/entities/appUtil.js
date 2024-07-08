@@ -99,7 +99,15 @@ const appUtil = (state = INIT_STATE, action) => {
     case 'UPDATE_APPUTIL_KEY':
       return {
         ...state,
-        [action?.payload?.key]: action?.payload?.value,
+      };
+    case 'UPDATE_TOSYNC_COUNT':
+      console.warn('skydone', action.payload);
+
+      let olddata = Object.assign({}, state?.extraImageFormCountForSync);
+      olddata[action.payload?.label] = action.payload?.value;
+      return {
+        ...state,
+        extraImageFormCountForSync: olddata,
       };
     case 'CLEAR_FORMS':
       return {

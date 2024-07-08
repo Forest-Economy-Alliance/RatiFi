@@ -1,67 +1,55 @@
 /* eslint-disable prettier/prettier */
+/**
+ * First Problem - Cache the form data last time saved
+ * Second Problem - Check the form Upload Status
+ * Third Problem -
+ *
+ */
 import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
   ImageBackground,
   ScrollView,
-  Button,
   Modal,
   TouchableOpacity,
-  ActivityIndicator,
-  BackHandler,
   Pressable,
-  ProgressBarAndroid,
-  SafeAreaView,
+  TextInput,
+  Alert,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {Image} from 'react-native-compressor';
-import PagerView from 'react-native-pager-view';
 
 import queue from 'react-native-job-queue';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
-import dayjs from 'dayjs';
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useFormik} from 'formik';
-import {object, ref, string} from 'yup';
 import 'yup-phone';
-import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import CustomError from '../../components/CustomError';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  fetchClaimDetailsHandler,
-  patchClaimHandler,
-} from '../../services/claimService';
-import {fetchClaimDetailsByIdAction} from '../../redux-store/actions/claim';
-import RNFS from 'react-native-fs';
+import {fetchClaimDetailsHandler, patchClaimArea} from '../../services/claimService';
 
 import {RNCamera} from 'react-native-camera';
 import {getGCPUrlImageHandler} from '../../services/commonService';
-import {useToast} from 'react-native-toast-notifications';
 import FastImage from 'react-native-fast-image';
-import { useFocusEffect } from '@react-navigation/native';
-import NetworkSpeed from 'react-native-network-speed';
 
-import { VasernDB } from '../../vasern';
-import { OneSignal } from 'react-native-onesignal';
+import {VasernDB} from '../../vasern';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const handleHTTPtoHTTPS = args => {
-  if (args.includes('https:')) {
+  if (args?.includes('https:')) {
     return args;
   } else {
-    return args.replace(/^http:/, 'https:');
+    return args?.replace(/^http:/, 'https:');
   }
 };
 
@@ -69,150 +57,101 @@ var ok = false;
 
 const PastRecordsScreen = ({navigation}) => {
   const {ClaimImages} = VasernDB;
-  const {language, formUploadSyncStatus, globalSyncStatus} = useSelector(
+  const {formUploadSyncStatus, globalSyncStatus} = useSelector(
     state => state.entities.appUtil.appUtil,
   );
 
   const dispatch = useDispatch();
 
-  const toast = useToast();
   const cameraRef = useRef(null);
+
+  const [claimedArea, setClaimedArea] = useState('');
 
   const [stage, setStage] = useState(1);
 
-  const [bit, setBit] = useState(false);
-
-  const [curLen, setCurLen] = useState(0);
-
   const {t, i18n} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [errorVisible, setErrorVisible] = useState(false);
+  // const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+  // const changeLanguage = value => {
+  //   i18n
+  //     .changeLanguage(value)
+  //     .then(() => setCurrentLanguage(value))
+  //     .catch(err => console.log(err));
+  // };
 
-  const {
-    name,
-    panchayat,
-    tehsil,
-    state,
-    district,
-    village,
-    postLevel,
-    authLevel,
-  } = useSelector(state => state.entities.auth.userInfo?.profile);
-
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        navigation.goBack();
-        return true;
-      },
-    );
-    return () => backHandler.remove();
-  }, []);
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     () => {
+  //       navigation.goBack();
+  //       return true;
+  //     },
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
 
   const {profile} = useSelector(state => state.entities.auth.userInfo);
-  const TOSYNC_COUNTER=useSelector(state=>state.entities.appUtil);
-// alert(JSON.stringify(TOSYNC_COUNTER))
-console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
-  // const {claim}=useSelector(state=>state?.entities?.claimUtil?.claimInfo)
 
+  const {extraImageFormCountForSync} = useSelector(
+    state => state?.entities?.appUtil?.appUtil,
+  );
+
+  console.warn('TSX', extraImageFormCountForSync);
   const [claim, setClaim] = useState(null);
-  const [canSync,setCanSync]=useState(true);
+  const [canSync, setCanSync] = useState(true);
   const [uploadType, setUploadType] = useState('MAIN_DOC');
   const [focusedExtraImageID, setFocusedExtraImageID] = useState(null);
   const [shouldTriggerJointVerification, setShouldTriggerJointVerification] =
     useState(false);
-  // console.log("UIF",claim);
-
-  // const [name, setName] = useState('Ram Krishna');
-  const [member, setMember] = useState('FRC');
-  const [role, setRole] = useState('Secretary');
-  const [refresh,setRefresh]=useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [cameraModalVis, setCameraModalVis] = useState(false);
   const [previewDocModalVis, setPreviewDocModal] = useState(false);
   const [docUrlToPreview, setDocUrlToPreview] = useState('');
-  const [speed,setSpeed]=useState('');
   const [docName, setDocName] = useState('SDM_SUMMON');
   const [pendingCount, setPendingCount] = useState(0);
-  // const [state, setState] = useState('Himachal Pradesh');
-  // const [district, setDistrict] = useState('Kagda');
-  // const [tehsil, setTehsil] = useState('Palampur');
-  // const [panchayat, setPanchayat] = useState('Gopalpur');
-  // const [village, setVillage] = useState('Gujrehra');
-
-  // const useSelector=useSelector(state=>state.claim)
 
   const handleDocPreview = url => {
-    // alert(url)
     const finalUrl = handleHTTPtoHTTPS(url);
     setDocUrlToPreview(finalUrl);
-    // get-image-for-previev
   };
-  
 
   useEffect(() => {
-
     if (ok === false) dispatch({type: 'ENABLE_LOADING'});
-    // changeLanguage(language);
-    // fetch Details on basis of applicaton
-    // alert(profile?.claims[3])
-
-    console.warn('BEFORE_GOING', profile?.claims[profile?.claims.length - 1]);
     fetchClaimDetailsHandler({
       claimId: profile?.claims[profile?.claims.length - 1],
     })
-      .then(response => {
+      .then(async response => {
         console.warn(response.data.data);
         setClaim(response.data.data);
 
-        // dispatch({type: 'DISABLE_LOADING'});
+        await AsyncStorage.setItem(
+          'lastLoadedClaimData',
+          JSON.stringify(response.data.data),
+        );
       })
-      .catch(error => {
+      .catch(async error => {
+        const it = await AsyncStorage.getItem('lastLoadedClaimData');
+        setClaim(JSON.parse(it));
         console.log('ERROR', error);
       })
       .finally(f => {
         dispatch({type: 'DISABLE_LOADING'});
       });
     ok = true;
-  }, [globalSyncStatus,refresh]);
+  }, [globalSyncStatus, refresh]);
 
   const goBack = () => {
-    // Move to RoleScreen
     navigation.navigate('HomeScreen');
   };
-
-
 
   async function syncer() {
     console.log('syncer called');
     setCanSync(false);
     const da = await ClaimImages.data();
-    console.log('len', da?.length);
     setPendingCount(da?.length);
     for await (let key of da) {
       try {
-      
-
-        // dispatch({
-        //   type: 'UPDATE_APPUTIL_KEY',
-        //   payload: {
-        //     key: key?.name,
-        //     value: true,
-        //   },
-        // });
-
-
-
-
-        console.log(key?.name+'->initiated')
         const response = await getGCPUrlImageHandler({
           fileName: 'Hello',
           base64Data: key?.base64Data,
@@ -220,45 +159,50 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
           userId: key?.userId || 'unknown-asset',
         });
         console.warn(response?.data.response.Location);
-    
-        const rssponse = await patchClaimHandler({
-          claimId: key?.claimId,
-          title: key?.name,
-          userId: key?.userId,
-          storageUrl: response?.data.response.Location,
-          extraImageID: key?.extraImageID || undefined,
-          shouldTriggerJointVerification:
-            key?.shouldTriggerJointVerification,
-          IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
-          oneSignalId:
-            OneSignal.User.pushSubscription.getPushSubscriptionId(),
-        });
 
-        console.log('updated-claim')
+        // const rssponse = await patchClaimHandler({
+        //   claimId: key?.claimId,
+        //   title: key?.name,
+        //   userId: key?.userId,
+        //   storageUrl: response?.data.response.Location,
+        //   extraImageID: key?.extraImageID || undefined,
+        //   shouldTriggerJointVerification:
+        //     key?.shouldTriggerJointVerification,
+        //   IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
+        //   oneSignalId:
+        //     OneSignal.User.pushSubscription.getPushSubscriptionId(),
+        // });
 
-        // const rmv = await ClaimImages.remove(key?.id);
-        // console.warn('rmv',rmv);
+        console.log('updated-claim');
+
         console.log(response?.data.response.Location);
 
         setPendingCount(e => e - 1);
-        
-        await ClaimImages.remove(key);
-         
-  
 
+        await ClaimImages.remove(key);
+
+        dispatch({
+          type: 'UPDATE_TOSYNC_COUNT',
+          payload: {
+            label: docName,
+            value: 0,
+          },
+        });
       } catch (itemError) {
         console.warn('ierr', itemError);
-      }finally {
+      } finally {
         setCanSync(true);
         break;
-        return ;
+        return;
       }
     }
 
     setRefresh(!refresh);
   }
 
-  
+  useEffect(() => {
+    syncer();
+  }, []);
 
   return (
     <ImageBackground
@@ -266,30 +210,43 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 10,
+          marginBottom: 10,
+          marginLeft: 10,
+        }}>
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
             <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
-                </Text>
+          </Text>
         </Pressable>
 
-
         <Pressable
-        onPress={() => null}
-        style={{
-          flexDirection: 'row',
-          marginRight: 10,
-          justifyContent: 'center',
-          marginTop: 10,
-        }}>
-        <Text style={{fontSize: 22}}>
-          <MaterialCommunityIcons name="web-sync" size={22} color={pendingCount===0?'white':'yellow'} />
-        </Text>
-        <Text style={{color: pendingCount===0?'white': 'yellow', fontSize: 16}}>{`  ${
-          pendingCount === 0 ? '' : '(' + pendingCount + ')' 
-        }`}</Text>
-      </Pressable>
-        
+          onPress={() => null}
+          style={{
+            flexDirection: 'row',
+            marginRight: 10,
+            justifyContent: 'center',
+            marginTop: 10,
+          }}>
+          <Text style={{fontSize: 22}}>
+            <MaterialCommunityIcons
+              name="web-sync"
+              size={22}
+              color={pendingCount === 0 ? 'white' : 'yellow'}
+            />
+          </Text>
+          <Text
+            style={{
+              color: pendingCount === 0 ? 'white' : 'yellow',
+              fontSize: 16,
+            }}>{`  ${
+            pendingCount === 0 ? '' : '(' + pendingCount + ')'
+          }`}</Text>
+        </Pressable>
       </View>
 
       {cameraModalVis && (
@@ -355,10 +312,15 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         value: true,
                       },
                     });
-                    // console.log(data.uri)
-                    // console.log(await RNFS.readFile(data.uri, 'base64'));
 
                     if (uploadType === 'MAIN_DOC') {
+                      dispatch({
+                        type: 'UPDATE_TOSYNC_COUNT',
+                        payload: {
+                          label: docName,
+                          value: 1,
+                        },
+                      });
                       queue.addJob('testWorker', {
                         localPath: compressedURI,
                         userId: profile?._id,
@@ -367,8 +329,6 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         shouldTriggerJointVerification,
                       });
                     } else if (uploadType === 'NEW_EXTRA_IMAGE') {
-
-
                       queue.addJob('testWorker', {
                         localPath: compressedURI,
                         userId: profile?._id,
@@ -376,9 +336,6 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         claimId: claim?._id?.toString(),
                         extraImageID: 'NEW',
                       });
-
-
-
                     } else if (uploadType === 'UPDATE_EXTRA_IMAGE') {
                       queue.addJob('testWorker', {
                         localPath: compressedURI,
@@ -391,10 +348,10 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
 
                     dispatch({type: 'DISABLE_LOADING'});
                     setShouldTriggerJointVerification(false);
-                   setTimeout(()=>{
-                    // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
-                    syncer();
-                   },1500)
+                    setTimeout(() => {
+                      // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
+                      syncer();
+                    }, 1500);
                     return;
                   }
                 } catch (error) {
@@ -445,7 +402,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
               style={{color: 'white', paddingHorizontal: 20}}
               onPress={() => setPreviewDocModal(false)}>
               <Text style={{color: 'white'}}>
-                <Ionicons name="close" size={50}  />
+                <Ionicons name="close" size={50} />
               </Text>
             </TouchableOpacity>
           </View>
@@ -539,16 +496,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   }}>
                   <CustomButton
                     onPress={() => {
-                      // fetch Details on basis of applicato
-                      // dispatch({type:"ENABLE_LOADING"})
-                      // alert(claim?.courtDocuments.length)
                       if (
-                        !(
-                          claim?.courtDocuments.length &&
+                        !Boolean(
                           claim?.courtDocuments[0]?.title ===
-                            'SDM_SUMMON_RESULT_1'
+                            'SDM_SUMMON_RESULT_1',
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_1');
                         setCameraModalVis(true);
                       } else {
@@ -557,19 +511,38 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       }
                     }}
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                    {!(
-                      claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' 
+                    {!Boolean(
+                      claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1',
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_1'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={pendingCount === 0 ? 'white' : 'yellow'}
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[0]?.title ===
-                    'SDM_SUMMON_RESULT_1' && (
+                  {Boolean(
+                    claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1',
+                  ) && (
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_1');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -577,7 +550,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         marginRight: 40,
                         marginTop: 10,
                       }}>
-                      {<Ionicons name="camera" color="white" size={20} />}
+                      {<Ionicons name="camera" color="white" size={20} />}{' '}
                     </CustomButton>
                   )}
                 </View>
@@ -618,7 +591,9 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         claim?.courtDocuments[0]?.title ===
                         'SDM_SUMMON_RESULT_1'
                       ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
+                        <>
+                          <Ionicons name="camera" color="white" size={20} />
+                        </>
                       ) : (
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
@@ -653,16 +628,24 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' && (
+                {Boolean(
+                  claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_1'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_1');
                       setCameraModalVis(true);
+                      setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
-                    {TOSYNC_COUNTER && TOSYNC_COUNTER['SDM_SUMMON_RESULT_1']}
+                    <FontAwesome5 color="#fff" name="plus" size={20} />
+
+                    {/* {TOSYNC_COUNTER && TOSYNC_COUNTER['SDM_SUMMON_RESULT_1']} */}
                   </CustomButton>
                 )}
               </View>
@@ -714,14 +697,10 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   }}>
                   <CustomButton
                     onPress={() => {
-                      // fetch Details on basis of applicato
-                      // dispatch({type:"ENABLE_LOADING"})
-                      // alert(claim?.courtDocuments.length)
                       if (
-                        !(
-                          claim?.courtDocuments.length &&
+                        !Boolean(
                           claim?.courtDocuments[1]?.title ===
-                            'SDM_SUMMON_RESULT_3'
+                            'SDM_SUMMON_RESULT_2',
                         )
                       ) {
                         setUploadType('MAIN_DOC');
@@ -733,20 +712,45 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       }
                     }}
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                    {!(
-                      claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2'
+                    {!Boolean(
+                      claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2',
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_2'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_2'
+                                ] == 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
+
                   {claim?.courtDocuments[1]?.title ===
                     'SDM_SUMMON_RESULT_2' && (
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_2');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
+                        // setUploadType('UPDATE_EXTRA_IMAGE');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -761,16 +765,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
 
                 {claim?.courtDocuments[1]?.extraImages?.map((item, indd) => (
                   <View
-                    key={`${claim?.courtDocuments?.title}-${indd}`}
+                    key={`1stIndex-${indd}`}
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
                     }}>
                     <CustomButton
                       onPress={() => {
-                        // fetch Details on basis of applicato
-                        // dispatch({type:"ENABLE_LOADING"})
-                        // alert(claim?.courtDocuments.length)
                         if (
                           !(
                             claim?.courtDocuments.length &&
@@ -830,7 +831,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2' && (
+                {Boolean(
+                  claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_2'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_2');
@@ -878,14 +885,10 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   }}>
                   <CustomButton
                     onPress={() => {
-                      // fetch Details on basis of applicato
-                      // dispatch({type:"ENABLE_LOADING"})
-                      // alert(claim?.courtDocuments.length)
                       if (
-                        !(
-                          claim?.courtDocuments.length &&
+                        !Boolean(
                           claim?.courtDocuments[2]?.title ===
-                            'SDM_SUMMON_RESULT_3'
+                            'SDM_SUMMON_RESULT_3',
                         )
                       ) {
                         setUploadType('MAIN_DOC');
@@ -897,20 +900,45 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       }
                     }}
                     style={{width: '100%', marginLeft: 40, marginTop: 10}}>
-                    {!(
-                      claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3'
+                    {!Boolean(
+                      claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3',
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_3'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_3'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
                   </CustomButton>
-                  {claim?.courtDocuments[2]?.title ===
-                    'SDM_SUMMON_RESULT_3' && (
+
+                  {Boolean(
+                    claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3',
+                  ) && (
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_3');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -961,7 +989,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>फोटो देखें</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[2]?.title ===
@@ -994,7 +1022,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3' && (
+                {Boolean(
+                  claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_3'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_3');
@@ -1053,6 +1087,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_4'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_4');
                         setCameraModalVis(true);
                       } else {
@@ -1064,7 +1099,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_4'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_4'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1074,6 +1132,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_4');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1106,6 +1165,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_4');
+
                           setCameraModalVis(true);
                         } else {
                           setPreviewDocModal(true);
@@ -1157,7 +1217,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4' && (
+                {Boolean(
+                  claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_4'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_4');
@@ -1228,7 +1294,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_5'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_5'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1238,7 +1327,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_5');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1322,7 +1411,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5' && (
+                {Boolean(
+                  claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_5'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_5');
@@ -1374,10 +1469,10 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       // dispatch({type:"ENABLE_LOADING"})
                       // alert(claim?.courtDocuments.length)
                       if (
-                        !(
+                        !Boolean(
                           claim?.courtDocuments.length &&
-                          claim?.courtDocuments[5]?.title ===
-                            'SDM_SUMMON_RESULT_6'
+                            claim?.courtDocuments[5]?.title ===
+                              'SDM_SUMMON_RESULT_6',
                         )
                       ) {
                         setUploadType('MAIN_DOC');
@@ -1392,7 +1487,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_6'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_6'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1402,7 +1520,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_6');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1451,7 +1569,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         claim?.courtDocuments[5]?.title ===
                         'SDM_SUMMON_RESULT_6'
                       ) ? (
-                        <Ionicons name="camera" color="white" size={20} />
+                        <>
+                          <Ionicons name="camera" color="white" size={20} />
+                          {Boolean(
+                            extraImageFormCountForSync &&
+                              extraImageFormCountForSync[
+                                'SDM_SUMMON_RESULT_6'
+                              ] !== 0,
+                          ) && (
+                            <Text>
+                              {' '}
+                              <MaterialCommunityIcons
+                                name="web-sync"
+                                size={22}
+                                color={
+                                  extraImageFormCountForSync[
+                                    'SDM_SUMMON_RESULT_6'
+                                  ] == 0
+                                    ? 'white'
+                                    : 'yellow'
+                                }
+                              />
+                            </Text>
+                          )}
+                        </>
                       ) : (
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
@@ -1464,7 +1605,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                           setCameraModalVis(true);
                           setFocusedExtraImageID(indd + 1);
                           //   UPDATE IMAGE that object wiht particulat indd
-                          setUploadType('UPDATE_EXTRA_IMAGE');
+                          // setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
                         style={{
                           width: '100%',
@@ -1486,7 +1627,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6' && (
+                {Boolean(
+                  claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_6'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_6');
@@ -1555,7 +1702,24 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_7'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={pendingCount === 0 ? 'white' : 'yellow'}
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1565,7 +1729,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_7');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1649,7 +1813,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7' && (
+                {Boolean(
+                  claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_7'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_7');
@@ -1659,7 +1829,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
+                    <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
               </View>
@@ -1732,7 +1902,24 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_8'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={pendingCount === 0 ? 'white' : 'yellow'}
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1742,7 +1929,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_8');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1826,7 +2013,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8' && (
+                {Boolean(
+                  claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_8'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_8');
@@ -1895,7 +2088,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_9'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_9'
+                                ] == 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -1905,7 +2121,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_9');
-                        setUploadType('UPDATE_EXTRA_IMAGE');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -1989,7 +2205,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9' && (
+                {Boolean(
+                  claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_9'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_9');
@@ -2061,6 +2283,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_10'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_10');
                         setCameraModalVis(true);
                       } else {
@@ -2072,7 +2295,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     {!(
                       claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_10'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_10'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2083,7 +2329,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_10');
                         setShouldTriggerJointVerification(true);
-
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2167,7 +2413,13 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10' && (
+                {Boolean(
+                  claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_1'] !== 0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_10');
@@ -2222,6 +2474,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_11'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_11');
                         setCameraModalVis(true);
                       } else {
@@ -2234,7 +2487,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[10]?.title ===
                       'SDM_SUMMON_RESULT_11'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_11'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_11'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2244,6 +2520,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_11');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2327,8 +2604,14 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[10]?.title ===
-                  'SDM_SUMMON_RESULT_11' && (
+                {Boolean(
+                  claim?.courtDocuments[10]?.title === 'SDM_SUMMON_RESULT_11' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_11'] !==
+                          0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_11');
@@ -2399,6 +2682,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_12'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_12');
                         setCameraModalVis(true);
                       } else {
@@ -2411,7 +2695,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[11]?.title ===
                       'SDM_SUMMON_RESULT_12'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_12'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_12'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2421,6 +2728,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_12');
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2504,8 +2812,14 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[11]?.title ===
-                  'SDM_SUMMON_RESULT_12' && (
+                {Boolean(
+                  claim?.courtDocuments[11]?.title === 'SDM_SUMMON_RESULT_12' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_12'] !==
+                          0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_12');
@@ -2576,6 +2890,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_13'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_13');
                         setCameraModalVis(true);
                       } else {
@@ -2588,7 +2903,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[12]?.title ===
                       'SDM_SUMMON_RESULT_13'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_13'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_13'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2598,7 +2936,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     <CustomButton
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_13');
-                        // hit the alert on sccess
+                        setUploadType('MAIN_DOC');
                         setCameraModalVis(true);
                       }}
                       style={{
@@ -2682,8 +3020,14 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[12]?.title ===
-                  'SDM_SUMMON_RESULT_13' && (
+                {Boolean(
+                  claim?.courtDocuments[12]?.title === 'SDM_SUMMON_RESULT_13' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_13'] !==
+                          0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_13');
@@ -2741,6 +3085,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_14'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_14');
                         setCameraModalVis(true);
                       } else {
@@ -2753,7 +3098,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[13]?.title ===
                       'SDM_SUMMON_RESULT_14'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_14'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_14'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2762,6 +3130,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     'SDM_SUMMON_RESULT_14' && (
                     <CustomButton
                       onPress={() => {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_14');
                         setCameraModalVis(true);
                       }}
@@ -2905,6 +3274,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_15'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_15');
                         setCameraModalVis(true);
                       } else {
@@ -2917,7 +3287,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[14]?.title ===
                       'SDM_SUMMON_RESULT_15'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_15'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_15'
+                                ] === 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -2926,6 +3319,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     'SDM_SUMMON_RESULT_15' && (
                     <CustomButton
                       onPress={() => {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_15');
                         setCameraModalVis(true);
                       }}
@@ -3010,8 +3404,14 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {claim?.courtDocuments[14]?.title ===
-                  'SDM_SUMMON_RESULT_15' && (
+                {Boolean(
+                  claim?.courtDocuments[14]?.title === 'SDM_SUMMON_RESULT_15' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_15'] !==
+                          0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_15');
@@ -3069,6 +3469,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_16'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_16');
                         setCameraModalVis(true);
                       } else {
@@ -3081,7 +3482,30 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[15]?.title ===
                       'SDM_SUMMON_RESULT_16'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_16'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={
+                                extraImageFormCountForSync[
+                                  'SDM_SUMMON_RESULT_16'
+                                ] == 0
+                                  ? 'white'
+                                  : 'yellow'
+                              }
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -3090,6 +3514,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     'SDM_SUMMON_RESULT_16' && (
                     <CustomButton
                       onPress={() => {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_16');
                         setCameraModalVis(true);
                       }}
@@ -3144,8 +3569,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         <Text style={{fontSize: 12}}> फोटो देखें</Text>
                       )}
                     </CustomButton>
-                    {
-                    claim?.courtDocuments[15]?.title ===
+                    {claim?.courtDocuments[15]?.title ===
                       'SDM_SUMMON_RESULT_16' && (
                       <CustomButton
                         onPress={() => {
@@ -3162,8 +3586,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                         }}>
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
-                    )
-                    }
+                    )}
                   </View>
                 ))}
               </View>
@@ -3247,7 +3670,24 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[16]?.title ===
                       'SDM_SUMMON_RESULT_17'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_17'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={pendingCount === 0 ? 'white' : 'yellow'}
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -3256,6 +3696,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     'SDM_SUMMON_RESULT_17' && (
                     <CustomButton
                       onPress={() => {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_17');
                         setCameraModalVis(true);
                       }}
@@ -3399,6 +3840,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                             'SDM_SUMMON_RESULT_18'
                         )
                       ) {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_18');
                         setCameraModalVis(true);
                       } else {
@@ -3411,7 +3853,24 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       claim?.courtDocuments[17]?.title ===
                       'SDM_SUMMON_RESULT_18'
                     ) ? (
-                      <Ionicons name="camera" color="white" size={20} />
+                      <>
+                        <Ionicons name="camera" color="white" size={20} />
+                        {Boolean(
+                          extraImageFormCountForSync &&
+                            extraImageFormCountForSync[
+                              'SDM_SUMMON_RESULT_18'
+                            ] !== 0,
+                        ) && (
+                          <Text>
+                            {' '}
+                            <MaterialCommunityIcons
+                              name="web-sync"
+                              size={22}
+                              color={pendingCount === 0 ? 'white' : 'yellow'}
+                            />
+                          </Text>
+                        )}
+                      </>
                     ) : (
                       <Text style={{fontSize: 12}}> फोटो देखें</Text>
                     )}
@@ -3420,6 +3879,7 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                     'SDM_SUMMON_RESULT_18' && (
                     <CustomButton
                       onPress={() => {
+                        setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_18');
                         setCameraModalVis(true);
                       }}
@@ -3504,8 +3964,14 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                   borderBottomWidth: 1,
                   borderColor: '#fff',
                 }}>
-                {( (claim?.courtDocuments[17]?.title ===
-                  'SDM_SUMMON_RESULT_18') || (true /*vasren DB if yes then show count */) )&& (
+                {Boolean(
+                  claim?.courtDocuments[17]?.title === 'SDM_SUMMON_RESULT_18' ||
+                    Boolean(
+                      extraImageFormCountForSync &&
+                        extraImageFormCountForSync['SDM_SUMMON_RESULT_18'] !==
+                          0,
+                    ),
+                ) && (
                   <CustomButton
                     onPress={() => {
                       setDocName('SDM_SUMMON_RESULT_18');
@@ -3515,9 +3981,78 @@ console.warn('TOSYNC_COUNTER',TOSYNC_COUNTER)
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{width: '50%', marginRight: 40, marginTop: 10}}>
-                    <FontAwesome5 color="#fff" name="plus" size={20} /> 
+                    <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
+              </View>
+
+              <View
+                style={{
+                  // flexDirection: 'row',
+                  justifyContent: 'center',
+                  padding: 20,
+                  paddingVertical: 20,
+                  borderBottomWidth: 1,
+                  borderColor: '#fff',
+                }}>
+                <Text style={{color: 'white', fontSize: 18}}>
+                  दावेदार द्वारा दावा किया गया क्षेत्र (एकड़ में)
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 10,
+                  }}>
+                  <TextInput
+                    style={{
+                      backgroundColor: 'white',
+                      width: '50%',
+                      height: 40,
+                      textAlign: 'center',
+                      borderRadius: 10,
+                      marginTop: 10,
+                    }}
+                    keyboardType="number-pad"
+                    placeholder="क्षेत्रफल"
+                    editable={Boolean(claim?.area!=undefined)}
+                    value={claimedArea}
+                    onChangeText={e=>setClaimedArea(e)}
+                  />
+                { Boolean(claim?.area!=undefined) && <CustomButton
+                    style={{
+                      width: '70%',
+                      marginTop: 10,
+                    }}
+                    onPress={() => {
+                      Alert.alert(
+                        'कृपा ध्यान दे',
+                        'आपके द्वार दावा किया गया चेत्रफल दुबारा अपेंड नहीं कर सकता, कृपया पुष्टि करें',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'OK',
+                            onPress: () =>{
+                           
+                                patchClaimArea({claimId:claim?._id?.toString(),area:456})
+                                .then(res=>{
+                                  
+                                })
+                                .catch(err=>{
+                                    Alert("Failed to updated")
+                                })
+                            },
+                          },
+                        ],
+                      );
+                    }}>
+                    <FontAwesome5 name="check-circle" size={20} />
+                  </CustomButton>}
+                </View>
               </View>
             </ScrollView>
           </>
@@ -3717,6 +4252,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-
-// ( claim!==undefined && !(claim?.courtDocuments[2]?.title==='SDM_SUMMON_RESULT_1'))
-//( claim!=undefined && !(claim?.courtDocuments[2]?.title==='SDM_SUMMON') )

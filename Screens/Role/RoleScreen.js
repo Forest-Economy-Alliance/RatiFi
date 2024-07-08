@@ -86,7 +86,6 @@ const RoleScreen = ({navigation}) => {
     if( (values?.member===t('FRC')) || (values?.member!==t('FRC') &&  uploadStatus?.f &&  uploadStatus?.b)){
 
     
-    console.log(values);
     formikActions.setSubmitting(false);
 
     dispatch({type: 'ENABLE_LOADING'});
