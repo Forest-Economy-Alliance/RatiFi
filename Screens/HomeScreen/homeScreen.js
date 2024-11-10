@@ -14,8 +14,11 @@ import {
   Image,
   KeyboardAvoidingView,
   Alert,
+  Pressable,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import React, {useEffect, useState} from 'react';
@@ -45,11 +48,22 @@ import {
 } from '../../services/authService';
 import {firebase} from '@react-native-firebase/messaging';
 import {OneSignal} from 'react-native-onesignal';
+import {VasernDB} from '../../vasern';
+
 import {err} from 'react-native-svg/lib/typescript/xml';
 import auth from '../../redux-store/reducers/entities/auth';
+import {patchClaimHandler} from '../../services/claimService';
+import {getGCPUrlImageHandler} from '../../services/commonService';
+import {useFocusEffect} from '@react-navigation/native';
+import NetworkSpeed from 'react-native-network-speed';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const HomeScreen = ({navigation}) => {
+  const {ClaimImages} = VasernDB;
+  const {isConnected} = useNetInfo();
+  const [speed, setSpeed] = useState('');
+  const [canSync,setCanSync]=useState(true);
   const [notificationCount, setNC] = useState(0);
 
   const [imgUrl, setImgUrl] = useState('x');
@@ -85,8 +99,9 @@ const HomeScreen = ({navigation}) => {
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
   const {t, i18n} = useTranslation();
-
+  const [pendingCount, setPendingCount] = useState(0);
   const [currentLanguage, setCurrentLanguage] = useState('en');
+
   console.log(postLevel == 'अध्यक्ष');
 
   const changeLanguage = value => {
@@ -130,7 +145,8 @@ const HomeScreen = ({navigation}) => {
     })
       .then(res => {
         setVis(false);
-        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
+
+        ({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
         dispatch({type: 'SAVE_TOKEN', payload: null});
         // App Breackage Issue - To be discussed later  dispatch({type: 'CLEAR_PROFILE', payload: null});
         navigation.replace('MobilePassword');
@@ -182,29 +198,81 @@ const HomeScreen = ({navigation}) => {
     // onSubmit: onNext,
   });
   //
-  // @NOW
-  // leave app on back button press on this screen
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     // current screen is home screen
-  //     Alert.alert('JharFRA - सूचना', 'क्या आप ऐप से बाहर निकलना चाहते हैं?', [
-  //       {
-  //         text: 'नहीं',
-  //         onPress: () => null,
-  //         style: 'cancel',
-  //       },
-  //       {text: 'हाँ', onPress: () => BackHandler.exitApp()},
-  //     ]);
-  //     return true;
-  //   };
 
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction,
-  //   );
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('syncer called');
 
-  //   return () => backHandler.remove();
-  // }, []);
+      async function syncer() {
+        console.log('syncer called');
+        setCanSync(false);
+        const da = await ClaimImages.data();
+        console.log('len', da?.length);
+        setPendingCount(da?.length);
+        for await (let key of da) {
+          try {
+            console.log(key?.name + '->initiated');
+            const response = await getGCPUrlImageHandler({
+              fileName: 'Hello',
+              base64Data: key?.base64Data,
+              isPdf: false,
+              userId: key?.userId || 'unknown-asset',
+            });
+
+            const rssponse = await patchClaimHandler({
+              claimId: key?.claimId,
+              title: key?.name,
+              userId: key?.userId,
+              storageUrl: response?.data.response.Location,
+              extraImageID: key?.extraImageID || undefined,
+              shouldTriggerJointVerification:
+                key?.shouldTriggerJointVerification,
+              IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
+              oneSignalId:
+                OneSignal.User.pushSubscription.getPushSubscriptionId(),
+            });
+
+            console.log('updated-claim');
+
+            // const rmv = await ClaimImages.remove(key?.id);
+            // console.warn('rmv',rmv);
+            console.log(response?.data.response.Location);
+
+            setPendingCount(e =>Math.max(e-1,0));
+
+            await ClaimImages.remove(key);
+
+          } catch (itemError) {
+            console.warn('ierr', itemError);
+          }finally{
+            setCanSync(true);
+            break;
+            return ;
+          }
+        }
+      }
+
+      // if(isConnected)
+      syncer();
+      let t = 0;
+      NetworkSpeed.startListenNetworkSpeed(
+        ({
+          downLoadSpeed,
+          downLoadSpeedCurrent,
+          upLoadSpeed,
+          upLoadSpeedCurrent,
+        }) => {
+          console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app 当前app的上传速度(currently can only be used on Android)
+          setSpeed(upLoadSpeed);
+          t += 1;
+          console.log(t);
+          if (t % 5 === 0 && canSync) syncer();
+        },
+      );
+
+      // return () => NetworkSpeed.stopListenNetworkSpeed();
+    }, []),
+  );
 
   const UpdateRole = () => {
     // Move to RoleScreen
@@ -223,20 +291,35 @@ const HomeScreen = ({navigation}) => {
     checkAccount({mobile: profile?.mobile}).then(data => {
       console.log(data?.data);
 
-      const {authLevel,district,village,panchayat,range,subdivison,tehsil}=data?.data?.data;
-      const associatedFields=[...checkFromServer(authLevel,district,subdivison,tehsil,range,panchayat,village)]
-     
-      
+      const {
+        authLevel,
+        district,
+        village,
+        panchayat,
+        range,
+        subdivison,
+        tehsil,
+      } = data?.data?.data;
+      const associatedFields = [
+        ...checkFromServer(
+          authLevel,
+          district,
+          subdivison,
+          tehsil,
+          range,
+          panchayat,
+          village,
+        ),
+      ];
+
+    
       console.warn('associatedFields', associatedFields);
       console.log(associatedFields.includes('-1'));
       if (associatedFields.includes('-1') === true) {
         navigation.replace('Location');
-      }else{
-        console.log("Gelocation Fine")
+      } else {
+        console.log('Gelocation Fine');
       }
-
-
-
 
       dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
       dispatch({
@@ -259,7 +342,6 @@ const HomeScreen = ({navigation}) => {
         console.log(err);
       });
   }, []);
-
 
   async function alpha() {
     OneSignal.Notifications.requestPermission(true);
@@ -309,8 +391,7 @@ const HomeScreen = ({navigation}) => {
     return [];
   };
 
-
-  const checkFromServer = (A,B, C, D,range, E, F) => {
+  const checkFromServer = (A, B, C, D, range, E, F) => {
     if (A === t('FRC')) {
       return [B, C, D, E, F];
     } else if (A === t('SDLC')) {
@@ -352,7 +433,7 @@ const HomeScreen = ({navigation}) => {
           </Text>
 
           <Text style={styles.roleText}>
-            {' '}
+            
             <FontAwesome name="user-circle-o" size={30} color="white" />{' '}
           </Text>
         </TouchableOpacity>
@@ -530,7 +611,9 @@ const HomeScreen = ({navigation}) => {
                   zIndex: 199,
                   borderRadius: 10,
                 }}>
-             {notificationCount !==undefined && `(`}{notificationCount}{notificationCount !=undefined  && `)`}
+                {notificationCount !== undefined && `(`}
+                {notificationCount}
+                {notificationCount != undefined && `)`}
               </Text>
             )}
           </CustomButton>
@@ -609,6 +692,32 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       )}
+
+      <Pressable
+        onPress={() => alert('OK')}
+        style={{
+          flexDirection: 'row',
+          marginRight: 10,
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Text style={{fontSize: 22}}>
+          <MaterialCommunityIcons
+            name="web-sync"
+            size={22}
+            color={pendingCount === 0 ? 'white' : 'yellow'}
+          />
+         
+        </Text>
+        <Text
+          style={{
+            color: pendingCount === 0 ? 'white' : 'yellow',
+            fontSize: 16,
+          }}>{` ${
+          pendingCount === 0 ? '' : '(' + pendingCount + ')'
+        }`}</Text>
+      </Pressable>
+      {/* <Text style={{flex: 1, textAlign: 'center'}}>{pendingCount}</Text> */}
     </ImageBackground>
   );
 };
@@ -741,3 +850,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+
+

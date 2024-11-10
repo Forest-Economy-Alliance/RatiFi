@@ -14,7 +14,9 @@ import {
   ActivityIndicator,
   BackHandler,
   Pressable,
+  ToastAndroid,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
 import '../../assets/i18n/i18n';
 import dayjs from 'dayjs';
@@ -30,6 +32,8 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import queue from 'react-native-job-queue';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   fetchClaimDetailsHandler,
@@ -44,6 +48,9 @@ import {RNCamera} from 'react-native-camera';
 import {getGCPUrlImageHandler} from '../../services/commonService';
 import {useToast} from 'react-native-toast-notifications';
 import { Image } from 'react-native-compressor';
+import { OneSignal } from 'react-native-onesignal';
+import { VasernDB } from '../../vasern';
+
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -58,6 +65,7 @@ const handleHTTPtoHTTPS = args => {
 };
 
 const PastRecordsIFR = ({navigation}) => {
+  const {ClaimImagesIFR} = VasernDB;
   const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
   const dispatch = useDispatch();
@@ -121,6 +129,8 @@ const PastRecordsIFR = ({navigation}) => {
   const [docUrlToPreview, setDocUrlToPreview] = useState('');
 
   const [docName, setDocName] = useState('SDM_SUMMON');
+  const [canSync,setCanSync]=useState(true);
+  const [pendingCount, setPendingCount] = useState(0);
 
   // const [state, setState] = useState('Himachal Pradesh');
   // const [district, setDistrict] = useState('Kagda');
@@ -137,6 +147,8 @@ const PastRecordsIFR = ({navigation}) => {
   };
 
   useEffect(() => {
+    if(pendingCount>0)
+    syncer();
     dispatch({type: 'ENABLE_LOADING'});
     // changeLanguage(language);
     // fetch Details on basis of applicaton
@@ -155,6 +167,8 @@ const PastRecordsIFR = ({navigation}) => {
         dispatch({type: 'DISABLE_LOADING'});
       })
       .catch(error => {
+        // ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+        dispatch({type: 'DISABLE_LOADING'});
         console.log('ERROR', error);
       });
   }, [refresh, cameraModalVis]);
@@ -163,18 +177,117 @@ const PastRecordsIFR = ({navigation}) => {
     navigation.goBack();
   };
 
+
+
+  async function syncer() {
+    console.log('syncer called');
+    setCanSync(false);
+    const da = await ClaimImagesIFR.data();
+    console.log('len', da?.length);
+    setPendingCount(da?.length);
+    for await (let key of da) {
+      try {
+      
+
+        // dispatch({
+        //   type: 'UPDATE_APPUTIL_KEY',
+        //   payload: {
+        //     key: key?.name,
+        //     value: true,
+        //   },
+        // });
+
+
+
+
+        console.log(key?.name+'->initiated')
+        const response = await getGCPUrlImageHandler({
+          fileName: 'Hello',
+          base64Data: key?.base64Data,
+          isPdf: false,
+          userId: key?.userId || 'unknown-asset',
+        });
+        console.warn(response?.data.response.Location);
+    
+         const rssponse = await patchClaimHandlerIFR({
+                          claimId: claim?._id.toString(),
+                          title: docName,
+                          storageUrl: response?.data?.response.Location,
+                        });
+          
+        /**
+         * 
+        
+        const rssponse = await patchClaimHandlerIFR({
+          claimId: key?.claimId,
+          title: key?.name,
+          userId: key?.userId,
+          storageUrl: response?.data.response.Location,
+          extraImageID: key?.extraImageID || undefined,
+          shouldTriggerJointVerification:
+            key?.shouldTriggerJointVerification,
+          IS_IFR_CLAIM: key?.IS_IFR_CLAIM || false,
+          oneSignalId:
+            OneSignal.User.pushSubscription.getPushSubscriptionId(),
+        });
+         */
+
+        console.log('updated-claim')
+
+        // const rmv = await ClaimImages.remove(key?.id);
+        // console.warn('rmv',rmv);
+        console.log(response?.data.response.Location);
+
+        setPendingCount(e => e - 1);
+        
+        await ClaimImagesIFR.remove(key);
+         
+  
+
+      } catch (itemError) {
+        console.warn('ierr', itemError);
+      }finally {
+        setCanSync(true);
+        break;
+        return ;
+      }
+    }
+
+    setRefresh(!refresh);
+  }
+
+
+
+
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
       style={styles.bg}>
-      <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+      <View style={{flexDirection:'row',justifyContent:'space-between',marginTop: 10, marginBottom: 10, marginLeft: 10}}>
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
             <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
           </Text>
         </Pressable>
+
+
+        <Pressable
+        onPress={() => null}
+        style={{
+          flexDirection: 'row',
+          marginRight: 10,
+          justifyContent: 'center',
+          marginTop: 10,
+        }}>
+        <Text style={{fontSize: 22}}>
+          <MaterialCommunityIcons name="web-sync" size={22} color={pendingCount===0?'white':'yellow'} />
+        </Text>
+        <Text style={{color: pendingCount===0?'white': 'yellow', fontSize: 16}}>{`  ${
+          pendingCount === 0 ? '' : '(' + pendingCount + ')' 
+        }`}</Text>
+      </Pressable>
       </View>
 
       {cameraModalVis && (
@@ -217,8 +330,8 @@ const PastRecordsIFR = ({navigation}) => {
                 try {
                   dispatch({type: 'ENABLE_LOADING'});
                   if (cameraRef) {
-                    console.warn(cameraRef);
-                    const options = {quality: 0.9, base64: false};
+                    // console.warn(cameraRef);
+                    const options = {quality: 0.4, base64: false};
                     const data = await cameraRef?.current?.takePictureAsync(
                       options,
                     );
@@ -226,10 +339,49 @@ const PastRecordsIFR = ({navigation}) => {
                     const compressedURI=await Image.compress(data?.uri);
                     console.log('compressed-compressedURI',compressedURI)
 
-                    const base64data = await RNFS.readFile(compressedURI, 'base64');
+                    // const base64data = await RNFS.readFile(compressedURI, 'base64');
                     // console.log(data?.base64)
-                    RNFS.unlink(compressedURI)
-                    RNFS.unlink(data?.uri)
+                    // RNFS.unlink(compressedURI)
+                    // RNFS.unlink(data?.uri)
+                    setCameraModalVis(false);
+
+
+                    dispatch({
+                      type: 'UPDATE_APPUTIL_KEY',
+                      payload: {
+                        key: 'globalSyncStatus',
+                        value: true,
+                      },
+                    });
+
+                    dispatch({type: 'DISABLE_LOADING'});
+
+
+                    queue.addJob('testWorker',{
+                      localPath:compressedURI,
+                      userId: profile?._id,
+                      docName:docName,
+                      claimId: claim?._id?.toString(),
+                      IS_IFR_CLAIM:true
+                    });
+
+                    console.log('syncerrrrrrr-yay!')
+
+                    setTimeout(()=>{
+                      // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
+                    syncer();
+                  },1500) 
+
+                  dispatch({
+                    type: 'UPDATE_APPUTIL_KEY',
+                    payload: {
+                      key: 'globalSyncStatus',
+                      value: false,
+                    },
+                  });
+
+                  return ;
+
 
                     getGCPUrlImageHandler({
                       fileName: 'Hello',
@@ -273,13 +425,19 @@ const PastRecordsIFR = ({navigation}) => {
                           dispatch({type: 'DISABLE_LOADING'});
                         }
                       })
-
                       .catch(err => {
                         console.log(err);
                       });
+
+
+
+           
+
+
+
                   }
                 } catch (error) {
-                  console.log('ERROR', error);
+                  console.log('IFR-ERROR', error);
                 }
               }}>
               <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
@@ -696,7 +854,8 @@ const PastRecordsIFR = ({navigation}) => {
                       )}
                     </CustomButton>
 
-                    {Boolean(true) && (
+                    {Boolean((claim?.courtDocuments[7]?.title ===
+                              'SDM_SUMMON_RESULT_8')) && (
                       <CustomButton
                         onPress={() => {
                           navigation.navigate('MarkBoundry');

@@ -13,8 +13,27 @@ const INIT_STATE = {
   formUploadSyncStatus: false,
   globalSyncStatus: false,
   OneSignalSubsToken: '',
-  forgotFeature: false
-
+  forgotFeature: false,
+  extraImageFormCountForSync: {
+    SDM_SUMMON_RESULT_1: 0,
+    SDM_SUMMON_RESULT_2: 0,
+    SDM_SUMMON_RESULT_3: 0,
+    SDM_SUMMON_RESULT_4: 0,
+    SDM_SUMMON_RESULT_5: 0,
+    SDM_SUMMON_RESULT_6: 0,
+    SDM_SUMMON_RESULT_7: 0,
+    SDM_SUMMON_RESULT_8: 0,
+    SDM_SUMMON_RESULT_9: 0,
+    SDM_SUMMON_RESULT_10: 0,
+    SDM_SUMMON_RESULT_11: 0,
+    SDM_SUMMON_RESULT_12: 0,
+    SDM_SUMMON_RESULT_13: 0,
+    SDM_SUMMON_RESULT_14: 0,
+    SDM_SUMMON_RESULT_15: 0,
+    SDM_SUMMON_RESULT_16: 0,
+    SDM_SUMMON_RESULT_17: 0,
+    SDM_SUMMON_RESULT_18: 0,
+  },
 };
 
 const appUtil = (state = INIT_STATE, action) => {
@@ -80,7 +99,15 @@ const appUtil = (state = INIT_STATE, action) => {
     case 'UPDATE_APPUTIL_KEY':
       return {
         ...state,
-        [action?.payload?.key]: action?.payload?.value,
+      };
+    case 'UPDATE_TOSYNC_COUNT':
+      console.warn('skydone', action.payload);
+
+      let olddata = Object.assign({}, state?.extraImageFormCountForSync);
+      olddata[action.payload?.label] = action.payload?.value;
+      return {
+        ...state,
+        extraImageFormCountForSync: olddata,
       };
     case 'CLEAR_FORMS':
       return {

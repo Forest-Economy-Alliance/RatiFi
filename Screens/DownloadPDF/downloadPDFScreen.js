@@ -13,6 +13,7 @@ import {
   ScrollView,
   Linking,
   Button,
+  ToastAndroid,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
@@ -2865,7 +2866,7 @@ const DownloadPDFScreen = ({navigation}) => {
             onPress={async () => {
               setLoading(true);
               dispatch({type: 'ENABLE_LOADING'});
-
+              try {
               const rr = await request(`/get-ifr-documents`);
               console.log(rr.data?.data);
 
@@ -2887,10 +2888,15 @@ const DownloadPDFScreen = ({navigation}) => {
               } else {
                 console.log('Already Applied');
               }
-
               dispatch({type: 'DISABLE_LOADING'});
               setLoading(false);
               return;
+            }catch(error){
+              dispatch({type: 'DISABLE_LOADING'});
+              setLoading(false);
+              ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+
+            }
             }}>
             {t('download application document')}
           </CustomButton>

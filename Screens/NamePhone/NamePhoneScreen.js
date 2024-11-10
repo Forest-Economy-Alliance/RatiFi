@@ -20,6 +20,7 @@ import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
 import { postOTPAction } from '../../redux-store/actions/auth';
 import { getDeviceHash } from '../../utils/DeviceUtil';
+import { VasernDB } from '../../vasern';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 const NamePhoneScreen = ({navigation}) => {
@@ -140,6 +141,8 @@ const NamePhoneScreen = ({navigation}) => {
                 if (formik.errors.phoneNumber || formik.errors.name) {
                   setErrorVisible(true);
                 }
+
+             
                 formik.handleSubmit();
                 // console.log("otp gone!!")
               }}
