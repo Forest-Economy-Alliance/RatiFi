@@ -14,6 +14,7 @@ export const postOTPAction = (data, callback) => dispatch => {
   console.log(data,"before data");
   return loginHandler(data)
     .then(async ({ data: response }) => {
+      // console.log('RESponse', response);
       dispatch({ type: 'SAVE_TOKEN', payload: response?.token });
 
       dispatch({ type: 'SAVE_PROFILE', payload: response?.data });
