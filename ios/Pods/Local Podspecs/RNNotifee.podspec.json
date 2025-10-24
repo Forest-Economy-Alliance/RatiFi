@@ -1,0 +1,33 @@
+{
+  "name": "RNNotifee",
+  "version": "7.8.0",
+  "description": "Notifee - a feature rich notifications library for React Native.",
+  "summary": "A feature rich local notifications library for React Native Android & iOS.",
+  "homepage": "https://notifee.app",
+  "license": "Apache-2.0",
+  "authors": "Invertase Limited",
+  "source": {
+    "git": "https://github.com/invertase/notifee",
+    "tag": "v7.8.0"
+  },
+  "social_media_url": "http://twitter.com/notifee_app",
+  "cocoapods_version": ">= 1.10.0",
+  "platforms": {
+    "ios": "10.0"
+  },
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  },
+  "source_files": [
+    "ios/RNNotifee/NotifeeApiModule.h",
+    "ios/RNNotifee/NotifeeApiModule.m"
+  ],
+  "subspecs": [
+    {
+      "name": "NotifeeCore",
+      "source_files": "ios/NotifeeCore/*.{h,mm,m}"
+    }
+  ]
+}

@@ -1,0 +1,340 @@
+diff --git a/node_modules/vasern/android/build.gradle b/node_modules/vasern/android/build.gradle
+index 09e466b..4d8caaa 100644
+--- a/node_modules/vasern/android/build.gradle
++++ b/node_modules/vasern/android/build.gradle
+@@ -2,7 +2,7 @@
+ buildscript {
+     repositories {
+         google()
+-        jcenter()
++        mavenCentral()
+     }
+ 
+     dependencies {
+@@ -13,11 +13,11 @@ buildscript {
+ apply plugin: 'com.android.library'
+ 
+ android {
+-    compileSdkVersion 28
++    compileSdkVersion 36
+ 
+     defaultConfig {
+-        minSdkVersion 16
+-        targetSdkVersion 26
++        minSdkVersion 24
++        targetSdkVersion 36
+         versionCode 1
+         versionName "1.0"
+     }
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/results.bin b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/results.bin
+new file mode 100644
+index 0000000..7ed749e
+--- /dev/null
++++ b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/results.bin
+@@ -0,0 +1 @@
++o/bundleLibRuntimeToDirDebug
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/BuildConfig.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/BuildConfig.dex
+new file mode 100644
+index 0000000..877ca8e
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/BuildConfig.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernModule.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernModule.dex
+new file mode 100644
+index 0000000..a7e0bcd
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernModule.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernPackage.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernPackage.dex
+new file mode 100644
+index 0000000..3131199
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/RNVasernPackage.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/VasernUtils.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/VasernUtils.dex
+new file mode 100644
+index 0000000..ee81ee8
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/VasernUtils.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Config.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Config.dex
+new file mode 100644
+index 0000000..1d6473e
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Config.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Storage.dex b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Storage.dex
+new file mode 100644
+index 0000000..c69f7c4
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/reactlibrary/storage/Storage.dex differ
+diff --git a/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin
+new file mode 100644
+index 0000000..601f245
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/40e230b311a933a34d2b4be52c3303ec/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin differ
+diff --git a/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/results.bin b/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/results.bin
+new file mode 100644
+index 0000000..0d259dd
+--- /dev/null
++++ b/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/results.bin
+@@ -0,0 +1 @@
++o/classes
+diff --git a/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/transformed/classes/classes_dex/classes.dex b/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/transformed/classes/classes_dex/classes.dex
+new file mode 100644
+index 0000000..4a24763
+Binary files /dev/null and b/node_modules/vasern/android/build/.transforms/67163373937830ac46f80d9aff89b751/transformed/classes/classes_dex/classes.dex differ
+diff --git a/node_modules/vasern/android/build/generated/source/buildConfig/debug/com/reactlibrary/BuildConfig.java b/node_modules/vasern/android/build/generated/source/buildConfig/debug/com/reactlibrary/BuildConfig.java
+new file mode 100644
+index 0000000..4381f65
+--- /dev/null
++++ b/node_modules/vasern/android/build/generated/source/buildConfig/debug/com/reactlibrary/BuildConfig.java
+@@ -0,0 +1,10 @@
++/**
++ * Automatically generated file. DO NOT MODIFY
++ */
++package com.reactlibrary;
++
++public final class BuildConfig {
++  public static final boolean DEBUG = Boolean.parseBoolean("true");
++  public static final String LIBRARY_PACKAGE_NAME = "com.reactlibrary";
++  public static final String BUILD_TYPE = "debug";
++}
+diff --git a/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml b/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
+new file mode 100644
+index 0000000..c98700d
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.reactlibrary" >
++
++    <uses-sdk android:minSdkVersion="24" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json b/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
+new file mode 100644
+index 0000000..99bfe68
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json
+@@ -0,0 +1,18 @@
++{
++  "version": 3,
++  "artifactType": {
++    "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
++    "kind": "Directory"
++  },
++  "applicationId": "com.reactlibrary",
++  "variantName": "debug",
++  "elements": [
++    {
++      "type": "SINGLE",
++      "filters": [],
++      "attributes": [],
++      "outputFile": "AndroidManifest.xml"
++    }
++  ],
++  "elementType": "File"
++}
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties b/node_modules/vasern/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
+new file mode 100644
+index 0000000..1211b1e
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties
+@@ -0,0 +1,6 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
++minCompileSdk=1
++minCompileSdkExtension=0
++minAndroidGradlePluginVersion=1.0.0
++coreLibraryDesugaringEnabled=false
+diff --git a/node_modules/vasern/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json b/node_modules/vasern/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
+new file mode 100644
+index 0000000..9e26dfe
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json
+@@ -0,0 +1 @@
++{}
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/vasern/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
+new file mode 100644
+index 0000000..cb50e29
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
+diff --git a/node_modules/vasern/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/vasern/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
+new file mode 100644
+index 0000000..89780f8
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar differ
+diff --git a/node_modules/vasern/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt b/node_modules/vasern/android/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+new file mode 100644
+index 0000000..4f032a9
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+@@ -0,0 +1 @@
++#Wed Oct 22 20:06:00 IST 2025
+diff --git a/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+new file mode 100644
+index 0000000..c117a14
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\build\generated\res\resValues\debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\build\generated\res\resValues\debug"/></dataSet><mergedItems/></merger>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/incremental/mergeDebugAssets/merger.xml b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugAssets/merger.xml
+new file mode 100644
+index 0000000..815ca82
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugAssets/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\assets"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\debug\assets"/></dataSet><dataSet config="generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\build\intermediates\shader_assets\debug\compileDebugShaders\out"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+new file mode 100644
+index 0000000..0dd5df5
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\jniLibs"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\debug\jniLibs"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+new file mode 100644
+index 0000000..cd46276
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\debug\shaders"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/BuildConfig.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/BuildConfig.class
+new file mode 100644
+index 0000000..ef22f74
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/BuildConfig.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernModule.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernModule.class
+new file mode 100644
+index 0000000..c8c1678
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernModule.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernPackage.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernPackage.class
+new file mode 100644
+index 0000000..829a4ba
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/RNVasernPackage.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/VasernUtils.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/VasernUtils.class
+new file mode 100644
+index 0000000..bfd51cc
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/VasernUtils.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Config.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Config.class
+new file mode 100644
+index 0000000..a843506
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Config.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Storage.class b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Storage.class
+new file mode 100644
+index 0000000..b58e346
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/reactlibrary/storage/Storage.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt b/node_modules/vasern/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
+new file mode 100644
+index 0000000..78ac5b8
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt
+@@ -0,0 +1,2 @@
++R_DEF: Internal format may change without notice
++local
+diff --git a/node_modules/vasern/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt b/node_modules/vasern/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
+new file mode 100644
+index 0000000..1f97891
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt
+@@ -0,0 +1,7 @@
++1<?xml version="1.0" encoding="utf-8"?>
++2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++3    package="com.reactlibrary" >
++4
++5    <uses-sdk android:minSdkVersion="24" />
++6
++7</manifest>
+diff --git a/node_modules/vasern/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml b/node_modules/vasern/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
+new file mode 100644
+index 0000000..c98700d
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.reactlibrary" >
++
++    <uses-sdk android:minSdkVersion="24" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json b/node_modules/vasern/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
+new file mode 100644
+index 0000000..0637a08
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json
+@@ -0,0 +1 @@
++[]
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt b/node_modules/vasern/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
+new file mode 100644
+index 0000000..08f4ebe
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt
+@@ -0,0 +1 @@
++0 Warning/Error
+\ No newline at end of file
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/BuildConfig.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/BuildConfig.class
+new file mode 100644
+index 0000000..ef22f74
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/BuildConfig.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernModule.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernModule.class
+new file mode 100644
+index 0000000..c8c1678
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernModule.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernPackage.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernPackage.class
+new file mode 100644
+index 0000000..829a4ba
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/RNVasernPackage.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/VasernUtils.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/VasernUtils.class
+new file mode 100644
+index 0000000..bfd51cc
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/VasernUtils.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Config.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Config.class
+new file mode 100644
+index 0000000..a843506
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Config.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Storage.class b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Storage.class
+new file mode 100644
+index 0000000..b58e346
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/reactlibrary/storage/Storage.class differ
+diff --git a/node_modules/vasern/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar b/node_modules/vasern/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar
+new file mode 100644
+index 0000000..4087749
+Binary files /dev/null and b/node_modules/vasern/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar differ
+diff --git a/node_modules/vasern/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/vasern/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
+new file mode 100644
+index 0000000..4a700b6
+--- /dev/null
++++ b/node_modules/vasern/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
+@@ -0,0 +1 @@
++com.reactlibrary
+diff --git a/node_modules/vasern/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/vasern/android/build/outputs/logs/manifest-merger-debug-report.txt
+new file mode 100644
+index 0000000..9c22887
+--- /dev/null
++++ b/node_modules/vasern/android/build/outputs/logs/manifest-merger-debug-report.txt
+@@ -0,0 +1,17 @@
++-- Merging decision tree log ---
++manifest
++ADDED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml:1:1-4:12
++INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml:1:1-4:12
++	package
++		ADDED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml:2:11-37
++		INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml
++	xmlns:android
++		ADDED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml:1:11-69
++uses-sdk
++INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
++INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml
++INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml
++	android:targetSdkVersion
++		INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml
++	android:minSdkVersion
++		INJECTED from C:\Users\31977\Working_Env\ISB_Work\JharFRA\App\RatifiNew\node_modules\vasern\android\src\main\AndroidManifest.xml
+diff --git a/node_modules/vasern/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/vasern/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
+new file mode 100644
+index 0000000..b063671
+Binary files /dev/null and b/node_modules/vasern/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ

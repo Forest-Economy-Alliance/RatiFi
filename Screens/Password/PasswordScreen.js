@@ -1,0 +1,373 @@
+/* eslint-disable no-alert */
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Keyboard,
+  ImageBackground,
+  KeyboardAvoidingView,
+  View,
+  Pressable,
+} from 'react-native';
+import queue, {Worker} from 'react-native-job-queue';
+// import queue, {Worker} from '../../index';
+
+import {useTranslation} from 'react-i18next';
+import '../../assets/i18n/i18n';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useFormik} from 'formik';
+import {object, string, ref} from 'yup';
+import {updatePasswordAction} from '../../redux-store/actions/auth';
+import {useRoute} from '@react-navigation/native';
+import {useToast} from 'react-native-toast-notifications';
+import CustomButton from '../../components/CustomButton';
+import CustomInput from '../../components/CustomInput';
+import {updatePasswordHandler} from '../../services/authService';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+const BG_IMG_PATH = require('../../assets/images/background.png');
+
+const PasswordScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loginflow, setLoginFlow] = useState(false);
+  const route = useRoute();
+
+  React.useEffect(() => {
+    if (route?.params?.login === true) {
+      setLoginFlow(true);
+    }
+  }, [route?.params]);
+
+
+  console.log('Params', route.params);
+  const forgetPasswordCode = route.params.forgetPasswordCode || '2';
+  console.log('forgetPasswordCode', forgetPasswordCode);
+
+  const state = {
+    password: '',
+    confirmPassword: '',
+  };
+  const mobile = route.params.mobile;
+  // const mobile = useSelector(
+  //   state => state.entities.auth.userInfo.profile.mobile,
+  // );
+  const pwdToVerify = useSelector(
+    state => state.entities.auth.userInfo.profile.password,
+  );
+
+  console.log('PwdToVerify', pwdToVerify);
+
+  const {language, globalSyncStatus} = useSelector(
+    e => e?.entities?.appUtil?.appUtil,
+  );
+
+  const {t, i18n} = useTranslation();
+
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  const changeLanguage = value => {
+    i18n
+      .changeLanguage(value)
+      .then(() => setCurrentLanguage(value))
+      .catch(err => console.log(err));
+  };
+  const PassSchema = object().shape({
+    password: string().required(t('Password is Required')),
+    confirmPassword: string()
+      .required(t('Confirm Password is Required'))
+      .oneOf(
+        [ref('password'), null],
+        t('Password and Confirm Password does not match'),
+      ),
+  });
+  console.log('loginflow--', loginflow);
+
+  const savePasswordHandler = async ({ mobile, password }) => {
+    try {
+      // const { data: response } = await updatePasswordHandler({ mobile, password });
+      const response = await updatePasswordHandler({ mobile, password });
+
+      console.log('Response from updatePasswordHandler:', response);
+      dispatch({ type: 'SAVE_PROFILE', payload: response.data });
+      dispatch({ type: 'DISABLE_LOADING' });
+      dispatch({
+        type: 'UPDATE_APPUTIL_KEY',
+        payload: {
+          key: 'globalSyncStatus',
+          value: true,
+        },
+      });
+      if (response?.success) {
+        dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3 });
+      }
+      return response;
+    } catch (err) {
+      console.log('Error updating password', err);
+      throw err;
+    }
+  };
+
+  const onNext = async (values, formikActions) => {
+    formikActions.setSubmitting(false);
+    // dispatch({type: 'ENABLE_LOADING'});
+    if (loginflow === true) {
+      console.log('PwdToVerify', pwdToVerify);
+      if (pwdToVerify === formik.values.password) {
+        navigation.replace('DownloadPDF');
+      } else {
+        toast.show(t('INCORRECT_PASSWORD'), {
+          type: 'success',
+          animationType: 'zoom-in',
+          successColor: '#480E09',
+          placement: 'top',
+          duration: 5000,
+        });
+      }
+    } else {
+
+
+      dispatch({
+        type: 'UPDATE_APPUTIL_KEY',
+        payload: {
+          key: 'globalSyncStatus',
+          value: true,
+        },
+      });
+
+      // console.log("Schedule Job updatePasswordWorker")
+      // queue.addJob(
+      //   'UPDATEPasswordWorker',
+      //   {
+      //     mobile,
+      //     password: formik.values.password,
+      //   },
+      //   {
+      //     attempts: 2,
+      //     timeout: 5000,
+      //   },
+      // );
+
+      try {
+        await savePasswordHandler({ mobile, password: formik.values.password });
+        navigation?.replace('ClaimTypeSelectionScreen');
+      } catch (error) {
+        console.log('Error saving password', error);
+      }
+
+
+  
+      if (forgetPasswordCode == 1) {
+        navigation.replace('HomeScreen');
+      }
+
+      
+      // navigation?.replace('GovernmentOfficialCheck')
+      // navigation.replace('Location');
+
+      return;
+    }
+    // dispatch({type: 'DISABLE_LOADING'});
+  };
+  // alert("HI")
+  const formik = useFormik({
+    initialValues: state,
+    validationSchema: !loginflow ? PassSchema : null,
+    onSubmit: onNext,
+  });
+
+  useEffect(() => {
+    changeLanguage(language);
+  }, []);
+
+  function cb(response) {
+    const args = response?.success;
+    dispatch({type: 'SAVE_PROFILE', payload: response.data});
+
+    dispatch({type: 'DISABLE_LOADING'});
+    dispatch({
+      type: 'UPDATE_APPUTIL_KEY',
+      payload: {
+        key: 'globalSyncStatus',
+        value: true,
+      },
+    });
+
+   if (args) {
+      // screen code 3 means , password set
+      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 3});
+
+      // odish screen if oritya
+      if (language === 'or') {
+        navigation.navigate('LocationOdisha');
+      } else {
+        navigation.navigate('ClaimTypeSelectionScreen');
+    }
+
+    }
+  }
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <ImageBackground
+      source={BG_IMG_PATH}
+      resizeMode="cover"
+      blurRadius={10}
+      style={styles.bg}>
+      <View
+        style={{
+          marginLeft: 20,
+          marginTop: 10,
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          width: '100%',
+          right: 0,
+          left: 0,
+          paddingVertical: 5,
+          paddingLeft: 10,
+        }}>
+        <Pressable>
+          <Text style={{fontSize: 18, color: '#480E09', marginBottom: 10}}>
+            पास वर्ड दर्ज करें
+          </Text>
+        </Pressable>
+      </View>
+
+      <Text style={{color: '#fff', fontSize: 18, marginTop: 30}}>
+        कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें{' '}
+      </Text>
+
+      <TextInput
+        maxLength={4}
+        style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#FF6C00"
+        onChangeText={formik.handleChange('password')}
+        secureTextEntry={true}
+        onBlur={formik.handleBlur('password')}
+        value={formik.values.password}
+        keyboardType="number-pad"
+      />
+      {/* <CustomInput
+        maxLength={4}
+        style={styles.inputPass}
+        placeholder={t('password')}
+        placeholderTextColor="#FF6C00"
+        onChangeText={formik.handleChange('password')}
+        secureTextEntry={true}
+        onBlur={formik.handleBlur('password')}
+        value={formik.values.password}
+        keyboardType="number-pad"
+      /> */}
+     
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.error}>{formik.errors.password}</Text>
+      )}
+      {!loginflow && (
+        <TextInput
+          maxLength={4}
+          style={styles.inputConfPass}
+          placeholder={t('confirm password')}
+          placeholderTextColor="#FF6C00"
+          onChangeText={formik.handleChange('confirmPassword')}
+          secureTextEntry={true}
+          keyboardType="number-pad"
+          onBlur={formik.handleBlur('confirmPassword')}
+          value={formik.values.confirmPassword}
+        />
+      )}
+     
+      {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+        <Text style={styles.error}>{formik.errors.confirmPassword}</Text>
+      )}
+      <CustomButton style={styles.nextButton} onPress={formik.handleSubmit}>
+        <Text style={styles.nextButtonText}>
+          {loginflow ? 'LOGIN' : t('next')}
+        </Text>
+      </CustomButton>
+    </ImageBackground>
+  );
+};
+
+export default PasswordScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    paddingHorizontal: '10%',
+    // padding: '15%',
+  },
+  inputPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
+    borderColor: '#CCCCCC',
+    borderBottomWidth: 1,
+    width: '100%',
+    fontSize: 25,
+    // color: '#480E09',
+  },
+  inputConfPass: {
+    borderColor: '#FFFFFF',
+    borderWidth: 1,
+    borderRadius: 70,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginTop: '5%',
+    color: '#FFFFFF',
+    paddingVertical: '2%',
+    borderColor: '#CCCCCC',
+    borderBottomWidth: 1,
+    width: '100%',
+    fontSize: 25,
+
+    // color: '#480E09',
+  },
+  nextButton: {
+    // backgroundColor: '#480E09',
+
+    // height: '8%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '10%',
+  },
+  nextButtonText: {
+    color: 'white',
+    textTransform: 'uppercase',
+    fontSize: 20,
+  },
+  error: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: 14,
+    color: 'red',
+    marginTop: '2%',
+  },
+  bg: {
+    flex: 1,
+    // height: '100%',
+    // width: '100%',
+    paddingHorizontal: '10%',
+    paddingVertical: '10%',
+  },
+});

@@ -1,0 +1,10 @@
+*** Begin Patch
+*** Update File: node_modules/react-native-network-speed/android/build.gradle
+@@
+-    repositories {
+-        jcenter()
+-    }
++    repositories {
++        mavenCentral()
++    }
+*** End Patch
