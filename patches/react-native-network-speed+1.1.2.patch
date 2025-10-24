@@ -1,10 +1,31 @@
-*** Begin Patch
-*** Update File: node_modules/react-native-network-speed/android/build.gradle
-@@
--    repositories {
+diff --git a/node_modules/react-native-network-speed/android/build.gradle b/node_modules/react-native-network-speed/android/build.gradle
+index 94fde5e..3f73b83 100644
+--- a/node_modules/react-native-network-speed/android/build.gradle
++++ b/node_modules/react-native-network-speed/android/build.gradle
+@@ -5,10 +5,7 @@ def safeExtGet(prop, fallback) {
+ buildscript {
+     repositories {
+         google()
+-        maven {
+-          url 'https://maven.google.com'
+-        }
 -        jcenter()
--    }
-+    repositories {
 +        mavenCentral()
-+    }
-*** End Patch
+     }
+ 
+     dependencies {
+@@ -37,12 +34,12 @@ android {
+ 
+ repositories {
+     google()
+-    jcenter()
++    google()
++    mavenCentral()
+     maven {
+         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+         url "$rootDir/../node_modules/react-native/android"
+     }
+-    jcenter()
+ }
+ 
+ dependencies {

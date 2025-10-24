@@ -1,0 +1,13 @@
+diff --git a/node_modules/@react-native-community/progress-bar-android/android/build.gradle b/node_modules/@react-native-community/progress-bar-android/android/build.gradle
+index 316eadc..71a4bc6 100644
+--- a/node_modules/@react-native-community/progress-bar-android/android/build.gradle
++++ b/node_modules/@react-native-community/progress-bar-android/android/build.gradle
+@@ -1,6 +1,7 @@
+ buildscript {
+     repositories {
+-        jcenter()
++        google()
++        mavenCentral()
+     }
+ 
+     dependencies {
