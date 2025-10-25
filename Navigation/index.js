@@ -37,7 +37,6 @@ import {PDFPreviewScreen} from '../Screens/PDFPreviewScreen/PDFPreviewScreen';
 import LocationScreenOdisha from '../Screens/Location/LocationOdisha';
 import ClaimAlertsScreen from '../Screens/ClaimAlerts/ClaimAlertsScreen';
 import ClaimTypeSelectionScreen from '../Screens/ChooseIFRorCFR';
-import IFRScreen from '../Screens/PastRecordsIFR';
 import IFRDownloadPDF from '../Screens/FormsPageIFR';
 import HomeScreenIFR from '../Screens/HomeScreenIFR';
 import PastRecordsIFR from '../Screens/PastRecordsIFR';

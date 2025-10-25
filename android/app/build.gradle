@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ratifinew"
+    namespace "com.ratifi"
     defaultConfig {
-        applicationId "com.ratifinew"
+        applicationId "com.ratifi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
@@ -119,3 +119,7 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// Apply the Google services plugin so the native Firebase SDK is configured
+// with the values from android/app/google-services.json
+apply plugin: 'com.google.gms.google-services'

@@ -18,13 +18,17 @@ import {ToastProvider} from 'react-native-toast-notifications';
 import HomeScreen from './Screens/HomeScreen/homeScreen';
 import ProfileScreen from './Screens/ProfileScreen/profilescreen';
 import {useEffect} from 'react';
-import messaging, {firebase} from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 import notifee from '@notifee/react-native';
 import ClaimTypeSelectionScreen from './Screens/ChooseIFRorCFR';
 import {MarkBoundry} from './Screens/MarkBoundry';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 import * as Sentry from '@sentry/react-native';
+
+// React Native Firebase auto-initializes from google-services.json on Android
+// No need to call firebase.initializeApp() manually
 
 Sentry.init({
   dsn: 'https://f6df349b4939644ef5fd3693c17e766c@o4505605336662016.ingest.sentry.io/4506120617721856',
@@ -77,9 +81,10 @@ function App() {
   }, []);
 
   const fetchData = async () => {
-    await firebase.messaging().registerDeviceForRemoteMessages();
+    // Use the messaging module (not the app namespace) for FCM operations
+    await messaging().registerDeviceForRemoteMessages();
 
-    const fcmToken = await firebase.messaging().getToken();
+    const fcmToken = await messaging().getToken();
     console.log('fcm', fcmToken);
   };
 

@@ -80,7 +80,7 @@ const NamePhoneScreen = ({navigation}) => {
     name: string().required(t('Name is Required')),
     phoneNumber: string()
       .required(t('Phone Number is Required'))
-      .phone('IN', 'false', t('Invalid Phone Number')),
+      .matches(/^[6-9]\d{9}$/, t('Invalid Phone Number')),
   });
 
   const buttonText = {

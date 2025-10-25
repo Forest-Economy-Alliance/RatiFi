@@ -37,7 +37,7 @@ import {Dimensions} from 'react-native';
 import { firebase } from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-const HomeScreen = ({ navigation,route  }) => {
+const FRCMembersScreen = ({ navigation,route  }) => {
     // const {state} = this.props.navigation;
 // console.log(route.params.members,"FRC Members");
 const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
@@ -418,7 +418,7 @@ console.log(id)
                   <Text style={styles.nextButtonText}>{t('download')}</Text>
                 </TouchableOpacity> */}
 
-export default HomeScreen;
+export default FRCMembersScreen;
 
 const styles = StyleSheet.create({
      
