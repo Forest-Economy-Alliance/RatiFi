@@ -4,9 +4,9 @@
 
 import axios from 'axios';
 import store from '../redux-store/index';
-export const BASE_URL = 'http://172.16.77.188:3001';
+// export const BASE_URL = 'http://172.16.77.188:3001';
 // ISB DEV
-// export const  BASE_URL = 'https://hnspuesper.us-east-1.awsapprunner.com';
+export const  BASE_URL = 'https://hnspuesper.us-east-1.awsapprunner.com';
 
 
 
