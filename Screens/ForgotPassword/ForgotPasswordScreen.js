@@ -39,18 +39,11 @@ const ForgotPasswordScreen = ({navigation}) => {
     useSelector(state => state.entities.auth.userInfo.profile) || '';
   const [curLen, setCurLen] = useState(0);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
   const [accountNotification, setAccountNotification] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   const state = {
     phoneNumber: '',
@@ -107,7 +100,7 @@ const ForgotPasswordScreen = ({navigation}) => {
   const NPSchema = object().shape({
     phoneNumber: string()
       .required(t('Phone Number is Required'))
-      .phone('IN', 'false', t('Invalid Phone Number')),
+      .matches(/^[6-9]\d{9}$/, t('Invalid Phone Number')),
   });
 
   const buttonText = {
@@ -126,11 +119,6 @@ const ForgotPasswordScreen = ({navigation}) => {
     return () => clearInterval(interval);
   }, [timer]);
 
-
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   return (
     <ImageBackground

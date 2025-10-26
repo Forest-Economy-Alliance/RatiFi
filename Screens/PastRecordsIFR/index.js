@@ -83,12 +83,7 @@ const PastRecordsIFR = ({navigation}) => {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+
 
   const {
     name,
@@ -150,7 +145,6 @@ const PastRecordsIFR = ({navigation}) => {
     if(pendingCount>0)
     syncer();
     dispatch({type: 'ENABLE_LOADING'});
-    // changeLanguage(language);
     // fetch Details on basis of applicaton
     // alert(profile?.claims[0])
 

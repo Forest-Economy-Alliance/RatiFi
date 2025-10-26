@@ -46,7 +46,6 @@ const CheckStatus = ({ navigation }) => {
 
     }, [route?.params?.editProfile])
 
-    const language = 'hi';
     const dispatch = useDispatch();
     const name = useSelector(state => state.entities.appUtil.appUtil.name);
     
@@ -59,17 +58,9 @@ const CheckStatus = ({ navigation }) => {
         village: '',
     };
 
-    const { t, i18n } = useTranslation();
-
-    const [currentLanguage, setCurrentLanguage] = useState('en');
+    const { t } = useTranslation();
     const [errorVisible, setErrorVisible] = useState(false);
 
-    const changeLanguage = value => {
-        i18n
-            .changeLanguage(value)
-            .then(() => setCurrentLanguage(value))
-            .catch(err => console.log(err));
-    };
 
     const onNext = (values, formikActions) => {
         // console.log(values);
@@ -1644,9 +1635,7 @@ const CheckStatus = ({ navigation }) => {
         village: t('Fill Village'),
     };
 
-    useEffect(() => {
-        changeLanguage(language);
-    }, []);
+   
 
     return (
         <ImageBackground

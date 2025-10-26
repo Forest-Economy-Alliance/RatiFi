@@ -40,7 +40,6 @@ const ClaimAlertsScreen = ({navigation}) => {
   const route = useRoute();
   const {_id,village} = useSelector(state => state.entities.auth.userInfo?.profile);
 
-  const language = 'hi';
   const dispatch = useDispatch();
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
 
@@ -52,17 +51,10 @@ const ClaimAlertsScreen = ({navigation}) => {
     village: '',
   };
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -84,7 +76,6 @@ const ClaimAlertsScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    changeLanguage(language);
     dispatch({
       type: 'UPDATE_APPUTIL_KEY',
       payload: {

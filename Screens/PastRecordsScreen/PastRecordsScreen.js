@@ -71,14 +71,7 @@ const PastRecordsScreen = ({navigation}) => {
 
   const {t, i18n} = useTranslation();
 
-  // const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  // const changeLanguage = value => {
-  //   i18n
-  //     .changeLanguage(value)
-  //     .then(() => setCurrentLanguage(value))
-  //     .catch(err => console.log(err));
-  // };
 
   // useEffect(() => {
   //   const backHandler = BackHandler.addEventListener(

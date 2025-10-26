@@ -5,7 +5,7 @@ const INIT_STATE = {
   registrationScreenCode: 0,
   typeOfClaim: 'CFR',
   formSaveDir: '',
-  language: 'hi', // not used yet
+  language: 'en',
   name: '',
   formData: [],
   verificationAadharFrontUrl: '',

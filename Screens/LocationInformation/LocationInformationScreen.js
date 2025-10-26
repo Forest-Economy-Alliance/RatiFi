@@ -141,7 +141,7 @@ const LocationInformationScreen = ({navigation}) => {
   const [val5, setVal5] = useState('');
 
   const [err, setErr] = useState(0);
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const [states, setStates] = useState([
     {
@@ -273,16 +273,6 @@ const LocationInformationScreen = ({navigation}) => {
 
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -77,21 +77,8 @@ const DownloadPDFScreen = ({navigation}) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const route = useRoute();
-
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   const goBack = () => {
     navigation.goBack();

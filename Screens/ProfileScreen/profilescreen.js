@@ -35,17 +35,11 @@ const ProfileScreen = ({ navigation }) => {
 
     const [curLen, setCurLen] = useState(0);
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
-    const [currentLanguage, setCurrentLanguage] = useState('en');
     const [errorVisible, setErrorVisible] = useState(false);
 
-    const changeLanguage = value => {
-        i18n
-            .changeLanguage(value)
-            .then(() => setCurrentLanguage(value))
-            .catch(err => console.log(err));
-    };
+   
     const { name, panchayat, tehsil, state, district, village, postLevel, authLevel } = useSelector(state => state.entities.auth.userInfo?.profile);
 
     // console.log("UIF",UIF);
@@ -64,9 +58,6 @@ const ProfileScreen = ({ navigation }) => {
 
     const [claim, setClaim] = useState(null);
     useEffect(() => {
-        changeLanguage(language);
-
-
         dispatch({ type: "ENABLE_LOADING" })
 
         // console.warn("BEFORE_GOING", profile?.claims[profile?.claims.length - 1]);

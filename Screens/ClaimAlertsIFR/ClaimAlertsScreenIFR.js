@@ -38,7 +38,6 @@ import {
     const route = useRoute();
     const {_id} = useSelector(state => state.entities.auth.userInfo?.profile);
   
-    const language = 'hi';
     const dispatch = useDispatch();
     const name = useSelector(state => state.entities.appUtil.appUtil.name);
   
@@ -50,17 +49,10 @@ import {
       village: '',
     };
   
-    const {t, i18n} = useTranslation();
-  
-    const [currentLanguage, setCurrentLanguage] = useState('en');
+    const {t} = useTranslation();
     const [errorVisible, setErrorVisible] = useState(false);
   
-    const changeLanguage = value => {
-      i18n
-        .changeLanguage(value)
-        .then(() => setCurrentLanguage(value))
-        .catch(err => console.log(err));
-    };
+    
   
     useEffect(() => {
       const backHandler = BackHandler.addEventListener(
@@ -81,9 +73,7 @@ import {
       village: t('Fill Village'),
     };
   
-    useEffect(() => {
-      changeLanguage(language);
-  
+    useEffect(() => {  
       console.log(_id);
       request(`/ifr-fetch-notifications?id=${_id}`, {method: 'GET'}, true, false)
         .then(({data}) => {

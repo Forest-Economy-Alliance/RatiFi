@@ -33,20 +33,13 @@ import { setGender } from '../../services/authService';
       role: '',
     };
   
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
     const dispatch = useDispatch();
-    const [currentLanguage, setCurrentLanguage] = useState('en');
     const {name, village,_id} = useSelector(
       state => state.entities.auth.userInfo.profile,
     );
     const [errorVisible, setErrorVisible] = useState(false);
-  
-    const changeLanguage = value => {
-      i18n
-        .changeLanguage(value)
-        .then(() => setCurrentLanguage(value))
-        .catch(err => console.log(err));
-    };
+
  
     // const onNext = (values, formikActions) => {
     //   console.log(values);
@@ -154,10 +147,6 @@ import { setGender } from '../../services/authService';
       gender: t('Fill Gender'),
     };
   
-    useEffect(() => {
-      changeLanguage(language);
-    }, []);
-   
   
   
     return (

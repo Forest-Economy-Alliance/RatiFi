@@ -30,16 +30,10 @@ const NamePhoneScreen = ({navigation}) => {
   const {language} = useSelector(e => e?.entities?.appUtil?.appUtil);
   const route = useRoute();
   console.log(route?.params?.phoneNumber);
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [wrongOTP, setWrongOTP] = useState('');
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+
 
   const name = useSelector(state => state.entities.appUtil.appUtil.name);
   const {otp,authLevel} = useSelector(state => state.entities.auth.userInfo?.profile);
@@ -130,9 +124,6 @@ alert(otp)
     onSubmit: onVerifyOtp,
   });
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   return (
     <ImageBackground

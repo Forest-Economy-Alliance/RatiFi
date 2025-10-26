@@ -67,16 +67,9 @@ const PasswordScreen = ({navigation}) => {
     e => e?.entities?.appUtil?.appUtil,
   );
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
   const PassSchema = object().shape({
     password: string().required(t('Password is Required')),
     confirmPassword: string()
@@ -181,9 +174,7 @@ const PasswordScreen = ({navigation}) => {
     onSubmit: onNext,
   });
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+
 
   function cb(response) {
     const args = response?.success;

@@ -90,7 +90,6 @@ const HomeScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.village,
   );
   const [vis, setVis] = useState(false);
-  const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
   const [val5, setVal5] = useState('');
@@ -98,18 +97,12 @@ const HomeScreen = ({navigation}) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const [pendingCount, setPendingCount] = useState(0);
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
   console.log(postLevel == 'अध्यक्ष');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+
 
   useEffect(() => {
     if (!password) {
@@ -121,9 +114,7 @@ const HomeScreen = ({navigation}) => {
     }
   }, []);
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+ 
 
   const {profile} = useSelector(state => state.entities.auth.userInfo);
 

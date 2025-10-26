@@ -39,16 +39,8 @@ const MobilePasswordScreen = ({navigation}) => {
     password: '',
   };
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
   const PassSchema = object().shape({
     password: string().required(t('Password is Required')),
   });
@@ -108,9 +100,7 @@ const MobilePasswordScreen = ({navigation}) => {
 
   const [errorVisible, setErrorVisible] = useState(false);
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+
 
   return (
     <ImageBackground

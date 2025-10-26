@@ -67,18 +67,11 @@ const LocationScreen = ({navigation}) => {
     village: '',
   };
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
   const [panchayatInfoShow, setPanchayatInfoShow] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   const onNext = (values, formikActions) => {
     setPanchayatInfoShow(false);
@@ -245,9 +238,7 @@ const LocationScreen = ({navigation}) => {
     panchayatName: t('Ok'),
   };
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+
   // console.log(formik.values);
   const goBack = () => {
     // Move to RoleScreen

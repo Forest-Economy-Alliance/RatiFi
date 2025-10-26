@@ -32,17 +32,11 @@ const NamePhoneScreen = ({navigation}) => {
 
   const [curLen, setCurLen] = useState(0);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+
 
   const state = {
     name: '',
@@ -94,9 +88,6 @@ const NamePhoneScreen = ({navigation}) => {
     onSubmit: onGetOtp,
   });
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   return (
     <ImageBackground

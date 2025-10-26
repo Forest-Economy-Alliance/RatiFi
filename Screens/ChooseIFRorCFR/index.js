@@ -44,15 +44,9 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
 
 
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => null)
-      .catch(err => console.log(err));
-  };
+  
 
   useEffect(() => {
-    changeLanguage('hi');
     console.log('ooooo->', route?.params?.isMember);
     console.log('params->', route?.params);
     if (Boolean(authLevel && authLevel !== t('FRC') && authLevel !== '-1')) {

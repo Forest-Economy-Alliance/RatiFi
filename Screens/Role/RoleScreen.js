@@ -61,10 +61,9 @@ const RoleScreen = ({navigation}) => {
   };
   const route = useRoute();
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const {name, village, postLevel} = useSelector(
     state => state.entities.auth.userInfo.profile,
   );
@@ -72,12 +71,6 @@ const RoleScreen = ({navigation}) => {
   console.log(state1.postLevel, 'state');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   const onNext = (values, formikActions) => {
 
@@ -350,9 +343,6 @@ const RoleScreen = ({navigation}) => {
     role: t('Fill Role'),
   };
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   const goBack = () => {
     // Move to RoleScreen

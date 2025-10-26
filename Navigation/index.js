@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {use, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -53,17 +53,9 @@ const Stack = createNativeStackNavigator();
 
 export const Navigation = () => {
 
-  const {loading} = useSelector(state => state.entities.appUtil.appUtil);
-
+  const {loading, language} = useSelector(state => state.entities.appUtil.appUtil);
   const {t, i18n} = useTranslation();
-  let language = 'hi';
-  const changeLanguage = value => {
-    i18n.changeLanguage(value).catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+ 
 
   const {globalSyncStatus} = useSelector(
     state => state.entities.appUtil.appUtil,
@@ -77,6 +69,13 @@ export const Navigation = () => {
       background: 'transparent',
     },
   };
+
+  useEffect(() => {
+    i18n
+      .changeLanguage(language)
+      .then(() => null)
+      .catch(err => console.log(err));
+  }, [language]);
   return (
     <NavigationContainer theme={MyTheme}>
       {loading && <Loader />}

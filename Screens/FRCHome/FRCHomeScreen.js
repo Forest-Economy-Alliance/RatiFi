@@ -29,17 +29,9 @@ const FRCHomeScreen = ({navigation}) => {
 
   const [curLen, setCurLen] = useState(0);
 
-  const {t, i18n} = useTranslation();
-
-  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const {t} = useTranslation();
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   const {
     name,
@@ -64,9 +56,7 @@ const FRCHomeScreen = ({navigation}) => {
   // const [panchayat, setPanchayat] = useState('Gopalpur');
   // const [village, setVillage] = useState('Gujrehra');
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+
   console.log('hello FRC Home');
   return (
     <ImageBackground
