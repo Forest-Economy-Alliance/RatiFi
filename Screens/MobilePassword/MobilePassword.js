@@ -29,7 +29,6 @@ import {firebase} from '@react-native-firebase/messaging';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const MobilePasswordScreen = ({navigation}) => {
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
   const toast = useToast();
   const dispatch = useDispatch();
@@ -40,9 +39,10 @@ const MobilePasswordScreen = ({navigation}) => {
   };
 
   const {t} = useTranslation();
+  const authTranslation = t('auth');
 
   const PassSchema = object().shape({
-    password: string().required(t('Password is Required')),
+    password: string().required(authTranslation.password_required),
   });
 
   const fetchData = async () => {
@@ -71,7 +71,7 @@ const MobilePasswordScreen = ({navigation}) => {
             })
             // navigation.navigate('HomeScreen');
           } else {
-            toast.show(t('INCORRECT_PASSWORD'), {
+            toast.show(authTranslation.incorrect_password, {
               type: 'success',
               animationType: 'zoom-in',
               successColor: '#480E09',
@@ -89,7 +89,7 @@ const MobilePasswordScreen = ({navigation}) => {
   };
 
   const buttonText = {
-    password: t('Fill Password'),
+    password: authTranslation.enter_password,
   };
 
   const formik = useFormik({
@@ -112,11 +112,11 @@ const MobilePasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Login')}</Text>
+              <Text style={styles.headerText}>{authTranslation.login}</Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
+              <Text style={styles.titleText}>{authTranslation.enter_mobile_number}</Text>
             </View>
             <CustomInput
               keyboardType={'number-pad'}
@@ -126,7 +126,7 @@ const MobilePasswordScreen = ({navigation}) => {
               error={formik.errors.phoneNumber && formik.touched.phoneNumber}
             />
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('password')}</Text>
+              <Text style={styles.titleText}>{authTranslation.enter_password}</Text>
             </View>
             <CustomInput
               keyboardType={'number-pad'}
@@ -137,7 +137,7 @@ const MobilePasswordScreen = ({navigation}) => {
               error={formik.errors.password && formik.touched.password}
             />
             <CustomButton
-              text={t('Login')}
+              text={authTranslation.login}
               onPress={() => {
                 LoginByNumber();
               }}
@@ -148,13 +148,13 @@ const MobilePasswordScreen = ({navigation}) => {
               <CustomButton
                 style={{marginBottom: 10}}
                 button={{width: 200}}
-                text={t('New') + ' ' + t('Registration')}
+                text={authTranslation.new_registration}
                 onPress={() => {
                   navigation.navigate('NamePhone');
                 }}
               />
               <CustomButton
-                text={t('Forgot Password')}
+                text={authTranslation.forgot_password}
                 onPress={() => {
                   navigation.navigate('ForgotPassword');
                 }}
@@ -165,7 +165,7 @@ const MobilePasswordScreen = ({navigation}) => {
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
+              errorText={authTranslation.fill_all_the_fields}
               errors={formik.errors}
               buttonText={buttonText}
             />
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   otpBtn: {
-    marginTop: '20%',
+    marginTop: '10%',
   },
   forgPassBtn: {
     // marginTop: '50%',

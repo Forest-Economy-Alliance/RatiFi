@@ -10,24 +10,24 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {useFormik} from 'formik';
-import {object, string} from 'yup';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import { object, string } from 'yup';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomError from '../../components/CustomError';
-import {postOTPAction} from '../../redux-store/actions/auth';
-import {getDeviceHash} from '../../utils/DeviceUtil';
-import {checkAccount} from '../../services/authService';
+import { postOTPAction } from '../../redux-store/actions/auth';
+import { getDeviceHash } from '../../utils/DeviceUtil';
+import { checkAccount } from '../../services/authService';
 import CountdownTimer from './CountdownTimer';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const ForgotPasswordScreen = ({navigation}) => {
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+const ForgotPasswordScreen = ({ navigation }) => {
+  const { language } = useSelector(state => state.entities.appUtil.appUtil);
 
   const dispatch = useDispatch();
 
@@ -35,15 +35,15 @@ const ForgotPasswordScreen = ({navigation}) => {
 
   // const [name, setName] = useState('Ram Krishna');
 
-  const {name} =
+  const { name } =
     useSelector(state => state.entities.auth.userInfo.profile) || '';
   const [curLen, setCurLen] = useState(0);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const authTranslation = t('auth');
 
   const [errorVisible, setErrorVisible] = useState(false);
   const [accountNotification, setAccountNotification] = useState(false);
-
 
   const state = {
     phoneNumber: '',
@@ -54,16 +54,16 @@ const ForgotPasswordScreen = ({navigation}) => {
     formikActions.setSubmitting(false);
     console.log('values', values);
 
-    dispatch({type: 'ENABLE_LOADING'});
+    dispatch({ type: 'ENABLE_LOADING' });
     console.log(values.phoneNumber);
 
-    return checkAccount({mobile: values.phoneNumber}).then(async response => {
+    return checkAccount({ mobile: values.phoneNumber }).then(async response => {
       console.log(response.data, 'forget paasword data before');
       if (response.data.success) {
         console.log(response.data, 'forget paasword data');
         const DD = await getDeviceHash();
         console.log('sending otp...');
-        setTimer(60)
+        setTimer(60);
         dispatch(
           postOTPAction(
             {
@@ -74,7 +74,6 @@ const ForgotPasswordScreen = ({navigation}) => {
               dd: DD || '-1',
             },
             args => {
-              
               dispatch({
                 type: 'UPDATE_APPUTIL_KEY',
                 payload: {
@@ -99,12 +98,12 @@ const ForgotPasswordScreen = ({navigation}) => {
 
   const NPSchema = object().shape({
     phoneNumber: string()
-      .required(t('Phone Number is Required'))
-      .matches(/^[6-9]\d{9}$/, t('Invalid Phone Number')),
+      .required(authTranslation.phone_number_required)
+      .matches(/^[6-9]\d{9}$/, authTranslation.invalid_phone_number),
   });
 
   const buttonText = {
-    phoneNumber: t('Fill Phone Number'),
+    phoneNumber: authTranslation.enter_mobile_number,
   };
 
   const formik = useFormik({
@@ -119,25 +118,28 @@ const ForgotPasswordScreen = ({navigation}) => {
     return () => clearInterval(interval);
   }, [timer]);
 
-
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+    >
       <ScrollView style={styles.darkness}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Forgot Password')}</Text>
+              <Text style={styles.headerText}>
+                {authTranslation.forgot_password}
+              </Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>
-              {/* <Text style={styles.nameTxt}>{name}</Text> */}
             </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter mobile number')}</Text>
+              <Text style={styles.titleText}>
+                {authTranslation.enter_mobile_number}
+              </Text>
             </View>
             <CustomInput
               onChangeText={formik.handleChange('phoneNumber')}
@@ -148,34 +150,35 @@ const ForgotPasswordScreen = ({navigation}) => {
             />
             <View style={styles.sub}>
               <Text style={styles.subText}>
-                {t('You will receive otp on this number')}
+                {authTranslation.receive_otp_on_this_number}
               </Text>
             </View>
 
             <CustomButton
-              dsbled={timer!==0}
-              // text={t('Get OTP') + `(${1})`}
+              dsbled={timer !== 0}
               onPress={() => {
                 if (formik.errors.phoneNumber) {
                   setErrorVisible(true);
                 }
                 formik.handleSubmit();
               }}
-              style={styles.otpBtn}>
-              {t('Get OTP')} {(timer!==0) && `(${timer})`}
+              style={styles.otpBtn}
+            >
+              {authTranslation.send_otp} {timer !== 0 && `(${timer})`}
             </CustomButton>
 
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
+              errorText={authTranslation.fill_all_the_fields}
               errors={formik.errors}
               buttonText={buttonText}
             />
             <Modal
               //   animationType="fade"
               transparent={true}
-              visible={accountNotification}>
+              visible={accountNotification}
+            >
               <View style={styles.errorView}>
                 <View style={styles.errorCard}>
                   <Text style={styles.errorText}>
@@ -190,9 +193,10 @@ const ForgotPasswordScreen = ({navigation}) => {
                     onPress={() => {
                       navigation.navigate('NamePhone');
                       setAccountNotification(false);
-                    }}>
+                    }}
+                  >
                     <Text style={styles.buttonText}>
-                      {t('Please Register')}
+                      {authTranslation.new_registration}
                     </Text>
                   </Pressable>
                 </View>

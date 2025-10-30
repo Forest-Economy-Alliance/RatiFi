@@ -60,6 +60,11 @@ const GovernmentOfficialCheck = ({navigation}) => {
   const route = useRoute();
 
   const {t} = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
+  
   const dispatch = useDispatch();
 
   const {name, village, postLevel} = useSelector(
@@ -73,8 +78,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
   const onNext = (values, formikActions) => {
     if (
-      values?.member === t('FRC') ||
-      (values?.member !== t('FRC') && uploadStatus?.f && uploadStatus?.b)
+      values?.member === roleTranslation.frc ||
+      (values?.member !== roleTranslation.frc && uploadStatus?.f && uploadStatus?.b)
     ) {
 
 
@@ -95,7 +100,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
             postLevel: values.role,
             // village: village,
             gender: values?.gender,
-            isMember: values.role === t('Member'),
+            isMember: values.role === roleTranslation.member,
             activeStatus: values.member !== 'एफआरसी' ? false : true,
           },
           args => {
@@ -106,7 +111,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
               // screencode 5 means role set
               dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
 
-              if (values?.member === t('SLMC')) {
+              if (values?.member === roleTranslation.slmc) {
                 navigation.replace('HomeScreen');
                 return;
               }
@@ -114,7 +119,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
               // console.log('yy', postLevel);
               if (values.member !== 'एफआरसी') {
                 navigation.replace('Location');
-              } else if (!(values.role === t('Member'))) {
+              } else if (!(values.role === roleTranslation.member)) {
                 // check if secretyary or president have already filed a claim
                 // fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
                 //   if (res?.data?.data[0]?._id?.toString()) {
@@ -186,14 +191,14 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
 
     } else {
-      Alert.alert('सुचना', 'कृपया सत्यापन के लिए आईडी अपलोड करें');
+      Alert.alert(appTranslation.upload_id_for_verification);
     }
   };
 
   const uidSchema = object().shape({
-    gender: string().required(t('Gender is Required')),
-    member: string().required(t('Membership is Required')),
-    role: string().required(t('Role is Required')),
+    gender: string().required(appTranslation.gender_required),
+    member: string().required(appTranslation.membership_required),
+    role: string().required(appTranslation.role_required),
   });
 
   const formik = useFormik({
@@ -204,147 +209,106 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
   const data1 = [
     {
-      label: t('FRC'),
+      label: roleTranslation.frc,
       value: '1',
       roleData: [
         {
-          label: t('President'),
+          label: roleTranslation.president,
           value: '1',
         },
         {
-          label: t('Secretary'),
+          label: roleTranslation.secretary,
           value: '2',
         },
         {
-          label: t('Member'),
+          label: roleTranslation.member,
           value: '3',
         },
       ],
     },
     {
-      label: t('SDLC'),
+      label: roleTranslation.sdlc,
       value: '2',
       roleData: [
         {
-          label: t('Subdivisonal Officer'),
+          label: roleTranslation.subdivisonal_officer,
           value: '1',
         },
-        // {
-        //   label: t('Tehsildar'),
-        //   value: '2',
-        // },
-        // {
-        //   label: t('ACF'),
-        //   value: '3',
-        // },
+        
 
         {
-          label: t('Member'),
+          label: roleTranslation.member,
           value: '4',
         },
 
-        // {
-        //   label: t('Circle Officer'),
-        //   value: '5',
-        // },
-        // {
-        //   label: t('Range Officer'),
-        //   value: '6',
-        // },
+        
       ],
     },
     {
-      label: t('DLC'),
+      label: roleTranslation.dlc,
       value: '3',
       roleData: [
         {
-          label: t('District Collector'),
+          label: roleTranslation.district_collector,
           value: '1',
         },
         {
-          label: t('District Forest Officer'),
+          label: roleTranslation.district_forest_officer,
           value: '2',
         },
         {
-          label: t('District Welfare Officer'),
+          label: roleTranslation.district_welfare_officer,
           value: '3',
         },
-        // {
-        //   label: t('Officer-in-Charge (Tribal Affairs)'),
-        //   value: '4',
-        // },
         {
-          label: t('Member'),
+          label: roleTranslation.member,
           value: '5',
         },
       ],
     },
     {
-      label: t('SLMC'),
+      label: roleTranslation.slmc,
       value: '4',
       roleData: [
         {
-          label: 'मुख्य सचिव - अध्यक्ष',
+          label: roleTranslation.panchayati_raj_secretary,
           value: '1',
         },
         {
-          label: 'सचिव - राजस्व विभाग',
+          label: roleTranslation.pradhan_mukhya_van_sanrakshak,
           value: '2',
         },
-        {
-          label: 'सचिव - जन जाति या समाज कल्याण विभाग',
-          value: '3',
-        },
-        {
-          label: 'सचिव - वन विभाग',
-          value: '4',
-        },
-        {
-          label: 'सचिव - पंचायती राज',
-          value: '5',
-        },
-        {
-          label: 'प्रधान मुख्य वन संरक्षक',
-          value: '6',
-        },
-        {
-          label: 'जनजाति सलाहकार परिषद सदस्य',
-          value: '7',
-        },
-        {
-          label: 'जनजातीय कल्याण आयुक्त',
-          value: '8',
-        },
+        
       ],
     },
     {
-      label: 'भारसाधक  - ' + t('Forest_Department') + ' (SDLC)',
+      label: roleTranslation.forest_department,
       value: '5',
       roleData: [
         {
-          label: 'वन परिक्षेत्र अधिकारी',
+          label: roleTranslation.forest_range_officer,
           value: '1',
         },
         {
-          label: 'वन रक्षक',
+          label: roleTranslation.forest_guard,
           value: '2',
         },
       ],
     },
     {
-      label: 'भारसाधक  - ' + t('Revenue_Department') + ' (SDLC)',
+      label: roleTranslation.revenue_department,
       value: '6',
       roleData: [
         {
-          label: 'राजस्व उपनिरक्षक',
+          label: roleTranslation.revenue_officer,
           value: '1',
         },
         {
-          label: 'आंचल निरक्षक',
+          label: roleTranslation.circle_off,
           value: '2',
         },
         {
-          label: t('Circle Officer'),
+          label: roleTranslation.circle_officer,
           value: '5',
         },
       ],
@@ -352,8 +316,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
   ];
 
   const buttonText = {
-    member: t('Fill Membership'),
-    role: t('Fill Role'),
+    member: appTranslation.choose_membership,
+    role: appTranslation.choose_role,
   };
 
   const goBack = () => {
@@ -475,7 +439,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         // console.log("WOW", rssponse.data);
 
                         if (data?.response?.Location) {
-                          toast.show(t('FILE_UPLOADED'), {
+                          toast.show(appTranslation.file_uploaded, {
                             type: 'success',
                             animationType: 'zoom-in',
                             successColor: '#480E09',
@@ -485,7 +449,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                           setCameraModalVis(false);
                           dispatch({type: 'DISABLE_LOADING'});
                         } else {
-                          toast.show(t('UPLOAD_FAILED'), {
+                          toast.show(appTranslation.upload_failed, {
                             type: 'failure',
                             animationType: 'zoom-in',
                             successColor: '#480E09',
@@ -559,7 +523,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
         <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
           <Pressable onPress={goBack}>
             <Text style={{fontSize: 18}}>
-              <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
+              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -578,17 +542,17 @@ const GovernmentOfficialCheck = ({navigation}) => {
             </View>
 
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('specify your gender')}</Text>
+              <Text style={styles.titleText}>{appTranslation.choose_gender}</Text>
             </View>
             <Dropdown
               visible={true}
               data={[
                 {
-                  label: t('male'),
+                  label: appTranslation.male,
                   value: 1,
                 },
                 {
-                  label: t('female'),
+                  label: appTranslation.female,
                   value: 2,
                 },
               ]}
@@ -598,7 +562,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
             <View style={styles.title}>
               <Text style={styles.titleText}>
-                {t('specify your membership')}
+                {appTranslation.choose_membership}
               </Text>
             </View>
             <Dropdown
@@ -622,7 +586,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
             {Boolean(roleData?.length !== 0) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('specify your role')}</Text>
+                  <Text style={styles.titleText}>{appTranslation.choose_role}</Text>
                 </View>
                 <Dropdown
                   visible={true}
@@ -634,16 +598,16 @@ const GovernmentOfficialCheck = ({navigation}) => {
             )}
 
             {Boolean(
-              formik.values.member !== t('FRC') && formik.values.member,
+              formik.values.member !== roleTranslation.frc && formik.values.member,
             ) && (
               <View>
                 <View>
                   <View style={styles.title}>
                     <Text style={styles.titleText}>
-                      {t('Upload Aadhar Card')}
+                      {appTranslation.upload_aadhar_card}
                     </Text>
                     <Text style={styles.titleText}>
-                      (प्रोफ़ाइल सत्यापन हेतु)
+                      {appTranslation.for_profile_verification}
                     </Text>
                   </View>
                 </View>
@@ -669,7 +633,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         padding: 10,
                         borderStyle: 'dashed',
                       }}>
-                      FRONT <Ionicons name="camera-sharp" size={22} />
+                      {commonTranslation.next} <Ionicons name="camera-sharp" size={22} />
                     </Text>
                   </Pressable>
 
@@ -686,7 +650,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         padding: 10,
                         borderStyle: 'dashed',
                       }}>
-                      BACK <Ionicons name="camera-sharp" size={22} />
+                      {commonTranslation.back} <Ionicons name="camera-sharp" size={22} />
                     </Text>
                   </Pressable>
                 </View>
@@ -731,7 +695,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
             )}
 
             <CustomButton
-              text={t('Next')}
+              text={commonTranslation.next}
               onPress={async () => {
                 if (formik.errors.member || formik.errors.role) {
                   console.log(formik.errors);
@@ -745,7 +709,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
+              errorText={commonTranslation.fill_all_the_fields}
               errors={formik.errors}
               buttonText={buttonText}
             />
@@ -811,7 +775,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   otpBtn: {
-    marginTop: '30%',
+    marginTop: '15%',
+    marginBottom: '8%',
   },
   inputName: {
     borderColor: '#CCCCCC',

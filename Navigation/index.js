@@ -215,9 +215,7 @@ export const Navigation = () => {
             headerShown: false,
           }}
         />
-        {/* <CheckStatus>
-
-         </CheckStatus> */}
+        
         <Stack.Screen
           name="Role"
           component={RoleScreen}

@@ -42,11 +42,13 @@ const LoginPasswordScreen = ({navigation}) => {
   };
 
   const {t} = useTranslation();
+  const authTranslation = t('auth');
+  const commonTranslation = t('common');
 
 
 
   const PassSchema = object().shape({
-    password: string().required(t('Password is Required')),
+    password: string().required(authTranslation.password_required),
   });
 
   const pwdToVerify = useSelector(
@@ -63,7 +65,7 @@ const LoginPasswordScreen = ({navigation}) => {
 
         navigation.replace(typeOfClaim==='CFR'?'HomeScreen':'HomeScreenIFR');
       } else {
-        toast.show(t('INCORRECT_PASSWORD'), {
+        toast.show(authTranslation.incorrect_password, {
           type: 'success',
           animationType: 'zoom-in',
           successColor: '#480E09',
@@ -95,7 +97,7 @@ const LoginPasswordScreen = ({navigation}) => {
   };
 
   const buttonText = {
-    password: t('Fill Password'),
+    password: authTranslation.enter_password,
   };
 
   const formik = useFormik({
@@ -121,14 +123,14 @@ const LoginPasswordScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('Login')}</Text>
+              <Text style={styles.headerText}>{authTranslation.login}</Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>
               <Text style={styles.nameTxt}>{name}</Text>
             </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('password')}</Text>
+              <Text style={styles.titleText}>{authTranslation.enter_password}</Text>
             </View>
             <CustomInput
               keyboardType={"number-pad"}
@@ -139,7 +141,7 @@ const LoginPasswordScreen = ({navigation}) => {
               error={formik.errors.password && formik.touched.password}
             />
             <CustomButton
-              text={t('Login')}
+              text={authTranslation.login}
               onPress={() => {
                 if (formik.errors.password) {
                   setErrorVisible(true);
@@ -149,17 +151,17 @@ const LoginPasswordScreen = ({navigation}) => {
               style={styles.otpBtn}
             />
 
-            <View style={{marginTop:'30%'}}>
+            <View style={{marginTop:'10%'}}>
             <CustomButton
             style={{marginBottom:10}}
             button={{width:200}}
-            text={ t('New') +' '+  t('Registration')}
+            text={authTranslation.new_registration}
             onPress={() => {
                 navigation.navigate('NamePhone');
               }}
             />
             <CustomButton
-              text={t('Forgot Password')}
+              text={authTranslation.forgot_password}
               onPress={() => {
                 navigation.navigate('ForgotPassword');
               }}
@@ -170,7 +172,7 @@ const LoginPasswordScreen = ({navigation}) => {
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
+              errorText={authTranslation.fill_all_the_fields}
               errors={formik.errors}
               buttonText={buttonText}
             />

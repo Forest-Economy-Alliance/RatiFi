@@ -120,6 +120,13 @@ dependencies {
     }
 }
 
+// Add vector icons fonts to the app
+project.ext.vectoricons = [
+    iconFontNames: [ 'Ionicons.ttf', 'MaterialCommunityIcons.ttf', 'FontAwesome.ttf' ]
+]
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+
 // Apply the Google services plugin so the native Firebase SDK is configured
 // with the values from android/app/google-services.json
 apply plugin: 'com.google.gms.google-services'

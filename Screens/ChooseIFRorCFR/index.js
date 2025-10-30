@@ -37,6 +37,10 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
 
   const {token} = useSelector(state => state.entities.auth.userInfo);
   const {t, i18n} = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
 
   const [userType, setUserType] = useState('');
 
@@ -49,18 +53,18 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
   useEffect(() => {
     console.log('ooooo->', route?.params?.isMember);
     console.log('params->', route?.params);
-    if (Boolean(authLevel && authLevel !== t('FRC') && authLevel !== '-1')) {
+    if (Boolean(authLevel && authLevel !== "एफआरसी" && authLevel !== '-1')) {
       setIsUpperLevel(true);
     }
   }, []);
 
   const claimTypes = [
     {
-      name: t('CFR'),
+      name: appTranslation.cfr,
       value: 'cfr',
     },
     {
-      name: t('IFR'),
+      name: appTranslation.ifr,
       value: 'ifr',
     },
   ];
@@ -73,7 +77,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
       style={styles.bg}>
       <View style={styles.darkness}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('Select your claim')}</Text>
+          <Text style={styles.headerText}>{appTranslation.select_claim}</Text>
           <View style={styles.horizontalLine} />
         </View>
         <ScrollView contentContainerStyle={styles.innerContainer}>
@@ -110,7 +114,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                       navigation.replace('HomeScreen');
                     }
                    else if (loginMode === true) {
-                      if (authLevel !== t('FRC')) {
+                      if (authLevel !== "एफआरसी") {
                         navigation.replace('HomeScreen');
                         return;
                       }
@@ -135,7 +139,7 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
           })}
         </ScrollView>
          <View style={{padding:10}}>
-         <Text style={{textAlign:'center',fontSize:18}}>सूचना - सरकारी अधिकारी कृपया {t('CFR')} विकल्प पर क्लिक करें</Text>
+         <Text style={{textAlign:'center',fontSize:18}}>{appTranslation.notice_to_official}</Text>
          {/* <Text style={{textAlign:'center'}}>Note - Govt. Official Please choose CFR</Text> */}
          </View>
       </View>

@@ -6,8 +6,9 @@ import te from './te.json';
 
 i18n.use(initReactI18next).init({
     compatibilityJSON: 'v3',
-    lng: 'en',
-    fallbackLng: 'en',
+    lng: 'hi',
+    fallbackLng: 'hi',
+    returnObjects: true,
     resources: {
         en: en,
         hi: hi,

@@ -70,6 +70,10 @@ const PastRecordsScreen = ({navigation}) => {
   const [stage, setStage] = useState(1);
 
   const {t, i18n} = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
 
 
 
@@ -213,7 +217,7 @@ const PastRecordsScreen = ({navigation}) => {
         }}>
         <Pressable onPress={goBack}>
           <Text style={{fontSize: 18}}>
-            <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
+            <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
           </Text>
         </Pressable>
 
@@ -414,7 +418,7 @@ const PastRecordsScreen = ({navigation}) => {
             paddingHorizontal: 40,
             marginTop: 20,
           }}>
-          <Text style={[styles.headerText]}>{t('Application_Number')}</Text>
+          <Text style={[styles.headerText]}>{appTranslation.application_number}</Text>
           <Text style={[styles.headerText, {fontWeight: 'bold'}]}>
             &nbsp;{claim?.applicationNumber}
           </Text>
@@ -436,7 +440,7 @@ const PastRecordsScreen = ({navigation}) => {
                 backgroundColor: item == stage ? '#fff' : 'transparent',
               }}>
               <Text style={{color: item === stage ? 'green' : '#fff'}}>
-                {id === 5 ? 'प्रपत्र' : `चरण ${item}`}
+                {id === 5 ? appTranslation.form : `${appTranslation.stage} ${item}`}
               </Text>
             </TouchableOpacity>
           ))}
@@ -448,11 +452,10 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  वन अधिकार समिति का गठन / पुनर्गठन
+                  {appTranslation.forest_rights_committee}
                 </Text>
                 <Text style={{fontSize: 18, color: '#fff', fontWeight: '600'}}>
-                  (कार्यरत वन अधिकार समिति के पहले से उपस्थित होने पर चरण १ को
-                  वैकल्पिक माना जाये)
+                  {appTranslation.optional_consideration_rule}
                 </Text>
               </View>
 
@@ -475,7 +478,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      कार्यवाही रजिस्टर की छाया प्रति (1.1 या 1.2)
+                      {appTranslation.shadow_copy_of_proceedings_register}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -526,7 +529,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}> {appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {Boolean(
@@ -588,7 +591,7 @@ const PastRecordsScreen = ({navigation}) => {
                           <Ionicons name="camera" color="white" size={20} />
                         </>
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}> {appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[0]?.title ===
@@ -652,7 +655,7 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  सामुदायिक वन अधिकारों का दावा तैयार करना
+                 {appTranslation.prepare_community_forest_rights_claim}
                 </Text>
               </View>
 
@@ -675,8 +678,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावा प्रक्रिया आरम्भ करने और दस्तावेजों की मांग के लिए
-                      SDLC को पत्र (2 . 1) (संलग्न 4)
+                      {appTranslation.claim_process_initiation}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -733,7 +735,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
 
@@ -791,7 +793,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[1]?.title ===
@@ -864,7 +866,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावित वन क्षेत्र का नक़्शा (संलग्न 4)
+                      {appTranslation.disputed_forest_area_map}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -921,7 +923,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
 
@@ -982,7 +984,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[2]?.title ===
@@ -1055,8 +1057,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      नियम 13 (झ) के अंतर्गत बुजुर्गों का शपथ पत्र (2.5) (संलग्न
-                      3)
+                      {appTranslation.elder_affidavit}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1117,7 +1118,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[3]?.title ===
@@ -1177,7 +1178,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[3]?.title ===
@@ -1250,8 +1251,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      नियम 13 (झ) के अंतर्गत एक दस्तावेज़ - खतियान भाग 2 / पंजी 2
-                      इत्यादि (संलग्न 3)
+                      {appTranslation.document_under_rule_13}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1312,7 +1312,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[4]?.title ===
@@ -1371,7 +1371,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[4]?.title ===
@@ -1443,8 +1443,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      नियम 13 (झ) के अंतर्गत सरना / श्मशान / देवस्थल इत्यादि का
-                      फ़ोटो (संलग्न 3) (वैकल्पिक)
+                      {appTranslation.photo_under_rule_13}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1505,7 +1504,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[5]?.title ===
@@ -1587,7 +1586,7 @@ const PastRecordsScreen = ({navigation}) => {
                           )}
                         </>
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[5]?.title ===
@@ -1659,7 +1658,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावेदारों के नाम और हस्ताक्षर (2. 4) (संलग्न 1)
+                      {appTranslation.claimants_names_and_signatures}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1714,7 +1713,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[6]?.title ===
@@ -1773,7 +1772,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[6]?.title ===
@@ -1836,7 +1835,7 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  वन क्षेत्र का सीमांकन
+                  {appTranslation.demarcation_of_forest_area}
                 </Text>
               </View>
 
@@ -1858,8 +1857,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      सीमांकन के लिए पडोसी गांव को सूचना की पावती (2.7) (संलग्न
-                      6)
+                      {appTranslation.neighboring_village_notification}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -1914,7 +1912,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[7]?.title ===
@@ -1973,7 +1971,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[7]?.title ===
@@ -2045,7 +2043,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      सीमांकन की कार्यवाही (2.9) (संलग्न 8)
+                     {appTranslation.demarcation_proceedings}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2106,7 +2104,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[8]?.title ===
@@ -2165,7 +2163,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[8]?.title ===
@@ -2228,7 +2226,7 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  भौतिक सत्यापन
+                 {appTranslation.physical_verification}
                 </Text>
               </View>
 
@@ -2251,8 +2249,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      भौतिक सत्यापन के लिए वन और राजस्व विभाग के अधिकारियों को
-                      सूचना की पावती (2.6) (संलग्न 5)
+                      {appTranslation.physical_verification_notification}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2313,7 +2310,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[9]?.title ===
@@ -2373,7 +2370,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[9]?.title ===
@@ -2445,7 +2442,7 @@ const PastRecordsScreen = ({navigation}) => {
                           // textDecorationLine: 'underline',
                         },
                       ]}>
-                      भौतिक सत्यापन प्रतिवेदन (2.8) (संलग्न 7)
+                      {appTranslation.physical_verification_report}
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -2505,7 +2502,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[10]?.title ===
@@ -2564,7 +2561,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[10]?.title ===
@@ -2628,7 +2625,7 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  सामुदायिक अधिकारों की अनुशंसा के लिए ग्राम सभा
+                  {appTranslation.community_rights_recommendation}
                 </Text>
               </View>
 
@@ -2651,7 +2648,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      ग्राम सभा की कार्यवाही (2.10) (संलग्न 9)
+                      {appTranslation.gram_sabha_proceedings}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2713,7 +2710,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[11]?.title ===
@@ -2772,7 +2769,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[11]?.title ===
@@ -2836,7 +2833,7 @@ const PastRecordsScreen = ({navigation}) => {
             <ScrollView>
               <View style={{padding: 20}}>
                 <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                  दावा विवरण
+                  {appTranslation.claim_details}
                 </Text>
               </View>
 
@@ -2858,7 +2855,7 @@ const PastRecordsScreen = ({navigation}) => {
                           // textDecorationLine: 'underline',
                         },
                       ]}>
-                      दावा अभिलेख (2.11)
+                      {appTranslation.claim_records}
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -2921,7 +2918,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[12]?.title ===
@@ -2980,7 +2977,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[12]?.title ===
@@ -3054,7 +3051,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      प्रारूप - ख (2.2)
+                      {appTranslation.format_kh}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3116,7 +3113,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[13]?.title ===
@@ -3175,7 +3172,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[13]?.title ===
@@ -3242,7 +3239,7 @@ const PastRecordsScreen = ({navigation}) => {
                           // textDecorationLine: 'underline',
                         },
                       ]}>
-                      प्रारूप - ग (2.3)
+                      {appTranslation.format_g}
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
@@ -3305,7 +3302,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[14]?.title ===
@@ -3364,7 +3361,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[14]?.title ===
@@ -3438,7 +3435,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      अनुमंडल (SDLC) से प्राप्त पावती
+                      {appTranslation.subdivision_receipt}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3500,7 +3497,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[15]?.title ===
@@ -3559,7 +3556,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[15]?.title ===
@@ -3627,7 +3624,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      भौतिक सत्यापन के लिए द्वितीय सूचना (2.12)
+                      {appTranslation.physical_verification_second_notification}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3682,7 +3679,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[16]?.title ===
@@ -3741,7 +3738,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[16]?.title ===
@@ -3808,8 +3805,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      दावों के दुबारा भौतिक सत्यापन और SDLC की अनुशंसा के लिए
-                      पत्र (2.13)
+                      {appTranslation.claim_verification_second_notification}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3865,7 +3861,7 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[17]?.title ===
@@ -3924,7 +3920,7 @@ const PastRecordsScreen = ({navigation}) => {
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}> फोटो देखें</Text>
+                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[17]?.title ===
@@ -3989,7 +3985,7 @@ const PastRecordsScreen = ({navigation}) => {
                   borderColor: '#fff',
                 }}>
                 <Text style={{color: 'white', fontSize: 18}}>
-                  दावेदार द्वारा दावा किया गया क्षेत्र (एकड़ में)
+                  {appTranslation.claimed_area}
                 </Text>
 
                 <View
@@ -4007,7 +4003,7 @@ const PastRecordsScreen = ({navigation}) => {
                       marginTop: 10,
                     }}
                     keyboardType="number-pad"
-                    placeholder="क्षेत्रफल"
+                    placeholder={appTranslation.area}
                     editable={Boolean(claim?.area!=undefined)}
                     value={claimedArea}
                     onChangeText={e=>setClaimedArea(e)}
@@ -4019,16 +4015,16 @@ const PastRecordsScreen = ({navigation}) => {
                     }}
                     onPress={() => {
                       Alert.alert(
-                        'कृपा ध्यान दे',
-                        'आपके द्वार दावा किया गया चेत्रफल दुबारा अपेंड नहीं कर सकता, कृपया पुष्टि करें',
+                        commonTranslation.notice,
+                        appTranslation.area_cant_be_changed_notif,
                         [
                           {
-                            text: 'Cancel',
+                            text: commonTranslation.cancel,
                             onPress: () => console.log('Cancel Pressed'),
                             style: 'cancel',
                           },
                           {
-                            text: 'OK',
+                            text: commonTranslation.ok,
                             onPress: () =>{
                            
                                 patchClaimArea({claimId:claim?._id?.toString(),area:456})

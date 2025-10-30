@@ -13,31 +13,31 @@ import {
   Linking,
   Alert,
 } from 'react-native';
-import {BackHandler} from 'react-native';
+import { BackHandler } from 'react-native';
 import queue from 'react-native-job-queue';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useState} from 'react';
-import {useFormik} from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
 import 'yup-phone';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
-import {object, string} from 'yup';
+import { object, string } from 'yup';
 import CustomError from '../../components/CustomError';
 import CustomNotification from '../../components/CustomNotification';
-import {updateUserInfoAction} from '../../redux-store/actions/auth';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { updateUserInfoAction } from '../../redux-store/actions/auth';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {G} from 'react-native-svg';
+import { G } from 'react-native-svg';
 import axios from 'axios';
-import {ProgressBar} from '@react-native-community/progress-bar-android';
-import {BASE_URL, request} from '../../services/APICentral';
+import { ProgressBar } from '@react-native-community/progress-bar-android';
+import { BASE_URL, request } from '../../services/APICentral';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-const LocationScreen = ({navigation}) => {
-  const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
+const LocationScreen = ({ navigation }) => {
+  const { typeOfClaim } = useSelector(state => state.entities.appUtil.appUtil);
   const [editProfileMode, setEditProfileMode] = useState(false);
   const {
     name,
@@ -52,7 +52,7 @@ const LocationScreen = ({navigation}) => {
   // console.log(authLevel=="एसडीएलसी");
   const route = useRoute();
 
-  const {language} = useSelector(state => state.entities.appUtil.appUtil);
+  const { language } = useSelector(state => state.entities.appUtil.appUtil);
 
   const dispatch = useDispatch();
   const stateName = useSelector(state => state.entities.appUtil.appUtil.name);
@@ -67,11 +67,14 @@ const LocationScreen = ({navigation}) => {
     village: '',
   };
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
 
   const [errorVisible, setErrorVisible] = useState(false);
   const [panchayatInfoShow, setPanchayatInfoShow] = useState(false);
-
 
   const onNext = (values, formikActions) => {
     setPanchayatInfoShow(false);
@@ -120,7 +123,7 @@ const LocationScreen = ({navigation}) => {
               range: formik.values.range,
             });
 
-            dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
+            dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
             if (typeOfClaim === 'CFR') {
               const timer = setTimeout(() => {
                 navigation.replace('HomeScreen');
@@ -145,17 +148,17 @@ const LocationScreen = ({navigation}) => {
 
           console.log('avail-error', error);
 
-          Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
+          Alert.alert(commonTranslation.notice, appTranslation.already_assigned_role, [
             {
-              text: 'Ok',
+              text: commonTranslation.ok,
               // onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
             {
-              text: 'सहायता',
+              text: commonTranslation.help,
               onPress: () => {
                 // link to whatsapp
-                const HttpURL = `https://wa.me/7209680888?text=${encodeURIComponent(
+                const HttpURL = `https://wa.me/7870565464?text=${encodeURIComponent(
                   `JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${
                     formik.values.district
                   } | Subdivison - ${formik.values.subdivison} | ${
@@ -192,7 +195,7 @@ const LocationScreen = ({navigation}) => {
         range: formik.values.range,
       });
 
-      dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4});
+      dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 4 });
       if (typeOfClaim === 'CFR') {
         navigation.replace('HomeScreen');
       } else {
@@ -203,13 +206,7 @@ const LocationScreen = ({navigation}) => {
     return;
   };
 
-  // const locSchema = object().shape({
-  //   // state: string().required(t('State is Required')),
-  //   district: string().required(t('District is Required')),
-  //   tehsil: string().required(t('Tehsil is Required')),
-  //   panchayat: string().required(t('Panchayat is Required')),
-  //   village: string().required(t('Village is Required')),
-  // });
+ 
 
   const formik = useFormik({
     initialValues: state,
@@ -229,15 +226,14 @@ const LocationScreen = ({navigation}) => {
   }, []);
 
   const buttonText = {
-    state: t('Fill State'),
-    district: t('Fill District'),
-    subdivison: t('Fill Subdivision'),
-    tehsil: t('Fill Tehsil'),
-    panchayat: t('Fill Panchayat'),
-    village: t('Fill Village'),
-    panchayatName: t('Ok'),
+    state: appTranslation.fill_state,
+    district: appTranslation.fill_district,
+    subdivison: appTranslation.fill_subdivison,
+    tehsil: appTranslation.fill_tehsil,
+    panchayat: appTranslation.fill_panchayat,
+    village: appTranslation.fill_village,
+    panchayatName: appTranslation.ok,
   };
-
 
   // console.log(formik.values);
   const goBack = () => {
@@ -296,33 +292,33 @@ const LocationScreen = ({navigation}) => {
   }, []);
 
   const handleShowDropdownOrNot = field => {
-    if (authLevel === t('SDLC')) {
-      if (field === t('district') || field === t('subdivison')) {
+    if (authLevel === "एसडीएलसी") {
+      if (field === "जिला" || field === "अनुमंडल") {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === t('DLC')) {
-      if (field === t('district')) {
+    } else if (authLevel === "डीएलसी") {
+      if (field === "जिला") {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === t('FRC')) {
+    } else if (authLevel === "एफआरसी") {
       return true;
-    } else if (authLevel === t('SLMC')) {
+    } else if (authLevel === "राज्य स्तरीय निगरानी समिति") {
       return false;
     } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
-      if (field === t('district') || field === t('subdivison')) {
+      if (field === "जिला" || field === "अनुमंडल") {
         return true;
       } else {
         return false;
       }
     } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
       if (
-        field === t('district') ||
-        field === t('subdivison') ||
-        field === t('tehsil')
+        field === "जिला" ||
+        field === "अनुमंडल" ||
+        field === "प्रखंड"
       ) {
         return true;
       } else {
@@ -332,13 +328,13 @@ const LocationScreen = ({navigation}) => {
   };
 
   const handleShowNextButton = () => {
-    if (authLevel === t('SDLC')) {
+    if (authLevel === "एसडीएलसी") {
       return Boolean(formik?.values?.subdivison !== '');
-    } else if (authLevel === t('DLC')) {
+    } else if (authLevel === "डीएलसी") {
       return Boolean(formik?.values?.district !== '');
-    } else if (authLevel === t('FRC')) {
+    } else if (authLevel === "एफआरसी") {
       return Boolean(formik?.values?.village !== '');
-    } else if (authLevel === t('SLMC')) {
+    } else if (authLevel === "राज्य स्तरीय निगरानी समिति") {
       return Boolean(formik?.values?.district !== '');
     } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return Boolean(formik?.values?.subdivison !== '');
@@ -351,12 +347,13 @@ const LocationScreen = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+    >
       {editProfileMode ? (
-        <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+        <View style={{ marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
           <Pressable onPress={goBack}>
-            <Text style={{fontSize: 18}}>
-              <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
+            <Text style={{ fontSize: 18 }}>
+              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -368,7 +365,7 @@ const LocationScreen = ({navigation}) => {
           <KeyboardAvoidingView>
             <View style={styles.header}>
               <View style={styles.name}>
-                <Text style={styles.nameTxt}>{t('Select your location')}</Text>
+                <Text style={styles.nameTxt}>{appTranslation.select_location}</Text>
               </View>
               <Text>{authLevel}</Text>
               <View style={styles.horizontalLine} />
@@ -385,7 +382,7 @@ const LocationScreen = ({navigation}) => {
                         /> */}
 
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('District')}</Text>
+              <Text style={styles.titleText}>{aboundaryTranslation.district}</Text>
             </View>
             {districtData?.length !== 0 ? (
               <Dropdown
@@ -445,17 +442,17 @@ const LocationScreen = ({navigation}) => {
                 indeterminate
                 styleAttr="Horizontal"
                 color="white"
-                style={{height: 30, width: 100, alignSelf: 'center'}}
+                style={{ height: 30, width: 100, alignSelf: 'center' }}
               />
             )}
 
             {Boolean(
               formik?.values?.district !== '' &&
-                handleShowDropdownOrNot(t('subdivison')),
+                handleShowDropdownOrNot("अनुमंडल"),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('Subdivision')}</Text>
+                  <Text style={styles.titleText}>{aboundaryTranslation.subdivison}</Text>
                 </View>
                 {subDivisonData?.length !== 0 ? (
                   <Dropdown
@@ -543,7 +540,7 @@ const LocationScreen = ({navigation}) => {
                     indeterminate
                     styleAttr="Horizontal"
                     color="white"
-                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
                   />
                 )}
               </>
@@ -555,7 +552,7 @@ const LocationScreen = ({navigation}) => {
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('वन क्षेत्र')}</Text>
+                  <Text style={styles.titleText}>{appTranslation.forest_area}</Text>
                 </View>
                 {rangeData?.length !== 0 ? (
                   <Dropdown
@@ -618,7 +615,7 @@ const LocationScreen = ({navigation}) => {
                     indeterminate
                     styleAttr="Horizontal"
                     color="white"
-                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
                   />
                 )}
               </>
@@ -626,11 +623,11 @@ const LocationScreen = ({navigation}) => {
 
             {Boolean(
               formik?.values?.subdivison !== '' &&
-                handleShowDropdownOrNot(t('tehsil')),
+                handleShowDropdownOrNot("प्रखंड"),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('Tehsil')}</Text>
+                  <Text style={styles.titleText}>{aboundaryTranslation.block}</Text>
                 </View>
                 {tehsilData?.length !== 0 ? (
                   <Dropdown
@@ -696,7 +693,7 @@ const LocationScreen = ({navigation}) => {
                     indeterminate
                     styleAttr="Horizontal"
                     color="white"
-                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
                   />
                 )}
               </>
@@ -704,11 +701,11 @@ const LocationScreen = ({navigation}) => {
 
             {Boolean(
               formik?.values?.tehsil !== '' &&
-                handleShowDropdownOrNot(t('panchayat')),
+                handleShowDropdownOrNot("पंचायत"),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('panchayat')}</Text>
+                  <Text style={styles.titleText}>{aboundaryTranslation.panchayat}</Text>
                 </View>
                 {panchayatData?.length !== 0 ? (
                   <Dropdown
@@ -772,7 +769,7 @@ const LocationScreen = ({navigation}) => {
                     indeterminate
                     styleAttr="Horizontal"
                     color="white"
-                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
                   />
                 )}
               </>
@@ -780,11 +777,11 @@ const LocationScreen = ({navigation}) => {
 
             {Boolean(
               formik?.values?.panchayat !== '' &&
-                handleShowDropdownOrNot(t('village')),
+                handleShowDropdownOrNot("गाँव"),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('village')}</Text>
+                  <Text style={styles.titleText}>{aboundaryTranslation.village}</Text>
                 </View>
                 {villageData?.length !== 0 ? (
                   <Dropdown
@@ -798,7 +795,7 @@ const LocationScreen = ({navigation}) => {
                     indeterminate
                     styleAttr="Horizontal"
                     color="white"
-                    style={{height: 30, width: 100, alignSelf: 'center'}}
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
                   />
                 )}
               </>
@@ -941,7 +938,7 @@ const LocationScreen = ({navigation}) => {
             )} */}
             {Boolean(handleShowNextButton()) && (
               <CustomButton
-                text={t('Next')}
+                text={commonTranslation.next}
                 onPress={() => {
                   if (formik.errors.state || formik.errors.district) {
                     console.log(formik.errors);
@@ -959,21 +956,20 @@ const LocationScreen = ({navigation}) => {
             <CustomError
               visible={errorVisible}
               setVisible={setErrorVisible}
-              errorText={t('Please fill all the fields')}
+              errorText={commonTranslation.fill_all_the_fields}
               errors={formik.errors}
-              buttonText={t('Next')}
+              buttonText={commonTranslation.next}
             />
             <Modal
               //   animationType="fade"
               transparent={true}
-              visible={panchayatInfoShow}>
+              visible={panchayatInfoShow}
+            >
               <View style={styles.errorView}>
                 <View style={styles.errorCard}>
-                  <Text style={styles.errorText}>{`${t(
-                    'you have chosen panchayat',
-                  )} ${formik.values.panchayat} ${t('chosen')}`}</Text>
+                  <Text style={styles.errorText}>{`${appTranslation.chosen_panchayat} ${formik.values.panchayat}`}</Text>
                   <View style={styles.horizontalLineErr} />
-
+                  
                   <Pressable
                     style={styles.button}
                     onPress={() => {
@@ -983,8 +979,9 @@ const LocationScreen = ({navigation}) => {
                       }
                       console.log(formik.errors, 'formik Errors');
                       formik.handleSubmit();
-                    }}>
-                    <Text style={styles.buttonText}>{t('Ok')}</Text>
+                    }}
+                  >
+                    <Text style={styles.buttonText}>{commonTranslation.ok}</Text>
                   </Pressable>
                 </View>
               </View>

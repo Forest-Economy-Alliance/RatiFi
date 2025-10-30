@@ -31,6 +31,8 @@ const NamePhoneScreen = ({navigation}) => {
   const route = useRoute();
   console.log(route?.params?.phoneNumber);
   const {t} = useTranslation();
+  const authTranslation = t('auth');
+  const commonTranslation = t('common');
 
   const [wrongOTP, setWrongOTP] = useState('');
 
@@ -74,10 +76,10 @@ const NamePhoneScreen = ({navigation}) => {
         dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 2});
         navigation.replace('Password', {mobile: route.params.phoneNumber});
       } else {
-        setWrongOTP(t('Wrong OTP'));
+        setWrongOTP(authTranslation.wrong_otp);
       }
     } else {
-      setWrongOTP(t('Wrong OTP'));
+      setWrongOTP(authTranslation.wrong_otp);
     }
 
     return;
@@ -99,14 +101,14 @@ const NamePhoneScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView>
             <View style={styles.header}>
-              <Text style={styles.headerText}>{t('OTP')}</Text>
+              <Text style={styles.headerText}>{authTranslation.verify_otp}</Text>
               <View style={styles.horizontalLine} />
             </View>
             <View style={styles.name}>
               <Text style={styles.nameTxt}>{name}</Text>
             </View>
             <View style={styles.title}>
-              <Text style={styles.titleText}>{t('Enter OTP')}</Text>
+              <Text style={styles.titleText}>{authTranslation.enter_otp}</Text>
             </View>
 
             <CustomInput
@@ -120,7 +122,7 @@ const NamePhoneScreen = ({navigation}) => {
               {wrongOTP}
             </Text>
             <CustomButton
-              text={t('Next')}
+              text={commonTranslation.next}
               onPress={formik.handleSubmit}
               style={styles.otpBtn}
             />

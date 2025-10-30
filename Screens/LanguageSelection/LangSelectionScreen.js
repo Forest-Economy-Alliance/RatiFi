@@ -29,6 +29,7 @@ const LangSelectionScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const {token} = useSelector(state => state.entities.auth.userInfo);
   const {t, i18n} = useTranslation();
+  const appTranslation = t('app');
 
   return (
     <ImageBackground
@@ -38,7 +39,7 @@ const LangSelectionScreen = ({navigation}) => {
       style={styles.bg}>
       <View style={styles.darkness}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('Select your language')}</Text>
+          <Text style={styles.headerText}>{appTranslation.select_language}</Text>
           <View style={styles.horizontalLine} />
         </View>
         <ScrollView contentContainerStyle={styles.innerContainer}>

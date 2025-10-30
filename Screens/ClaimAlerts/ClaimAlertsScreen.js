@@ -52,6 +52,10 @@ const ClaimAlertsScreen = ({navigation}) => {
   };
 
   const {t} = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
 
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -68,11 +72,11 @@ const ClaimAlertsScreen = ({navigation}) => {
   }, []);
 
   const buttonText = {
-    state: t('Fill State'),
-    district: t('Fill District'),
-    tehsil: t('Fill Tehsil'),
-    panchayat: t('Fill Panchayat'),
-    village: t('Fill Village'),
+    state: appTranslation.enter_state,
+    district: appTranslation.enter_district,
+    tehsil: appTranslation.enter_block,
+    panchayat: appTranslation.enter_panchayat,
+    village: appTranslation.enter_village,
   };
 
   useEffect(() => {
@@ -126,7 +130,7 @@ const ClaimAlertsScreen = ({navigation}) => {
         <Text
           style={{fontSize: 20, marginVertical: 10, marginHorizontal: 10}}
           numberOfLines={2}>
-          {t('claim_alerts')}
+          {appTranslation.claim_alerts}
         </Text>
         <FlatList
           ListEmptyComponent={() => {
@@ -142,10 +146,10 @@ const ClaimAlertsScreen = ({navigation}) => {
                     fontWeight: '600',
                     textDecorationLine: 'underline',
                   }}>
-                  {t('No Alerts')}
+                  {appTranslation.no_alerts}
                 </Text>
                 <Text style={{color: '#fff', marginTop: 10}}>
-                  {t('Alerts regarding claim will appear here')}
+                  {appTranslation.claim_alerts_will_appear_here}
                 </Text>
               </View>
             );
