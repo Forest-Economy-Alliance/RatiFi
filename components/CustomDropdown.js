@@ -34,7 +34,9 @@ const Dropdown = props => {
     
       if(props.downloadPDFScreenFix){
    props.downloadPDFScreenFix(item);}else{
-    props.formik.setFieldValue(props.variable, item.label);
+    // Store hindiLabel if provided, otherwise store label
+    const valueToStore = item.hindiLabel || item.label;
+    props.formik.setFieldValue(props.variable, valueToStore);
    }
    if(props?.exec)
    props?.exec(item?.label);

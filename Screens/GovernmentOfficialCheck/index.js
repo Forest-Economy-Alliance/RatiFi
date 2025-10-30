@@ -15,27 +15,27 @@ import {
 } from 'react-native';
 import RNFS from 'react-native-fs';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useRef, useState} from 'react';
-import {useRoute} from '@react-navigation/native';
-import {useFormik} from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { useFormik } from 'formik';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Dropdown from '../../components/CustomDropdown';
-import {object, string} from 'yup';
+import { object, string } from 'yup';
 import CustomError from '../../components/CustomError';
-import {updateUserInfoAction} from '../../redux-store/actions/auth';
-import {fetchClaimDetailsByFRCHandler} from '../../services/claimService';
-import {updateUserHandler} from '../../services/authService';
-import {RNCamera} from 'react-native-camera';
-import {getGCPUrlImageHandler} from '../../services/commonService';
-import {useToast} from 'react-native-toast-notifications';
+import { updateUserInfoAction } from '../../redux-store/actions/auth';
+import { fetchClaimDetailsByFRCHandler } from '../../services/claimService';
+import { updateUserHandler } from '../../services/authService';
+import { RNCamera } from 'react-native-camera';
+import { getGCPUrlImageHandler } from '../../services/commonService';
+import { useToast } from 'react-native-toast-notifications';
 import FastImage from 'react-native-fast-image';
-import {Image} from 'react-native-compressor';
+import { Image } from 'react-native-compressor';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -47,9 +47,9 @@ const handleHTTPtoHTTPS = args => {
   }
 };
 
-const GovernmentOfficialCheck = ({navigation}) => {
+const GovernmentOfficialCheck = ({ navigation }) => {
   const toast = useToast();
-  const {language, verificationAadharBackUrl, verificationAadharFrontUrl} =
+  const { language, verificationAadharBackUrl, verificationAadharFrontUrl } =
     useSelector(state => state.entities.appUtil.appUtil);
 
   const state = {
@@ -59,39 +59,33 @@ const GovernmentOfficialCheck = ({navigation}) => {
   };
   const route = useRoute();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const appTranslation = t('app');
+  const hindiAppTranslation = t('app', { lng: 'hi' });
   const commonTranslation = t('common');
   const roleTranslation = t('role');
+  const hindiRoleTranslation = t('role', { lng: 'hi' });
   const aboundaryTranslation = t('aboundary');
-  
+
   const dispatch = useDispatch();
 
-  const {name, village, postLevel} = useSelector(
+  const { name, village, postLevel } = useSelector(
     state => state.entities.auth.userInfo.profile,
   );
   const state1 = useSelector(state => state.entities.auth.userInfo.profile);
   console.log(state1.postLevel, 'state');
   const [errorVisible, setErrorVisible] = useState(false);
 
-
-
   const onNext = (values, formikActions) => {
     if (
-      values?.member === roleTranslation.frc ||
-      (values?.member !== roleTranslation.frc && uploadStatus?.f && uploadStatus?.b)
+      values?.member === hindiRoleTranslation.frc ||
+      (values?.member !== hindiRoleTranslation.frc &&
+        uploadStatus?.f &&
+        uploadStatus?.b)
     ) {
-
-
-
-
-      console.log(values);
       formikActions.setSubmitting(false);
 
-      dispatch({type: 'ENABLE_LOADING'});
-
-
-      
+      dispatch({ type: 'ENABLE_LOADING' });
 
       dispatch(
         updateUserInfoAction(
@@ -100,18 +94,18 @@ const GovernmentOfficialCheck = ({navigation}) => {
             postLevel: values.role,
             // village: village,
             gender: values?.gender,
-            isMember: values.role === roleTranslation.member,
+            isMember: values.role === hindiRoleTranslation.member,
             activeStatus: values.member !== 'एफआरसी' ? false : true,
           },
           args => {
             console.log('role-args', args);
             if (args) {
-              dispatch({type: 'DISABLE_LOADING'});
+              dispatch({ type: 'DISABLE_LOADING' });
 
               // screencode 5 means role set
-              dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5});
+              dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 5 });
 
-              if (values?.member === roleTranslation.slmc) {
+              if (values?.member === hindiRoleTranslation.slmc) {
                 navigation.replace('HomeScreen');
                 return;
               }
@@ -119,7 +113,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
               // console.log('yy', postLevel);
               if (values.member !== 'एफआरसी') {
                 navigation.replace('Location');
-              } else if (!(values.role === roleTranslation.member)) {
+              } else if (!(values.role === hindiRoleTranslation.member)) {
                 // check if secretyary or president have already filed a claim
                 // fetchClaimDetailsByFRCHandler({frc: village}).then(res => {
                 //   if (res?.data?.data[0]?._id?.toString()) {
@@ -156,7 +150,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                 // navigation.navigate('IdCard');
               }
             } else {
-              dispatch({type: 'DISABLE_LOADING'});
+              dispatch({ type: 'DISABLE_LOADING' });
               // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
               //   type: 'success',
               //   animationType: 'zoom-in',
@@ -187,9 +181,6 @@ const GovernmentOfficialCheck = ({navigation}) => {
           },
         ),
       );
-
-
-
     } else {
       Alert.alert(appTranslation.upload_id_for_verification);
     }
@@ -210,105 +201,123 @@ const GovernmentOfficialCheck = ({navigation}) => {
   const data1 = [
     {
       label: roleTranslation.frc,
+      hindiLabel: hindiRoleTranslation.frc,
       value: '1',
       roleData: [
         {
           label: roleTranslation.president,
+          hindiLabel: hindiRoleTranslation.president,
           value: '1',
         },
         {
           label: roleTranslation.secretary,
+          hindiLabel: hindiRoleTranslation.secretary,
           value: '2',
         },
         {
           label: roleTranslation.member,
+          hindiLabel: hindiRoleTranslation.member,
           value: '3',
         },
       ],
     },
     {
       label: roleTranslation.sdlc,
+      hindiLabel: hindiRoleTranslation.sdlc,
       value: '2',
       roleData: [
         {
           label: roleTranslation.subdivisonal_officer,
+          hindiLabel: hindiRoleTranslation.subdivisonal_officer,
           value: '1',
         },
-        
 
         {
           label: roleTranslation.member,
+          hindiLabel: hindiRoleTranslation.member,
           value: '4',
         },
-
-        
       ],
     },
     {
       label: roleTranslation.dlc,
+      hindiLabel: hindiRoleTranslation.dlc,
       value: '3',
       roleData: [
         {
           label: roleTranslation.district_collector,
+          hindiLabel: hindiRoleTranslation.district_collector,
           value: '1',
         },
         {
           label: roleTranslation.district_forest_officer,
+          hindiLabel: hindiRoleTranslation.district_forest_officer,
           value: '2',
         },
         {
           label: roleTranslation.district_welfare_officer,
+          hindiLabel: hindiRoleTranslation.district_welfare_officer,
           value: '3',
         },
         {
           label: roleTranslation.member,
+          hindiLabel: hindiRoleTranslation.member,
           value: '5',
         },
       ],
     },
     {
       label: roleTranslation.slmc,
+      hindiLabel: hindiRoleTranslation.slmc,
       value: '4',
       roleData: [
         {
           label: roleTranslation.panchayati_raj_secretary,
+          hindiLabel: hindiRoleTranslation.panchayati_raj_secretary,
           value: '1',
         },
         {
           label: roleTranslation.pradhan_mukhya_van_sanrakshak,
+          hindiLabel: hindiRoleTranslation.pradhan_mukhya_van_sanrakshak,
           value: '2',
         },
-        
       ],
     },
     {
       label: roleTranslation.forest_department,
+      hindiLabel: hindiRoleTranslation.forest_department,
       value: '5',
       roleData: [
         {
           label: roleTranslation.forest_range_officer,
+          hindiLabel: hindiRoleTranslation.forest_range_officer,
           value: '1',
         },
         {
           label: roleTranslation.forest_guard,
+          hindiLabel: hindiRoleTranslation.forest_guard,
           value: '2',
         },
       ],
     },
     {
       label: roleTranslation.revenue_department,
+      hindiLabel: hindiRoleTranslation.revenue_department,
       value: '6',
       roleData: [
         {
           label: roleTranslation.revenue_officer,
+          hindiLabel: hindiRoleTranslation.revenue_officer,
           value: '1',
         },
         {
           label: roleTranslation.circle_off,
+          hindiLabel: hindiRoleTranslation.circle_off,
           value: '2',
         },
         {
           label: roleTranslation.circle_officer,
+          hindiLabel: hindiRoleTranslation.circle_officer,
           value: '5',
         },
       ],
@@ -331,7 +340,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
   const [previewDocModalVis, setPreviewDocModal] = useState(false);
   const [docUrlToPreview, setDocUrlToPreview] = useState('');
 
-  const [uploadStatus, setUploadStatus] = useState({f: false, b: false});
+  const [uploadStatus, setUploadStatus] = useState({ f: false, b: false });
   const [isFront, setIsFront] = useState(null);
 
   const [roleData, setRoleData] = useState([]);
@@ -342,19 +351,21 @@ const GovernmentOfficialCheck = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+    >
       {cameraModalVis && (
-        <Modal style={{padding: 100, backgroundColor: 'white'}}>
+        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
           <RNCamera
             ref={cameraRef}
             onCameraReady={e => {
-              dispatch({type: 'DISABLE_LOADING'});
+              dispatch({ type: 'DISABLE_LOADING' });
             }}
             // flashMode={'on'}
             style={styles.rnCamera}
             captureAudio={false}
             ratio="16:9"
-            useNativeZoom></RNCamera>
+            useNativeZoom
+          ></RNCamera>
 
           <View
             style={{
@@ -365,7 +376,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
               paddingBottom: 'auto',
               backgroundColor: 'black',
               flex: 0.2,
-            }}>
+            }}
+          >
             <TouchableOpacity
               disabled={false}
               style={{
@@ -381,11 +393,11 @@ const GovernmentOfficialCheck = ({navigation}) => {
               }}
               onPress={async () => {
                 try {
-                  dispatch({type: 'ENABLE_LOADING'});
+                  dispatch({ type: 'ENABLE_LOADING' });
 
                   if (cameraRef) {
                     console.warn(cameraRef);
-                    const options = {quality: 0.4};
+                    const options = { quality: 0.4 };
                     const data = await cameraRef?.current?.takePictureAsync(
                       options,
                     );
@@ -394,7 +406,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
 
                     const r = await RNFS.readFile(compressedURI, 'base64');
 
-                    dispatch({type: 'ENABLE_LOADING'});
+                    dispatch({ type: 'ENABLE_LOADING' });
 
                     getGCPUrlImageHandler({
                       fileName: 'Hello',
@@ -405,7 +417,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                       isBack: !isFront,
                       userId: state1?._id,
                     })
-                      .then(async ({data}) => {
+                      .then(async ({ data }) => {
                         console.log('RESPONSE', data);
                         console.log('HERE REACHED ');
                         if (isFront === true) {
@@ -416,7 +428,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                               value: data?.response?.Location,
                             },
                           });
-                          setUploadStatus({...uploadStatus, f: true});
+                          setUploadStatus({ ...uploadStatus, f: true });
                         } else if (isFront === false) {
                           dispatch({
                             type: 'UPDATE_APPUTIL_KEY',
@@ -426,7 +438,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                             },
                           });
 
-                          setUploadStatus({...uploadStatus, b: true});
+                          setUploadStatus({ ...uploadStatus, b: true });
                         }
 
                         // console.warn("CID", claim?._id)
@@ -447,7 +459,7 @@ const GovernmentOfficialCheck = ({navigation}) => {
                             duration: 5000,
                           });
                           setCameraModalVis(false);
-                          dispatch({type: 'DISABLE_LOADING'});
+                          dispatch({ type: 'DISABLE_LOADING' });
                         } else {
                           toast.show(appTranslation.upload_failed, {
                             type: 'failure',
@@ -470,16 +482,18 @@ const GovernmentOfficialCheck = ({navigation}) => {
                 //  finally {
                 //   dispatch({type: 'DISABLE_LOADING'});
                 // }
-              }}>
+              }}
+            >
               <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{color: 'white', paddingHorizontal: 20}}
+              style={{ color: 'white', paddingHorizontal: 20 }}
               onPress={() => {
                 setCameraModalVis(false);
-              }}>
-              <Text style={{color: 'white'}}>
+              }}
+            >
+              <Text style={{ color: 'white' }}>
                 <Ionicons name="close" size={50} />
               </Text>
             </TouchableOpacity>
@@ -488,13 +502,13 @@ const GovernmentOfficialCheck = ({navigation}) => {
       )}
 
       {previewDocModalVis && (
-        <Modal style={{padding: 100, backgroundColor: 'white'}}>
-          <View style={{flex: 0.8}}>
+        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
+          <View style={{ flex: 0.8 }}>
             <FastImage
               // onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
               // onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
-              source={{uri: handleHTTPtoHTTPS(docUrlToPreview)}}
-              style={{flex: 1}}
+              source={{ uri: handleHTTPtoHTTPS(docUrlToPreview) }}
+              style={{ flex: 1 }}
             />
           </View>
 
@@ -507,11 +521,13 @@ const GovernmentOfficialCheck = ({navigation}) => {
               paddingBottom: 'auto',
               backgroundColor: 'black',
               flex: 0.2,
-            }}>
+            }}
+          >
             <TouchableOpacity
-              style={{color: 'white', paddingHorizontal: 20}}
-              onPress={() => setPreviewDocModal(false)}>
-              <Text style={{color: 'white'}}>
+              style={{ color: 'white', paddingHorizontal: 20 }}
+              onPress={() => setPreviewDocModal(false)}
+            >
+              <Text style={{ color: 'white' }}>
                 <Ionicons name="close" size={50} c />
               </Text>
             </TouchableOpacity>
@@ -520,10 +536,11 @@ const GovernmentOfficialCheck = ({navigation}) => {
       )}
 
       {state1.postLevel !== undefined ? (
-        <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10}}>
+        <View style={{ marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
           <Pressable onPress={goBack}>
-            <Text style={{fontSize: 18}}>
-              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
+            <Text style={{ fontSize: 18 }}>
+              <FontAwesome name="arrow-left" size={18} />{' '}
+              {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -542,17 +559,21 @@ const GovernmentOfficialCheck = ({navigation}) => {
             </View>
 
             <View style={styles.title}>
-              <Text style={styles.titleText}>{appTranslation.choose_gender}</Text>
+              <Text style={styles.titleText}>
+                {appTranslation.choose_gender}
+              </Text>
             </View>
             <Dropdown
               visible={true}
               data={[
                 {
                   label: appTranslation.male,
+                  hindiLabel: hindiAppTranslation.male,
                   value: 1,
                 },
                 {
                   label: appTranslation.female,
+                  hindiLabel: hindiAppTranslation.female,
                   value: 2,
                 },
               ]}
@@ -586,7 +607,9 @@ const GovernmentOfficialCheck = ({navigation}) => {
             {Boolean(roleData?.length !== 0) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{appTranslation.choose_role}</Text>
+                  <Text style={styles.titleText}>
+                    {appTranslation.choose_role}
+                  </Text>
                 </View>
                 <Dropdown
                   visible={true}
@@ -598,7 +621,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
             )}
 
             {Boolean(
-              formik.values.member !== roleTranslation.frc && formik.values.member,
+              formik.values.member !== hindiRoleTranslation.frc &&
+                formik.values.member,
             ) && (
               <View>
                 <View>
@@ -619,12 +643,14 @@ const GovernmentOfficialCheck = ({navigation}) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     },
-                  ]}>
+                  ]}
+                >
                   <Pressable
                     onPress={() => {
                       setIsFront(true);
                       setCameraModalVis(true);
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
                         color: 'white',
@@ -632,8 +658,10 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         borderWidth: 1,
                         padding: 10,
                         borderStyle: 'dashed',
-                      }}>
-                      {commonTranslation.next} <Ionicons name="camera-sharp" size={22} />
+                      }}
+                    >
+                      {commonTranslation.next}{' '}
+                      <Ionicons name="camera-sharp" size={22} />
                     </Text>
                   </Pressable>
 
@@ -641,7 +669,8 @@ const GovernmentOfficialCheck = ({navigation}) => {
                     onPress={() => {
                       setIsFront(false);
                       setCameraModalVis(true);
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
                         color: 'white',
@@ -649,8 +678,10 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         borderWidth: 1,
                         padding: 10,
                         borderStyle: 'dashed',
-                      }}>
-                      {commonTranslation.back} <Ionicons name="camera-sharp" size={22} />
+                      }}
+                    >
+                      {commonTranslation.back}{' '}
+                      <Ionicons name="camera-sharp" size={22} />
                     </Text>
                   </Pressable>
                 </View>
@@ -666,14 +697,16 @@ const GovernmentOfficialCheck = ({navigation}) => {
                         : 'flex-end',
                       marginTop: 5,
                     },
-                  ]}>
+                  ]}
+                >
                   {uploadStatus?.f && (
                     <Pressable
                       onPress={() => {
                         setDocUrlToPreview(verificationAadharFrontUrl);
                         setPreviewDocModal(true);
-                      }}>
-                      <Text style={{color: 'white', padding: 10}}>
+                      }}
+                    >
+                      <Text style={{ color: 'white', padding: 10 }}>
                         VIEW <Ionicons name="eye" size={22} />
                       </Text>
                     </Pressable>
@@ -684,8 +717,9 @@ const GovernmentOfficialCheck = ({navigation}) => {
                       onPress={() => {
                         setDocUrlToPreview(verificationAadharBackUrl);
                         setPreviewDocModal(true);
-                      }}>
-                      <Text style={{color: 'white', padding: 10}}>
+                      }}
+                    >
+                      <Text style={{ color: 'white', padding: 10 }}>
                         VIEW <Ionicons name="eye" size={22} />
                       </Text>
                     </Pressable>
