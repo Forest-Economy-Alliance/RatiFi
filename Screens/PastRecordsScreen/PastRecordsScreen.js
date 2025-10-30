@@ -3051,7 +3051,7 @@ const PastRecordsScreen = ({navigation}) => {
                         },
                       ]}>
                       {/* <Image /> */}
-                      {appTranslation.format_kh}
+                      {appTranslation.format_b}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -3239,7 +3239,7 @@ const PastRecordsScreen = ({navigation}) => {
                           // textDecorationLine: 'underline',
                         },
                       ]}>
-                      {appTranslation.format_g}
+                      {appTranslation.format_c}
                       {/* <Image /> */}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
