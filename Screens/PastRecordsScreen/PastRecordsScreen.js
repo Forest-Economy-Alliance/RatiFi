@@ -20,28 +20,31 @@ import {
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {Image} from 'react-native-compressor';
+import { Image } from 'react-native-compressor';
 
 import queue from 'react-native-job-queue';
-import {ProgressBar} from '@react-native-community/progress-bar-android';
+import { ProgressBar } from '@react-native-community/progress-bar-android';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import 'yup-phone';
 import CustomButton from '../../components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {fetchClaimDetailsHandler, patchClaimArea} from '../../services/claimService';
+import {
+  fetchClaimDetailsHandler,
+  patchClaimArea,
+} from '../../services/claimService';
 
-import {RNCamera} from 'react-native-camera';
-import {getGCPUrlImageHandler} from '../../services/commonService';
+import { RNCamera } from 'react-native-camera';
+import { getGCPUrlImageHandler } from '../../services/commonService';
 import FastImage from 'react-native-fast-image';
 
-import {VasernDB} from '../../vasern';
+import { VasernDB } from '../../vasern';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -55,9 +58,9 @@ const handleHTTPtoHTTPS = args => {
 
 var ok = false;
 
-const PastRecordsScreen = ({navigation}) => {
-  const {ClaimImages} = VasernDB;
-  const {formUploadSyncStatus, globalSyncStatus} = useSelector(
+const PastRecordsScreen = ({ navigation }) => {
+  const { ClaimImages } = VasernDB;
+  const { formUploadSyncStatus, globalSyncStatus } = useSelector(
     state => state.entities.appUtil.appUtil,
   );
 
@@ -69,13 +72,11 @@ const PastRecordsScreen = ({navigation}) => {
 
   const [stage, setStage] = useState(1);
 
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const appTranslation = t('app');
   const commonTranslation = t('common');
   const roleTranslation = t('role');
   const aboundaryTranslation = t('aboundary');
-
-
 
   // useEffect(() => {
   //   const backHandler = BackHandler.addEventListener(
@@ -88,9 +89,9 @@ const PastRecordsScreen = ({navigation}) => {
   //   return () => backHandler.remove();
   // }, []);
 
-  const {profile} = useSelector(state => state.entities.auth.userInfo);
+  const { profile } = useSelector(state => state.entities.auth.userInfo);
 
-  const {extraImageFormCountForSync} = useSelector(
+  const { extraImageFormCountForSync } = useSelector(
     state => state?.entities?.appUtil?.appUtil,
   );
 
@@ -114,7 +115,7 @@ const PastRecordsScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (ok === false) dispatch({type: 'ENABLE_LOADING'});
+    if (ok === false) dispatch({ type: 'ENABLE_LOADING' });
     fetchClaimDetailsHandler({
       claimId: profile?.claims[profile?.claims.length - 1],
     })
@@ -133,7 +134,7 @@ const PastRecordsScreen = ({navigation}) => {
         console.log('ERROR', error);
       })
       .finally(f => {
-        dispatch({type: 'DISABLE_LOADING'});
+        dispatch({ type: 'DISABLE_LOADING' });
       });
     ok = true;
   }, [globalSyncStatus, refresh]);
@@ -206,7 +207,8 @@ const PastRecordsScreen = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+    >
       <View
         style={{
           flexDirection: 'row',
@@ -214,9 +216,10 @@ const PastRecordsScreen = ({navigation}) => {
           marginTop: 10,
           marginBottom: 10,
           marginLeft: 10,
-        }}>
+        }}
+      >
         <Pressable onPress={goBack}>
-          <Text style={{fontSize: 18}}>
+          <Text style={{ fontSize: 18 }}>
             <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
           </Text>
         </Pressable>
@@ -228,8 +231,9 @@ const PastRecordsScreen = ({navigation}) => {
             marginRight: 10,
             justifyContent: 'center',
             marginTop: 10,
-          }}>
-          <Text style={{fontSize: 22}}>
+          }}
+        >
+          <Text style={{ fontSize: 22 }}>
             <MaterialCommunityIcons
               name="web-sync"
               size={22}
@@ -240,24 +244,24 @@ const PastRecordsScreen = ({navigation}) => {
             style={{
               color: pendingCount === 0 ? 'white' : 'yellow',
               fontSize: 16,
-            }}>{`  ${
-            pendingCount === 0 ? '' : '(' + pendingCount + ')'
-          }`}</Text>
+            }}
+          >{`  ${pendingCount === 0 ? '' : '(' + pendingCount + ')'}`}</Text>
         </Pressable>
       </View>
 
       {cameraModalVis && (
-        <Modal style={{padding: 100, backgroundColor: 'white'}}>
+        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
           <RNCamera
             ref={cameraRef}
             onCameraReady={e => {
-              dispatch({type: 'DISABLE_LOADING'});
+              dispatch({ type: 'DISABLE_LOADING' });
             }}
             // flashMode={'on'}
             style={styles.rnCamera}
             captureAudio={false}
             ratio="16:9"
-            useNativeZoom></RNCamera>
+            useNativeZoom
+          ></RNCamera>
 
           <View
             style={{
@@ -268,7 +272,8 @@ const PastRecordsScreen = ({navigation}) => {
               paddingBottom: 'auto',
               backgroundColor: 'black',
               flex: 0.2,
-            }}>
+            }}
+          >
             <TouchableOpacity
               disabled={false}
               style={{
@@ -291,7 +296,7 @@ const PastRecordsScreen = ({navigation}) => {
                       base64: false,
                       skipProcessing: true,
                     };
-                    dispatch({type: 'ENABLE_LOADING'});
+                    dispatch({ type: 'ENABLE_LOADING' });
 
                     const data = await cameraRef?.current?.takePictureAsync(
                       options,
@@ -343,7 +348,7 @@ const PastRecordsScreen = ({navigation}) => {
                       });
                     }
 
-                    dispatch({type: 'DISABLE_LOADING'});
+                    dispatch({ type: 'DISABLE_LOADING' });
                     setShouldTriggerJointVerification(false);
                     setTimeout(() => {
                       // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
@@ -354,16 +359,18 @@ const PastRecordsScreen = ({navigation}) => {
                 } catch (error) {
                   console.log('ERROR', error);
                 }
-              }}>
+              }}
+            >
               <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{color: 'white', paddingHorizontal: 20}}
+              style={{ color: 'white', paddingHorizontal: 20 }}
               onPress={() => {
                 setCameraModalVis(false);
-              }}>
-              <Text style={{color: 'white'}}>
+              }}
+            >
+              <Text style={{ color: 'white' }}>
                 <Ionicons name="close" size={50} />
               </Text>
             </TouchableOpacity>
@@ -372,16 +379,16 @@ const PastRecordsScreen = ({navigation}) => {
       )}
 
       {previewDocModalVis && (
-        <Modal style={{padding: 100, backgroundColor: 'white'}}>
-          <View style={{flex: 0.8}}>
+        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
+          <View style={{ flex: 0.8 }}>
             <FastImage
-              onLoadStart={() => dispatch({type: 'ENABLE_LOADING'})}
-              onLoadEnd={() => dispatch({type: 'DISABLE_LOADING'})}
+              onLoadStart={() => dispatch({ type: 'ENABLE_LOADING' })}
+              onLoadEnd={() => dispatch({ type: 'DISABLE_LOADING' })}
               source={{
                 uri: docUrlToPreview,
                 cache: FastImage.cacheControl.immutable,
               }}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
             />
           </View>
 
@@ -394,11 +401,13 @@ const PastRecordsScreen = ({navigation}) => {
               paddingBottom: 'auto',
               backgroundColor: 'black',
               flex: 0.2,
-            }}>
+            }}
+          >
             <TouchableOpacity
-              style={{color: 'white', paddingHorizontal: 20}}
-              onPress={() => setPreviewDocModal(false)}>
-              <Text style={{color: 'white'}}>
+              style={{ color: 'white', paddingHorizontal: 20 }}
+              onPress={() => setPreviewDocModal(false)}
+            >
+              <Text style={{ color: 'white' }}>
                 <Ionicons name="close" size={50} />
               </Text>
             </TouchableOpacity>
@@ -407,19 +416,26 @@ const PastRecordsScreen = ({navigation}) => {
       )}
 
       {formUploadSyncStatus && (
-        <ProgressBar styleAttr="Horizontal" color="#Fff" style={{height: 40}} />
+        <ProgressBar
+          styleAttr="Horizontal"
+          color="#Fff"
+          style={{ height: 40 }}
+        />
       )}
 
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             paddingHorizontal: 40,
             marginTop: 20,
-          }}>
-          <Text style={[styles.headerText]}>{appTranslation.application_number}</Text>
-          <Text style={[styles.headerText, {fontWeight: 'bold'}]}>
+          }}
+        >
+          <Text style={[styles.headerText]}>
+            {appTranslation.application_number}
+          </Text>
+          <Text style={[styles.headerText, { fontWeight: 'bold' }]}>
             &nbsp;{claim?.applicationNumber}
           </Text>
         </View>
@@ -428,7 +444,8 @@ const PastRecordsScreen = ({navigation}) => {
           scrollEnabled
           horizontal
           showsHorizontalScrollIndicator
-          style={{minHeight: 55, maxHeight: 55}}>
+          style={{ minHeight: 55, maxHeight: 55 }}
+        >
           {[1, 2, 3, 4, 5, 6].map((item, id) => (
             <TouchableOpacity
               onPress={() => setStage(item)}
@@ -438,9 +455,12 @@ const PastRecordsScreen = ({navigation}) => {
                 borderWidth: 1,
                 marginTop: 10,
                 backgroundColor: item == stage ? '#fff' : 'transparent',
-              }}>
-              <Text style={{color: item === stage ? 'green' : '#fff'}}>
-                {id === 5 ? appTranslation.form : `${appTranslation.stage} ${item}`}
+              }}
+            >
+              <Text style={{ color: item === stage ? 'green' : '#fff' }}>
+                {id === 5
+                  ? appTranslation.form
+                  : `${appTranslation.stage} ${item}`}
               </Text>
             </TouchableOpacity>
           ))}
@@ -450,24 +470,29 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 1 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
                   {appTranslation.forest_rights_committee}
                 </Text>
-                <Text style={{fontSize: 18, color: '#fff', fontWeight: '600'}}>
+                <Text
+                  style={{ fontSize: 18, color: '#fff', fontWeight: '600' }}
+                >
                   {appTranslation.optional_consideration_rule}
                 </Text>
               </View>
 
               {/* FORM 1 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -476,7 +501,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.shadow_copy_of_proceedings_register}
                     </Text>
@@ -489,7 +515,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       if (
@@ -506,7 +533,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[0]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!Boolean(
                       claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1',
                     ) ? (
@@ -529,7 +557,10 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}> {appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {' '}
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {Boolean(
@@ -545,7 +576,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}{' '}
                     </CustomButton>
                   )}
@@ -557,7 +589,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -582,7 +615,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[0]?.title ===
                         'SDM_SUMMON_RESULT_1'
@@ -591,7 +625,10 @@ const PastRecordsScreen = ({navigation}) => {
                           <Ionicons name="camera" color="white" size={20} />
                         </>
                       ) : (
-                        <Text style={{fontSize: 12}}> {appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {' '}
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[0]?.title ===
@@ -608,7 +645,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -623,7 +661,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1' ||
                     Boolean(
@@ -638,7 +677,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
 
                     {/* {TOSYNC_COUNTER && TOSYNC_COUNTER['SDM_SUMMON_RESULT_1']} */}
@@ -653,21 +693,24 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 2 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                 {appTranslation.prepare_community_forest_rights_claim}
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
+                  {appTranslation.prepare_community_forest_rights_claim}
                 </Text>
               </View>
 
               {/* FORM 2 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -676,7 +719,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.claim_process_initiation}
                     </Text>
@@ -689,7 +733,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       if (
@@ -706,7 +751,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[1]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!Boolean(
                       claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2',
                     ) ? (
@@ -735,7 +781,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
 
@@ -752,7 +800,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -764,7 +813,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         if (
@@ -786,14 +836,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[1]?.title ===
                         'SDM_SUMMON_RESULT_2'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[1]?.title ===
@@ -810,7 +863,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -825,7 +879,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[1]?.title === 'SDM_SUMMON_RESULT_2' ||
                     Boolean(
@@ -841,7 +896,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -849,13 +905,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 3  */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -864,7 +921,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.disputed_forest_area_map}
                     </Text>
@@ -877,7 +935,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       if (
@@ -894,7 +953,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[2]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!Boolean(
                       claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3',
                     ) ? (
@@ -923,7 +983,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
 
@@ -940,7 +1002,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -952,7 +1015,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -977,14 +1041,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[2]?.title ===
                         'SDM_SUMMON_RESULT_3'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[2]?.title ===
@@ -1001,7 +1068,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -1016,7 +1084,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[2]?.title === 'SDM_SUMMON_RESULT_3' ||
                     Boolean(
@@ -1032,7 +1101,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -1040,13 +1110,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 4 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -1055,7 +1126,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.elder_affidavit}
                     </Text>
@@ -1068,7 +1140,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -1089,7 +1162,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[3]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4'
                     ) ? (
@@ -1118,7 +1192,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[3]?.title ===
@@ -1133,7 +1209,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -1145,7 +1222,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -1171,14 +1249,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[3]?.title ===
                         'SDM_SUMMON_RESULT_4'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[3]?.title ===
@@ -1195,7 +1276,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -1210,7 +1292,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[3]?.title === 'SDM_SUMMON_RESULT_4' ||
                     Boolean(
@@ -1226,7 +1309,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -1234,13 +1318,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 5 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -1249,7 +1334,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.document_under_rule_13}
                     </Text>
@@ -1262,7 +1348,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -1283,7 +1370,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[4]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5'
                     ) ? (
@@ -1312,7 +1400,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[4]?.title ===
@@ -1327,7 +1417,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -1339,7 +1430,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -1364,14 +1456,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[4]?.title ===
                         'SDM_SUMMON_RESULT_5'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[4]?.title ===
@@ -1388,7 +1483,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -1403,7 +1499,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[4]?.title === 'SDM_SUMMON_RESULT_5' ||
                     Boolean(
@@ -1419,20 +1516,22 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
               </View>
 
               {/* FORM 6  */}
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -1441,7 +1540,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.photo_under_rule_13}
                     </Text>
@@ -1454,7 +1554,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -1475,7 +1576,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[5]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6'
                     ) ? (
@@ -1504,7 +1606,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[5]?.title ===
@@ -1519,7 +1623,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -1531,7 +1636,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -1556,7 +1662,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[5]?.title ===
                         'SDM_SUMMON_RESULT_6'
@@ -1586,7 +1693,9 @@ const PastRecordsScreen = ({navigation}) => {
                           )}
                         </>
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[5]?.title ===
@@ -1603,7 +1712,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -1618,7 +1728,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[5]?.title === 'SDM_SUMMON_RESULT_6' ||
                     Boolean(
@@ -1634,20 +1745,22 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
               </View>
 
               {/* FORM 7  */}
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -1656,7 +1769,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.claimants_names_and_signatures}
                     </Text>
@@ -1669,7 +1783,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -1690,7 +1805,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[6]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7'
                     ) ? (
@@ -1713,7 +1829,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[6]?.title ===
@@ -1728,7 +1846,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -1740,7 +1859,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -1765,14 +1885,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[6]?.title ===
                         'SDM_SUMMON_RESULT_7'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[6]?.title ===
@@ -1789,7 +1912,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -1804,7 +1928,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[6]?.title === 'SDM_SUMMON_RESULT_7' ||
                     Boolean(
@@ -1820,7 +1945,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -1833,20 +1959,23 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 3 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
                   {appTranslation.demarcation_of_forest_area}
                 </Text>
               </View>
 
               {/* FORM 8  */}
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -1855,7 +1984,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.neighboring_village_notification}
                     </Text>
@@ -1868,7 +1998,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -1889,7 +2020,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[7]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8'
                     ) ? (
@@ -1912,7 +2044,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[7]?.title ===
@@ -1927,7 +2061,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -1939,7 +2074,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -1964,14 +2100,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[7]?.title ===
                         'SDM_SUMMON_RESULT_8'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[7]?.title ===
@@ -1988,7 +2127,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -2003,7 +2143,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[7]?.title === 'SDM_SUMMON_RESULT_8' ||
                     Boolean(
@@ -2019,20 +2160,22 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
               </View>
 
               {/* FORM 9  */}
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -2041,9 +2184,10 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           //   // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
-                     {appTranslation.demarcation_proceedings}
+                      {appTranslation.demarcation_proceedings}
                     </Text>
                     {/* <Text style={[styles.subheaderText, { fontSize: 12 }]}>Date : {dayjs().format('DD/MM/YYYY')}</Text> */}
                   </View>
@@ -2054,7 +2198,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -2075,7 +2220,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[8]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9'
                     ) ? (
@@ -2104,7 +2250,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[8]?.title ===
@@ -2119,7 +2267,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -2131,7 +2280,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -2156,14 +2306,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[8]?.title ===
                         'SDM_SUMMON_RESULT_9'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[8]?.title ===
@@ -2180,7 +2333,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -2195,7 +2349,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[8]?.title === 'SDM_SUMMON_RESULT_9' ||
                     Boolean(
@@ -2211,7 +2366,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -2224,21 +2380,24 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 4 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
-                 {appTranslation.physical_verification}
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
+                  {appTranslation.physical_verification}
                 </Text>
               </View>
 
               {/* FORM 10 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -2247,7 +2406,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.physical_verification_notification}
                     </Text>
@@ -2260,7 +2420,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -2281,7 +2442,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[9]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10'
                     ) ? (
@@ -2310,7 +2472,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[9]?.title ===
@@ -2326,7 +2490,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -2338,7 +2503,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -2363,14 +2529,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[9]?.title ===
                         'SDM_SUMMON_RESULT_10'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[9]?.title ===
@@ -2387,7 +2556,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -2402,7 +2572,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[9]?.title === 'SDM_SUMMON_RESULT_10' ||
                     Boolean(
@@ -2418,7 +2589,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -2426,13 +2598,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 11 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -2441,7 +2614,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {appTranslation.physical_verification_report}
                       {/* <Image /> */}
                     </Text>
@@ -2454,7 +2628,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       if (
@@ -2472,7 +2647,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[10]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[10]?.title ===
                       'SDM_SUMMON_RESULT_11'
@@ -2502,7 +2678,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[10]?.title ===
@@ -2517,7 +2695,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -2529,7 +2708,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -2554,14 +2734,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[10]?.title ===
                         'SDM_SUMMON_RESULT_11'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[10]?.title ===
@@ -2578,7 +2761,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -2593,7 +2777,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[10]?.title === 'SDM_SUMMON_RESULT_11' ||
                     Boolean(
@@ -2610,7 +2795,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -2623,21 +2809,24 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 5 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
                   {appTranslation.community_rights_recommendation}
                 </Text>
               </View>
 
               {/* FORM 12 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -2646,7 +2835,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.gram_sabha_proceedings}
                     </Text>
@@ -2659,7 +2849,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -2680,7 +2871,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[11]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[11]?.title ===
                       'SDM_SUMMON_RESULT_12'
@@ -2710,7 +2902,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[11]?.title ===
@@ -2725,7 +2919,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -2737,7 +2932,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -2762,14 +2958,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[11]?.title ===
                         'SDM_SUMMON_RESULT_12'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[11]?.title ===
@@ -2786,7 +2985,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -2801,7 +3001,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[11]?.title === 'SDM_SUMMON_RESULT_12' ||
                     Boolean(
@@ -2818,7 +3019,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -2831,21 +3033,24 @@ const PastRecordsScreen = ({navigation}) => {
         {stage === 6 && (
           <>
             <ScrollView>
-              <View style={{padding: 20}}>
-                <Text style={{fontSize: 26, color: '#fff', fontWeight: '600'}}>
+              <View style={{ padding: 20 }}>
+                <Text
+                  style={{ fontSize: 26, color: '#fff', fontWeight: '600' }}
+                >
                   {appTranslation.claim_details}
                 </Text>
               </View>
 
               {/* FORM 13 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -2854,7 +3059,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {appTranslation.claim_records}
                       {/* <Image /> */}
                     </Text>
@@ -2867,7 +3073,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -2888,7 +3095,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[12]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[12]?.title ===
                       'SDM_SUMMON_RESULT_13'
@@ -2918,7 +3126,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[12]?.title ===
@@ -2933,7 +3143,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -2945,7 +3156,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -2970,14 +3182,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[12]?.title ===
                         'SDM_SUMMON_RESULT_13'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[12]?.title ===
@@ -2994,7 +3209,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3009,7 +3225,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[12]?.title === 'SDM_SUMMON_RESULT_13' ||
                     Boolean(
@@ -3026,7 +3243,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -3034,13 +3252,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 14 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -3049,7 +3268,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.format_b}
                     </Text>
@@ -3062,7 +3282,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -3083,7 +3304,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[13]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[13]?.title ===
                       'SDM_SUMMON_RESULT_14'
@@ -3113,7 +3335,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[13]?.title ===
@@ -3128,7 +3352,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -3140,7 +3365,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -3165,14 +3391,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[13]?.title ===
                         'SDM_SUMMON_RESULT_14'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[13]?.title ===
@@ -3189,7 +3418,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3204,7 +3434,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {claim?.courtDocuments[13]?.title ===
                   'SDM_SUMMON_RESULT_14' && (
                   <CustomButton
@@ -3215,7 +3446,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -3223,13 +3455,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 15 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -3238,7 +3471,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {appTranslation.format_c}
                       {/* <Image /> */}
                     </Text>
@@ -3251,7 +3485,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -3272,7 +3507,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[14]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[14]?.title ===
                       'SDM_SUMMON_RESULT_15'
@@ -3302,7 +3538,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[14]?.title ===
@@ -3317,7 +3555,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -3329,7 +3568,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -3354,14 +3594,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[14]?.title ===
                         'SDM_SUMMON_RESULT_15'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[14]?.title ===
@@ -3378,7 +3621,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3393,7 +3637,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[14]?.title === 'SDM_SUMMON_RESULT_15' ||
                     Boolean(
@@ -3410,7 +3655,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -3418,13 +3664,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 16 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -3433,7 +3680,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.subdivision_receipt}
                     </Text>
@@ -3446,7 +3694,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -3467,7 +3716,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[15]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[15]?.title ===
                       'SDM_SUMMON_RESULT_16'
@@ -3497,7 +3747,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[15]?.title ===
@@ -3512,7 +3764,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -3524,7 +3777,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -3549,14 +3803,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[15]?.title ===
                         'SDM_SUMMON_RESULT_16'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[15]?.title ===
@@ -3573,7 +3830,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3607,13 +3865,14 @@ const PastRecordsScreen = ({navigation}) => {
 
               {/* FORM 17 */}
 
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -3622,7 +3881,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.physical_verification_second_notification}
                     </Text>
@@ -3635,7 +3895,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -3655,7 +3916,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[16]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[16]?.title ===
                       'SDM_SUMMON_RESULT_17'
@@ -3679,7 +3941,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[16]?.title ===
@@ -3694,7 +3958,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -3706,7 +3971,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -3731,14 +3997,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[16]?.title ===
                         'SDM_SUMMON_RESULT_17'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[16]?.title ===
@@ -3755,7 +4024,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3788,13 +4058,14 @@ const PastRecordsScreen = ({navigation}) => {
               </View> */}
 
               {/* FORM 18 SDLC ke pawati */}
-              <View style={{borderTopWidth: 1, borderColor: '#fff'}}>
-                <View style={{...styles.header, marginTop: -20}}>
+              <View style={{ borderTopWidth: 1, borderColor: '#fff' }}>
+                <View style={{ ...styles.header, marginTop: -20 }}>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.subheaderText,
@@ -3803,7 +4074,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           // textDecorationLine: 'underline',
                         },
-                      ]}>
+                      ]}
+                    >
                       {/* <Image /> */}
                       {appTranslation.claim_verification_second_notification}
                     </Text>
@@ -3816,7 +4088,8 @@ const PastRecordsScreen = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
                     paddingVertical: 10,
-                  }}>
+                  }}
+                >
                   <CustomButton
                     onPress={() => {
                       // fetch Details on basis of applicato
@@ -3837,7 +4110,8 @@ const PastRecordsScreen = ({navigation}) => {
                         handleDocPreview(claim?.courtDocuments[17]?.storageUrl);
                       }
                     }}
-                    style={{width: '100%', marginLeft: 40, marginTop: 10}}>
+                    style={{ width: '100%', marginLeft: 40, marginTop: 10 }}
+                  >
                     {!(
                       claim?.courtDocuments[17]?.title ===
                       'SDM_SUMMON_RESULT_18'
@@ -3861,7 +4135,9 @@ const PastRecordsScreen = ({navigation}) => {
                         )}
                       </>
                     ) : (
-                      <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                      <Text style={{ fontSize: 12 }}>
+                        {appTranslation.view_photo}
+                      </Text>
                     )}
                   </CustomButton>
                   {claim?.courtDocuments[17]?.title ===
@@ -3876,7 +4152,8 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginRight: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {<Ionicons name="camera" color="white" size={20} />}
                     </CustomButton>
                   )}
@@ -3888,7 +4165,8 @@ const PastRecordsScreen = ({navigation}) => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-evenly',
-                    }}>
+                    }}
+                  >
                     <CustomButton
                       onPress={() => {
                         // fetch Details on basis of applicato
@@ -3913,14 +4191,17 @@ const PastRecordsScreen = ({navigation}) => {
                         width: '100%',
                         marginLeft: 40,
                         marginTop: 10,
-                      }}>
+                      }}
+                    >
                       {!(
                         claim?.courtDocuments[17]?.title ===
                         'SDM_SUMMON_RESULT_18'
                       ) ? (
                         <Ionicons name="camera" color="white" size={20} />
                       ) : (
-                        <Text style={{fontSize: 12}}>{appTranslation.view_photo}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {appTranslation.view_photo}
+                        </Text>
                       )}
                     </CustomButton>
                     {claim?.courtDocuments[17]?.title ===
@@ -3937,7 +4218,8 @@ const PastRecordsScreen = ({navigation}) => {
                           width: '100%',
                           marginRight: 40,
                           marginTop: 10,
-                        }}>
+                        }}
+                      >
                         {<Ionicons name="camera" color="white" size={20} />}
                       </CustomButton>
                     )}
@@ -3952,7 +4234,8 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
+                }}
+              >
                 {Boolean(
                   claim?.courtDocuments[17]?.title === 'SDM_SUMMON_RESULT_18' ||
                     Boolean(
@@ -3969,7 +4252,8 @@ const PastRecordsScreen = ({navigation}) => {
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
-                    style={{width: '50%', marginRight: 40, marginTop: 10}}>
+                    style={{ width: '50%', marginRight: 40, marginTop: 10 }}
+                  >
                     <FontAwesome5 color="#fff" name="plus" size={20} />
                   </CustomButton>
                 )}
@@ -3983,8 +4267,9 @@ const PastRecordsScreen = ({navigation}) => {
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderColor: '#fff',
-                }}>
-                <Text style={{color: 'white', fontSize: 18}}>
+                }}
+              >
+                <Text style={{ color: 'white', fontSize: 18 }}>
                   {appTranslation.claimed_area}
                 </Text>
 
@@ -3992,7 +4277,8 @@ const PastRecordsScreen = ({navigation}) => {
                   style={{
                     flexDirection: 'row',
                     marginTop: 10,
-                  }}>
+                  }}
+                >
                   <TextInput
                     style={{
                       backgroundColor: 'white',
@@ -4004,43 +4290,46 @@ const PastRecordsScreen = ({navigation}) => {
                     }}
                     keyboardType="number-pad"
                     placeholder={appTranslation.area}
-                    editable={Boolean(claim?.area!=undefined)}
+                    // editable={Boolean(claim?.area !== undefined)}
                     value={claimedArea}
-                    onChangeText={e=>setClaimedArea(e)}
+                    onChangeText={e => setClaimedArea(e)}
                   />
-                { Boolean(claim?.area!=undefined) && <CustomButton
-                    style={{
-                      width: '70%',
-                      marginTop: 10,
-                    }}
-                    onPress={() => {
-                      Alert.alert(
-                        commonTranslation.notice,
-                        appTranslation.area_cant_be_changed_notif,
-                        [
-                          {
-                            text: commonTranslation.cancel,
-                            onPress: () => console.log('Cancel Pressed'),
-                            style: 'cancel',
-                          },
-                          {
-                            text: commonTranslation.ok,
-                            onPress: () =>{
-                           
-                                patchClaimArea({claimId:claim?._id?.toString(),area:456})
-                                .then(res=>{
-                                  
-                                })
-                                .catch(err=>{
-                                    Alert("Failed to updated")
-                                })
+                  {Boolean(claim?.area != undefined) && (
+                    <CustomButton
+                      style={{
+                        width: '70%',
+                        marginTop: 10,
+                      }}
+                      onPress={() => {
+                        Alert.alert(
+                          commonTranslation.notice,
+                          appTranslation.area_cant_be_changed_notif,
+                          [
+                            {
+                              text: commonTranslation.cancel,
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
                             },
-                          },
-                        ],
-                      );
-                    }}>
-                    <FontAwesome5 name="check-circle" size={20} />
-                  </CustomButton>}
+                            {
+                              text: commonTranslation.ok,
+                              onPress: () => {
+                                patchClaimArea({
+                                  claimId: claim?._id?.toString(),
+                                  area: 456,
+                                })
+                                  .then(res => {})
+                                  .catch(err => {
+                                    Alert('Failed to updated');
+                                  });
+                              },
+                            },
+                          ],
+                        );
+                      }}
+                    >
+                      <FontAwesome5 name="check-circle" size={20} />
+                    </CustomButton>
+                  )}
                 </View>
               </View>
             </ScrollView>
