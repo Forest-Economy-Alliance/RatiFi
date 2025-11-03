@@ -9,6 +9,7 @@
       "enter_mobile_number": "మొబైల్ నంబర్ నమోదు చేయండి",
 
       "login": "లాగిన్",
+      "sign_out": "సైన్ అవుట్",
       "enter_password": "పిన్ నమోదు చేయండి",
       "confirm_password": "పిన్ నిర్ధారించండి",
       "forgot_password": "పిన్ మర్చిపోయారా",
@@ -238,7 +239,6 @@
     "otp_sent": "OTP మీ మొబైల్ నంబర్‌కు పంపబడింది.",
     "otp_sent_to_your_mobile": "మీ మొబైల్‌కు OTP పంపబడింది!!",
     "resend_otp": "OTP మళ్లీ పంపండి",
-    "sign_out": "సైన్ అవుట్",
     "otp_is_required": "OTP తప్పనిసరి",
     "invalid_otp": "చెల్లని OTP"
   }

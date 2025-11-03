@@ -9,6 +9,7 @@
       "enter_mobile_number": "अपना मोबाइल नंबर लिखें",
 
       "login": "लॉगिन",
+      "sign_out": "साइनआउट करें",
       "enter_password": "पिन लिखें",
       "confirm_password": "पिन की पुष्टि करें",
       "forgot_password": "पिन भूल गए",
@@ -238,7 +239,6 @@
     "otp_sent": "OTP आपके मोबाइल नंबर पर भेजा गया है।",
     "otp_sent_to_your_mobile": "आपके मोबाइल पर भेजा गया ओटीपी !!",
     "resend_otp": "OTP पुनः भेजें",
-    "sign_out": "साइनआउट करें",
     "otp_is_required": "OTP आवश्यक है",
     "invalid_otp": "अमान्य OTP"
   }

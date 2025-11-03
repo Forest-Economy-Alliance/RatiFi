@@ -9,6 +9,7 @@
       "enter_mobile_number": "Enter mobile number",
 
       "login": "Login",
+      "sign_out": "Sign Out",
       "enter_password": "Enter PIN",
       "confirm_password": "Confirm PIN",
       "forgot_password": "Forgot PIN",
@@ -238,7 +239,6 @@
     "otp_sent": "OTP has been sent to your mobile number.",
     "otp_sent_to_your_mobile": "OTP sent to your mobile!!",
     "resend_otp": "Resend OTP",
-    "sign_out": "Sign Out",
     "otp_is_required": "OTP is required",
     "invalid_otp": "Invalid OTP"
   }
