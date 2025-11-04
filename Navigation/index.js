@@ -46,6 +46,7 @@ import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
 import ValidateIFRScreen from '../Screens/ValidateIFR';
 import GovernmentOfficialCheck from '../Screens/GovernmentOfficialCheck';
+import CameraCapture from '../Screens/CameraCapture/CameraCapture';
 import ViewForms from '../Screens/ViewForms';
 import RORWebView from '../Screens/RORWebView/RORWebView';
 
@@ -234,6 +235,14 @@ export const Navigation = () => {
        <Stack.Screen
           name="GovernmentOfficialCheck"
           component={GovernmentOfficialCheck}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="CameraCapture"
+          component={CameraCapture}
           options={{
             headerShown: false,
           }}

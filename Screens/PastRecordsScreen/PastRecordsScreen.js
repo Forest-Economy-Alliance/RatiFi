@@ -16,6 +16,9 @@ import {
   Pressable,
   TextInput,
   Alert,
+  PermissionsAndroid,
+  Platform,
+  InteractionManager,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -40,7 +43,6 @@ import {
   patchClaimArea,
 } from '../../services/claimService';
 
-import { RNCamera } from 'react-native-camera';
 import { getGCPUrlImageHandler } from '../../services/commonService';
 import FastImage from 'react-native-fast-image';
 
@@ -108,6 +110,115 @@ const PastRecordsScreen = ({ navigation }) => {
   const [docUrlToPreview, setDocUrlToPreview] = useState('');
   const [docName, setDocName] = useState('SDM_SUMMON');
   const [pendingCount, setPendingCount] = useState(0);
+
+  // Camera helpers
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const already = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        );
+        if (already) return true;
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera to capture documents',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn('Permission error', err);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const openCameraForCurrentState = async (extraImageID = null) => {
+    const has = await requestCameraPermission();
+    if (!has) {
+      Alert.alert(
+        'Permission Denied',
+        'Camera permission is required to upload documents',
+      );
+      return;
+    }
+
+    // Try to use react-native-image-picker if available
+    try {
+      const ImagePicker = require('react-native-image-picker');
+      if (ImagePicker && ImagePicker.launchCamera) {
+        ImagePicker.launchCamera(
+          { mediaType: 'photo', saveToPhotos: false },
+          async response => {
+            if (response?.didCancel) return;
+            const uri =
+              response?.assets && response.assets[0] && response.assets[0].uri;
+            if (uri) {
+              try {
+                dispatch({ type: 'ENABLE_LOADING' });
+                const compressedURI = await Image.compress(uri);
+                setCameraModalVis(false);
+                // enqueue job similar to original flow
+                if (uploadType === 'MAIN_DOC') {
+                  dispatch({
+                    type: 'UPDATE_TOSYNC_COUNT',
+                    payload: { label: docName, value: 1 },
+                  });
+                  queue.addJob('testWorker', {
+                    localPath: compressedURI,
+                    userId: profile?._id,
+                    docName: docName,
+                    claimId: claim?._id?.toString(),
+                    shouldTriggerJointVerification,
+                  });
+                } else if (uploadType === 'NEW_EXTRA_IMAGE') {
+                  queue.addJob('testWorker', {
+                    localPath: compressedURI,
+                    userId: profile?._id,
+                    docName: docName,
+                    claimId: claim?._id?.toString(),
+                    extraImageID: extraImageID,
+                  });
+                } else if (uploadType === 'UPDATE_EXTRA_IMAGE') {
+                  queue.addJob('testWorker', {
+                    localPath: compressedURI,
+                    userId: profile?._id,
+                    docName: docName,
+                    claimId: claim?._id?.toString(),
+                    extraImageID: extraImageID || focusedExtraImageID,
+                  });
+                }
+                dispatch({ type: 'DISABLE_LOADING' });
+                setShouldTriggerJointVerification(false);
+                setTimeout(() => syncer(), 1500);
+              } catch (e) {
+                console.log('ImagePicker handling error', e);
+                dispatch({ type: 'DISABLE_LOADING' });
+              }
+            }
+          },
+        );
+        return;
+      }
+    } catch (e) {
+      // image-picker not available; fall back to CameraCapture screen
+    }
+
+    // Fallback: navigate to full-screen CameraCapture we added
+    InteractionManager.runAfterInteractions(() => {
+      navigation.navigate('CameraCapture', {
+        isFront: true,
+        docName,
+        uploadType,
+        extraImageID,
+      });
+    });
+  };
 
   const handleDocPreview = url => {
     const finalUrl = handleHTTPtoHTTPS(url);
@@ -249,134 +360,7 @@ const PastRecordsScreen = ({ navigation }) => {
         </Pressable>
       </View>
 
-      {cameraModalVis && (
-        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
-          <RNCamera
-            ref={cameraRef}
-            onCameraReady={e => {
-              dispatch({ type: 'DISABLE_LOADING' });
-            }}
-            // flashMode={'on'}
-            style={styles.rnCamera}
-            captureAudio={false}
-            ratio="16:9"
-            useNativeZoom
-          ></RNCamera>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              paddingTop: 'auto',
-              paddingBottom: 'auto',
-              backgroundColor: 'black',
-              flex: 0.2,
-            }}
-          >
-            <TouchableOpacity
-              disabled={false}
-              style={{
-                borderWidth: 1,
-                borderRadius: 50,
-                alignItems: 'center',
-                padding: 20,
-                marginTop: 'auto',
-                marginBottom: 'auto',
-                // alignSelf:'flex-start',
-                alignSelf: 'center',
-                backgroundColor: '#fff',
-              }}
-              onPress={async () => {
-                try {
-                  if (cameraRef) {
-                    console.warn(cameraRef);
-                    const options = {
-                      quality: 0.4,
-                      base64: false,
-                      skipProcessing: true,
-                    };
-                    dispatch({ type: 'ENABLE_LOADING' });
-
-                    const data = await cameraRef?.current?.takePictureAsync(
-                      options,
-                    );
-
-                    const compressedURI = await Image.compress(data?.uri);
-                    console.log('compressed-compressedURI', compressedURI);
-
-                    setCameraModalVis(false);
-
-                    dispatch({
-                      type: 'UPDATE_APPUTIL_KEY',
-                      payload: {
-                        key: 'globalSyncStatus',
-                        value: true,
-                      },
-                    });
-
-                    if (uploadType === 'MAIN_DOC') {
-                      dispatch({
-                        type: 'UPDATE_TOSYNC_COUNT',
-                        payload: {
-                          label: docName,
-                          value: 1,
-                        },
-                      });
-                      queue.addJob('testWorker', {
-                        localPath: compressedURI,
-                        userId: profile?._id,
-                        docName: docName,
-                        claimId: claim?._id?.toString(),
-                        shouldTriggerJointVerification,
-                      });
-                    } else if (uploadType === 'NEW_EXTRA_IMAGE') {
-                      queue.addJob('testWorker', {
-                        localPath: compressedURI,
-                        userId: profile?._id,
-                        docName: docName,
-                        claimId: claim?._id?.toString(),
-                        extraImageID: 'NEW',
-                      });
-                    } else if (uploadType === 'UPDATE_EXTRA_IMAGE') {
-                      queue.addJob('testWorker', {
-                        localPath: compressedURI,
-                        userId: profile?._id,
-                        docName: docName,
-                        claimId: claim?._id?.toString(),
-                        extraImageID: focusedExtraImageID,
-                      });
-                    }
-
-                    dispatch({ type: 'DISABLE_LOADING' });
-                    setShouldTriggerJointVerification(false);
-                    setTimeout(() => {
-                      // @NOTE - INSIDE QUEUE THEN VARSEN CAN PULL
-                      syncer();
-                    }, 1500);
-                    return;
-                  }
-                } catch (error) {
-                  console.log('ERROR', error);
-                }
-              }}
-            >
-              <Text>&nbsp;&nbsp; &nbsp;&nbsp;</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{ color: 'white', paddingHorizontal: 20 }}
-              onPress={() => {
-                setCameraModalVis(false);
-              }}
-            >
-              <Text style={{ color: 'white' }}>
-                <Ionicons name="close" size={50} />
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      )}
+      {/* Camera is handled via image-picker or CameraCapture screen (openCameraForCurrentState) */}
 
       {previewDocModalVis && (
         <Modal style={{ padding: 100, backgroundColor: 'white' }}>
@@ -404,12 +388,14 @@ const PastRecordsScreen = ({ navigation }) => {
             }}
           >
             <TouchableOpacity
-              style={{ color: 'white', paddingHorizontal: 20 }}
+              style={{
+                color: 'white',
+                paddingHorizontal: 20,
+                alignItems: 'center',
+              }}
               onPress={() => setPreviewDocModal(false)}
             >
-              <Text style={{ color: 'white' }}>
-                <Ionicons name="close" size={50} />
-              </Text>
+              <Ionicons name="close" size={50} color="white" />
             </TouchableOpacity>
           </View>
         </Modal>
@@ -519,6 +505,7 @@ const PastRecordsScreen = ({ navigation }) => {
                 >
                   <CustomButton
                     onPress={() => {
+                      console.warn('me pressed 1');
                       if (
                         !Boolean(
                           claim?.courtDocuments[0]?.title ===
@@ -527,7 +514,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_1');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[0]?.storageUrl);
@@ -537,7 +524,10 @@ const PastRecordsScreen = ({ navigation }) => {
                   >
                     {!Boolean(
                       claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1',
-                    ) ? (
+                    ) ? 
+                    
+                    
+                    (
                       <>
                         <Ionicons name="camera" color="white" size={20} />
                         {Boolean(
@@ -570,7 +560,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_1');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -604,7 +594,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_1');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -635,10 +625,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_1' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[0]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_1');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
-                          //   UPDATE IMAGE that object wiht particulat indd
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
                         style={{
@@ -672,9 +662,10 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[0]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_1');
-                      setCameraModalVis(true);
                       setUploadType('NEW_EXTRA_IMAGE');
+                      openCameraForCurrentState(nextId + 1);
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
                     style={{ width: '50%', marginRight: 40, marginTop: 10 }}
@@ -745,7 +736,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_2');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[1]?.storageUrl);
@@ -794,7 +785,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         setDocName('SDM_SUMMON_RESULT_2');
                         setUploadType('MAIN_DOC');
                         // setUploadType('UPDATE_EXTRA_IMAGE');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -825,7 +816,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_2');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -853,9 +844,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_2' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[0]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_2');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -890,9 +882,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_2');
-                      setCameraModalVis(true);
-
+                      openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
@@ -947,7 +939,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_3');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState()
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[2]?.storageUrl);
@@ -996,7 +988,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_3');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -1022,6 +1014,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         // fetch Details on basis of applicato
                         // dispatch({type:"ENABLE_LOADING"})
                         // alert(claim?.courtDocuments.length)
+                        
                         if (
                           !(
                             claim?.courtDocuments.length &&
@@ -1030,7 +1023,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_3');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -1058,9 +1051,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_3' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_3');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -1095,8 +1089,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_3');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -1156,7 +1151,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_4');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[3]?.storageUrl);
@@ -1203,7 +1198,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_4');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -1238,7 +1233,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         ) {
                           setDocName('SDM_SUMMON_RESULT_4');
 
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -1266,9 +1261,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_4' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_4');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -1303,8 +1299,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_4');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -1364,7 +1361,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_5');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[4]?.storageUrl);
@@ -1411,7 +1408,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_5');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -1445,7 +1442,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_5');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -1473,9 +1470,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_5' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_5');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -1510,8 +1508,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_5');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -1570,7 +1569,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_6');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[5]?.storageUrl);
@@ -1617,7 +1616,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_6');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -1651,7 +1650,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_6');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -1702,11 +1701,12 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_6' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_6');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
-                          // setUploadType('UPDATE_EXTRA_IMAGE');
+                          setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
                         style={{
                           width: '100%',
@@ -1739,8 +1739,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_6');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -1799,7 +1800,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_7');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[6]?.storageUrl);
@@ -1840,7 +1841,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_7');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -1874,7 +1875,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_7');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -1902,9 +1903,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_7' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_7');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -1939,8 +1941,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_7');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -2014,7 +2017,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_8');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[7]?.storageUrl);
@@ -2055,7 +2058,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_8');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -2089,7 +2092,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_8');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -2117,9 +2120,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_8' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_8');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -2154,8 +2158,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_8');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -2214,7 +2219,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_9');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[8]?.storageUrl);
@@ -2261,7 +2266,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_9');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -2295,7 +2300,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_9');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -2323,9 +2328,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_9' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_9');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -2360,8 +2366,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_9');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -2436,7 +2443,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_10');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[9]?.storageUrl);
@@ -2484,7 +2491,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         setDocName('SDM_SUMMON_RESULT_10');
                         setShouldTriggerJointVerification(true);
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -2518,7 +2525,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_10');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -2546,9 +2553,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_10' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_10');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -2583,8 +2591,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_10');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -2641,7 +2650,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_11');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[10]?.storageUrl);
@@ -2689,7 +2698,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_11');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -2723,7 +2732,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_11');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -2751,9 +2760,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_11' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_11');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -2789,8 +2799,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_11');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -2865,7 +2876,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_12');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[11]?.storageUrl);
@@ -2913,7 +2924,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_12');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -2947,7 +2958,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_12');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -2975,9 +2986,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_12' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_12');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -3013,8 +3025,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_12');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -3089,7 +3102,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_13');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[12]?.storageUrl);
@@ -3137,7 +3150,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setDocName('SDM_SUMMON_RESULT_13');
                         setUploadType('MAIN_DOC');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -3171,7 +3184,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_13');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -3199,9 +3212,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_13' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_13');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -3237,8 +3251,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_13');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -3298,7 +3313,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_14');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[13]?.storageUrl);
@@ -3346,7 +3361,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_14');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -3380,7 +3395,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_14');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -3408,9 +3423,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_14' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_14');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -3440,9 +3456,9 @@ const PastRecordsScreen = ({ navigation }) => {
                   'SDM_SUMMON_RESULT_14' && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_14');
-                      setCameraModalVis(true);
-
+                      openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}
@@ -3501,7 +3517,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_15');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[14]?.storageUrl);
@@ -3549,7 +3565,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_15');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -3583,7 +3599,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_15');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -3611,9 +3627,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_15' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_15');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -3649,8 +3666,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_15');
-                      setCameraModalVis(true);
+                      openCameraForCurrentState(nextId + 1);
 
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
@@ -3710,7 +3728,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_16');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[15]?.storageUrl);
@@ -3758,7 +3776,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_16');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -3792,7 +3810,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_16');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -3820,9 +3838,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_16' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_16');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -3910,7 +3929,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         )
                       ) {
                         setDocName('SDM_SUMMON_RESULT_17');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[16]?.storageUrl);
@@ -3952,7 +3971,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_17');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -3986,7 +4005,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_17');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -4014,9 +4033,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_17' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_17');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -4104,7 +4124,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_18');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[17]?.storageUrl);
@@ -4146,7 +4166,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       onPress={() => {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_18');
-                        setCameraModalVis(true);
+                        openCameraForCurrentState();
                       }}
                       style={{
                         width: '100%',
@@ -4180,7 +4200,7 @@ const PastRecordsScreen = ({ navigation }) => {
                           )
                         ) {
                           setDocName('SDM_SUMMON_RESULT_18');
-                          setCameraModalVis(true);
+                          openCameraForCurrentState();
                         } else {
                           setPreviewDocModal(true);
 
@@ -4208,9 +4228,10 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_18' && (
                       <CustomButton
                         onPress={() => {
+                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_18');
-                          setCameraModalVis(true);
-                          setFocusedExtraImageID(indd + 1);
+                          openCameraForCurrentState(nextId);
+                          setFocusedExtraImageID(nextId);
                           //   UPDATE IMAGE that object wiht particulat indd
                           setUploadType('UPDATE_EXTRA_IMAGE');
                         }}
@@ -4246,9 +4267,9 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
+                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_18');
-                      setCameraModalVis(true);
-
+                      openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
                       // CAPTUR THAT IMAGE WITH A NEW ENTRY IN LAST OF THAT ARRAY
                     }}

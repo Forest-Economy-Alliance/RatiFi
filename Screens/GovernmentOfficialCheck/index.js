@@ -12,6 +12,9 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
+  InteractionManager,
 } from 'react-native';
 import RNFS from 'react-native-fs';
 
@@ -31,7 +34,7 @@ import CustomError from '../../components/CustomError';
 import { updateUserInfoAction } from '../../redux-store/actions/auth';
 import { fetchClaimDetailsByFRCHandler } from '../../services/claimService';
 import { updateUserHandler } from '../../services/authService';
-import { RNCamera } from 'react-native-camera';
+// react-native-camera removed — using react-native-image-picker / CameraCapture fallback instead
 import { getGCPUrlImageHandler } from '../../services/commonService';
 import { useToast } from 'react-native-toast-notifications';
 import FastImage from 'react-native-fast-image';
@@ -146,37 +149,9 @@ const GovernmentOfficialCheck = ({ navigation }) => {
                 console.log('ok');
 
                 navigation.replace('Location');
-
-                // navigation.navigate('IdCard');
               }
             } else {
               dispatch({ type: 'DISABLE_LOADING' });
-              // toast.show(t('ALREADY_ASSIGNED_ROLE'), {
-              //   type: 'success',
-              //   animationType: 'zoom-in',
-              //   successColor: '#480E09',
-              //   placement: 'top',
-              //   duration: 5000,
-              // });
-              // alert(t('ALREADY_ASSIGNED_ROLE'));
-              // this alert button should have a help button which will redirect to the help screen
-
-              // Alert.alert('सूचना', t('ALREADY_ASSIGNED_ROLE'), [
-              //   {
-              //     text: 'Ok',
-              //     // onPress: () => console.log('Cancel Pressed'),
-              //     style: 'cancel',
-              //   },
-              //   {
-              //     text: 'सहायता',
-              //     onPress: () => {
-              //       // link to whatsapp
-              //       Linking.openURL(
-              //         "https://wa.me/12345?text=I'm%20having%20issue%20with%JharFRA%20Registration.",
-              //       );
-              //     },
-              //   },
-              // ]);
             }
           },
         ),
@@ -186,18 +161,8 @@ const GovernmentOfficialCheck = ({ navigation }) => {
     }
   };
 
-  const uidSchema = object().shape({
-    gender: string().required(appTranslation.gender_required),
-    member: string().required(appTranslation.membership_required),
-    role: string().required(appTranslation.role_required),
-  });
-
-  const formik = useFormik({
-    initialValues: state,
-    validationSchema: uidSchema,
-    onSubmit: onNext,
-  });
-
+  // Roles list used by dropdown. Keep shape: { label, hindiLabel, value, roleData: [{label,hindiLabel,value}, ...] }
+  // Restored a fuller set of roles so the dropdown presents all expected options to the user.
   const data1 = [
     {
       label: roleTranslation.frc,
@@ -345,6 +310,36 @@ const GovernmentOfficialCheck = ({ navigation }) => {
 
   const [roleData, setRoleData] = useState([]);
 
+  // Request camera permission helper
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const already = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        );
+        if (already) return true;
+
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera to capture documents',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn('Permission error', err);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // Camera is handled via react-native-image-picker or the CameraCapture screen fallback
+
   console.log(verificationAadharBackUrl);
   return (
     <ImageBackground
@@ -354,18 +349,22 @@ const GovernmentOfficialCheck = ({ navigation }) => {
       style={styles.bg}
     >
       {cameraModalVis && (
-        <Modal style={{ padding: 100, backgroundColor: 'white' }}>
-          <RNCamera
-            ref={cameraRef}
-            onCameraReady={e => {
+        <Modal
+          style={{ padding: 100, backgroundColor: 'white' }}
+          visible={true}
+          onRequestClose={() => setCameraModalVis(false)}
+        >
+          <CameraWrapper
+            cameraRefProp={cameraRef}
+            onCameraReady={() => dispatch({ type: 'DISABLE_LOADING' })}
+            onMountError={error => {
+              console.log('Camera mount error', error);
               dispatch({ type: 'DISABLE_LOADING' });
+              Alert.alert('Camera Error', 'Failed to initialize camera. Please try again.');
+              setCameraModalVis(false);
             }}
-            // flashMode={'on'}
-            style={styles.rnCamera}
-            captureAudio={false}
-            ratio="16:9"
-            useNativeZoom
-          ></RNCamera>
+            isFrontProp={isFront}
+          />
 
           <View
             style={{
@@ -646,9 +645,61 @@ const GovernmentOfficialCheck = ({ navigation }) => {
                   ]}
                 >
                   <Pressable
-                    onPress={() => {
+                    onPress={async () => {
+                      const has = await requestCameraPermission();
+                      if (!has) {
+                        Alert.alert('Permission Denied', 'Camera permission is required to upload documents');
+                        return;
+                      }
                       setIsFront(true);
-                      setCameraModalVis(true);
+                      // Try to use react-native-image-picker if available (system camera fallback)
+                      try {
+                        const ImagePicker = require('react-native-image-picker');
+                        if (ImagePicker && ImagePicker.launchCamera) {
+                          ImagePicker.launchCamera(
+                            {mediaType: 'photo', cameraType: 'back', saveToPhotos: false},
+                            async response => {
+                              if (response?.didCancel) return;
+                              if (response?.assets && response.assets[0]?.uri) {
+                                try {
+                                  dispatch({type: 'ENABLE_LOADING'});
+                                  const compressed = await Image.compress(response.assets[0].uri);
+                                  const b64 = await RNFS.readFile(compressed, 'base64');
+                                  const {data} = await getGCPUrlImageHandler({
+                                    fileName: 'capture',
+                                    base64Data: b64,
+                                    isPdf: false,
+                                    isVerificationDoc: true,
+                                    isFront: true,
+                                    isBack: false,
+                                    userId: state1?._id,
+                                  });
+                                  if (data?.response?.Location) {
+                                    dispatch({
+                                      type: 'UPDATE_APPUTIL_KEY',
+                                      payload: {key: 'verificationAadharFrontUrl', value: data.response.Location},
+                                    });
+                                    toast.show(appTranslation.file_uploaded, {type: 'success'});
+                                  }
+                                } catch (e) {
+                                  console.log(e);
+                                } finally {
+                                  dispatch({type: 'DISABLE_LOADING'});
+                                }
+                              } else if (response?.errorCode) {
+                                Alert.alert('Camera error', response.errorMessage || 'Unknown');
+                              }
+                            },
+                          );
+                          return;
+                        }
+                      } catch (e) {
+                        // image-picker not installed; fall back to full-screen camera
+                      }
+
+                      InteractionManager.runAfterInteractions(() => {
+                        navigation.navigate('CameraCapture', {isFront: true});
+                      });
                     }}
                   >
                     <Text
@@ -666,9 +717,60 @@ const GovernmentOfficialCheck = ({ navigation }) => {
                   </Pressable>
 
                   <Pressable
-                    onPress={() => {
+                    onPress={async () => {
+                      const has = await requestCameraPermission();
+                      if (!has) {
+                        Alert.alert('Permission Denied', 'Camera permission is required to upload documents');
+                        return;
+                      }
                       setIsFront(false);
-                      setCameraModalVis(true);
+                      try {
+                        const ImagePicker = require('react-native-image-picker');
+                        if (ImagePicker && ImagePicker.launchCamera) {
+                          ImagePicker.launchCamera(
+                            {mediaType: 'photo', cameraType: 'back', saveToPhotos: false},
+                            async response => {
+                              if (response?.didCancel) return;
+                              if (response?.assets && response.assets[0]?.uri) {
+                                try {
+                                  dispatch({type: 'ENABLE_LOADING'});
+                                  const compressed = await Image.compress(response.assets[0].uri);
+                                  const b64 = await RNFS.readFile(compressed, 'base64');
+                                  const {data} = await getGCPUrlImageHandler({
+                                    fileName: 'capture',
+                                    base64Data: b64,
+                                    isPdf: false,
+                                    isVerificationDoc: true,
+                                    isFront: false,
+                                    isBack: true,
+                                    userId: state1?._id,
+                                  });
+                                  if (data?.response?.Location) {
+                                    dispatch({
+                                      type: 'UPDATE_APPUTIL_KEY',
+                                      payload: {key: 'verificationAadharBackUrl', value: data.response.Location},
+                                    });
+                                    toast.show(appTranslation.file_uploaded, {type: 'success'});
+                                  }
+                                } catch (e) {
+                                  console.log(e);
+                                } finally {
+                                  dispatch({type: 'DISABLE_LOADING'});
+                                }
+                              } else if (response?.errorCode) {
+                                Alert.alert('Camera error', response.errorMessage || 'Unknown');
+                              }
+                            },
+                          );
+                          return;
+                        }
+                      } catch (e) {
+                        // image-picker not installed; fall back to full-screen camera
+                      }
+
+                      InteractionManager.runAfterInteractions(() => {
+                        navigation.navigate('CameraCapture', {isFront: false});
+                      });
                     }}
                   >
                     <Text

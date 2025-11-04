@@ -38,6 +38,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-html-to-pdf": "^1.3.0",
     "react-native-hyperlink": "^0.0.22",
+    "react-native-image-picker": "^8.2.1",
     "react-native-job-queue": "^0.5.3",
     "react-native-maps": "^1.26.18",
     "react-native-network-speed": "^1.1.2",
