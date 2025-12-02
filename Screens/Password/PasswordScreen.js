@@ -67,23 +67,19 @@ const PasswordScreen = ({navigation}) => {
     e => e?.entities?.appUtil?.appUtil,
   );
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
+  const authTranslation = t('auth');
+  const commonTranslation = t('common');
+  
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
   const PassSchema = object().shape({
-    password: string().required(t('Password is Required')),
+    password: string().required(authTranslation.password_required),
     confirmPassword: string()
-      .required(t('Confirm Password is Required'))
+      .required(authTranslation.confirm_password_required)
       .oneOf(
         [ref('password'), null],
-        t('Password and Confirm Password does not match'),
+        authTranslation.password_does_not_match,
       ),
   });
   console.log('loginflow--', loginflow);
@@ -121,7 +117,7 @@ const PasswordScreen = ({navigation}) => {
       if (pwdToVerify === formik.values.password) {
         navigation.replace('DownloadPDF');
       } else {
-        toast.show(t('INCORRECT_PASSWORD'), {
+        toast.show(authTranslation.incorrect_password, {
           type: 'success',
           animationType: 'zoom-in',
           successColor: '#480E09',
@@ -181,9 +177,7 @@ const PasswordScreen = ({navigation}) => {
     onSubmit: onNext,
   });
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+
 
   function cb(response) {
     const args = response?.success;
@@ -236,19 +230,19 @@ const PasswordScreen = ({navigation}) => {
         }}>
         <Pressable>
           <Text style={{fontSize: 18, color: '#480E09', marginBottom: 10}}>
-            पास वर्ड दर्ज करें
+            {authTranslation.set_pin}
           </Text>
         </Pressable>
       </View>
 
       <Text style={{color: '#fff', fontSize: 18, marginTop: 30}}>
-        कृपया अपनी पसंद का 4 अंकों का पिन दर्ज करें और लॉगिन के लिए याद रखें{' '}
+        {authTranslation.enter_4_digit_pin}
       </Text>
 
       <TextInput
         maxLength={4}
         style={styles.inputPass}
-        placeholder={t('password')}
+        placeholder={authTranslation.enter_password}
         placeholderTextColor="#FF6C00"
         onChangeText={formik.handleChange('password')}
         secureTextEntry={true}
@@ -256,18 +250,7 @@ const PasswordScreen = ({navigation}) => {
         value={formik.values.password}
         keyboardType="number-pad"
       />
-      {/* <CustomInput
-        maxLength={4}
-        style={styles.inputPass}
-        placeholder={t('password')}
-        placeholderTextColor="#FF6C00"
-        onChangeText={formik.handleChange('password')}
-        secureTextEntry={true}
-        onBlur={formik.handleBlur('password')}
-        value={formik.values.password}
-        keyboardType="number-pad"
-      /> */}
-     
+      
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.error}>{formik.errors.password}</Text>
       )}
@@ -275,7 +258,7 @@ const PasswordScreen = ({navigation}) => {
         <TextInput
           maxLength={4}
           style={styles.inputConfPass}
-          placeholder={t('confirm password')}
+          placeholder={authTranslation.confirm_password}
           placeholderTextColor="#FF6C00"
           onChangeText={formik.handleChange('confirmPassword')}
           secureTextEntry={true}
@@ -290,7 +273,7 @@ const PasswordScreen = ({navigation}) => {
       )}
       <CustomButton style={styles.nextButton} onPress={formik.handleSubmit}>
         <Text style={styles.nextButtonText}>
-          {loginflow ? 'LOGIN' : t('next')}
+          {loginflow ? authTranslation.login : commonTranslation.next}
         </Text>
       </CustomButton>
     </ImageBackground>

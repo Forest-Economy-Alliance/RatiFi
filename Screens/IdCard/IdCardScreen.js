@@ -34,17 +34,11 @@ const IdCardScreen = ({navigation}) => {
     uid: '',
   };
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
   const [errorVisible, setErrorVisible] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
+
 
   const onNext = (values, formikActions) => {
     formikActions.setSubmitting(false);
@@ -95,9 +89,6 @@ const IdCardScreen = ({navigation}) => {
     uid: t('Fill UID'),
   };
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   return (
     <ImageBackground

@@ -19,26 +19,26 @@ import {
 import FastImage from 'react-native-fast-image';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 // import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch, useSelector} from 'react-redux';
-import {AllVillages} from '../../constants/Villages';
+import { useDispatch, useSelector } from 'react-redux';
+import { AllVillages } from '../../constants/Villages';
 import CustomButton from '../../components/CustomButton';
 import Dropdown from '../../components/CustomDropdown';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
-import {BASE_URL, request} from '../../services/APICentral';
-import {BackHandler} from 'react-native';
+import { BASE_URL, request } from '../../services/APICentral';
+import { BackHandler } from 'react-native';
 import HI from '../../assets/i18n/hi.json';
-import {getDeviceHash} from '../../utils/DeviceUtil';
+import { getDeviceHash } from '../../utils/DeviceUtil';
 import RoleScreen from '../Role/RoleScreen';
-import {verifYYMember} from '../../redux-store/actions/auth';
+import { verifYYMember } from '../../redux-store/actions/auth';
 import {
   checkAccount,
   logoutHandler,
@@ -46,24 +46,24 @@ import {
   verifyyMember,
   viewFRCMember,
 } from '../../services/authService';
-import {firebase} from '@react-native-firebase/messaging';
-import {OneSignal} from 'react-native-onesignal';
-import {VasernDB} from '../../vasern';
+import { firebase } from '@react-native-firebase/messaging';
+import { OneSignal } from 'react-native-onesignal';
+import { VasernDB } from '../../vasern';
 
-import {err} from 'react-native-svg/lib/typescript/xml';
+import { err } from 'react-native-svg/lib/typescript/xml';
 import auth from '../../redux-store/reducers/entities/auth';
-import {patchClaimHandler} from '../../services/claimService';
-import {getGCPUrlImageHandler} from '../../services/commonService';
-import {useFocusEffect} from '@react-navigation/native';
+import { patchClaimHandler } from '../../services/claimService';
+import { getGCPUrlImageHandler } from '../../services/commonService';
+import { useFocusEffect } from '@react-navigation/native';
 import NetworkSpeed from 'react-native-network-speed';
-import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
-const HomeScreen = ({navigation}) => {
-  const {ClaimImages} = VasernDB;
-  const {isConnected} = useNetInfo();
+const HomeScreen = ({ navigation }) => {
+  const { ClaimImages } = VasernDB;
+  const { isConnected } = useNetInfo();
   const [speed, setSpeed] = useState('');
-  const [canSync,setCanSync]=useState(true);
+  const [canSync, setCanSync] = useState(true);
   const [notificationCount, setNC] = useState(0);
 
   const [imgUrl, setImgUrl] = useState('x');
@@ -82,7 +82,7 @@ const HomeScreen = ({navigation}) => {
     subdivison,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
 
-  const {typeOfClaim} = useSelector(state => state.entities.appUtil.appUtil);
+  const { typeOfClaim } = useSelector(state => state.entities.appUtil.appUtil);
 
   // console.log(authLevel=="एसडीएलसी");
   // alert("Hi")
@@ -90,7 +90,6 @@ const HomeScreen = ({navigation}) => {
     state => state.entities.auth.userInfo.profile.village,
   );
   const [vis, setVis] = useState(false);
-  const language = 'hi';
   const dispatch = useDispatch();
   const [role, setRole] = useState('FRC');
   const [val5, setVal5] = useState('');
@@ -98,18 +97,15 @@ const HomeScreen = ({navigation}) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
-  const {t, i18n} = useTranslation();
+  const { t } = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
+
   const [pendingCount, setPendingCount] = useState(0);
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
   console.log(postLevel == 'अध्यक्ष');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
 
   useEffect(() => {
     if (!password) {
@@ -121,11 +117,7 @@ const HomeScreen = ({navigation}) => {
     }
   }, []);
 
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
-
-  const {profile} = useSelector(state => state.entities.auth.userInfo);
+  const { profile } = useSelector(state => state.entities.auth.userInfo);
 
   const handleSignOut = () => {
     setVis(true);
@@ -146,8 +138,8 @@ const HomeScreen = ({navigation}) => {
       .then(res => {
         setVis(false);
 
-        ({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-        dispatch({type: 'SAVE_TOKEN', payload: null});
+        ({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1 });
+        dispatch({ type: 'SAVE_TOKEN', payload: null });
         // App Breackage Issue - To be discussed later  dispatch({type: 'CLEAR_PROFILE', payload: null});
         navigation.replace('MobilePassword');
       })
@@ -163,7 +155,7 @@ const HomeScreen = ({navigation}) => {
       authLevel: authLevel,
       postLevel: 'सदस्य',
     });
-    dispatch({type: 'ENABLE_LOADING'});
+    dispatch({ type: 'ENABLE_LOADING' });
     return viewFRCMember({
       village: village,
       authLevel: authLevel,
@@ -171,8 +163,8 @@ const HomeScreen = ({navigation}) => {
     })
       .then(async response => {
         console.log('View Members', response.data.data);
-        navigation.navigate('FRCMembers', {members: response.data.data});
-        dispatch({type: 'DISABLE_LOADING'});
+        navigation.navigate('FRCMembers', { members: response.data.data });
+        dispatch({ type: 'DISABLE_LOADING' });
         //     if (response.success) {
         //       dispatch({ type: 'VERIFY_MEMBER', payload: {} });
         //     }
@@ -182,7 +174,7 @@ const HomeScreen = ({navigation}) => {
       })
       .catch(err => {
         console.log('NETWORK', err);
-        dispatch({type: 'DISABLE_LOADING'});
+        dispatch({ type: 'DISABLE_LOADING' });
       });
   };
   // console.log(districts);
@@ -238,16 +230,15 @@ const HomeScreen = ({navigation}) => {
             // console.warn('rmv',rmv);
             console.log(response?.data.response.Location);
 
-            setPendingCount(e =>Math.max(e-1,0));
+            setPendingCount(e => Math.max(e - 1, 0));
 
             await ClaimImages.remove(key);
-
           } catch (itemError) {
             console.warn('ierr', itemError);
-          }finally{
+          } finally {
             setCanSync(true);
             break;
-            return ;
+            return;
           }
         }
       }
@@ -288,7 +279,7 @@ const HomeScreen = ({navigation}) => {
       },
     });
     // dispatch user profile
-    checkAccount({mobile: profile?.mobile}).then(data => {
+    checkAccount({ mobile: profile?.mobile }).then(data => {
       console.log(data?.data);
 
       const {
@@ -312,7 +303,6 @@ const HomeScreen = ({navigation}) => {
         ),
       ];
 
-    
       console.warn('associatedFields', associatedFields);
       console.log(associatedFields.includes('-1'));
       if (associatedFields.includes('-1') === true) {
@@ -321,7 +311,7 @@ const HomeScreen = ({navigation}) => {
         console.log('Gelocation Fine');
       }
 
-      dispatch({type: 'SAVE_PROFILE', payload: data?.data?.data});
+      dispatch({ type: 'SAVE_PROFILE', payload: data?.data?.data });
       dispatch({
         type: 'SAVE_GOVT_OFFICIALS',
         payload: data?.data?.govtOfficials,
@@ -333,8 +323,8 @@ const HomeScreen = ({navigation}) => {
       URL = `/fetch-notifications-by-village?village=${village}`;
     }
 
-    request(URL, {method: 'GET'}, true, false)
-      .then(({data}) => {
+    request(URL, { method: 'GET' }, true, false)
+      .then(({ data }) => {
         console.log('x', data?.data?.length);
         setNC(data?.data?.length);
       })
@@ -374,15 +364,20 @@ const HomeScreen = ({navigation}) => {
     alpha();
   }, []);
 
+
+  const handleLangChange = () => {
+    navigation.navigate('LangSelection')
+  }
+
   const handleDisplayLocation = () => {
-    if (authLevel === t('FRC')) {
+    if (authLevel === 'एफआरसी') {
       return [district, subdivison, tehsil, panchayat, village];
-    } else if (authLevel === t('SDLC')) {
+    } else if (authLevel === 'एसडीएलसी') {
       return [district, subdivison];
-    } else if (authLevel === t('DLC')) {
+    } else if (authLevel === 'डीएलसी') {
       return [district];
-    } else if (authLevel === t(t('SLMC'))) {
-      return [t('Jharkhand')];
+    } else if (authLevel === 'राज्य स्तरीय निगरानी समिति') {
+      return ['झारखंड'];
     } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return [district, subdivison];
     } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
@@ -392,14 +387,14 @@ const HomeScreen = ({navigation}) => {
   };
 
   const checkFromServer = (A, B, C, D, range, E, F) => {
-    if (A === t('FRC')) {
+    if (A === 'एफआरसी') {
       return [B, C, D, E, F];
-    } else if (A === t('SDLC')) {
+    } else if (A === 'एसडीएलसी') {
       return [B, C];
-    } else if (A === t('DLC')) {
+    } else if (A === 'डीएलसी') {
       return [B];
-    } else if (A === t(t('SLMC'))) {
-      return [t('Jharkhand')];
+    } else if (A === 'राज्य स्तरीय निगरानी समिति') {
+      return ['झारखंड'];
     } else if (A === 'भारसाधक  - वन विभाग (SDLC)') {
       return [B, C];
     } else if (A === 'भारसाधक  - राजस्व विभाग (SDLC)') {
@@ -413,30 +408,35 @@ const HomeScreen = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
-      <View style={{paddingHorizontal: 20}}>
+      style={styles.bg}
+    >
+      <View style={{ paddingHorizontal: 20 }}>
         {vis && (
           <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />
         )}
 
-        <TouchableOpacity style={styles.roleContainer} onPress={handleSignOut}>
+        <View style={styles.roleContainer} >
           <Text
             style={{
-              fontSize: 20,
+              fontSize: 17,
               alignSelf: 'center',
               color: '#fff',
               fontWeight: '700',
               color: 'white',
               textDecorationLine: 'underline',
-            }}>
-            {t('CFR')}
+              marginRight: 15
+            }}
+          >
+            {appTranslation.cfr}
           </Text>
 
-          <Text style={styles.roleText}>
-            
-            <FontAwesome name="user-circle-o" size={30} color="white" />{' '}
+          <Text style={styles.roleText} onPress={handleLangChange}>
+            <FontAwesome name="language" size={25} color="white" />{' '}
           </Text>
-        </TouchableOpacity>
+          <Text style={styles.roleText} onPress={handleSignOut}>
+            <FontAwesome name="user-circle-o" size={25} color="white" />{' '}
+          </Text>
+        </View>
 
         <View style={styles.header}>
           {village === '-1' ? (
@@ -471,8 +471,8 @@ const HomeScreen = ({navigation}) => {
                 {', '}
                 {t(state)} */}
                 {handleDisplayLocation().map((item, i, a) => {
-                  if (i === a.length - 1) return `${t(item)}`;
-                  else return `${t(item)}, `;
+                  if (i === a.length - 1) return item;
+                  else return `${item}, `;
                 })}
               </Text>
             </>
@@ -489,26 +489,15 @@ const HomeScreen = ({navigation}) => {
                 borderStyle: 'dashed',
                 padding: 10,
               },
-            ]}>
-            <Text style={{color: 'white', fontSize: 20}}>
-              आपके आधार कार्ड विवरण सत्यापित होने के बाद, आपकी प्रोफ़ाइल सक्रिय
-              हो जाएगी
+            ]}
+          >
+            <Text style={{ color: 'white', fontSize: 20 }}>
+              {appTranslation.profile_activation}
             </Text>
-            <Text style={{color: 'white', marginTop: 5, fontWeight: '700'}}>
-              VERIFICATION - IN-PROCESS
+            <Text style={{ color: 'white', marginTop: 5, fontWeight: '700' }}>
+              {appTranslation.verification_in_process}
             </Text>
           </View>
-        )}
-
-        {Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            text={<Text style={{fontWeight: '700'}}>अवेदन दस्तावेज़ </Text>}
-            onPress={() => {
-              navigation.navigate('DownloadPDF', {code: 'president'});
-            }}
-          />
         )}
 
         {/* Add a button to change Role */}
@@ -520,19 +509,6 @@ const HomeScreen = ({navigation}) => {
             UpdateRole();
           }}
         /> */}
-        {Boolean(authLevel == 'एफआरसी' && postLevel !== 'सदस्य') && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            // dsbled={profile?.claims?.length==0}
-            text={t('Track old claim')}
-            onPress={() => {
-              if (profile?.claims?.length === 0) {
-                Alert.alert('सूचना', t('CLAIM_NOT_APPLIED'));
-              } else navigation.navigate('PastRecordsScreen');
-            }}
-          />
-        )}
 
         {/* {Boolean(authLevel == 'एफआरसी' && postLevel === 'सदस्य') && (
           <CustomButton
@@ -571,53 +547,6 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         )} */}
-
-        {authLevel !== 'एफआरसी' && activeStatus && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            // dsbled={profile?.claims?.length==0}
-            text={'एफआरसी आवेदन स्थिति'}
-            onPress={() => {
-              console.log('ji');
-              navigation.navigate('LocationSdlc');
-            }}
-          />
-        )}
-
-        <View
-          style={{
-            backgroundColor: 'green',
-          }}></View>
-
-        {activeStatus && Boolean(authLevel !== t('SLMC')) && (
-          <CustomButton
-            style={{marginBottom: 20}}
-            button={{width: 300}}
-            onPress={() => {
-              navigation.navigate('ClaimAlertsScreen');
-              // all the alers related to claim
-              // @ TODO
-              // Notii aiotn Badge Icon
-            }}>
-            {t('claim_alerts')}
-            &nbsp;&nbsp;
-            {notificationCount !== 0 && (
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 18,
-                  padding: 5,
-                  zIndex: 199,
-                  borderRadius: 10,
-                }}>
-                {notificationCount !== undefined && `(`}
-                {notificationCount}
-                {notificationCount != undefined && `)`}
-              </Text>
-            )}
-          </CustomButton>
-        )}
       </View>
 
       {/* HELPDESK TO BE DONE IN FUTURE - 18/Nov */}
@@ -661,31 +590,102 @@ const HomeScreen = ({navigation}) => {
           }}
         /> */}
 
-      {authLevel !== 'एफआरसी' && activeStatus && (
+      
+        {authLevel !== 'एफआरसी' && activeStatus && (
+          <CustomButton
+            // style={{marginBottom: 20}}
+            button={{ width: 300 }}
+            // dsbled={profile?.claims?.length==0}
+            text={
+              <>
+                <Ionicons name="open-outline" size={20} />
+                &nbsp;
+                {appTranslation.go_to_dashboard}
+              </>
+            }
+            onPress={() => {
+              // console.log('ifr-claim');
+              navigation.navigate('WebDashboard');
+            }}
+          />
+        )}
+         {authLevel !== 'एफआरसी' && activeStatus && (
+          <CustomButton
+            // style={{marginBottom: 20}}
+            button={{ width: 300 }}
+            // dsbled={profile?.claims?.length==0}
+            text={appTranslation.frc_application_status}
+            onPress={() => {
+              navigation.navigate('LocationSdlc');
+            }}
+          />
+        )}
+        {Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
         <CustomButton
-          style={{marginBottom: 20}}
-          button={{width: 300}}
-          // dsbled={profile?.claims?.length==0}
-          text={
-            <>
-              <Ionicons name="open-outline" size={20} />
-              &nbsp;
-              {t('Go to Dashboard')}
-            </>
-          }
+          // style={{marginBottom: 20}}
+          button={{ width: 300 }}
+          text={appTranslation.application_documents}
           onPress={() => {
-            // console.log('ifr-claim');
-            navigation.navigate('WebDashboard');
+            navigation.navigate('DownloadPDF', { code: 'president' });
           }}
         />
       )}
-
+        
+       
+        
+      {Boolean(authLevel == 'एफआरसी' && postLevel !== 'सदस्य') && (
+        <CustomButton
+          // style={{marginBottom: 20}}
+          button={{ width: 300 }}
+          // dsbled={profile?.claims?.length==0}
+          text={appTranslation.track_old_claim}
+          onPress={() => {
+            if (profile?.claims?.length === 0) {
+              Alert.alert(
+                commonTranslation.notice,
+                appTranslation.claim_not_applied,
+              );
+            } else navigation.navigate('PastRecordsScreen');
+          }}
+        />
+      )}
+      {activeStatus && Boolean(authLevel !== t('SLMC')) && (
+        <CustomButton
+          // style={{marginBottom: 20}}
+          button={{ width: 300 }}
+          text={appTranslation.claim_alerts}
+          onPress={() => {
+            navigation.navigate('ClaimAlertsScreen');
+            // all the alers related to claim
+            // @ TODO
+            // Notii aiotn Badge Icon
+          }}
+        >
+          
+          &nbsp;&nbsp;
+          {notificationCount !== 0 && (
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 18,
+                padding: 5,
+                zIndex: 199,
+                borderRadius: 10,
+              }}
+            >
+              {notificationCount !== undefined && `(`}
+              {notificationCount}
+              {notificationCount != undefined && `)`}
+            </Text>
+          )}
+        </CustomButton>
+      )}
       {(postLevel === 'अध्यक्ष' || postLevel === 'सचिव') && (
         <CustomButton
-          style={{marginBottom: 20}}
-          button={{width: 300}}
+          style={{ marginBottom: 20 }}
+          button={{ width: 300 }}
           // dsbled={profile?.claims?.length==0}
-          text={t('Validate IFR Claim')}
+          text={appTranslation.validate_ifr_claim}
           onPress={() => {
             console.log('ifr-claim');
             navigation.navigate('ValidateIFRScreen');
@@ -693,29 +693,38 @@ const HomeScreen = ({navigation}) => {
         />
       )}
 
+      
+
+      
+
+      
+
+      
+      
+
       <Pressable
-        onPress={() => alert('OK')}
+        onPress={() => alert(commonTranslation.ok)}
         style={{
           flexDirection: 'row',
           marginRight: 10,
           justifyContent: 'center',
-          marginTop: 10,
-        }}>
-        <Text style={{fontSize: 22}}>
+          marginBottom: 40,
+          
+        }}
+      >
+        <Text style={{ fontSize: 22 }}>
           <MaterialCommunityIcons
             name="web-sync"
             size={22}
             color={pendingCount === 0 ? 'white' : 'yellow'}
           />
-         
         </Text>
         <Text
           style={{
             color: pendingCount === 0 ? 'white' : 'yellow',
             fontSize: 16,
-          }}>{` ${
-          pendingCount === 0 ? '' : '(' + pendingCount + ')'
-        }`}</Text>
+          }}
+        >{` ${pendingCount === 0 ? '' : '(' + pendingCount + ')'}`}</Text>
       </Pressable>
       {/* <Text style={{flex: 1, textAlign: 'center'}}>{pendingCount}</Text> */}
     </ImageBackground>
@@ -748,7 +757,8 @@ const styles = StyleSheet.create({
   roleText: {
     fontSize: 20,
     fontWeight: 'bold',
-    margin: '5%',
+    marginVertical: '5%',
+    marginRight: 5,
     color: '#480E09',
   },
   inputGramSabha: {
@@ -837,9 +847,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    paddingTop: '15%',
     marginHorizontal: '10%',
-    marginBottom: '10%',
+    marginTop: '5%',
+    marginBottom: '15%',
   },
   headerText: {
     fontSize: 22,
@@ -850,6 +860,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-
-

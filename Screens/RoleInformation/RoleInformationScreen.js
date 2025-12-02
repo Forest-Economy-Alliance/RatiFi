@@ -37,9 +37,8 @@ const RoleInformationScreen = ({navigation}) => {
 
   const [err, setErr] = useState(0);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
 
   const ROLES = [
     {label: 'FRC', value: '1'},
@@ -71,16 +70,8 @@ const RoleInformationScreen = ({navigation}) => {
     {label: 'Government ID', value: '2'},
   ];
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
+  
+  
 
   const renderItem = item => {
     return (

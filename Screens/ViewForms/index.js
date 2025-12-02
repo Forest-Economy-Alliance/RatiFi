@@ -78,18 +78,11 @@ const ViewForms = ({navigation}) => {
 
   const [curLen, setCurLen] = useState(0);
 
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
-
+ 
   const {
     name,
     panchayat,
@@ -151,7 +144,6 @@ const ViewForms = ({navigation}) => {
 
   useEffect(() => {
     if (ok === false) dispatch({type: 'ENABLE_LOADING'});
-    // changeLanguage(language);
     // fetch Details on basis of applicaton
     // alert(profile?.claims[3])
 

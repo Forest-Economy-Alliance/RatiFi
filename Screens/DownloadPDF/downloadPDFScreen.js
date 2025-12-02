@@ -77,47 +77,18 @@ const DownloadPDFScreen = ({navigation}) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
   const route = useRoute();
-
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
-  const changeLanguage = value => {
-    i18n
-      .changeLanguage(value)
-      .then(() => setCurrentLanguage(value))
-      .catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    changeLanguage(language);
-  }, []);
 
   const goBack = () => {
     navigation.goBack();
   };
 
-  // const imgUrls = {
-  //   ambepadar:
-  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324247/Map1_oqd9eg.png',
-  //   dayaltung:
-  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324264/Map2_iq3jyc.png',
-  //   telarai:
-  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324257/Map3_h8wi6y.png',
-  //   pedawara:
-  //     'https://res.cloudinary.com/df2q7cryi/image/upload/v1655324266/Map4_f5zkou.png',
-  // };
-
-  const data1 = [
-    {
-      label: 'AADHAR',
-      value: '1',
-    },
-    {
-      label: 'GOVERNMENT ID',
-      value: '2',
-    },
-  ];
+  
 
   const states = [
     {
@@ -1001,11 +972,39 @@ const DownloadPDFScreen = ({navigation}) => {
 
   const {profile} = useSelector(state => state.entities.auth.userInfo);
 
-  const villagesData = states[0].Districts[0].Tehsils[0].Villages;
-
   const handleSignOut = () => {
     setVis(true);
   };
+
+
+
+  const renderDocumentTypeName = (hindiName)=>{
+    const hindiNametoKeyMapping = {
+      "आवेदन दस्तावेज": "application_documents",
+      "प्रपत्र क": "form_a",
+      "प्रपत्र ख ग": "form_b_c",
+      "खतियान भाग दो": "khatian_part_two",
+      "जंगल का नक्शा": "forest_map",
+    }
+
+
+
+    const key = hindiNametoKeyMapping[hindiName];
+    if(key==="application_documents"){
+      return appTranslation.application_documents;
+    } else if(key==="form_a"){
+      return appTranslation.form_a;
+    } else if(key==="form_b_c"){
+      return appTranslation.form_b_c;
+    } else if(key==="khatian_part_two"){
+      return appTranslation.khatian_part_two;
+    } else if(key==="forest_map"){
+      return appTranslation.forest_map;
+    } else {
+      return appTranslation.other_documents;
+    }
+    
+  }
 
   const fetchData = async () => {
     await firebase.messaging().registerDeviceForRemoteMessages();
@@ -2777,7 +2776,7 @@ const DownloadPDFScreen = ({navigation}) => {
         <View style={{marginTop: 10, marginBottom: 30, marginLeft: 10}}>
           <Pressable onPress={goBack}>
             <Text style={{fontSize: 18}}>
-              <FontAwesome name="arrow-left" size={18} /> {t('Go Back')}
+              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -2794,7 +2793,7 @@ const DownloadPDFScreen = ({navigation}) => {
                     textAlign: 'center',
                   }}>
                   {' '}
-                  गांव - {vil}
+                  {aboundaryTranslation.village} - {vil}
                 </Text>
 
                 {/* <Dropdown
@@ -2855,7 +2854,7 @@ const DownloadPDFScreen = ({navigation}) => {
                   }}
                   button={{width: 200, marginTop: 20}}
                   dsbled={vil ? false : true}>
-                  {t('download application document')}
+                  {appTranslation.download_application_document}
                 </CustomButton>
               </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
@@ -2894,15 +2893,16 @@ const DownloadPDFScreen = ({navigation}) => {
             }catch(error){
               dispatch({type: 'DISABLE_LOADING'});
               setLoading(false);
-              ToastAndroid.show('कृपया अपने इंटरनेट कनेक्शन की जाँच करें',ToastAndroid.BOTTOM)
+              ToastAndroid.show(appTranslation.check_your_internet_connection,ToastAndroid.BOTTOM)
 
             }
             }}>
-            {t('download application document')}
-          </CustomButton>
+              {appTranslation.download_application_document}
+            </CustomButton>
         )}
         {printDocs?.map(item => {
           const id = "खतियान भाग दो";
+          console.log("ITEM",item);
           if (item?.name === id) {
             return (
               <View
@@ -2916,7 +2916,7 @@ const DownloadPDFScreen = ({navigation}) => {
                 <View style={{paddingVertical: 5}}>
                   <Text
                     style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
-                    {item?.name}
+                    {renderDocumentTypeName(item?.name)}
                   </Text>
                 </View>
                 <View>
@@ -2944,7 +2944,7 @@ const DownloadPDFScreen = ({navigation}) => {
                 <View style={{paddingVertical: 5}}>
                   <Text
                     style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
-                    {item?.name}
+                    {renderDocumentTypeName(item?.name)}
                   </Text>
                 </View>
                 <View>

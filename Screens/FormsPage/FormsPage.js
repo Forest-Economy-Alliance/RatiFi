@@ -60,6 +60,7 @@ const FormsPage = ({navigation}) => {
   const [vName, setVName] = useState('');
   const carouselRef = useRef(null);
   const {t} = useTranslation();
+  const commonTranslation = t('common');
   const [vis, setVis] = useState(false);
   const [progress, setProgress] = useState(0);
   const toast = useToast();
@@ -566,7 +567,7 @@ text={t('Track old claim')}
               color="#480E09"
               style={{alignSelf: 'center', marginBottom: 10}}
             />
-            <Text>{t('Please wait')}...</Text>
+            <Text>{commonTranslation.please_wait}...</Text>
           </View>
         </DownloadLoader>
       ) : null}

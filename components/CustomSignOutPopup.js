@@ -20,6 +20,11 @@ import {useTranslation} from 'react-i18next';
 
 export default function CustomSignOutPopup(props) {
   const {t} = useTranslation();
+  const authTranslation = t('auth');
+  const appTranslation = t('app');
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
   if (!props.vis) {
     return null;
   }
@@ -42,12 +47,11 @@ export default function CustomSignOutPopup(props) {
           <View style={{flexDirection: 'row'}}>
             <MaterialCommunityIcons name="face-agent" size={30} color="black" />
             <Text style={{color: 'black', fontSize: 18}}>
-              {' '}
-              सहायता केंद्र - {govtOfficials?.helpline}{' '}
+              {appTranslation.help_center} - {govtOfficials?.helpline}{' '}
             </Text>
           </View>
 
-          {Boolean(profile?.authLevel === t('FRC') || profile?.authLevel===t('SDLC')) && (
+          {Boolean(profile?.authLevel === "एफआरसी" || profile?.authLevel==="एसडीएलसी") && (
             <View>
               <View style={{marginVertical: 10}}>
                 <View
@@ -57,13 +61,13 @@ export default function CustomSignOutPopup(props) {
                     marginVertical: 5,
                   }}>
                   <Text style={{color: 'black', marginRight: 5}}>
-                    {t('Subdivisonal Officer')}
+                    {roleTranslation.subdivisonal_officer}
                     {/* {JSON.stringify(govtOfficials)} */}
                   </Text>
                   <Text style={{color: 'green'}}>
                     {govtOfficials?.sdlcChairman
                       ? govtOfficials?.sdlcChairman?.name
-                      : 'पंजीकृत नहीं है'}
+                      : appTranslation.not_registered}
                   </Text>
                 </View>
 
@@ -74,12 +78,12 @@ export default function CustomSignOutPopup(props) {
                     marginVertical: 5,
                   }}>
                   <Text style={{color: 'black', marginRight: 5}}>
-                    {t('Forest Range Officer')}
+                    {roleTranslation.forest_range_officer}
                   </Text>
                   <Text style={{color: 'green'}}>
                     {govtOfficials?.rangeOfficer
                       ? govtOfficials?.rangeOfficer?.name
-                      : 'पंजीकृत नहीं है'}
+                      : appTranslation.not_registered}
                   </Text>
                 </View>
 
@@ -90,12 +94,12 @@ export default function CustomSignOutPopup(props) {
                     marginVertical: 5,
                   }}>
                   <Text style={{color: 'black', marginRight: 5}}>
-                    {t('Circle Officer')}
+                    {roleTranslation.circle_officer}
                   </Text>
                   <Text style={{color: 'green'}}>
                     {govtOfficials?.circleOfficer
                       ? govtOfficials?.circleOfficer?.name
-                      : 'पंजीकृत नहीं है'}
+                      : appTranslation.not_registered}
                   </Text>
                 </View>
               </View>
@@ -115,7 +119,7 @@ export default function CustomSignOutPopup(props) {
                 borderRadius: 12,
                 color: 'black',
               }}>
-              {i18n.t('Are you sure, you want to sign out?')}
+              {appTranslation.sign_out_confirmation}
             </Text>
           </View>
           <View
@@ -134,7 +138,7 @@ export default function CustomSignOutPopup(props) {
                   paddingHorizontal: 10,
                   borderRadius: 10,
                 }}>
-                {t('SIGN_OUT')}
+                {authTranslation.sign_out}
               </Text>
             </TouchableOpacity>
 
@@ -147,7 +151,7 @@ export default function CustomSignOutPopup(props) {
                   paddingHorizontal: 10,
                   borderRadius: 10,
                 }}>
-                {t('NO')}
+                {commonTranslation.no}
               </Text>
             </TouchableOpacity>
           </View>

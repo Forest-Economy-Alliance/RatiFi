@@ -32,6 +32,10 @@ export default function ValidateIFRScreen() {
   } = useSelector(state => state.entities.auth.userInfo?.profile);
 
   const {t} = useTranslation();
+  const appTranslation = t('app', {village: village});
+  const commonTranslation = t('common');
+  const roleTranslation = t('role');
+  const aboundaryTranslation = t('aboundary');
   const [claims, setClaims] = useState([]);
 
   const dispatch=useDispatch();
@@ -71,7 +75,7 @@ export default function ValidateIFRScreen() {
       <ScrollView>
         <View style={{padding: 10}}>
           <Text style={{fontSize: 20, marginBottom: 20,fontWeight:'700'}}>
-            {t('IFR')} दावे ({village})
+            {appTranslation.ifr_claims} ({village})
           </Text>
 
           {claims?.map(
@@ -87,9 +91,9 @@ export default function ValidateIFRScreen() {
                   paddingHorizontal: 5,
                 }}>
                 <View style={{padding: 10}}>
-                  <Text style={{fontSize: 18}}>दावा दावा : {item?.IFRclaims[0]?.applicationNumber}</Text>
-                  <Text style={{fontSize: 18}}>नाम : {item?.name}</Text>
-                  <Text style={{fontSize: 18}}>फ़ोन : {item?.mobile}</Text>
+                  <Text style={{fontSize: 18}}>{appTranslation.claims} : {item?.IFRclaims[0]?.applicationNumber}</Text>
+                  <Text style={{fontSize: 18}}>{appTranslation.name} : {item?.name}</Text>
+                  <Text style={{fontSize: 18}}>{appTranslation.mobile_number} : {item?.mobile}</Text>
                 </View>
 
                 {Boolean(item?.IFRclaims[0]?.boundary?.length!==0) && (
@@ -99,7 +103,7 @@ export default function ValidateIFRScreen() {
                         Linking.openURL(item?.IFRclaims[0]?.courtDocuments[7]?.storageUrl);
                       }}
                       button={{width: '100%', marginTop: 5}}>
-                      <Text>नक्शा देखे</Text>
+                      <Text>{appTranslation.view_map}</Text>
                     </CustomButton>
                   </View>
                 )}
@@ -107,7 +111,7 @@ export default function ValidateIFRScreen() {
             ),
           )}
 
-          {claims?.length===0 && <Text style={{fontSize:18}}>आपके {t('village')} में ऐप का उपयोग करके अभी तक कोई व्यक्तिगत दावा नहीं भरा गया है</Text>}
+          {claims?.length===0 && <Text style={{fontSize:18}}>{appTranslation.no_claims_found}</Text>}
         </View>
       </ScrollView>
     </ImageBackground>

@@ -50,7 +50,6 @@ const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
 
     const vil = useSelector(state => state.entities.auth.userInfo.profile.village);
     const [vis, setVis] = useState(false);
-    const {language} = useSelector(state => state.entities.appUtil.appUtil);
 
     const dispatch = useDispatch();
     const [role, setRole] = useState('FRC');
@@ -59,21 +58,13 @@ const [emptyMemberMessage,setEmptyMemberMessage]=useState('');
     const [gramSabha, setGramSabha] = useState('');
     const [pressed, setPressed] = useState(false);
     const [villages, setVillages] = useState(AllVillages);
-    const { t, i18n } = useTranslation();
+    const { t} = useTranslation();
 
     const [currentLanguage, setCurrentLanguage] = useState('en');
      console.log(postLevel=="अध्यक्ष")
 
-    const changeLanguage = value => {
-        i18n
-            .changeLanguage(value)
-            .then(() => setCurrentLanguage(value))
-            .catch(err => console.log(err));
-    };
 
-    useEffect(() => {
-        changeLanguage(language);
-    }, []);
+   
 
 
     useEffect(()=>{

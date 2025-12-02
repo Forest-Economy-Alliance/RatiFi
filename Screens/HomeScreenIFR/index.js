@@ -79,7 +79,6 @@ import { VasernDB } from '../../vasern';
     );
     const [canSync,setCanSync]=useState(true);
     const [vis, setVis] = useState(false);
-    const language = 'hi';
     const dispatch = useDispatch();
     const [role, setRole] = useState('FRC');
     const [val5, setVal5] = useState('');
@@ -87,21 +86,11 @@ import { VasernDB } from '../../vasern';
     const [gramSabha, setGramSabha] = useState('');
     const [pressed, setPressed] = useState(false);
     const [villages, setVillages] = useState(AllVillages);
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
   
-    const [currentLanguage, setCurrentLanguage] = useState('en');
     console.log(postLevel == 'अध्यक्ष');
   
-    const changeLanguage = value => {
-      i18n
-        .changeLanguage(value)
-        .then(() => setCurrentLanguage(value))
-        .catch(err => console.log(err));
-    };
   
-    useEffect(() => {
-      changeLanguage(language);
-    }, []);
   
     const {profile} = useSelector(state => state.entities.auth.userInfo);
   
