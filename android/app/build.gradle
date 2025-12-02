@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ratifi"
+    namespace "com.ratifi.apfra"
     defaultConfig {
-        applicationId "com.ratifi"
+        applicationId "com.ratifi.apfra"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
@@ -93,6 +93,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('RATIFI_RELEASE_STORE_FILE')) {
+                storeFile file(RATIFI_RELEASE_STORE_FILE)
+                storePassword RATIFI_RELEASE_STORE_PASSWORD
+                keyAlias RATIFI_RELEASE_KEY_ALIAS
+                keyPassword RATIFI_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -101,7 +109,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -139,3 +147,22 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 // Apply the Google services plugin so the native Firebase SDK is configured
 // with the values from android/app/google-services.json
 apply plugin: 'com.google.gms.google-services'
+
+// Fix autolinking package name before compilation
+task fixAutolinkingPackageName {
+    doLast {
+        def autolinkingFile = file("${buildDir}/generated/autolinking/src/main/java/com/facebook/react/ReactNativeApplicationEntryPoint.java")
+        if (autolinkingFile.exists()) {
+            def content = autolinkingFile.text
+            content = content.replaceAll('com\\.ratifi\\.BuildConfig', 'com.ratifi.apfra.BuildConfig')
+            autolinkingFile.text = content
+            println "Fixed autolinking package name to com.ratifi.apfra"
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'compileReleaseJavaWithJavac' || task.name == 'compileDebugJavaWithJavac') {
+        task.dependsOn fixAutolinkingPackageName
+    }
+}

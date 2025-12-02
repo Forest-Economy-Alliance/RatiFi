@@ -1,4 +1,4 @@
-package com.ratifi
+package com.ratifi.apfra
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

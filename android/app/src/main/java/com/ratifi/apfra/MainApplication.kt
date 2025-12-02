@@ -1,4 +1,4 @@
-package com.ratifi
+package com.ratifi.apfra
 
 import android.app.Application
 import com.facebook.react.PackageList

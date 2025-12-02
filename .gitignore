@@ -43,6 +43,10 @@ local.properties
 /android/.gradle/
 *.apk
 
+# Release signing
+*.keystore
+!debug.keystore
+android/gradle.properties
 
 # Node
 node_modules
