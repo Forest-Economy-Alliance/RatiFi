@@ -16,25 +16,25 @@ import {
   ToastAndroid,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useTranslation} from 'react-i18next';
-import {useRoute} from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
 import '../../assets/i18n/i18n';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 // import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {AllVillages} from '../../constants/Villages';
+import { useDispatch, useSelector } from 'react-redux';
+import { AllVillages } from '../../constants/Villages';
 import CustomButton from '../../components/CustomButton';
 import Dropdown from '../../components/CustomDropdown';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
-import {BASE_URL, request} from '../../services/APICentral';
+import { BASE_URL, request } from '../../services/APICentral';
 
 import HI from '../../assets/i18n/hi.json';
-import {getDeviceHash} from '../../utils/DeviceUtil';
-import {logoutHandler} from '../../services/authService';
+import { getDeviceHash } from '../../utils/DeviceUtil';
+import { logoutHandler } from '../../services/authService';
 import firebase from '@react-native-firebase/app';
 import WebView from 'react-native-webview';
 import Pdf from 'react-native-pdf';
@@ -46,20 +46,10 @@ import {
 } from '../../services/claimService';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const data = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-  {label: 'Item 4', value: '4'},
-  {label: 'Item 5', value: '5'},
-  {label: 'Item 6', value: '6'},
-  {label: 'Item 7', value: '7'},
-  {label: 'Item 8', value: '8'},
-];
 
-const DownloadPDFScreen = ({navigation}) => {
+const DownloadPDFScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const {language, typeOfClaim} = useSelector(
+  const { language, typeOfClaim } = useSelector(
     state => state.entities.appUtil.appUtil,
   );
   const [imgUrl, setImgUrl] = useState('x');
@@ -77,7 +67,7 @@ const DownloadPDFScreen = ({navigation}) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const appTranslation = t('app');
   const commonTranslation = t('common');
   const roleTranslation = t('role');
@@ -87,8 +77,6 @@ const DownloadPDFScreen = ({navigation}) => {
   const goBack = () => {
     navigation.goBack();
   };
-
-  
 
   const states = [
     {
@@ -716,7 +704,7 @@ const DownloadPDFScreen = ({navigation}) => {
                   label: t('Hutubada'),
                   value: '27',
                 },
-                {label: t('Turupdega'), value: '27'},
+                { label: t('Turupdega'), value: '27' },
                 {
                   label: t('Barbera'),
                   value: '27',
@@ -970,41 +958,36 @@ const DownloadPDFScreen = ({navigation}) => {
     },
   ];
 
-  const {profile} = useSelector(state => state.entities.auth.userInfo);
+  const { profile } = useSelector(state => state.entities.auth.userInfo);
 
   const handleSignOut = () => {
     setVis(true);
   };
 
-
-
-  const renderDocumentTypeName = (hindiName)=>{
+  const renderDocumentTypeName = hindiName => {
     const hindiNametoKeyMapping = {
-      "आवेदन दस्तावेज": "application_documents",
-      "प्रपत्र क": "form_a",
-      "प्रपत्र ख ग": "form_b_c",
-      "खतियान भाग दो": "khatian_part_two",
-      "जंगल का नक्शा": "forest_map",
-    }
-
-
+      'आवेदन दस्तावेज': 'application_documents',
+      'प्रपत्र क': 'form_a',
+      'प्रपत्र ख ग': 'form_b_c',
+      'खतियान भाग दो': 'khatian_part_two',
+      'जंगल का नक्शा': 'forest_map',
+    };
 
     const key = hindiNametoKeyMapping[hindiName];
-    if(key==="application_documents"){
+    if (key === 'application_documents') {
       return appTranslation.application_documents;
-    } else if(key==="form_a"){
+    } else if (key === 'form_a') {
       return appTranslation.form_a;
-    } else if(key==="form_b_c"){
+    } else if (key === 'form_b_c') {
       return appTranslation.form_b_c;
-    } else if(key==="khatian_part_two"){
+    } else if (key === 'khatian_part_two') {
       return appTranslation.khatian_part_two;
-    } else if(key==="forest_map"){
+    } else if (key === 'forest_map') {
       return appTranslation.forest_map;
     } else {
       return appTranslation.other_documents;
     }
-    
-  }
+  };
 
   const fetchData = async () => {
     await firebase.messaging().registerDeviceForRemoteMessages();
@@ -1020,8 +1003,8 @@ const DownloadPDFScreen = ({navigation}) => {
     })
       .then(res => {
         setVis(false);
-        dispatch({type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1});
-        dispatch({type: 'SAVE_TOKEN', payload: null});
+        dispatch({ type: 'UPDATE_REGISTRATION_SCREEN_CODE', payload: 1 });
+        dispatch({ type: 'SAVE_TOKEN', payload: null });
         navigation.replace('MobilePassword');
       })
       .catch(error => {
@@ -2771,12 +2754,14 @@ const DownloadPDFScreen = ({navigation}) => {
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
-      <ScrollView style={{paddingHorizontal: 20}}>
-        <View style={{marginTop: 10, marginBottom: 30, marginLeft: 10}}>
+      style={styles.bg}
+    >
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        <View style={{ marginTop: 10, marginBottom: 30, marginLeft: 10 }}>
           <Pressable onPress={goBack}>
-            <Text style={{fontSize: 18}}>
-              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
+            <Text style={{ fontSize: 18 }}>
+              <FontAwesome name="arrow-left" size={18} />{' '}
+              {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -2789,42 +2774,51 @@ const DownloadPDFScreen = ({navigation}) => {
                   style={{
                     paddingHorizontal: 40,
                     color: 'white',
-                    fontSize: 20,
+                    fontSize: 18,
                     textAlign: 'center',
-                  }}>
+                  }}
+                >
                   {' '}
                   {aboundaryTranslation.village} - {vil}
                 </Text>
-
-                {/* <Dropdown
-          downloadPDFScreenFix={setVal5}
-          visible={true}
-          data={vData}
-          formik={formik} 
-          variable={'type'}
-        />
-        <Text>{vil}</Text> */}
 
                 <CustomButton
                   onPress={async () => {
                     setPressed(true);
                     try {
-                      // fetch image
-                      // await getDeviceHash();
-                      // const map_name=getEnglish(val5);
                       setLoading(true);
-                      dispatch({type: 'ENABLE_LOADING'});
+                      dispatch({ type: 'ENABLE_LOADING' });
 
-                      const rr = await request(`/get-documents?vName=${vil}`);
+                      // const rr = await request(`/get-documents?vName=${vil}`);
+                      // if (rr?.data?.isMapAvailable === false) {
+                      //   setImgUrl('x');
+                      // }
+                      // console.log(rr?.data?.data);
 
-                      console.log(rr.data?.data);
-                      // alert(JSON.stringify(rr.data))
+                      const dummyDocs = [
+                        {
+                          name: 'आवेदन दस्तावेज',
+                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/CFR+Forms_eng_translated.pdf',
+                        },
+                        {
+                          name: 'प्रपत्र क',
+                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र क.pdf',
+                        },
+                        {
+                          name: 'प्रपत्र ख ग',
+                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र ख ग.pdf',
+                        },
+                        {
+                          name: 'खतियान भाग दो',
+                          path: '',
+                        },
+                        {
+                          name: 'जंगल का नक्शा',
+                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र ख ग.pdf',
+                        },
+                      ];
+                      setPrintDocs(dummyDocs);
 
-                      if (rr?.data?.isMapAvailable === false) {
-                        setImgUrl('x');
-                      }
-                      console.log(rr?.data?.data);
-                      setPrintDocs(rr?.data?.data);
                       console.log('owner id', profile._id.toString());
 
                       if (profile?.claims?.length === 0) {
@@ -2843,17 +2837,18 @@ const DownloadPDFScreen = ({navigation}) => {
                         console.log('Already Applied');
                       }
 
-                      dispatch({type: 'DISABLE_LOADING'});
+                      dispatch({ type: 'DISABLE_LOADING' });
                       setLoading(false);
                       return;
                     } catch (error) {
                       console.log(error);
                     } finally {
-                      dispatch({type: 'DISABLE_LOADING'});
+                      dispatch({ type: 'DISABLE_LOADING' });
                     }
                   }}
-                  button={{width: 200, marginTop: 20}}
-                  dsbled={vil ? false : true}>
+                  button={{ maxWidth: 300, marginTop: 20 }}
+                  dsbled={vil ? false : true}
+                >
                   {appTranslation.download_application_document}
                 </CustomButton>
               </KeyboardAvoidingView>
@@ -2861,48 +2856,52 @@ const DownloadPDFScreen = ({navigation}) => {
           </ScrollView>
         ) : (
           <CustomButton
-            button={{width: 200, marginTop: 20}}
+            button={{ width: 200, marginTop: 20 }}
             onPress={async () => {
               setLoading(true);
-              dispatch({type: 'ENABLE_LOADING'});
+              dispatch({ type: 'ENABLE_LOADING' });
               try {
-              const rr = await request(`/get-ifr-documents`);
-              console.log(rr.data?.data);
+                const rr = await request(`/get-ifr-documents`);
+                console.log(rr.data?.data);
 
-              setPrintDocs(rr.data?.data);
-              console.log('owner id', profile._id.toString());
+                setPrintDocs(rr.data?.data);
+                console.log('owner id', profile._id.toString());
 
-              if (profile?.IFRclaims?.length === 0) {
-                // first download then only
-                const rsponse = await postIFRClaimHandler({
-                  ownerId: profile._id.toString(),
-                });
+                if (profile?.IFRclaims?.length === 0) {
+                  // first download then only
+                  const rsponse = await postIFRClaimHandler({
+                    ownerId: profile._id.toString(),
+                  });
 
-                console.log('XXXX', rsponse.data.data);
+                  console.log('XXXX', rsponse.data.data);
 
-                dispatch({
-                  type: 'SAVE_PROFILE',
-                  payload: rsponse?.data?.data,
-                });
-              } else {
-                console.log('Already Applied');
+                  dispatch({
+                    type: 'SAVE_PROFILE',
+                    payload: rsponse?.data?.data,
+                  });
+                } else {
+                  console.log('Already Applied');
+                }
+                dispatch({ type: 'DISABLE_LOADING' });
+                setLoading(false);
+                return;
+              } catch (error) {
+                dispatch({ type: 'DISABLE_LOADING' });
+                setLoading(false);
+                ToastAndroid.show(
+                  appTranslation.check_your_internet_connection,
+                  ToastAndroid.BOTTOM,
+                );
               }
-              dispatch({type: 'DISABLE_LOADING'});
-              setLoading(false);
-              return;
-            }catch(error){
-              dispatch({type: 'DISABLE_LOADING'});
-              setLoading(false);
-              ToastAndroid.show(appTranslation.check_your_internet_connection,ToastAndroid.BOTTOM)
-
-            }
-            }}>
-              {appTranslation.download_application_document}
-            </CustomButton>
+            }}
+          >
+            {appTranslation.download_application_document}
+          </CustomButton>
         )}
+
         {printDocs?.map(item => {
-          const id = "खतियान भाग दो";
-          console.log("ITEM",item);
+          const id = 'खतियान भाग दो';
+          console.log('ITEM', item);
           if (item?.name === id) {
             return (
               <View
@@ -2912,10 +2911,12 @@ const DownloadPDFScreen = ({navigation}) => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingVertical: 20,
-                }}>
-                <View style={{paddingVertical: 5}}>
+                }}
+              >
+                <View style={{ paddingVertical: 5 , flex: 1}}>
                   <Text
-                    style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
+                    style={{ fontSize: 18, color: '#fff', fontWeight: '700' }}
+                  >
                     {renderDocumentTypeName(item?.name)}
                   </Text>
                 </View>
@@ -2923,9 +2924,9 @@ const DownloadPDFScreen = ({navigation}) => {
                   <CustomButton
                     onPress={() => {
                       navigation.navigate('RORWebView');
-                     
                     }}
-                    button={{width: '100%', paddingVertical: 10}}>
+                    button={{ width: '100%', paddingVertical: 10 }}
+                  >
                     <MaterialCommunityIcons name="cloud-search" size={28} />
                   </CustomButton>
                 </View>
@@ -2934,16 +2935,18 @@ const DownloadPDFScreen = ({navigation}) => {
           } else {
             return (
               <View
-                key={`pd-${item?.path}`}
+                key={`pd-${item?.name}`}
                 style={{
                   borderBottomWidth: 1,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingVertical: 20,
-                }}>
-                <View style={{paddingVertical: 5}}>
+                }}
+              >
+                <View style={{ paddingVertical: 5 , flex: 1}}>
                   <Text
-                    style={{fontSize: 18, color: '#fff', fontWeight: '700'}}>
+                    style={{ fontSize: 18, color: '#fff', fontWeight: '700' }}
+                  >
                     {renderDocumentTypeName(item?.name)}
                   </Text>
                 </View>
@@ -2952,7 +2955,8 @@ const DownloadPDFScreen = ({navigation}) => {
                     onPress={() => {
                       Linking.openURL(item?.path);
                     }}
-                    button={{width: '100%', paddingVertical: 10}}>
+                    button={{ width: '100%', paddingVertical: 10 }}
+                  >
                     <MaterialCommunityIcons name="download-box" size={28} />
                   </CustomButton>
                 </View>

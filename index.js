@@ -6,8 +6,6 @@ import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import './assets/i18n/i18n'; // Initialize i18n before app starts
-import firebase from '@react-native-firebase/app';
-import messaging from '@react-native-firebase/messaging';
 import RNFS, {PicturesDirectoryPath} from 'react-native-fs';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -293,14 +291,6 @@ LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
 ]);
 
-// Register background handler - moved after Firebase initialization
-if (firebase.apps.length > 0) {
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
-  });
-}
+// Firebase messaging is initialized in App.js
 
-// export queue and worker
-// export default queue;
-// export { Worker };
 AppRegistry.registerComponent(appName, () => App);

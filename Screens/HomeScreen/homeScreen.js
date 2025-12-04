@@ -418,7 +418,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.roleContainer} >
           <Text
             style={{
-              fontSize: 17,
+              fontSize: 14,
               alignSelf: 'center',
               color: '#fff',
               fontWeight: '700',
@@ -431,10 +431,10 @@ const HomeScreen = ({ navigation }) => {
           </Text>
 
           <Text style={styles.roleText} onPress={handleLangChange}>
-            <FontAwesome name="language" size={25} color="white" />{' '}
+            <FontAwesome name="language" size={20} color="white" />{' '}
           </Text>
           <Text style={styles.roleText} onPress={handleSignOut}>
-            <FontAwesome name="user-circle-o" size={25} color="white" />{' '}
+            <FontAwesome name="user-circle-o" size={20} color="white" />{' '}
           </Text>
         </View>
 
@@ -852,7 +852,7 @@ const styles = StyleSheet.create({
     marginBottom: '15%',
   },
   headerText: {
-    fontSize: 22,
+    fontSize: 16,
     color: '#FFFFFF',
   },
   subheaderText: {

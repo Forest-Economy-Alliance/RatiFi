@@ -49,9 +49,9 @@ const ClaimTypeSelectionScreen = ({ navigation }) => {
     console.log('ooooo->', route?.params?.isMember);
     console.log('params->', route?.params);
     if (Boolean(authLevel && authLevel !== 'एफआरसी' && authLevel !== '-1')) {
-      setIsUpperLevel(true); // instead setUpperLevel for all so that ifr is disabled in AP FRA.
+      // setIsUpperLevel(true); // instead setUpperLevel for all so that ifr is disabled in AP FRA.
     }
-    // setIsUpperLevel(true);
+    setIsUpperLevel(true);
   }, []);
 
   const claimTypes = [

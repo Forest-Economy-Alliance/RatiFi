@@ -49,53 +49,60 @@ LogBox.ignoreLogs([
 function App() {
   const netInfo = useNetInfo();
 
+  // Set up Firebase messaging handlers
   useEffect(() => {
-    // Wait for Firebase to initialize before setting up messaging
-    if (firebase.apps.length === 0) {
-      console.warn('Firebase not initialized yet');
-      return;
-    }
+    let unsubscribe;
+    
+    const setupMessaging = async () => {
+      try {
+        // Give Firebase time to auto-initialize from google-services.json
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Set up foreground message handler
+        unsubscribe = messaging().onMessage(async remoteMessage => {
+          try {
+            await notifee.requestPermission();
+            const channelId = await notifee.createChannel({
+              id: 'default',
+              name: 'Default Channel',
+            });
+            await notifee.displayNotification({
+              title: 'Claim Filing Alert',
+              body: 'SDLC has updated a comment in Claim - A107',
+              android: {
+                channelId,
+                pressAction: {
+                  id: 'default',
+                },
+              },
+            });
+          } catch (error) {
+            console.error('Error displaying notification:', error);
+          }
+        });
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        // Set up background message handler
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+          console.log('Message handled in the background!', remoteMessage);
+        });
 
-      // Request permissions (required for iOS)
-      await notifee.requestPermission();
+        // Register device and get FCM token
+        await messaging().registerDeviceForRemoteMessages();
+        const fcmToken = await messaging().getToken();
+        console.log('FCM Token:', fcmToken);
+        
+      } catch (error) {
+        console.error('Firebase messaging setup error:', error);
+      }
+    };
 
-      // Create a channel (required for Android)
-      const channelId = await notifee.createChannel({
-        id: 'default',
-        name: 'Default Channel',
-      });
+    setupMessaging();
 
-      // Display a notification
-      await notifee.displayNotification({
-        title: 'Claim Filing Alert',
-        body: 'SDLC has updated a comment in Claim - A107',
-        android: {
-          channelId,
-          // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-          // pressAction is needed if you want the notification to open the app when pressed
-          pressAction: {
-            id: 'default',
-          },
-        },
-      });
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const fetchData = async () => {
-    // Use the messaging module (not the app namespace) for FCM operations
-    await messaging().registerDeviceForRemoteMessages();
-
-    const fcmToken = await messaging().getToken();
-    console.log('fcm', fcmToken);
-  };
-
-  useEffect(() => {
-    fetchData();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const formatSpeed = sp => {
