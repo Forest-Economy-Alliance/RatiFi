@@ -50,7 +50,7 @@ import { BASE_URL } from '../../services/APICentral';
 import { useRoute } from '@react-navigation/native';
 import { postClaimHandler, postIFRClaimHandler } from '../../services/claimService';
 import { logoutHandler } from '../../services/authService';
-import { firebase } from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 const BG_IMG_PATH = require('../../assets/images/background.png');
     
 

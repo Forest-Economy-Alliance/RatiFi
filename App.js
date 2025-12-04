@@ -50,6 +50,12 @@ function App() {
   const netInfo = useNetInfo();
 
   useEffect(() => {
+    // Wait for Firebase to initialize before setting up messaging
+    if (firebase.apps.length === 0) {
+      console.warn('Firebase not initialized yet');
+      return;
+    }
+
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
 

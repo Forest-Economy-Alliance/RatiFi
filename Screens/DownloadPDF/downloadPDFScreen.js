@@ -35,7 +35,7 @@ import {BASE_URL, request} from '../../services/APICentral';
 import HI from '../../assets/i18n/hi.json';
 import {getDeviceHash} from '../../utils/DeviceUtil';
 import {logoutHandler} from '../../services/authService';
-import {firebase} from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 import WebView from 'react-native-webview';
 import Pdf from 'react-native-pdf';
 import Icon from 'react-native-vector-icons/FontAwesome';

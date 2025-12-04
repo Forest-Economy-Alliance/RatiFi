@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     borderRadius: 70,
   },
   btnText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#FFFFFF',
   },
 });

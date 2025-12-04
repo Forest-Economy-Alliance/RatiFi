@@ -46,7 +46,7 @@ import {
   verifyyMember,
   viewFRCMember,
 } from '../../services/authService';
-import { firebase } from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 import { OneSignal } from 'react-native-onesignal';
 import { VasernDB } from '../../vasern';
 

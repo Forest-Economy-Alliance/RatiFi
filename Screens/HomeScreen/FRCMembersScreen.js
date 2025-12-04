@@ -34,7 +34,7 @@ import RoleScreen from '../Role/RoleScreen';
 import { verifYYMember } from '../../redux-store/actions/auth';
 import { logoutHandler, verifyyMember, viewFRCMember } from '../../services/authService';
 import {Dimensions} from 'react-native';
-import { firebase } from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
 const FRCMembersScreen = ({ navigation,route  }) => {

@@ -24,7 +24,7 @@ import CustomError from '../../components/CustomError';
 import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
 import {signInAction} from '../../redux-store/actions/auth';
-import {firebase} from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 // import { BASE_URL } from '../../services/APICentral';
 const BG_IMG_PATH = require('../../assets/images/background.png');
 

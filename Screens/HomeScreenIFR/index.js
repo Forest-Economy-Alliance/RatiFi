@@ -45,7 +45,7 @@ import {
     verifyyMember,
     viewFRCMember,
   } from '../../services/authService';
-  import {firebase} from '@react-native-firebase/messaging';
+  import firebase from '@react-native-firebase/app';
 import { useFocusEffect } from '@react-navigation/native';
 import { getGCPUrlImageHandler } from '../../services/commonService';
 import { patchClaimHandler, patchClaimHandlerIFR } from '../../services/claimService';
