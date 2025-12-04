@@ -6,14 +6,14 @@ import {
   ScrollView,
   ImageBackground,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {useTranslation} from 'react-i18next';
-import {useRoute} from '@react-navigation/native';
-import {useState} from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
+import { useState } from 'react';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
-const ClaimTypeSelectionScreen = ({navigation}) => {
+const ClaimTypeSelectionScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const {
     name,
@@ -28,15 +28,14 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
     IFRclaims,
   } = useSelector(state => state.entities.auth.userInfo?.profile);
 
-
-  
-  const {forgotFeature} = useSelector(state => state.entities.appUtil.appUtil);
-
+  const { forgotFeature } = useSelector(
+    state => state.entities.appUtil.appUtil,
+  );
 
   const [isUpperLevel, setIsUpperLevel] = useState(false);
 
-  const {token} = useSelector(state => state.entities.auth.userInfo);
-  const {t, i18n} = useTranslation();
+  const { token } = useSelector(state => state.entities.auth.userInfo);
+  const { t, i18n } = useTranslation();
   const appTranslation = t('app');
   const commonTranslation = t('common');
   const roleTranslation = t('role');
@@ -46,16 +45,13 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
 
   const route = useRoute();
 
-
-
-  
-
   useEffect(() => {
     console.log('ooooo->', route?.params?.isMember);
     console.log('params->', route?.params);
-    if (Boolean(authLevel && authLevel !== "एफआरसी" && authLevel !== '-1')) {
-      setIsUpperLevel(true);
+    if (Boolean(authLevel && authLevel !== 'एफआरसी' && authLevel !== '-1')) {
+      setIsUpperLevel(true); // instead setUpperLevel for all so that ifr is disabled in AP FRA.
     }
+    // setIsUpperLevel(true);
   }, []);
 
   const claimTypes = [
@@ -68,13 +64,14 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
       value: 'ifr',
     },
   ];
-  
+
   return (
     <ImageBackground
       source={BG_IMG_PATH}
       resizeMode="cover"
       blurRadius={10}
-      style={styles.bg}>
+      style={styles.bg}
+    >
       <View style={styles.darkness}>
         <View style={styles.header}>
           <Text style={styles.headerText}>{appTranslation.select_claim}</Text>
@@ -89,32 +86,25 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
               <TouchableOpacity
                 key={lang.value}
                 onPress={() => {
-            
                   const loginMode = route?.params?.loginMode;
 
-                    
-
-                  
                   if (lang?.value === 'ifr') {
-                    dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR'});
-                    if(!village){
-                      navigation.replace('Location')
-                    }else{
-                      navigation.replace('HomeScreenIFR')
+                    dispatch({ type: 'UPDATE_TYPE_OF_CLAIM', payload: 'IFR' });
+                    if (!village) {
+                      navigation.replace('Location');
+                    } else {
+                      navigation.replace('HomeScreenIFR');
                     }
-                    
                   } else {
-                    dispatch({type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR'});
+                    dispatch({ type: 'UPDATE_TYPE_OF_CLAIM', payload: 'CFR' });
 
-
-                    // 
+                    //
                     // check form download screnerio
 
-                    if(forgotFeature){
+                    if (forgotFeature) {
                       navigation.replace('HomeScreen');
-                    }
-                   else if (loginMode === true) {
-                      if (authLevel !== "एफआरसी") {
+                    } else if (loginMode === true) {
+                      if (authLevel !== 'एफआरसी') {
                         navigation.replace('HomeScreen');
                         return;
                       }
@@ -124,24 +114,23 @@ const ClaimTypeSelectionScreen = ({navigation}) => {
                       } else {
                         navigation.replace('HomeScreen');
                       }
-
-
-
                     } else {
                       navigation.replace('GovernmentOfficialCheck');
                     }
                   }
                 }}
-                style={styles.button}>
+                style={styles.button}
+              >
                 <Text style={styles.text}>{lang.name}</Text>
               </TouchableOpacity>
             );
           })}
         </ScrollView>
-         <View style={{padding:10}}>
-         <Text style={{textAlign:'center',fontSize:18}}>{appTranslation.notice_to_official}</Text>
-         {/* <Text style={{textAlign:'center'}}>Note - Govt. Official Please choose CFR</Text> */}
-         </View>
+        <View style={{ paddingBottom: 50 }}>
+          <Text style={{ textAlign: 'center', fontSize: 18 }}>
+            {appTranslation.notice_to_official}
+          </Text>
+        </View>
       </View>
     </ImageBackground>
   );

@@ -186,107 +186,107 @@ const GovernmentOfficialCheck = ({ navigation }) => {
         },
       ],
     },
-    {
-      label: roleTranslation.sdlc,
-      hindiLabel: hindiRoleTranslation.sdlc,
-      value: '2',
-      roleData: [
-        {
-          label: roleTranslation.subdivisonal_officer,
-          hindiLabel: hindiRoleTranslation.subdivisonal_officer,
-          value: '1',
-        },
+    // {
+    //   label: roleTranslation.sdlc,
+    //   hindiLabel: hindiRoleTranslation.sdlc,
+    //   value: '2',
+    //   roleData: [
+    //     {
+    //       label: roleTranslation.subdivisonal_officer,
+    //       hindiLabel: hindiRoleTranslation.subdivisonal_officer,
+    //       value: '1',
+    //     },
 
-        {
-          label: roleTranslation.member,
-          hindiLabel: hindiRoleTranslation.member,
-          value: '4',
-        },
-      ],
-    },
-    {
-      label: roleTranslation.dlc,
-      hindiLabel: hindiRoleTranslation.dlc,
-      value: '3',
-      roleData: [
-        {
-          label: roleTranslation.district_collector,
-          hindiLabel: hindiRoleTranslation.district_collector,
-          value: '1',
-        },
-        {
-          label: roleTranslation.district_forest_officer,
-          hindiLabel: hindiRoleTranslation.district_forest_officer,
-          value: '2',
-        },
-        {
-          label: roleTranslation.district_welfare_officer,
-          hindiLabel: hindiRoleTranslation.district_welfare_officer,
-          value: '3',
-        },
-        {
-          label: roleTranslation.member,
-          hindiLabel: hindiRoleTranslation.member,
-          value: '5',
-        },
-      ],
-    },
-    {
-      label: roleTranslation.slmc,
-      hindiLabel: hindiRoleTranslation.slmc,
-      value: '4',
-      roleData: [
-        {
-          label: roleTranslation.panchayati_raj_secretary,
-          hindiLabel: hindiRoleTranslation.panchayati_raj_secretary,
-          value: '1',
-        },
-        {
-          label: roleTranslation.pradhan_mukhya_van_sanrakshak,
-          hindiLabel: hindiRoleTranslation.pradhan_mukhya_van_sanrakshak,
-          value: '2',
-        },
-      ],
-    },
-    {
-      label: roleTranslation.forest_department,
-      hindiLabel: hindiRoleTranslation.forest_department,
-      value: '5',
-      roleData: [
-        {
-          label: roleTranslation.forest_range_officer,
-          hindiLabel: hindiRoleTranslation.forest_range_officer,
-          value: '1',
-        },
-        {
-          label: roleTranslation.forest_guard,
-          hindiLabel: hindiRoleTranslation.forest_guard,
-          value: '2',
-        },
-      ],
-    },
-    {
-      label: roleTranslation.revenue_department,
-      hindiLabel: hindiRoleTranslation.revenue_department,
-      value: '6',
-      roleData: [
-        {
-          label: roleTranslation.revenue_officer,
-          hindiLabel: hindiRoleTranslation.revenue_officer,
-          value: '1',
-        },
-        {
-          label: roleTranslation.circle_off,
-          hindiLabel: hindiRoleTranslation.circle_off,
-          value: '2',
-        },
-        {
-          label: roleTranslation.circle_officer,
-          hindiLabel: hindiRoleTranslation.circle_officer,
-          value: '5',
-        },
-      ],
-    },
+    //     {
+    //       label: roleTranslation.member,
+    //       hindiLabel: hindiRoleTranslation.member,
+    //       value: '4',
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: roleTranslation.dlc,
+    //   hindiLabel: hindiRoleTranslation.dlc,
+    //   value: '3',
+    //   roleData: [
+    //     {
+    //       label: roleTranslation.district_collector,
+    //       hindiLabel: hindiRoleTranslation.district_collector,
+    //       value: '1',
+    //     },
+    //     {
+    //       label: roleTranslation.district_forest_officer,
+    //       hindiLabel: hindiRoleTranslation.district_forest_officer,
+    //       value: '2',
+    //     },
+    //     {
+    //       label: roleTranslation.district_welfare_officer,
+    //       hindiLabel: hindiRoleTranslation.district_welfare_officer,
+    //       value: '3',
+    //     },
+    //     {
+    //       label: roleTranslation.member,
+    //       hindiLabel: hindiRoleTranslation.member,
+    //       value: '5',
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: roleTranslation.slmc,
+    //   hindiLabel: hindiRoleTranslation.slmc,
+    //   value: '4',
+    //   roleData: [
+    //     {
+    //       label: roleTranslation.panchayati_raj_secretary,
+    //       hindiLabel: hindiRoleTranslation.panchayati_raj_secretary,
+    //       value: '1',
+    //     },
+    //     {
+    //       label: roleTranslation.pradhan_mukhya_van_sanrakshak,
+    //       hindiLabel: hindiRoleTranslation.pradhan_mukhya_van_sanrakshak,
+    //       value: '2',
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: roleTranslation.forest_department,
+    //   hindiLabel: hindiRoleTranslation.forest_department,
+    //   value: '5',
+    //   roleData: [
+    //     {
+    //       label: roleTranslation.forest_range_officer,
+    //       hindiLabel: hindiRoleTranslation.forest_range_officer,
+    //       value: '1',
+    //     },
+    //     {
+    //       label: roleTranslation.forest_guard,
+    //       hindiLabel: hindiRoleTranslation.forest_guard,
+    //       value: '2',
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: roleTranslation.revenue_department,
+    //   hindiLabel: hindiRoleTranslation.revenue_department,
+    //   value: '6',
+    //   roleData: [
+    //     {
+    //       label: roleTranslation.revenue_officer,
+    //       hindiLabel: hindiRoleTranslation.revenue_officer,
+    //       value: '1',
+    //     },
+    //     {
+    //       label: roleTranslation.circle_off,
+    //       hindiLabel: hindiRoleTranslation.circle_off,
+    //       value: '2',
+    //     },
+    //     {
+    //       label: roleTranslation.circle_officer,
+    //       hindiLabel: hindiRoleTranslation.circle_officer,
+    //       value: '5',
+    //     },
+    //   ],
+    // },
   ];
 
   const buttonText = {
@@ -309,6 +309,31 @@ const GovernmentOfficialCheck = ({ navigation }) => {
   const [isFront, setIsFront] = useState(null);
 
   const [roleData, setRoleData] = useState([]);
+
+  // Initialize formik
+  const formik = useFormik({
+    initialValues: {
+      member: '',
+      role: '',
+      gender: '',
+    },
+    onSubmit: (values, formikActions) => {
+      onNext(values, formikActions);
+    },
+    validate: values => {
+      const errors = {};
+      if (!values.member) {
+        errors.member = appTranslation.choose_membership;
+      }
+      if (!values.role) {
+        errors.role = appTranslation.choose_role;
+      }
+      if (!values.gender) {
+        errors.gender = appTranslation.choose_gender;
+      }
+      return errors;
+    },
+  });
 
   // Request camera permission helper
   const requestCameraPermission = async () => {

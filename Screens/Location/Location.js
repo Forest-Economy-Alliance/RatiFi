@@ -148,32 +148,36 @@ const LocationScreen = ({ navigation }) => {
 
           console.log('avail-error', error);
 
-          Alert.alert(commonTranslation.notice, appTranslation.already_assigned_role, [
-            {
-              text: commonTranslation.ok,
-              // onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-            {
-              text: commonTranslation.help,
-              onPress: () => {
-                // link to whatsapp
-                const HttpURL = `https://wa.me/7870565464?text=${encodeURIComponent(
-                  `JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${
-                    formik.values.district
-                  } | Subdivison - ${formik.values.subdivison} | ${
-                    formik?.values?.range ? `${formik?.values?.range} | ` : ''
-                  }  Block - ${formik?.values?.tehsil} | Panchayat - ${
-                    formik?.values?.panchayat
-                  } | Village - ${
-                    formik?.values?.village
-                  } | Level - ${authLevel} | Role - ${postLevel}`,
-                )}`;
-                console.log(HttpURL);
-                Linking.openURL(HttpURL);
+          Alert.alert(
+            commonTranslation.notice,
+            appTranslation.already_assigned_role,
+            [
+              {
+                text: commonTranslation.ok,
+                // onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
               },
-            },
-          ]);
+              {
+                text: commonTranslation.help,
+                onPress: () => {
+                  // link to whatsapp
+                  const HttpURL = `https://wa.me/7870565464?text=${encodeURIComponent(
+                    `JharFRA में पंजीकरण में मदद चाहिए - भूमिका पहले से ही पंजीकृत बताई जा रही है - District ${
+                      formik.values.district
+                    } | Subdivison - ${formik.values.subdivison} | ${
+                      formik?.values?.range ? `${formik?.values?.range} | ` : ''
+                    }  Block - ${formik?.values?.tehsil} | Panchayat - ${
+                      formik?.values?.panchayat
+                    } | Village - ${
+                      formik?.values?.village
+                    } | Level - ${authLevel} | Role - ${postLevel}`,
+                  )}`;
+                  console.log(HttpURL);
+                  Linking.openURL(HttpURL);
+                },
+              },
+            ],
+          );
         })
         .finally(f => {
           // dispatch({
@@ -206,8 +210,6 @@ const LocationScreen = ({ navigation }) => {
     return;
   };
 
- 
-
   const formik = useFormik({
     initialValues: state,
     // validationSchema: locSchema,
@@ -235,7 +237,6 @@ const LocationScreen = ({ navigation }) => {
     panchayatName: appTranslation.ok,
   };
 
-  // console.log(formik.values);
   const goBack = () => {
     // Move to RoleScreen
     navigation.goBack();
@@ -257,69 +258,68 @@ const LocationScreen = ({ navigation }) => {
     const query = 'select distinct "district name" from jharfratable;';
     const url = LAMBDA_URL + encodeURIComponent(query);
     console.warn('URL', url);
-    // alert(JSON.stringify(url))
     console.log('FFF', BASE_URL + '/lgd?q=' + url);
-    axios
-      .get(BASE_URL + '/lgd?q=' + url)
-      .then(res => {
-        console.log('res', res?.data);
-        const dropdownData = [];
+    const demoDropdownData = [
+      {
+        label: 'East Godavari',
+        value: 'East Godavari',
+      },
+    ];
+    setDistrictData(demoDropdownData);
+    // axios
+    //   .get(BASE_URL + '/lgd?q=' + url)
+    //   .then(res => {
+    //     console.log('res', res?.data);
+    //     const dropdownData = [];
 
-        res?.data?.data?.forEach(cell => {
-          dropdownData?.push({
-            label: cell['district name'],
-            value: cell['district name'],
-          });
-        });
-        console.warn(dropdownData);
-        // alert(JSON.stringify(res?.data))
-        setDistrictData(dropdownData);
-
-        // [ {label:'',value:''},{label:'',value:''},]
-      })
-      .catch(err => {
-        console.log('DERROR', err);
-      })
-      .finally(f => {
-        dispatch({
-          type: 'UPDATE_APPUTIL_KEY',
-          payload: {
-            key: 'globalSyncStatus',
-            value: false,
-          },
-        });
-      });
+    //     res?.data?.data?.forEach(cell => {
+    //       dropdownData?.push({
+    //         label: cell['district name'],
+    //         value: cell['district name'],
+    //       });
+    //     });
+    //
+    //     setDistrictData(dropdownData);
+    //   })
+    //   .catch(err => {
+    //     console.log('DERROR', err);
+    //   })
+    //   .finally(f => {
+    //     dispatch({
+    //       type: 'UPDATE_APPUTIL_KEY',
+    //       payload: {
+    //         key: 'globalSyncStatus',
+    //         value: false,
+    //       },
+    //     });
+    //   });
   }, []);
 
   const handleShowDropdownOrNot = field => {
-    if (authLevel === "एसडीएलसी") {
-      if (field === "जिला" || field === "अनुमंडल") {
+    if (authLevel === 'एसडीएलसी') {
+      if (field === 'जिला' || field === 'अनुमंडल') {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === "डीएलसी") {
-      if (field === "जिला") {
+    } else if (authLevel === 'डीएलसी') {
+      if (field === 'जिला') {
         return true;
       } else {
         return false;
       }
-    } else if (authLevel === "एफआरसी") {
+    } else if (authLevel === 'एफआरसी') {
       return true;
-    } else if (authLevel === "राज्य स्तरीय निगरानी समिति") {
+    } else if (authLevel === 'राज्य स्तरीय निगरानी समिति') {
       return false;
     } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
-      if (field === "जिला" || field === "अनुमंडल") {
+      if (field === 'जिला' || field === 'अनुमंडल') {
         return true;
       } else {
         return false;
       }
     } else if (authLevel === 'भारसाधक  - राजस्व विभाग (SDLC)') {
-      if (
-        field === "जिला" ||
-        field === "अनुमंडल" ||
-        field === "प्रखंड"
-      ) {
+      if (field === 'जिला' || field === 'अनुमंडल' || field === 'प्रखंड') {
         return true;
       } else {
         return false;
@@ -328,13 +328,13 @@ const LocationScreen = ({ navigation }) => {
   };
 
   const handleShowNextButton = () => {
-    if (authLevel === "एसडीएलसी") {
+    if (authLevel === 'एसडीएलसी') {
       return Boolean(formik?.values?.subdivison !== '');
-    } else if (authLevel === "डीएलसी") {
+    } else if (authLevel === 'डीएलसी') {
       return Boolean(formik?.values?.district !== '');
-    } else if (authLevel === "एफआरसी") {
+    } else if (authLevel === 'एफआरसी') {
       return Boolean(formik?.values?.village !== '');
-    } else if (authLevel === "राज्य स्तरीय निगरानी समिति") {
+    } else if (authLevel === 'राज्य स्तरीय निगरानी समिति') {
       return Boolean(formik?.values?.district !== '');
     } else if (authLevel === 'भारसाधक  - वन विभाग (SDLC)') {
       return Boolean(formik?.values?.subdivison !== '');
@@ -353,7 +353,8 @@ const LocationScreen = ({ navigation }) => {
         <View style={{ marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
           <Pressable onPress={goBack}>
             <Text style={{ fontSize: 18 }}>
-              <FontAwesome name="arrow-left" size={18} /> {commonTranslation.back}
+              <FontAwesome name="arrow-left" size={18} />{' '}
+              {commonTranslation.back}
             </Text>
           </Pressable>
         </View>
@@ -365,24 +366,18 @@ const LocationScreen = ({ navigation }) => {
           <KeyboardAvoidingView>
             <View style={styles.header}>
               <View style={styles.name}>
-                <Text style={styles.nameTxt}>{appTranslation.select_location}</Text>
+                <Text style={styles.nameTxt}>
+                  {appTranslation.select_location}
+                </Text>
               </View>
-              <Text>{authLevel}</Text>
+              {/* <Text>{authLevel}</Text> */}
               <View style={styles.horizontalLine} />
             </View>
-            {/* <View style={styles.title}>
-                            <Text style={styles.titleText}>{t('State')}</Text>
-                        </View>
-                        <Dropdown
-                            visible={true}
-                            data={states}
-                            formik={formik}
-                            variable={'state'}
-                            
-                        /> */}
 
             <View style={styles.title}>
-              <Text style={styles.titleText}>{aboundaryTranslation.district}</Text>
+              <Text style={styles.titleText}>
+                {aboundaryTranslation.district}
+              </Text>
             </View>
             {districtData?.length !== 0 ? (
               <Dropdown
@@ -406,35 +401,33 @@ const LocationScreen = ({ navigation }) => {
                   const url2 = LAMBDA_URL + encodeURIComponent(query2);
                   console.warn('URL2', url2);
 
-                  axios
-                    .get(BASE_URL + '/lgd?q=' + url2)
-                    .then(rr => {
-                      console.log('res->SUBDIVSION', rr?.data);
-                      const d = [];
+                  const demoDropdownData = [
+                    {
+                      label: 'Devipatnam',
+                      value: 'Devipatnam',
+                    },
+                  ];
+                  setSubDivisionData(demoDropdownData);
 
-                      rr?.data?.data?.forEach(cell => {
-                        d?.push({
-                          label: cell['subdivison'],
-                          value: cell['subdivison'],
-                        });
-                      });
-                      console.warn('subdivison', d);
-                      setSubDivisionData(d);
+                  // axios
+                  //   .get(BASE_URL + '/lgd?q=' + url2)
+                  //   .then(rr => {
+                  //     console.log('res->SUBDIVSION', rr?.data);
+                  //     const d = [];
 
-                      // [ {label:'',value:''},{label:'',value:''},]
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    })
-                    .finally(f => {
-                      // dispatch({
-                      //   type: 'UPDATE_APPUTIL_KEY',
-                      //   payload: {
-                      //     key: 'globalSyncStatus',
-                      //     value: false,
-                      //   },
-                      // });
-                    });
+                  //     rr?.data?.data?.forEach(cell => {
+                  //       d?.push({
+                  //         label: cell['subdivison'],
+                  //         value: cell['subdivison'],
+                  //       });
+                  //     });
+                  //     console.warn('subdivison', d);
+                  //     setSubDivisionData(d);
+                  //   })
+                  //   .catch(err => {
+                  //     console.log(err);
+                  //   })
+                  //   .finally(f => {});
                 }}
               />
             ) : (
@@ -448,11 +441,13 @@ const LocationScreen = ({ navigation }) => {
 
             {Boolean(
               formik?.values?.district !== '' &&
-                handleShowDropdownOrNot("अनुमंडल"),
+                handleShowDropdownOrNot('अनुमंडल'),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{aboundaryTranslation.subdivison}</Text>
+                  <Text style={styles.titleText}>
+                    {aboundaryTranslation.subdivison}
+                  </Text>
                 </View>
                 {subDivisonData?.length !== 0 ? (
                   <Dropdown
@@ -461,14 +456,6 @@ const LocationScreen = ({ navigation }) => {
                     formik={formik}
                     variable={'subdivison'}
                     exec={val => {
-                      // formik?.setFieldValue('district',null);
-                      // dispatch({
-                      //   type: 'UPDATE_APPUTIL_KEY',
-                      //   payload: {
-                      //     key: 'globalSyncStatus',
-                      //     value: true,
-                      //   },
-                      // });
                       setRangeData([]);
                       setTehsilData([]);
                       formik?.setFieldValue('tehsil', '');
@@ -490,111 +477,42 @@ const LocationScreen = ({ navigation }) => {
                       const url3 = LAMBDA_URL + encodeURIComponent(query3);
                       console.warn('URL3', url3);
 
-                      axios
-                        .get(BASE_URL + '/lgd?q=' + url3)
-                        .then(rr => {
-                          console.log('res->BLOCK', rr?.data);
-                          const d = [];
-                          const rangeTempArray = [];
-                          const occured = new Map();
+                      const demoDropdownData = [
+                        {
+                          label: 'Devipatnam',
+                          value: 'Devipatnam',
+                        },
+                      ];
+                      setTehsilData(demoDropdownData);
 
-                          rr?.data?.data?.forEach(cell => {
-                            if (cell['block name']) {
-                              d?.push({
-                                label: cell['block name'],
-                                value: cell['block name'],
-                              });
-                            }
-
-                            if (cell['range'] && !occured.get(cell['range'])) {
-                              rangeTempArray.push({
-                                label: cell['range'],
-                                value: cell['range'],
-                              });
-                              occured.set(cell['range'], true);
-                            }
-                          });
-                          console.warn('DR-BLOCKS', d);
-                          setTehsilData(d);
-
-                          setRangeData(rangeTempArray);
-
-                          // [ {label:'',value:''},{label:'',value:''},]
-                        })
-                        .catch(err => {
-                          console.log(err);
-                        })
-                        .finally(f => {
-                          dispatch({
-                            type: 'UPDATE_APPUTIL_KEY',
-                            payload: {
-                              key: 'globalSyncStatus',
-                              value: false,
-                            },
-                          });
-                        });
-                    }}
-                  />
-                ) : (
-                  <ProgressBar
-                    indeterminate
-                    styleAttr="Horizontal"
-                    color="white"
-                    style={{ height: 30, width: 100, alignSelf: 'center' }}
-                  />
-                )}
-              </>
-            )}
-
-            {Boolean(
-              formik?.values?.subdivison !== '' &&
-                authLevel === 'भारसाधक  - वन विभाग (SDLC)',
-            ) && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>{appTranslation.forest_area}</Text>
-                </View>
-                {rangeData?.length !== 0 ? (
-                  <Dropdown
-                    visible={true}
-                    data={rangeData}
-                    formik={formik}
-                    variable={'range'}
-                    exec={val => {
-                      // formik?.setFieldValue('district',null);
-                      // dispatch({
-                      //   type: 'UPDATE_APPUTIL_KEY',
-                      //   payload: {
-                      //     key: 'globalSyncStatus',
-                      //     value: true,
-                      //   },
-                      // });
-                      // setTehsilData([]);
-                      // formik?.setFieldValue('tehsil', '');
-                      // setPanchanyatData([]);
-                      // formik?.setFieldValue('panchayat', '');
-                      // setVillageData([]);
-                      // formik?.setFieldValue('village', '');
-                      // const LAMBDA_URL =
-                      //   'https://vukkgqofhd.execute-api.us-east-1.amazonaws.com/prod?query=';
-                      // const query3 = `SELECT distinct "block name" FROM jharfratable WHERE "district name" = '${formik?.values?.district}' AND "subdivison" = '${val}'  `;
-                      // console.warn(query3);
-                      // const url3 = LAMBDA_URL + encodeURIComponent(query3);
-                      // console.warn('URL3', url3);
                       // axios
-                      //   .get(BASE_URL+'/lgd?q='+url3)
+                      //   .get(BASE_URL + '/lgd?q=' + url3)
                       //   .then(rr => {
                       //     console.log('res->BLOCK', rr?.data);
                       //     const d = [];
+                      //     const rangeTempArray = [];
+                      //     const occured = new Map();
+
                       //     rr?.data?.data?.forEach(cell => {
-                      //       d?.push({
-                      //         label: cell['block name'],
-                      //         value: cell['block name'],
-                      //       });
+                      //       if (cell['block name']) {
+                      //         d?.push({
+                      //           label: cell['block name'],
+                      //           value: cell['block name'],
+                      //         });
+                      //       }
+
+                      //       if (cell['range'] && !occured.get(cell['range'])) {
+                      //         rangeTempArray.push({
+                      //           label: cell['range'],
+                      //           value: cell['range'],
+                      //         });
+                      //         occured.set(cell['range'], true);
+                      //       }
                       //     });
                       //     console.warn('DR-BLOCKS', d);
                       //     setTehsilData(d);
-                      //     // [ {label:'',value:''},{label:'',value:''},]
+
+                      //     setRangeData(rangeTempArray);
                       //   })
                       //   .catch(err => {
                       //     console.log(err);
@@ -623,11 +541,42 @@ const LocationScreen = ({ navigation }) => {
 
             {Boolean(
               formik?.values?.subdivison !== '' &&
-                handleShowDropdownOrNot("प्रखंड"),
+                authLevel === 'भारसाधक  - वन विभाग (SDLC)',
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{aboundaryTranslation.block}</Text>
+                  <Text style={styles.titleText}>
+                    {appTranslation.forest_area}
+                  </Text>
+                </View>
+                {rangeData?.length !== 0 ? (
+                  <Dropdown
+                    visible={true}
+                    data={rangeData}
+                    formik={formik}
+                    variable={'range'}
+                    exec={val => {}}
+                  />
+                ) : (
+                  <ProgressBar
+                    indeterminate
+                    styleAttr="Horizontal"
+                    color="white"
+                    style={{ height: 30, width: 100, alignSelf: 'center' }}
+                  />
+                )}
+              </>
+            )}
+
+            {Boolean(
+              formik?.values?.subdivison !== '' &&
+                handleShowDropdownOrNot('प्रखंड'),
+            ) && (
+              <>
+                <View style={styles.title}>
+                  <Text style={styles.titleText}>
+                    {aboundaryTranslation.block}
+                  </Text>
                 </View>
                 {tehsilData?.length !== 0 ? (
                   <Dropdown
@@ -636,15 +585,6 @@ const LocationScreen = ({ navigation }) => {
                     formik={formik}
                     variable={'tehsil'}
                     exec={val => {
-                      // formik?.setFieldValue('district',null);
-                      // dispatch({
-                      //   type: 'UPDATE_APPUTIL_KEY',
-                      //   payload: {
-                      //     key: 'globalSyncStatus',
-                      //     value: true,
-                      //   },
-                      // });
-
                       setPanchanyatData([]);
                       formik?.setFieldValue('panchayat', '');
                       setVillageData([]);
@@ -657,35 +597,41 @@ const LocationScreen = ({ navigation }) => {
                       console.warn('URL2', url2);
                       console.warn('PANCHAYAT', query2);
 
-                      axios
-                        .get(BASE_URL + '/lgd?q=' + url2)
-                        .then(rr => {
-                          console.log('res->LOCAL_BODY', rr?.data);
-                          const d = [];
+                      const demoDropdownData = [
+                        {
+                          label: 'Choppakonda',
+                          value: 'Choppakonda',
+                        },
+                      ];
+                      setPanchanyatData(demoDropdownData);
 
-                          rr?.data?.data?.forEach(cell => {
-                            d?.push({
-                              label: cell['local body name'],
-                              value: cell['local body name'],
-                            });
-                          });
-                          console.warn('DR-Panchayat', d);
-                          setPanchanyatData(d);
+                      // axios
+                      //   .get(BASE_URL + '/lgd?q=' + url2)
+                      //   .then(rr => {
+                      //     console.log('res->LOCAL_BODY', rr?.data);
+                      //     const d = [];
 
-                          // [ {label:'',value:''},{label:'',value:''},]
-                        })
-                        .catch(err => {
-                          console.log(err);
-                        })
-                        .finally(f => {
-                          dispatch({
-                            type: 'UPDATE_APPUTIL_KEY',
-                            payload: {
-                              key: 'globalSyncStatus',
-                              value: false,
-                            },
-                          });
-                        });
+                      //     rr?.data?.data?.forEach(cell => {
+                      //       d?.push({
+                      //         label: cell['local body name'],
+                      //         value: cell['local body name'],
+                      //       });
+                      //     });
+                      //     console.warn('DR-Panchayat', d);
+                      //     setPanchanyatData(d);
+                      //   })
+                      //   .catch(err => {
+                      //     console.log(err);
+                      //   })
+                      //   .finally(f => {
+                      //     dispatch({
+                      //       type: 'UPDATE_APPUTIL_KEY',
+                      //       payload: {
+                      //         key: 'globalSyncStatus',
+                      //         value: false,
+                      //       },
+                      //     });
+                      //   });
                     }}
                   />
                 ) : (
@@ -701,11 +647,13 @@ const LocationScreen = ({ navigation }) => {
 
             {Boolean(
               formik?.values?.tehsil !== '' &&
-                handleShowDropdownOrNot("पंचायत"),
+                handleShowDropdownOrNot('पंचायत'),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{aboundaryTranslation.panchayat}</Text>
+                  <Text style={styles.titleText}>
+                    {aboundaryTranslation.panchayat}
+                  </Text>
                 </View>
                 {panchayatData?.length !== 0 ? (
                   <Dropdown
@@ -714,15 +662,6 @@ const LocationScreen = ({ navigation }) => {
                     formik={formik}
                     variable={'panchayat'}
                     exec={val => {
-                      // formik?.setFieldValue('district',null);
-                      // dispatch({
-                      //   type: 'UPDATE_APPUTIL_KEY',
-                      //   payload: {
-                      //     key: 'globalSyncStatus',
-                      //     value: true,
-                      //   },
-                      // });
-
                       setVillageData([]);
                       formik?.setFieldValue('village', '');
 
@@ -733,35 +672,41 @@ const LocationScreen = ({ navigation }) => {
                       console.warn('URL2', url2);
                       console.warn('Q2', query2);
 
-                      axios
-                        .get(BASE_URL + '/lgd?q=' + url2)
-                        .then(rr => {
-                          console.log('res->village', rr?.data);
-                          const d = [];
+                      const demoDropdownData = [
+                        {
+                          label: 'Maddirathigudem',
+                          value: 'Maddirathigudem',
+                        },
+                      ];
+                      setVillageData(demoDropdownData);
 
-                          rr?.data?.data?.forEach(cell => {
-                            d?.push({
-                              label: cell['village name'],
-                              value: cell['village name'],
-                            });
-                          });
-                          console.warn('DR-VillGE', d);
-                          setVillageData(d);
+                      // axios
+                      //   .get(BASE_URL + '/lgd?q=' + url2)
+                      //   .then(rr => {
+                      //     console.log('res->village', rr?.data);
+                      //     const d = [];
 
-                          // [ {label:'',value:''},{label:'',value:''},]
-                        })
-                        .catch(err => {
-                          console.log(err);
-                        })
-                        .finally(f => {
-                          dispatch({
-                            type: 'UPDATE_APPUTIL_KEY',
-                            payload: {
-                              key: 'globalSyncStatus',
-                              value: false,
-                            },
-                          });
-                        });
+                      //     rr?.data?.data?.forEach(cell => {
+                      //       d?.push({
+                      //         label: cell['village name'],
+                      //         value: cell['village name'],
+                      //       });
+                      //     });
+                      //     console.warn('DR-VillGE', d);
+                      //     setVillageData(d);
+                      //   })
+                      //   .catch(err => {
+                      //     console.log(err);
+                      //   })
+                      //   .finally(f => {
+                      //     dispatch({
+                      //       type: 'UPDATE_APPUTIL_KEY',
+                      //       payload: {
+                      //         key: 'globalSyncStatus',
+                      //         value: false,
+                      //       },
+                      //     });
+                      //   });
                     }}
                   />
                 ) : (
@@ -777,11 +722,13 @@ const LocationScreen = ({ navigation }) => {
 
             {Boolean(
               formik?.values?.panchayat !== '' &&
-                handleShowDropdownOrNot("गाँव"),
+                handleShowDropdownOrNot('गाँव'),
             ) && (
               <>
                 <View style={styles.title}>
-                  <Text style={styles.titleText}>{aboundaryTranslation.village}</Text>
+                  <Text style={styles.titleText}>
+                    {aboundaryTranslation.village}
+                  </Text>
                 </View>
                 {villageData?.length !== 0 ? (
                   <Dropdown
@@ -801,141 +748,6 @@ const LocationScreen = ({ navigation }) => {
               </>
             )}
 
-            {/* { Boolean(formik?.values?.state !== '') && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>Subdivision from API</Text>
-                </View>
-                <Dropdown
-                  visible={true}
-                  data={subDivisonData}
-                  formik={formik}
-                  variable={'state'}
-                />
-              </>
-            )} */}
-
-            {/* {formik.values.state !== '' && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('District')}</Text>
-                </View>
-                <Dropdown
-                  visible={true}
-                  data={
-                    states
-                      ?.filter(item => item.label === formik.values.state)
-                      ?.map(item => {
-                        return item.Districts;
-                      })[0] || []
-                  }
-                  formik={formik}
-                  variable={'district'}
-                />
-              </>
-            )} */}
-
-            {/* {formik.values.district !== '' && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('Tehsil')}</Text>
-                </View>
-                <Dropdown
-                  visible={true}
-                  data={
-                    states
-                      ?.filter(item => item.label === formik.values.state)
-                      ?.map(item => {
-                        return item.Districts;
-                      })[0]
-                      ?.filter(item => item.label === formik.values.district)
-                      ?.map(item => {
-                        return item.Tehsils;
-                      })[0]
-                  }
-                  formik={formik}
-                  variable={'tehsil'}
-                />
-              </>
-            )} */}
-            {/* {formik.values.tehsil !== '' && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('Panchayat')}</Text>
-                </View>
-                <Dropdown
-                  visible={true}
-                  data={
-                    states
-                      ?.filter(item => item.label === formik.values.state)
-                      ?.map(item => {
-                        return item.Districts;
-                      })[0]
-                      ?.filter(item => item.label === formik.values.district)
-                      ?.map(item => {
-                        return item.Tehsils;
-                      })[0]
-                      ?.filter(item => item.label === formik.values.tehsil)
-                      ?.map(item => {
-                        return item.Panchayats;
-                      })[0]
-                  }
-                  formik={formik}
-                  variable={'panchayat'}
-                />
-              </>
-            )} */}
-
-            {/* {formik.values.panchayat !== '' && (
-              <>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>{t('village')}</Text>
-                </View>
-                <Dropdown
-                  customTop={0}
-                  visible={true}
-                  data={
-                    //  FIX FOR बरकाडुएल NOT WORKING FOR MAPPING
-                    formik.values.panchayat === 'बरकाडुएल'
-                      ? [
-                          {
-                            label: t('Badkaduel'),
-                            value: '1',
-                          },
-                          {
-                            label: t('Barerpa'),
-                            value: '2',
-                          },
-                          {
-                            label: t('Chhotkaduel'),
-                            value: '3',
-                          },
-                          {
-                            label: t('Kudrum'),
-                            value: '4',
-                          },
-                          {
-                            label: t('Lamgarh'),
-                            value: '5',
-                          },
-                          {
-                            label: t('Maimsora'),
-                            value: '6',
-                          },
-                          {
-                            label: t('Navagaon'),
-                            value: '7',
-                          },
-                        ]
-                      : panchayatToVillageMapping[formik.values.panchayat]
-                      ? panchayatToVillageMapping[formik.values.panchayat]
-                      : []
-                  }
-                  formik={formik}
-                  variable={'village'}
-                />
-              </>
-            )} */}
             {Boolean(handleShowNextButton()) && (
               <CustomButton
                 text={commonTranslation.next}
@@ -967,9 +779,11 @@ const LocationScreen = ({ navigation }) => {
             >
               <View style={styles.errorView}>
                 <View style={styles.errorCard}>
-                  <Text style={styles.errorText}>{`${appTranslation.chosen_panchayat} ${formik.values.panchayat}`}</Text>
+                  <Text
+                    style={styles.errorText}
+                  >{`${appTranslation.chosen_panchayat} ${formik.values.panchayat}`}</Text>
                   <View style={styles.horizontalLineErr} />
-                  
+
                   <Pressable
                     style={styles.button}
                     onPress={() => {
@@ -981,7 +795,9 @@ const LocationScreen = ({ navigation }) => {
                       formik.handleSubmit();
                     }}
                   >
-                    <Text style={styles.buttonText}>{commonTranslation.ok}</Text>
+                    <Text style={styles.buttonText}>
+                      {commonTranslation.ok}
+                    </Text>
                   </Pressable>
                 </View>
               </View>
@@ -1026,7 +842,8 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   nameTxt: {
-    fontSize: 25,
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#FFFFFF',
   },
   title: {

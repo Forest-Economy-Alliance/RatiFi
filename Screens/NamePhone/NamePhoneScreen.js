@@ -58,7 +58,8 @@ const NamePhoneScreen = ({navigation}) => {
           name: formik.values.name,
           lat: '123.23',
           lng: '123.2',
-          dd:DD || "-1"
+          dd:DD || "-1",
+          state: "Andhra Pradesh",
         },
         args => {
           // sending phone number in OTP Screen, as we need their to send in API Call

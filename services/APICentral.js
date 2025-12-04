@@ -1,20 +1,9 @@
-/** Siddharth Kumar Yadav
- * © All rights reserved
- */
-
 import axios from 'axios';
 import store from '../redux-store/index';
-// export const BASE_URL = 'http://172.16.77.188:3001';
+// export const BASE_URL = 'http://172.20.10.7:3001';
 // ISB DEV
 export const  BASE_URL = 'https://hnspuesper.us-east-1.awsapprunner.com';
 
-
-
-// old and never used urls
-// export const  BASE_URL = 'https://4kmtkz4pcv.us-east-1.awsapprunner.com';
-// export con st BASE_URL='https://6cqpau3hwt.us-east-1.awsapprunner.com'
-// export const BASE_URL = 'https://ratifiserver.onrender.com';
-// export const BASE_URL = 'https://ratifi-backend-v2.herokuapp.com';
 export const request = async (
     url,
     options,
