@@ -141,7 +141,7 @@ const ForestFiSplashScreen = ({navigation}) => {
               transform: valueFor.getTranslateTransform(),
             },
           ]}>
-          <Text style={styles.text}>JharFRA</Text>
+          <Text style={styles.text}>AP FRA</Text>
         </Animated.View>
         <Animated.View
           style={[styles.circle, {transform: value.getTranslateTransform()}]}
