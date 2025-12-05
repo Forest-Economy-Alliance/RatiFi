@@ -2802,11 +2802,11 @@ const DownloadPDFScreen = ({ navigation }) => {
                         },
                         {
                           name: 'प्रपत्र क',
-                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र क.pdf',
+                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+A.pdf',
                         },
                         {
                           name: 'प्रपत्र ख ग',
-                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र ख ग.pdf',
+                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+B+%26+C.pdf',
                         },
                         {
                           name: 'खतियान भाग दो',
@@ -2814,7 +2814,7 @@ const DownloadPDFScreen = ({ navigation }) => {
                         },
                         {
                           name: 'जंगल का नक्शा',
-                          path: 'https://iofe-ratifi-bucket.s3.amazonaws.com/shared-forms/प्रपत्र ख ग.pdf',
+                          path: 'https://ncount-apps.s3.amazonaws.com/ANDHRA PRADESH_Alluri Sitharama Raju_Devipatnam_Maddirathigudem_11072.pdf',
                         },
                       ];
                       setPrintDocs(dummyDocs);
