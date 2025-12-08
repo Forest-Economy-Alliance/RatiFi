@@ -261,8 +261,8 @@ const LocationScreen = ({ navigation }) => {
     console.log('FFF', BASE_URL + '/lgd?q=' + url);
     const demoDropdownData = [
       {
-        label: 'East Godavari',
-        value: 'East Godavari',
+        label: 'Alluri Sitharama Raju',
+        value: 'Alluri Sitharama Raju',
       },
     ];
     setDistrictData(demoDropdownData);
