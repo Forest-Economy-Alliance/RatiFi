@@ -1,10 +1,15 @@
 import axios from 'axios';
 import store from '../redux-store/index';
-// export const BASE_URL = 'http://localhost:3001';
-// Physical device IP (requires firewall rule)
-export const BASE_URL = 'http://172.16.77.25:3001';
+// Local DEV
+// export const BASE_URL = 'http://172.16.77.25:3001';
+
+// APFRA DEV 
+export const  BASE_URL = 'https://smjq8cb5fb.us-east-1.awsapprunner.com';
+
 // ISB DEV
 // export const  BASE_URL = 'https://hnspuesper.us-east-1.awsapprunner.com';
+
+
 
 export const request = async (
     url,
