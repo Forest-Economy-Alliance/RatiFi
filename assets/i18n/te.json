@@ -165,9 +165,13 @@
       "subdivision_receipt": "సబ్ డివిజనల్ స్థాయి అటవీ హక్కుల కమిటీ (SDLC) నుండి రశీదు",
       "physical_verification_second_notification": "భౌతిక ధృవీకరణ కోసం రెండవ నోటీసు",
       "claim_verification_second_notification": "దావాల ధ్రువీకరణ కోసం రెండోవ నోటీసు",
-      "claimed_area": "దావా చేయబడిన విస్తీర్ణం/ ప్రాంతం",
+      
       "area_cant_be_changed_notif": "మీరు దావా ధరకస్తూ చేసుకున్న విస్తీర్ణం/ ప్రాంతం మార్చలేరు",
       "area": "విస్తీర్ణం/ ప్రాంతం",
+      "cfr_claimed_area": "దావా చేయవలసిన CFR విస్తీర్ణం (ఎకరాలలో)",
+    "cfrr_claimed_area": "దావా చేయవలసిన CFRR విస్తీర్ణం (ఎకరాలలో)",
+    "cfr_area_updated_successfully": "CFR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
+    "cfrr_area_updated_successfully": "CFRR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
       "select_language": "మీ భాష ఎంచుకోండి"
     },
     "finish registration": "రిజిస్ట్రేషన్ పూర్తి చేయండి",

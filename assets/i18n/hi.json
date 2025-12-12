@@ -190,9 +190,13 @@
       "subdivision_receipt": "अनुमंडल (SDLC) से प्राप्त पावती",
       "physical_verification_second_notification": "भौतिक सत्यापन के लिए द्वितीय सूचना (2.12)",
       "claim_verification_second_notification": "दावों के दुबारा भौतिक सत्यापन और SDLC की अनुशंसा के लिए पत्र (2.13)",
-      "claimed_area": "दावेदार द्वारा दावा किया गया क्षेत्र (एकड़ में)",
+      
       "area_cant_be_changed_notif": "आपके द्वार दावा किया गया चेत्रफल दुबारा अपेंड नहीं कर सकता, कृपया पुष्टि करें",
       "area": "क्षेत्रफल",
+      "cfr_claimed_area": "दावा किए जाने वाले CFR क्षेत्र (एकड़ में)",
+    "cfrr_claimed_area": "दावा किए जाने वाले CFRR क्षेत्र (एकड़ में)",
+    "cfr_area_updated_successfully": "CFR क्षेत्र सफलतापूर्वक अपडेट किया गया",
+    "cfrr_area_updated_successfully": "CFRR क्षेत्र सफलतापूर्वक अपडेट किया गया",
 
       "select_language": "अपनी भाषा चुनें"
     },
