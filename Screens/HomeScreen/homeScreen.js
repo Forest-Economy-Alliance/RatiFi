@@ -253,7 +253,7 @@ const HomeScreen = ({ navigation }) => {
           upLoadSpeed,
           upLoadSpeedCurrent,
         }) => {
-          console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app 当前app的上传速度(currently can only be used on Android)
+          console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app 
           setSpeed(upLoadSpeed);
           t += 1;
           console.log(t);
@@ -418,7 +418,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.roleContainer} >
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 20,
               alignSelf: 'center',
               color: '#fff',
               fontWeight: '700',
@@ -431,10 +431,10 @@ const HomeScreen = ({ navigation }) => {
           </Text>
 
           <Text style={styles.roleText} onPress={handleLangChange}>
-            <FontAwesome name="language" size={20} color="white" />{' '}
+            <FontAwesome name="language" size={22} color="white" />{' '}
           </Text>
           <Text style={styles.roleText} onPress={handleSignOut}>
-            <FontAwesome name="user-circle-o" size={20} color="white" />{' '}
+            <FontAwesome name="user-circle-o" size={22} color="white" />{' '}
           </Text>
         </View>
 

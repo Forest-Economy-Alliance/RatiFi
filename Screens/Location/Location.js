@@ -403,8 +403,8 @@ const LocationScreen = ({ navigation }) => {
 
                   const demoDropdownData = [
                     {
-                      label: 'Devipatnam',
-                      value: 'Devipatnam',
+                      label: 'Rampachodavaram',
+                      value: 'Rampachodavaram',
                     },
                   ];
                   setSubDivisionData(demoDropdownData);

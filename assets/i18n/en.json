@@ -55,8 +55,8 @@
     "aboundary": {
       "state": "State",
       "district": "District",
-      "subdivison": "Sub-division",
-      "block": "Block",
+      "subdivison": "Division",
+      "block": "Mandal",
       "panchayat": "Panchayat",
       "village": "Village",
       "Jharkhand": "Jharkhand"
