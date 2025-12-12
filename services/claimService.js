@@ -12,6 +12,19 @@ export const patchClaimHandler = data => {
   );
 };
 
+
+export const setCFRClaimArea = data => {
+  return request(
+    '/set-cfr-claim-area',
+    {
+      method: 'POST',
+      data,
+    },
+    false,
+    false,
+  );
+};
+
 export const patchClaimHandlerIFR = data => {
   return request(
     '/ifr-claims',

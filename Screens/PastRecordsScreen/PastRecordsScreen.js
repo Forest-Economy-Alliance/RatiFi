@@ -40,7 +40,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   fetchClaimDetailsHandler,
-  patchClaimArea,
+  setCFRClaimArea,
 } from '../../services/claimService';
 
 import { getGCPUrlImageHandler } from '../../services/commonService';
@@ -70,7 +70,10 @@ const PastRecordsScreen = ({ navigation }) => {
 
   const cameraRef = useRef(null);
 
-  const [claimedArea, setClaimedArea] = useState('');
+  const [claimedArea, setClaimedArea] = useState({
+    cfrAreaClaimed: 0,
+    cfrrAreaClaimed: 0,
+  });
 
   const [stage, setStage] = useState(1);
 
@@ -524,10 +527,7 @@ const PastRecordsScreen = ({ navigation }) => {
                   >
                     {!Boolean(
                       claim?.courtDocuments[0]?.title === 'SDM_SUMMON_RESULT_1',
-                    ) ? 
-                    
-                    
-                    (
+                    ) ? (
                       <>
                         <Ionicons name="camera" color="white" size={20} />
                         {Boolean(
@@ -625,7 +625,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_1' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[0]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[0]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_1');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -662,7 +663,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[0]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[0]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_1');
                       setUploadType('NEW_EXTRA_IMAGE');
                       openCameraForCurrentState(nextId + 1);
@@ -844,7 +846,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_2' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[0]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[0]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_2');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -882,7 +885,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_2');
                       openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
@@ -939,7 +943,7 @@ const PastRecordsScreen = ({ navigation }) => {
                       ) {
                         setUploadType('MAIN_DOC');
                         setDocName('SDM_SUMMON_RESULT_3');
-                        openCameraForCurrentState()
+                        openCameraForCurrentState();
                       } else {
                         setPreviewDocModal(true);
                         handleDocPreview(claim?.courtDocuments[2]?.storageUrl);
@@ -1014,7 +1018,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         // fetch Details on basis of applicato
                         // dispatch({type:"ENABLE_LOADING"})
                         // alert(claim?.courtDocuments.length)
-                        
+
                         if (
                           !(
                             claim?.courtDocuments.length &&
@@ -1051,7 +1055,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_3' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_3');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -1089,7 +1094,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_3');
                       openCameraForCurrentState(nextId + 1);
 
@@ -1261,7 +1267,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_4' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_4');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -1299,7 +1306,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_4');
                       openCameraForCurrentState(nextId + 1);
 
@@ -1470,7 +1478,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_5' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_5');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -1508,7 +1517,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_5');
                       openCameraForCurrentState(nextId + 1);
 
@@ -1701,7 +1711,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_6' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_6');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -1739,7 +1750,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_6');
                       openCameraForCurrentState(nextId + 1);
 
@@ -1903,7 +1915,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_7' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_7');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -1941,7 +1954,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_7');
                       openCameraForCurrentState(nextId + 1);
 
@@ -2120,7 +2134,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_8' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_8');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -2158,7 +2173,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_8');
                       openCameraForCurrentState(nextId + 1);
 
@@ -2328,7 +2344,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_9' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_9');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -2366,7 +2383,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_9');
                       openCameraForCurrentState(nextId + 1);
 
@@ -2553,7 +2571,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_10' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_10');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -2591,7 +2610,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_10');
                       openCameraForCurrentState(nextId + 1);
 
@@ -2760,7 +2780,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_11' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_11');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -2799,7 +2820,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_11');
                       openCameraForCurrentState(nextId + 1);
 
@@ -2986,7 +3008,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_12' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_12');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -3025,7 +3048,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_12');
                       openCameraForCurrentState(nextId + 1);
 
@@ -3212,7 +3236,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_13' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_13');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -3251,7 +3276,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_13');
                       openCameraForCurrentState(nextId + 1);
 
@@ -3423,7 +3449,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_14' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_14');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -3456,7 +3483,8 @@ const PastRecordsScreen = ({ navigation }) => {
                   'SDM_SUMMON_RESULT_14' && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_14');
                       openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
@@ -3627,7 +3655,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_15' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_15');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -3666,7 +3695,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_15');
                       openCameraForCurrentState(nextId + 1);
 
@@ -3838,7 +3868,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_16' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_16');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -4033,7 +4064,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_17' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_17');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -4228,7 +4260,8 @@ const PastRecordsScreen = ({ navigation }) => {
                       'SDM_SUMMON_RESULT_18' && (
                       <CustomButton
                         onPress={() => {
-                          const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                          const nextId =
+                            claim?.courtDocuments[1]?.extraImages?.length;
                           setDocName('SDM_SUMMON_RESULT_18');
                           openCameraForCurrentState(nextId);
                           setFocusedExtraImageID(nextId);
@@ -4267,7 +4300,8 @@ const PastRecordsScreen = ({ navigation }) => {
                 ) && (
                   <CustomButton
                     onPress={() => {
-                      const nextId = claim?.courtDocuments[1]?.extraImages?.length;
+                      const nextId =
+                        claim?.courtDocuments[1]?.extraImages?.length;
                       setDocName('SDM_SUMMON_RESULT_18');
                       openCameraForCurrentState(nextId + 1);
                       setUploadType('NEW_EXTRA_IMAGE');
@@ -4279,7 +4313,7 @@ const PastRecordsScreen = ({ navigation }) => {
                   </CustomButton>
                 )}
               </View>
-
+              {/* CFR Claimed Area  */}
               <View
                 style={{
                   // flexDirection: 'row',
@@ -4291,7 +4325,7 @@ const PastRecordsScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={{ color: 'white', fontSize: 18 }}>
-                  {appTranslation.claimed_area}
+                  {appTranslation.cfr_claimed_area}
                 </Text>
 
                 <View
@@ -4311,11 +4345,13 @@ const PastRecordsScreen = ({ navigation }) => {
                     }}
                     keyboardType="number-pad"
                     placeholder={appTranslation.area}
-                    // editable={Boolean(claim?.area !== undefined)}
-                    value={claimedArea}
-                    onChangeText={e => setClaimedArea(e)}
+                    value={claim?.cfrAreaClaimed === 0 ? claimedArea.cfrAreaClaimed?.toString() : claim?.cfrAreaClaimed?.toString()}
+                    editable={claim?.cfrAreaClaimed === 0}
+                    onChangeText={e =>
+                      setClaimedArea({ ...claimedArea, cfrAreaClaimed: e })
+                    }
                   />
-                  {Boolean(claim?.area != undefined) && (
+                  {claim?.cfrAreaClaimed === 0 && (
                     <CustomButton
                       style={{
                         width: '70%',
@@ -4334,13 +4370,101 @@ const PastRecordsScreen = ({ navigation }) => {
                             {
                               text: commonTranslation.ok,
                               onPress: () => {
-                                patchClaimArea({
+                                setCFRClaimArea({
                                   claimId: claim?._id?.toString(),
-                                  area: 456,
+                                  cfrAreaClaimed: claimedArea.cfrAreaClaimed,
                                 })
-                                  .then(res => {})
+                                  .then(res => {
+                                    setRefresh(!refresh);
+                                    Alert.alert(
+                                      commonTranslation.success,
+                                      appTranslation.cfr_area_updated_successfully,
+                                    );
+                                  })
                                   .catch(err => {
-                                    Alert('Failed to updated');
+                                    Alert('Failed to update cfr area claimed');
+                                  });
+                              },
+                            },
+                          ],
+                        );
+                      }}
+                    >
+                      <FontAwesome5 name="check-circle" size={20} />
+                    </CustomButton>
+                  )}
+                </View>
+              </View>
+              {/* CFRR Claimed Area  */}
+              <View
+                style={{
+                  // flexDirection: 'row',
+                  justifyContent: 'center',
+                  padding: 20,
+                  paddingVertical: 20,
+                  borderBottomWidth: 1,
+                  borderColor: '#fff',
+                }}
+              >
+                <Text style={{ color: 'white', fontSize: 18 }}>
+                  {appTranslation.cfrr_claimed_area}
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 10,
+                  }}
+                >
+                  <TextInput
+                    style={{
+                      backgroundColor: 'white',
+                      width: '50%',
+                      height: 40,
+                      textAlign: 'center',
+                      borderRadius: 10,
+                      marginTop: 10,
+                    }}
+                    keyboardType="number-pad"
+                    placeholder={appTranslation.area}
+                    value={claim?.cfrrAreaClaimed === 0 ? claimedArea.cfrrAreaClaimed?.toString() : claim?.cfrrAreaClaimed?.toString()}
+                    editable={claim?.cfrrAreaClaimed === 0}
+                    onChangeText={e =>
+                      setClaimedArea({ ...claimedArea, cfrrAreaClaimed: e })
+                    }
+                  />
+                  {claim?.cfrrAreaClaimed === 0 && (
+                    <CustomButton
+                      style={{
+                        width: '70%',
+                        marginTop: 10,
+                      }}
+                      onPress={() => {
+                        Alert.alert(
+                          commonTranslation.notice,
+                          appTranslation.area_cant_be_changed_notif,
+                          [
+                            {
+                              text: commonTranslation.cancel,
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {
+                              text: commonTranslation.ok,
+                              onPress: () => {
+                                setCFRClaimArea({
+                                  claimId: claim?._id?.toString(),
+                                  cfrrAreaClaimed: claimedArea.cfrrAreaClaimed,
+                                })
+                                  .then(res => {
+                                    setRefresh(!refresh);
+                                    Alert.alert(
+                                      commonTranslation.success,
+                                      appTranslation.cfrr_area_updated_successfully,
+                                    );
+                                  })
+                                  .catch(err => {
+                                    Alert('Failed to update cfrr area claimed');
                                   });
                               },
                             },
