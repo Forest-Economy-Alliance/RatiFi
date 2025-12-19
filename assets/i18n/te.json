@@ -165,14 +165,28 @@
       "subdivision_receipt": "సబ్ డివిజనల్ స్థాయి అటవీ హక్కుల కమిటీ (SDLC) నుండి రశీదు",
       "physical_verification_second_notification": "భౌతిక ధృవీకరణ కోసం రెండవ నోటీసు",
       "claim_verification_second_notification": "దావాల ధ్రువీకరణ కోసం రెండోవ నోటీసు",
-      
+
       "area_cant_be_changed_notif": "మీరు దావా ధరకస్తూ చేసుకున్న విస్తీర్ణం/ ప్రాంతం మార్చలేరు",
       "area": "విస్తీర్ణం/ ప్రాంతం",
       "cfr_claimed_area": "దావా చేయవలసిన CFR విస్తీర్ణం (ఎకరాలలో)",
-    "cfrr_claimed_area": "దావా చేయవలసిన CFRR విస్తీర్ణం (ఎకరాలలో)",
-    "cfr_area_updated_successfully": "CFR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
-    "cfrr_area_updated_successfully": "CFRR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
-      "select_language": "మీ భాష ఎంచుకోండి"
+      "cfrr_claimed_area": "దావా చేయవలసిన CFRR విస్తీర్ణం (ఎకరాలలో)",
+      "cfr_area_updated_successfully": "CFR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
+      "cfrr_area_updated_successfully": "CFRR విస్తీర్ణం విజయవంతంగా అప్‌డేట్ చేయబడింది",
+      "select_language": "మీ భాష ఎంచుకోండి",
+
+      "default": "డిఫాల్ట్",
+      "custom": "కస్టమ్",
+      "generating": "ఉత్పత్తి చేయబడుతోంది...",
+      "download_custom_map": "కస్టమ్ మ్యాప్ డౌన్‌లోడ్ చేయండి",
+      "boundary_tracking_active": "సరిహద్దు ట్రాకింగ్ యాక్టివ్",
+      "ready_to_start": "ప్రారంభించడానికి సిద్ధంగా ఉంది",
+      "gps_accuracy": "GPS ఖచ్చితత్వం",
+      "meteres": "మీటర్లు",
+      "points_recorded": "రికార్డ్ చేయబడిన పాయింట్లు",
+      "start_tracking": "ట్రాకింగ్ ప్రారంభించండి",
+      "complete_and_return": "పూర్తి చేసి తిరిగి రండి",
+      "walk_along_boundary": "సరిహద్దు వెంట నడవండి। ప్రతి 3 సెకన్లకు స్థానం రికార్డ్ చేయబడుతుంది।",
+      "press_start_and_walk": "స్టార్ట్ నొక్కండి మరియు మీ అటవీ ప్రాంత చుట్టుకొలత చుట్టూ నడవండి।"
     },
     "finish registration": "రిజిస్ట్రేషన్ పూర్తి చేయండి",
     "identity card type": "గుర్తింపు కార్డు రకం",

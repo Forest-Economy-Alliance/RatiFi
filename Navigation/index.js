@@ -41,6 +41,7 @@ import IFRDownloadPDF from '../Screens/FormsPageIFR';
 import HomeScreenIFR from '../Screens/HomeScreenIFR';
 import PastRecordsIFR from '../Screens/PastRecordsIFR';
 import {MarkBoundry} from '../Screens/MarkBoundry';
+import { APCFRMarkBoundry } from '../Screens/MarkBoundry/APCFRMarkBoundary';
 import ClaimAlertsScreenIFR from '../Screens/ClaimAlertsIFR/ClaimAlertsScreenIFR';
 import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
@@ -307,6 +308,13 @@ export const Navigation = () => {
           }}
         />
 
+        <Stack.Screen
+          name="APCFRMarkBoundry"
+          component={APCFRMarkBoundry}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="MarkBoundry"
           component={MarkBoundry}

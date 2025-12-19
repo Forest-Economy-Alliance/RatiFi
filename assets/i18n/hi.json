@@ -190,15 +190,29 @@
       "subdivision_receipt": "अनुमंडल (SDLC) से प्राप्त पावती",
       "physical_verification_second_notification": "भौतिक सत्यापन के लिए द्वितीय सूचना (2.12)",
       "claim_verification_second_notification": "दावों के दुबारा भौतिक सत्यापन और SDLC की अनुशंसा के लिए पत्र (2.13)",
-      
+
       "area_cant_be_changed_notif": "आपके द्वार दावा किया गया चेत्रफल दुबारा अपेंड नहीं कर सकता, कृपया पुष्टि करें",
       "area": "क्षेत्रफल",
       "cfr_claimed_area": "दावा किए जाने वाले CFR क्षेत्र (एकड़ में)",
-    "cfrr_claimed_area": "दावा किए जाने वाले CFRR क्षेत्र (एकड़ में)",
-    "cfr_area_updated_successfully": "CFR क्षेत्र सफलतापूर्वक अपडेट किया गया",
-    "cfrr_area_updated_successfully": "CFRR क्षेत्र सफलतापूर्वक अपडेट किया गया",
+      "cfrr_claimed_area": "दावा किए जाने वाले CFRR क्षेत्र (एकड़ में)",
+      "cfr_area_updated_successfully": "CFR क्षेत्र सफलतापूर्वक अपडेट किया गया",
+      "cfrr_area_updated_successfully": "CFRR क्षेत्र सफलतापूर्वक अपडेट किया गया",
 
-      "select_language": "अपनी भाषा चुनें"
+      "select_language": "अपनी भाषा चुनें",
+
+      "default": "डिफ़ॉल्ट",
+      "custom": "कस्टम",
+      "generating": "उत्पन्न हो रहा है...",
+      "download_custom_map": "कस्टम मैप डाउनलोड करें",
+      "boundary_tracking_active": "सीमा ट्रैकिंग सक्रिय",
+      "ready_to_start": "शुरू करने के लिए तैयार",
+      "gps_accuracy": "GPS सटीकता",
+      "meteres": "मीटर",
+      "points_recorded": "रिकॉर्ड किए गए बिंदु",
+      "start_tracking": "ट्रैकिंग शुरू करें",
+      "complete_and_return": "पूर्ण करें और वापस जाएं",
+      "walk_along_boundary": "सीमा के साथ चलें। हर 3 सेकंड में स्थान रिकॉर्ड किया जाता है।",
+      "press_start_and_walk": "स्टार्ट दबाएं और अपने वन क्षेत्र की परिधि के चारों ओर चलें।"
     },
 
     "finish registration": "पंजीकरण समाप्त करें",

@@ -19,7 +19,6 @@ import RNFS from 'react-native-fs';
 import ViewShot from 'react-native-view-shot';
 import queue from 'react-native-job-queue';
 import Geolocation from '@react-native-community/geolocation';
-// import {isLocationEnabled, promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {Platform} from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import {useLinkTo, useNavigation} from '@react-navigation/native';
@@ -139,9 +138,9 @@ export const MarkBoundry = () => {
             longitude: userLocation.longitude,
           });
 
-          console.log(userPath);
+          console.log("userPath", userPath);
+          console.log("prev--->", prev);
           setUserPath(prev);
-          // }
         } else {
           console.log(prev);
           prev.push({
@@ -211,7 +210,6 @@ export const MarkBoundry = () => {
   //   });
   // });
 
-  useEffect(() => {}, []);
 
   const convertImageToBase64 = async uri => {
     try {
@@ -406,7 +404,7 @@ export const MarkBoundry = () => {
                     console.warn('rs', rs);
                     setI(true);
                   }}>
-                  <Text>प्रारंभ करें</Text>
+                  <Text>प्रारंभ करें hhh</Text>
                 </CustomButton>
               </>
             ) : (

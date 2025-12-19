@@ -190,16 +190,29 @@
       "subdivision_receipt": "Receipt from Sub-Division (SDLC)",
       "physical_verification_second_notification": "Second notice for physical verification (2.12)",
       "claim_verification_second_notification": "Letter for re-verification of claims and SDLC recommendation (2.13)",
-      
+
       "area_cant_be_changed_notif": "Your claimed area cannot be changed again, please confirm",
       "area": "Area",
       "cfr_claimed_area": "CFR Area to be claimed (in acres)",
       "cfrr_claimed_area": "CFRR Area to be claimed (in acres)",
       "cfr_area_updated_successfully": "CFR Area updated successfully",
       "cfrr_area_updated_successfully": "CFRR Area updated successfully",
-      
 
-      "select_language": "Select your language"
+      "select_language": "Select your language",
+
+      "default": "Default",
+      "custom": "Custom",
+      "generating": "Generating...",
+      "download_custom_map": "Download Custom Map",
+      "boundary_tracking_active": "Boundary tracking Active",
+      "ready_to_start": "Ready to Start",
+      "gps_accuracy": "GPS Accuracy",
+      "meteres": "meters",
+      "points_recorded": "Points Recorded",
+      "start_tracking": "Start Tracking",
+      "complete_and_return": "Complete & Return",
+      "walk_along_boundary": "Walk along the boundary. Location recorded every 3 seconds.",
+      "press_start_and_walk": "Press Start and walk around the perimeter of your forest area."
     },
 
     "finish registration": "Finish Registration",

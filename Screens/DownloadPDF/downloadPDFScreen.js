@@ -67,6 +67,8 @@ const DownloadPDFScreen = ({ navigation }) => {
   const [gramSabha, setGramSabha] = useState('');
   const [pressed, setPressed] = useState(false);
   const [villages, setVillages] = useState(AllVillages);
+  const [customMapUrl, setCustomMapUrl] = useState(null);
+  const [isGeneratingMap, setIsGeneratingMap] = useState(false);
   const { t } = useTranslation();
   const appTranslation = t('app');
   const commonTranslation = t('common');
@@ -2746,6 +2748,188 @@ const DownloadPDFScreen = ({ navigation }) => {
     }
   };
 
+  const loadDocuments = async () => {
+    setPressed(true);
+    setLoading(true);
+    dispatch({ type: 'ENABLE_LOADING' });
+
+    try {
+      const dummyDocs = [
+        {
+          name: 'आवेदन दस्तावेज',
+          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/CFR+Forms_eng_translated.pdf',
+        },
+        {
+          name: 'प्रपत्र क',
+          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+A.pdf',
+        },
+        {
+          name: 'प्रपत्र ख ग',
+          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+B+%26+C.pdf',
+        },
+        {
+          name: 'खतियान भाग दो',
+          path: '',
+        },
+        {
+          name: 'जंगल का नक्शा',
+          path: 'https://ncount-apps.s3.amazonaws.com/Telangana_Ranga Reddy_Gachibowli_Hyderabad_default.pdf',
+        },
+      ];
+      setPrintDocs(dummyDocs);
+
+      console.log('owner id', profile._id.toString());
+
+      if (profile?.claims?.length === 0) {
+        const rsponse = await postClaimHandler({
+          ownerId: profile._id.toString(),
+        });
+        console.log('XXXX', rsponse.data.data);
+        dispatch({
+          type: 'SAVE_PROFILE',
+          payload: rsponse?.data?.data,
+        });
+      } else {
+        console.log('Already Applied');
+      }
+    } catch (error) {
+      console.log('Error loading documents:', error);
+    } finally {
+      dispatch({ type: 'DISABLE_LOADING' });
+      setLoading(false);
+    }
+  };
+
+  const handleCustomBoundaryComplete = async userCoords => {
+    try {
+      setIsGeneratingMap(true);
+
+      console.log('=== CUSTOM BOUNDARY MAP GENERATION STARTED ===');
+      console.log(
+        'User traced coordinates:',
+        JSON.stringify(userCoords, null, 2),
+      );
+      console.log('Total boundary points:', userCoords?.length);
+      console.log('Village:', profile?.village);
+      console.log('Owner ID:', profile?._id.toString());
+
+      // Convert coordinates from {latitude, longitude} to [latitude, longitude] format
+      const formattedCoords = userCoords.map(coord => [
+        coord.latitude,
+        coord.longitude,
+      ]);
+
+      const payload = {
+        address: {
+          state: 'Telangana',
+          district: 'Ranga Reddy',
+          block: 'Gachibowli',
+          village: 'Hyderabad',
+        },
+        user_coords: formattedCoords,
+        show_neighbor_boundaries: false,
+        show_neighbor_names: false,
+      };
+
+      console.log('=== SENDING API REQUEST ===');
+      
+      console.log('Payload:', JSON.stringify(payload, null, 2));
+
+      // Call actual FastAPI endpoint
+      const response = await axios.post(
+        'http://3.87.158.113/api/v1/generateMap',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          timeout: 60000, // 60 second timeout for map generation
+        },
+      );
+
+      console.log('=== API RESPONSE ===');
+      console.log('Status:', response.status);
+      console.log('Data:', JSON.stringify(response.data, null, 2));
+
+      if (response.status === 200 && response.data) {
+        const customMapUrl = response.data.data;
+
+        console.log('=== CUSTOM MAP GENERATED SUCCESSFULLY ===');
+        console.log('Custom map URL:', customMapUrl);
+        setCustomMapUrl(customMapUrl);
+
+        // Update printDocs with custom map
+        setPrintDocs(prevDocs =>
+          prevDocs.map(doc =>
+            doc.name === 'जंगल का नक्शा'
+              ? { ...doc, customPath: customMapUrl }
+              : doc,
+          ),
+        );
+
+        ToastAndroid.show(
+          'Custom boundary map generated successfully!',
+          ToastAndroid.LONG,
+        );
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      console.error('=== ERROR GENERATING CUSTOM MAP ===');
+      console.error('Error type:', error.name);
+      console.error('Error message:', error.message);
+      
+      if (error.response) {
+        // Server responded with error
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+        ToastAndroid.show(
+          `Server error: ${error.response.status}. Please try again.`,
+          ToastAndroid.LONG,
+        );
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error('No response received from server');
+        console.error('Request details:', error.request);
+        ToastAndroid.show(
+          'Network error: Cannot reach server. Check if FastAPI is running and accessible from your device.',
+          ToastAndroid.LONG,
+        );
+      } else {
+        // Something else happened
+        console.error('Error details:', error);
+        ToastAndroid.show(
+          'Failed to generate custom map. Please try again.',
+          ToastAndroid.LONG,
+        );
+      }
+    } finally {
+      setIsGeneratingMap(false);
+    }
+  };
+
+  useEffect(() => {
+    // Listen for custom boundary completion from APCFRMarkBoundry screen
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const params = route.params;
+      if (params?.userCoords) {
+        // If printDocs is empty, load documents first
+        if (printDocs.length === 0) {
+          console.log('Documents not loaded yet, loading automatically...');
+          await loadDocuments();
+        }
+
+        // Now process the custom boundary
+        handleCustomBoundaryComplete(params.userCoords);
+        // Clear params after processing
+        navigation.setParams({ userCoords: null });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params, printDocs]);
+
   console.log(imgUrl);
 
   return (
@@ -2784,66 +2968,10 @@ const DownloadPDFScreen = ({ navigation }) => {
 
                 <CustomButton
                   onPress={async () => {
-                    setPressed(true);
                     try {
-                      setLoading(true);
-                      dispatch({ type: 'ENABLE_LOADING' });
-
-                      // const rr = await request(`/get-documents?vName=${vil}`);
-                      // if (rr?.data?.isMapAvailable === false) {
-                      //   setImgUrl('x');
-                      // }
-                      // console.log(rr?.data?.data);
-
-                      const dummyDocs = [
-                        {
-                          name: 'आवेदन दस्तावेज',
-                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/CFR+Forms_eng_translated.pdf',
-                        },
-                        {
-                          name: 'प्रपत्र क',
-                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+A.pdf',
-                        },
-                        {
-                          name: 'प्रपत्र ख ग',
-                          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+B+%26+C.pdf',
-                        },
-                        {
-                          name: 'खतियान भाग दो',
-                          path: '',
-                        },
-                        {
-                          name: 'जंगल का नक्शा',
-                          path: 'https://ncount-apps.s3.amazonaws.com/ANDHRA PRADESH_Alluri Sitharama Raju_Devipatnam_Maddirathigudem_11072.pdf',
-                        },
-                      ];
-                      setPrintDocs(dummyDocs);
-
-                      console.log('owner id', profile._id.toString());
-
-                      if (profile?.claims?.length === 0) {
-                        // first download then only
-                        const rsponse = await postClaimHandler({
-                          ownerId: profile._id.toString(),
-                        });
-
-                        console.log('XXXX', rsponse.data.data);
-
-                        dispatch({
-                          type: 'SAVE_PROFILE',
-                          payload: rsponse?.data?.data,
-                        });
-                      } else {
-                        console.log('Already Applied');
-                      }
-
-                      dispatch({ type: 'DISABLE_LOADING' });
-                      setLoading(false);
-                      return;
+                      await loadDocuments();
                     } catch (error) {
                       console.log(error);
-                    } finally {
-                      dispatch({ type: 'DISABLE_LOADING' });
                     }
                   }}
                   button={{ maxWidth: 300, marginTop: 20 }}
@@ -2901,7 +3029,9 @@ const DownloadPDFScreen = ({ navigation }) => {
 
         {printDocs?.map(item => {
           const id = 'खतियान भाग दो';
+          const forestMapId = 'जंगल का नक्शा';
           console.log('ITEM', item);
+
           if (item?.name === id) {
             return (
               <View
@@ -2913,7 +3043,7 @@ const DownloadPDFScreen = ({ navigation }) => {
                   paddingVertical: 20,
                 }}
               >
-                <View style={{ paddingVertical: 5 , flex: 1}}>
+                <View style={{ paddingVertical: 5, flex: 1 }}>
                   <Text
                     style={{ fontSize: 18, color: '#fff', fontWeight: '700' }}
                   >
@@ -2932,6 +3062,157 @@ const DownloadPDFScreen = ({ navigation }) => {
                 </View>
               </View>
             );
+          } else if (item?.name === forestMapId) {
+            // Forest Map with two options
+            return (
+              <View
+                key={`pd-${item?.path}`}
+                style={{
+                  borderBottomWidth: 1,
+                  paddingVertical: 20,
+                }}
+              >
+                <View style={{ paddingVertical: 5, marginBottom: 10 }}>
+                  <Text
+                    style={{ fontSize: 18, color: '#fff', fontWeight: '700' }}
+                  >
+                    {renderDocumentTypeName(item?.name)}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    gap: 10,
+                  }}
+                >
+                  {/* Download Default Map */}
+                  <CustomButton
+                    onPress={() => {
+                      Linking.openURL(item?.path);
+                    }}
+                    button={{ flex: 1, paddingVertical: 10 }}
+                  >
+                    <View style={{ alignItems: 'center' }}>
+                      <MaterialCommunityIcons
+                        name="download-box"
+                        size={24}
+                        color="#fff"
+                      />
+                      <Text
+                        style={{ color: '#fff', fontSize: 10, marginTop: 4 }}
+                      >
+                        {appTranslation.default}
+                      </Text>
+                    </View>
+                  </CustomButton>
+
+                  {/* Add Custom Boundary */}
+                  <CustomButton
+                    onPress={() => {
+                      navigation.navigate('APCFRMarkBoundry', {
+                        returnScreen: 'DownloadPDF',
+                        mode: 'customBoundary',
+                      });
+                    }}
+                    button={{ 
+                      flex: 1, 
+                      paddingVertical: 10,
+                      backgroundColor: isGeneratingMap ? '#FF9800' : undefined,
+                      opacity: isGeneratingMap ? 0.8 : 1
+                    }}
+                    dsbled={isGeneratingMap}
+                  >
+                    <View style={{ alignItems: 'center' }}>
+                      <MaterialCommunityIcons
+                        name={isGeneratingMap ? 'loading' : 'map-marker-path'}
+                        size={24}
+                        color="#fff"
+                      />
+                      <Text
+                        style={{ color: '#fff', fontSize: 9, marginTop: 4, textAlign: 'center' }}
+                        numberOfLines={2}
+                      >
+                        {isGeneratingMap ? 'Generating...' : appTranslation.custom}
+                      </Text>
+                    </View>
+                  </CustomButton>
+                </View>
+
+                {/* Warning message during map generation */}
+                {isGeneratingMap && (
+                  <View
+                    style={{
+                      marginTop: 10,
+                      padding: 12,
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      borderRadius: 8,
+                      borderWidth: 2,
+                      borderColor: '#FF9800',
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <MaterialCommunityIcons
+                        name="alert-circle"
+                        size={20}
+                        color="#FF6F00"
+                      />
+                      <Text
+                        style={{
+                          color: '#E65100',
+                          marginLeft: 8,
+                          fontSize: 12,
+                          flex: 1,
+                          fontWeight: '600',
+                        }}
+                      >
+                        Please wait, generating custom map... Do not press back or exit the app.
+                      </Text>
+                    </View>
+                  </View>
+                )}
+
+                {/* Show custom map download if available */}
+                {item?.customPath && (
+                  <View style={{ marginTop: 10 }}>
+                    <CustomButton
+                      onPress={() => {
+                        Linking.openURL(item.customPath);
+                      }}
+                      button={{
+                        width: '100%',
+                        paddingVertical: 10,
+                        backgroundColor: '#4CAF50',
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <MaterialCommunityIcons
+                          name="download-box"
+                          size={24}
+                          color="#fff"
+                        />
+                        <Text
+                          style={{
+                            color: '#fff',
+                            marginLeft: 8,
+                            fontWeight: '600',
+                          }}
+                        >
+                          {appTranslation.download_custom_map}
+                        </Text>
+                      </View>
+                    </CustomButton>
+                  </View>
+                )}
+              </View>
+            );
           } else {
             return (
               <View
@@ -2943,7 +3224,7 @@ const DownloadPDFScreen = ({ navigation }) => {
                   paddingVertical: 20,
                 }}
               >
-                <View style={{ paddingVertical: 5 , flex: 1}}>
+                <View style={{ paddingVertical: 5, flex: 1 }}>
                   <Text
                     style={{ fontSize: 18, color: '#fff', fontWeight: '700' }}
                   >
@@ -2964,10 +3245,6 @@ const DownloadPDFScreen = ({ navigation }) => {
             );
           }
         })}
-
-        {/* <Button title='ROR' onPress={()=>{
-          navigation.navigate("RORWebView")
-        }} /> */}
       </ScrollView>
     </ImageBackground>
   );
