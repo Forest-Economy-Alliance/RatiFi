@@ -465,11 +465,6 @@ const PastRecordsScreen = ({ navigation }) => {
                 >
                   {appTranslation.forest_rights_committee}
                 </Text>
-                <Text
-                  style={{ fontSize: 18, color: '#fff', fontWeight: '600' }}
-                >
-                  {appTranslation.optional_consideration_rule}
-                </Text>
               </View>
 
               {/* FORM 1 */}
@@ -4390,7 +4385,8 @@ const PastRecordsScreen = ({ navigation }) => {
                         );
                       }}
                     >
-                      <FontAwesome5 name="check-circle" size={20} />
+                      
+                      <Text >{commonTranslation.submit}</Text>
                     </CustomButton>
                   )}
                 </View>
@@ -4472,7 +4468,7 @@ const PastRecordsScreen = ({ navigation }) => {
                         );
                       }}
                     >
-                      <FontAwesome5 name="check-circle" size={20} />
+                      <Text>{commonTranslation.submit}</Text>
                     </CustomButton>
                   )}
                 </View>

@@ -14,6 +14,7 @@ import {
   Linking,
   Button,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +32,7 @@ import Loader from '../../components/Loader';
 import CustomSignOutPopup from '../../components/CustomSignOutPopup';
 import axios from 'axios';
 import { BASE_URL, request } from '../../services/APICentral';
+import { VasernDB } from '../../vasern';
 
 import HI from '../../assets/i18n/hi.json';
 import { getDeviceHash } from '../../utils/DeviceUtil';
@@ -57,6 +59,11 @@ const DownloadPDFScreen = ({ navigation }) => {
   const vil = useSelector(
     state => state.entities.auth.userInfo.profile.village,
   );
+  const userProfile = useSelector(
+    state => state.entities.auth.userInfo.profile,
+  );
+
+  console.log('userProfile', userProfile);
   const [vis, setVis] = useState(false);
 
   const dispatch = useDispatch();
@@ -2760,10 +2767,6 @@ const DownloadPDFScreen = ({ navigation }) => {
           path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/CFR+Forms_eng_translated.pdf',
         },
         {
-          name: 'प्रपत्र क',
-          path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+A.pdf',
-        },
-        {
           name: 'प्रपत्र ख ग',
           path: 'https://iofe-ratifi-bucket.s3.us-east-1.amazonaws.com/shared-forms/apfra/Form+B+%26+C.pdf',
         },
@@ -2773,7 +2776,7 @@ const DownloadPDFScreen = ({ navigation }) => {
         },
         {
           name: 'जंगल का नक्शा',
-          path: 'https://ncount-apps.s3.amazonaws.com/Telangana_Ranga Reddy_Gachibowli_Hyderabad_default.pdf',
+          path: userProfile.name === "demo" ? 'https://ncount-apps.s3.amazonaws.com/Telangana_Ranga Reddy_Gachibowli_Hyderabad_default.pdf' : 'https://ncount-apps.s3.amazonaws.com/ANDHRA PRADESH_Alluri Sitharama Raju_Devipatnam_Maddirathigudem_default.pdf',
         },
       ];
       setPrintDocs(dummyDocs);
@@ -2800,51 +2803,93 @@ const DownloadPDFScreen = ({ navigation }) => {
     }
   };
 
-  const handleCustomBoundaryComplete = async userCoords => {
+  const telanganaAddress = {
+    state: 'Telangana',
+    district: 'Ranga Reddy',
+    block: 'Gachibowli',
+    village: 'Hyderabad',
+  };
+
+  const apfraAddress = {
+    state: 'ANDHRA PRADESH',
+    district: 'Alluri Sitharama Raju',
+    block: 'Devipatnam',
+    village: 'Maddirathigudem',
+  };
+
+  const handleCustomBoundaryComplete = async (
+    userCoords,
+    isBatchMode = false,
+    selectedPolygonIds = [],
+  ) => {
     try {
       setIsGeneratingMap(true);
 
       console.log('=== CUSTOM BOUNDARY MAP GENERATION STARTED ===');
+      console.log('Batch Mode:', isBatchMode);
       console.log(
-        'User traced coordinates:',
-        JSON.stringify(userCoords, null, 2),
+        'Number of polygons:',
+        isBatchMode ? selectedPolygonIds.length : 1,
       );
-      console.log('Total boundary points:', userCoords?.length);
-      console.log('Village:', profile?.village);
-      console.log('Owner ID:', profile?._id.toString());
 
-      // Convert coordinates from {latitude, longitude} to [latitude, longitude] format
-      const formattedCoords = userCoords.map(coord => [
-        coord.latitude,
-        coord.longitude,
-      ]);
+      let polygonsToProcess = [];
 
+      if (isBatchMode) {
+        // Batch mode: process multiple saved polygons
+        polygonsToProcess = selectedPolygonIds.map(polygonId => {
+          const polygon = VasernDB.SavedPolygons.get(polygonId);
+          return {
+            id: polygonId,
+            name: polygon.polygonName,
+            coordinates: JSON.parse(polygon.coordinates),
+          };
+        });
+      } else {
+        // Single polygon mode (legacy support)
+        polygonsToProcess = [
+          {
+            id: null,
+            name: 'Custom Polygon',
+            coordinates: userCoords,
+          },
+        ];
+      }
+
+      console.log('Total polygons to process:', polygonsToProcess.length);
+
+      // Format all polygon coordinates for API
+      // API expects: Optional[List[List[Tuple[float, float]]]]
+      const allPolygonsFormatted = polygonsToProcess.map(polygon =>
+        polygon.coordinates.map(coord => [coord.latitude, coord.longitude]),
+      );
+      
       const payload = {
-        address: {
-          state: 'Telangana',
-          district: 'Ranga Reddy',
-          block: 'Gachibowli',
-          village: 'Hyderabad',
-        },
-        user_coords: formattedCoords,
+        address: userProfile.name === "demo" ? telanganaAddress : apfraAddress,
+        user_coords: allPolygonsFormatted, // Now sending List[List[Tuple[float, float]]]
         show_neighbor_boundaries: false,
         show_neighbor_names: false,
       };
 
       console.log('=== SENDING API REQUEST ===');
-      
-      console.log('Payload:', JSON.stringify(payload, null, 2));
+      console.log('Payload structure:', {
+        address: payload.address,
+        user_coords_count: allPolygonsFormatted.length,
+        total_points: allPolygonsFormatted.reduce(
+          (sum, poly) => sum + poly.length,
+          0,
+        ),
+      });
 
       // Call actual FastAPI endpoint
       const response = await axios.post(
-        'http://3.87.158.113/api/v1/generateMap',
+        'http://34.234.85.163/api/v1/generateMap',
         payload,
         {
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
           },
-          timeout: 60000, // 60 second timeout for map generation
+          timeout: 90000, // 90 second timeout for batch generation
         },
       );
 
@@ -2853,25 +2898,58 @@ const DownloadPDFScreen = ({ navigation }) => {
       console.log('Data:', JSON.stringify(response.data, null, 2));
 
       if (response.status === 200 && response.data) {
-        const customMapUrl = response.data.data;
+        const mapUrls = Array.isArray(response.data.data)
+          ? response.data.data
+          : [response.data.data];
 
-        console.log('=== CUSTOM MAP GENERATED SUCCESSFULLY ===');
-        console.log('Custom map URL:', customMapUrl);
-        setCustomMapUrl(customMapUrl);
+        console.log('=== MAPS GENERATED SUCCESSFULLY ===');
+        console.log('Map URLs:', mapUrls);
 
-        // Update printDocs with custom map
-        setPrintDocs(prevDocs =>
-          prevDocs.map(doc =>
-            doc.name === 'जंगल का नक्शा'
-              ? { ...doc, customPath: customMapUrl }
-              : doc,
-          ),
-        );
+        if (isBatchMode) {
+          // Show maps with download links
+          const mapsList = mapUrls
+            .map(
+              (url, index) =>
+                `${index + 1}. ${polygonsToProcess[index].name}: ${url}`,
+            )
+            .join('\n\n');
 
-        ToastAndroid.show(
-          'Custom boundary map generated successfully!',
-          ToastAndroid.LONG,
-        );
+          Alert.alert(
+            appTranslation.maps_generated_successfully,
+            `${polygonsToProcess.length} ${appTranslation.maps_generated_message}`,
+            [
+              {
+                text: commonTranslation.ok,
+                onPress: () => {
+                  // Open first map URL
+                  if (mapUrls.length > 0) {
+                    mapUrls.forEach(url => {
+                      Linking.openURL(url);
+                    });
+                  }
+                },
+              },
+            ],
+          );
+        } else {
+          // Single polygon mode - update UI immediately
+          const customMapUrl = mapUrls[0];
+          setCustomMapUrl(customMapUrl);
+
+          // Update printDocs with custom map
+          setPrintDocs(prevDocs =>
+            prevDocs.map(doc =>
+              doc.name === 'जंगल का नक्शा'
+                ? { ...doc, customPath: customMapUrl }
+                : doc,
+            ),
+          );
+
+          ToastAndroid.show(
+            'Custom boundary map generated successfully!',
+            ToastAndroid.LONG,
+          );
+        }
       } else {
         throw new Error('Invalid response from server');
       }
@@ -2879,29 +2957,32 @@ const DownloadPDFScreen = ({ navigation }) => {
       console.error('=== ERROR GENERATING CUSTOM MAP ===');
       console.error('Error type:', error.name);
       console.error('Error message:', error.message);
-      
+
       if (error.response) {
         // Server responded with error
         console.error('Response status:', error.response.status);
         console.error('Response data:', error.response.data);
-        ToastAndroid.show(
-          `Server error: ${error.response.status}. Please try again.`,
-          ToastAndroid.LONG,
+        Alert.alert(
+          appTranslation.server_error,
+          `Status: ${error.response.status}\n\n${appTranslation.server_error_message}`,
+          [{ text: commonTranslation.ok }],
         );
       } else if (error.request) {
         // Request was made but no response received
         console.error('No response received from server');
         console.error('Request details:', error.request);
-        ToastAndroid.show(
-          'Network error: Cannot reach server. Check if FastAPI is running and accessible from your device.',
-          ToastAndroid.LONG,
+        Alert.alert(
+          appTranslation.network_error,
+          appTranslation.cannot_reach_server,
+          [{ text: commonTranslation.ok }],
         );
       } else {
         // Something else happened
         console.error('Error details:', error);
-        ToastAndroid.show(
-          'Failed to generate custom map. Please try again.',
-          ToastAndroid.LONG,
+        Alert.alert(
+          appTranslation.error,
+          appTranslation.failed_to_generate_map,
+          [{ text: commonTranslation.ok }],
         );
       }
     } finally {
@@ -2911,9 +2992,37 @@ const DownloadPDFScreen = ({ navigation }) => {
 
   useEffect(() => {
     // Listen for custom boundary completion from APCFRMarkBoundry screen
+    // OR batch polygon generation from SavedPolygonsScreen
     const unsubscribe = navigation.addListener('focus', async () => {
       const params = route.params;
-      if (params?.userCoords) {
+
+      // Handle batch polygon generation from SavedPolygonsScreen
+      if (params?.selectedPolygons && params.selectedPolygons.length > 0) {
+        console.log(
+          'Batch polygon generation requested:',
+          params.selectedPolygons.length,
+          'polygons',
+        );
+
+        // If printDocs is empty, load documents first
+        if (printDocs.length === 0) {
+          console.log('Documents not loaded yet, loading automatically...');
+          await loadDocuments();
+        }
+
+        // Extract polygon IDs
+        const polygonIds = params.selectedPolygons.map(p => p.id);
+
+        // Process batch generation
+        handleCustomBoundaryComplete(null, true, polygonIds);
+
+        // Clear params after processing
+        navigation.setParams({ selectedPolygons: null });
+      }
+      // Handle single polygon from APCFRMarkBoundry (legacy support)
+      else if (params?.userCoords) {
+        console.log('Single polygon generation from boundary tracing');
+
         // If printDocs is empty, load documents first
         if (printDocs.length === 0) {
           console.log('Documents not loaded yet, loading automatically...');
@@ -2921,7 +3030,8 @@ const DownloadPDFScreen = ({ navigation }) => {
         }
 
         // Now process the custom boundary
-        handleCustomBoundaryComplete(params.userCoords);
+        handleCustomBoundaryComplete(params.userCoords, false, []);
+
         // Clear params after processing
         navigation.setParams({ userCoords: null });
       }
@@ -3108,33 +3218,37 @@ const DownloadPDFScreen = ({ navigation }) => {
                     </View>
                   </CustomButton>
 
-                  {/* Add Custom Boundary */}
+                  {/* Add Custom Boundary - Navigate to Saved Polygons */}
                   <CustomButton
                     onPress={() => {
-                      navigation.navigate('APCFRMarkBoundry', {
-                        returnScreen: 'DownloadPDF',
-                        mode: 'customBoundary',
-                      });
+                      navigation.navigate('SavedPolygons');
                     }}
-                    button={{ 
-                      flex: 1, 
+                    button={{
+                      flex: 1,
                       paddingVertical: 10,
                       backgroundColor: isGeneratingMap ? '#FF9800' : undefined,
-                      opacity: isGeneratingMap ? 0.8 : 1
+                      opacity: isGeneratingMap ? 0.8 : 1,
                     }}
                     dsbled={isGeneratingMap}
                   >
                     <View style={{ alignItems: 'center' }}>
                       <MaterialCommunityIcons
-                        name={isGeneratingMap ? 'loading' : 'map-marker-path'}
+                        name={
+                          isGeneratingMap ? 'loading' : 'map-marker-multiple'
+                        }
                         size={24}
                         color="#fff"
                       />
                       <Text
-                        style={{ color: '#fff', fontSize: 9, marginTop: 4, textAlign: 'center' }}
+                        style={{
+                          color: '#fff',
+                          fontSize: 9,
+                          marginTop: 4,
+                          textAlign: 'center',
+                        }}
                         numberOfLines={2}
                       >
-                        {isGeneratingMap ? 'Generating...' : appTranslation.custom}
+                        {isGeneratingMap ? appTranslation.generating : appTranslation.saved_polygons}
                       </Text>
                     </View>
                   </CustomButton>
@@ -3152,7 +3266,9 @@ const DownloadPDFScreen = ({ navigation }) => {
                       borderColor: '#FF9800',
                     }}
                   >
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                       <MaterialCommunityIcons
                         name="alert-circle"
                         size={20}
@@ -3167,7 +3283,7 @@ const DownloadPDFScreen = ({ navigation }) => {
                           fontWeight: '600',
                         }}
                       >
-                        Please wait, generating custom map... Do not press back or exit the app.
+                        {appTranslation.please_wait_generating_warning}
                       </Text>
                     </View>
                   </View>

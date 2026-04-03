@@ -253,7 +253,7 @@ const HomeScreen = ({ navigation }) => {
           upLoadSpeed,
           upLoadSpeedCurrent,
         }) => {
-          console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app 
+          console.log(upLoadSpeed + 'kb/s'); // upload speed for the current app
           setSpeed(upLoadSpeed);
           t += 1;
           console.log(t);
@@ -364,10 +364,9 @@ const HomeScreen = ({ navigation }) => {
     alpha();
   }, []);
 
-
   const handleLangChange = () => {
-    navigation.navigate('LangSelection')
-  }
+    navigation.navigate('LangSelection');
+  };
 
   const handleDisplayLocation = () => {
     if (authLevel === 'एफआरसी') {
@@ -403,6 +402,26 @@ const HomeScreen = ({ navigation }) => {
     return [];
   };
 
+  const translateAuthLevel = level => {
+    if (level === 'एफआरसी') {
+      return roleTranslation.frc;
+    } else {
+      return level;
+    }
+  };
+
+  const translatePostLevel = level => {
+    if (level === 'अध्यक्ष') {
+      return roleTranslation.president;
+    } else if (level === 'सचिव') {
+      return roleTranslation.secretary;
+    } else if (level === 'सदस्य') {
+      return roleTranslation.member;
+    } else {
+      return level;
+    }
+  };
+
   return (
     <ImageBackground
       source={BG_IMG_PATH}
@@ -415,16 +434,16 @@ const HomeScreen = ({ navigation }) => {
           <CustomSignOutPopup vis={vis} setVis={setVis} signout={signout} />
         )}
 
-        <View style={styles.roleContainer} >
+        <View style={styles.roleContainer}>
           <Text
             style={{
-              fontSize: 20,
+              fontSize: 16,
               alignSelf: 'center',
               color: '#fff',
               fontWeight: '700',
               color: 'white',
               textDecorationLine: 'underline',
-              marginRight: 15
+              marginRight: 15,
             }}
           >
             {appTranslation.cfr}
@@ -443,9 +462,9 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.headerText}>
               {name}
               {', '}
-              {postLevel}
+              {translatePostLevel(postLevel)}
               {', '}
-              {authLevel}
+              {translateAuthLevel(authLevel)}
               {'\n '}
               {t(district) !== '-1' && district + ', '}
               {tehsil !== '-1' && tehsil + ', '}
@@ -457,9 +476,9 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.headerText}>
                 {name}
                 {', '}
-                {postLevel}
+                {translatePostLevel(postLevel)}
                 {', '}
-                {authLevel}
+                {translateAuthLevel(authLevel)}
               </Text>
               <Text style={styles.subheaderText}>
                 {/* {t(village)}{', '}
@@ -590,37 +609,36 @@ const HomeScreen = ({ navigation }) => {
           }}
         /> */}
 
-      
-        {authLevel !== 'एफआरसी' && activeStatus && (
-          <CustomButton
-            // style={{marginBottom: 20}}
-            button={{ width: 300 }}
-            // dsbled={profile?.claims?.length==0}
-            text={
-              <>
-                <Ionicons name="open-outline" size={20} />
-                &nbsp;
-                {appTranslation.go_to_dashboard}
-              </>
-            }
-            onPress={() => {
-              // console.log('ifr-claim');
-              navigation.navigate('WebDashboard');
-            }}
-          />
-        )}
-         {authLevel !== 'एफआरसी' && activeStatus && (
-          <CustomButton
-            // style={{marginBottom: 20}}
-            button={{ width: 300 }}
-            // dsbled={profile?.claims?.length==0}
-            text={appTranslation.frc_application_status}
-            onPress={() => {
-              navigation.navigate('LocationSdlc');
-            }}
-          />
-        )}
-        {Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
+      {authLevel !== 'एफआरसी' && activeStatus && (
+        <CustomButton
+          // style={{marginBottom: 20}}
+          button={{ width: 300 }}
+          // dsbled={profile?.claims?.length==0}
+          text={
+            <>
+              <Ionicons name="open-outline" size={20} />
+              &nbsp;
+              {appTranslation.go_to_dashboard}
+            </>
+          }
+          onPress={() => {
+            // console.log('ifr-claim');
+            navigation.navigate('WebDashboard');
+          }}
+        />
+      )}
+      {authLevel !== 'एफआरसी' && activeStatus && (
+        <CustomButton
+          // style={{marginBottom: 20}}
+          button={{ width: 300 }}
+          // dsbled={profile?.claims?.length==0}
+          text={appTranslation.frc_application_status}
+          onPress={() => {
+            navigation.navigate('LocationSdlc');
+          }}
+        />
+      )}
+      {Boolean(authLevel === 'एफआरसी' && postLevel !== 'सदस्य') && (
         <CustomButton
           // style={{marginBottom: 20}}
           button={{ width: 300 }}
@@ -630,15 +648,13 @@ const HomeScreen = ({ navigation }) => {
           }}
         />
       )}
-        
-       
-        
+
       {Boolean(authLevel == 'एफआरसी' && postLevel !== 'सदस्य') && (
         <CustomButton
           // style={{marginBottom: 20}}
           button={{ width: 300 }}
           // dsbled={profile?.claims?.length==0}
-          text={appTranslation.track_old_claim}
+          text={appTranslation.claim_filing}
           onPress={() => {
             if (profile?.claims?.length === 0) {
               Alert.alert(
@@ -661,7 +677,6 @@ const HomeScreen = ({ navigation }) => {
             // Notii aiotn Badge Icon
           }}
         >
-          
           &nbsp;&nbsp;
           {notificationCount !== 0 && (
             <Text
@@ -693,15 +708,6 @@ const HomeScreen = ({ navigation }) => {
         />
       )}
 
-      
-
-      
-
-      
-
-      
-      
-
       <Pressable
         onPress={() => alert(commonTranslation.ok)}
         style={{
@@ -709,7 +715,6 @@ const HomeScreen = ({ navigation }) => {
           marginRight: 10,
           justifyContent: 'center',
           marginBottom: 40,
-          
         }}
       >
         <Text style={{ fontSize: 22 }}>

@@ -7,6 +7,8 @@ import {
   ScrollView,
   Text,
   View,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import MapView, {
   PROVIDER_GOOGLE,
@@ -20,6 +22,7 @@ import { DeviceEventEmitter } from 'react-native';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { VasernDB } from '../../vasern';
 
 const BG_IMG_PATH = require('../../assets/images/background.png');
 
@@ -31,9 +34,11 @@ export const APCFRMarkBoundry = () => {
   const [isTripStarted, setI] = useState(false);
   const [bit, setBit] = React.useState(false);
   const [locationAccuracy, setLocationAccuracy] = useState(null);
+  const [tripStartTime, setTripStartTime] = useState(null);
 
   const { t } = useTranslation();
   const appTranslation = t('app');
+  const commonTranslation = t('common');
   
   // Check if this is custom boundary mode from DownloadPDF
   const isCustomBoundaryMode = route.params?.mode === 'customBoundary';
@@ -241,6 +246,7 @@ export const APCFRMarkBoundry = () => {
                 onPress={() => {
                   console.log('Starting boundary tracing...');
                   setUserPath([]); // Clear any previous path
+                  setTripStartTime(new Date().toISOString()); // Record start time
                   setI(true);
                 }}
                 button={{
@@ -254,17 +260,92 @@ export const APCFRMarkBoundry = () => {
               </CustomButton>
             ) : (
               <CustomButton
-                onPress={() => {
+                onPress={async () => {
+                  if (userPath.length < 3) {
+                    Alert.alert(
+                      appTranslation.not_enough_points,
+                      appTranslation.please_trace_at_least,
+                      [{ text: commonTranslation.ok }],
+                    );
+                    return;
+                  }
+
                   console.log('Boundary completed');
                   console.log('User traced path:', userPath);
                   console.log('Total points:', userPath.length);
                   
+                  // Stop tracking immediately
                   setI(false);
                   
-                  // Navigate back to DownloadPDF with user coordinates
-                  navigation.navigate('DownloadPDF', {
-                    userCoords: userPath
-                  });
+                  const endTime = new Date().toISOString();
+                  const startTime = new Date(tripStartTime);
+                  const end = new Date(endTime);
+                  const durationSeconds = Math.floor((end - startTime) / 1000);
+
+                  console.log('=== SAVING POLYGON DEBUG ===');
+                  console.log('Profile ID:', profile?.id);
+                  console.log('Profile _id:', profile?._id);
+                  console.log('Using userId:', profile?._id?.toString() || profile?.id);
+
+                  const userId = profile?._id?.toString() || profile?.id;
+
+                  // Get count of existing polygons for this user to generate name
+                  const existingPolygons = VasernDB.SavedPolygons.filter({
+                    userId: userId
+                  }).data();
+                  console.log('Existing polygons for this user:', existingPolygons.length);
+                  
+                  const polygonCount = existingPolygons.length + 1;
+                  const polygonName = `Polygon-${polygonCount}`;
+
+                  // Save to Vasern database
+                  const savedPolygon = {
+                    userId: userId,
+                    polygonName: polygonName,
+                    coordinates: JSON.stringify(userPath), // Store as JSON string
+                    startTime: tripStartTime,
+                    endTime: endTime,
+                    duration: durationSeconds,
+                    pointsRecorded: userPath.length,
+                    isVisible: true,
+                    createdAt: Date.now()
+                  };
+
+                  console.log('Polygon to save:', JSON.stringify(savedPolygon, null, 2));
+
+                  try {
+                    const result = VasernDB.SavedPolygons.insert(savedPolygon);
+                    
+                    console.log('✅ Polygon saved successfully!');
+                    console.log('Save result:', result);
+                    console.log('Saved polygon:', JSON.stringify(savedPolygon, null, 2));
+                    
+                    // Wait a moment for Vasern to persist
+                    setTimeout(() => {
+                      // Verify it was saved
+                      const allPolygons = VasernDB.SavedPolygons.data();
+                      console.log('Total polygons in DB after timeout:', allPolygons.length);
+                      console.log('All polygons:', allPolygons.map(p => ({ id: p.id, name: p.polygonName, userId: p.userId })));
+                      
+                      ToastAndroid.show(
+                        `✅ ${polygonName} saved! (${userPath.length} points, ${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s)`,
+                        ToastAndroid.LONG
+                      );
+                      
+                      // Navigate back to SavedPolygons screen
+                      navigation.navigate('SavedPolygons', {
+                        refresh: Date.now() // Force refresh with timestamp
+                      });
+                    }, 300); // 300ms delay for Vasern to persist
+
+                  } catch (error) {
+                    console.error('Error saving polygon:', error);
+                    ToastAndroid.show(
+                      '❌ Failed to save polygon. Please try again.',
+                      ToastAndroid.LONG
+                    );
+                    setI(true); // Resume tracking if save failed
+                  }
                 }}
                 button={{
                   backgroundColor: '#2196F3',
@@ -272,7 +353,7 @@ export const APCFRMarkBoundry = () => {
                 }}
               >
                 <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
-                  ✅ {appTranslation.complete_and_return}
+                  💾 {appTranslation.save_polygon}
                 </Text>
               </CustomButton>
             )}

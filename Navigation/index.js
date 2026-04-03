@@ -42,6 +42,7 @@ import HomeScreenIFR from '../Screens/HomeScreenIFR';
 import PastRecordsIFR from '../Screens/PastRecordsIFR';
 import {MarkBoundry} from '../Screens/MarkBoundry';
 import { APCFRMarkBoundry } from '../Screens/MarkBoundry/APCFRMarkBoundary';
+import SavedPolygonsScreen from '../Screens/MarkBoundry/SavedPolygonsScreen';
 import ClaimAlertsScreenIFR from '../Screens/ClaimAlertsIFR/ClaimAlertsScreenIFR';
 import WebDashboard from '../Screens/WebDashboard';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
@@ -311,6 +312,13 @@ export const Navigation = () => {
         <Stack.Screen
           name="APCFRMarkBoundry"
           component={APCFRMarkBoundry}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="SavedPolygons"
+          component={SavedPolygonsScreen}
           options={{
             headerShown: false,
           }}

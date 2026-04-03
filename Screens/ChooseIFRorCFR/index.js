@@ -127,11 +127,7 @@ const ClaimTypeSelectionScreen = ({ navigation }) => {
             );
           })}
         </ScrollView>
-        <View style={{ paddingBottom: 50 }}>
-          <Text style={{ textAlign: 'center', fontSize: 18 }}>
-            {appTranslation.notice_to_official}
-          </Text>
-        </View>
+        
       </View>
     </ImageBackground>
   );

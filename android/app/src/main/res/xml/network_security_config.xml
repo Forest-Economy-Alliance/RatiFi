@@ -2,7 +2,7 @@
 <network-security-config>
     <!-- Allow cleartext traffic for your API server -->
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">3.87.158.113</domain>
+        <domain includeSubdomains="true">34.234.85.163</domain>
         <domain includeSubdomains="true">127.0.0.1</domain>
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>

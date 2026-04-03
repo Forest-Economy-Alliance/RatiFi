@@ -36,6 +36,20 @@ const VasernDB = new Vasern({
         // ScreenshotBase64Data: 'string',
       },
     },
+    {
+      name: 'SavedPolygons',
+      props: {
+        userId: 'string',
+        polygonName: 'string', // e.g., "Polygon-1"
+        coordinates: '[]', // Array of {latitude, longitude}
+        startTime: 'string', // ISO timestamp
+        endTime: 'string', // ISO timestamp
+        duration: 'number', // in seconds
+        pointsRecorded: 'number',
+        isVisible: 'boolean', // for view/hide toggle
+        createdAt: 'number', // timestamp for sorting
+      },
+    },
   ],
 });
 
